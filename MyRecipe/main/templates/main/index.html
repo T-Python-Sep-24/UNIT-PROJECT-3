@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Collection</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <h2>Recipe Collection</h2>
+        <p>Find your favorite recipes or add a new one!</p>
+        <div class="auth-links">
+            {% if user.is_authenticated %}
+                <a href="{% url 'accounts:profile' %}">Profile</a> |
+                <a href="{% url 'accounts:logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'accounts:register' %}">Register</a> |
+                <a href="{% url 'accounts:login' %}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="search-container">
+        <form method="get" action="{% url 'main:search' %}">
+            <input type="text" name="q" class="search-input" placeholder="Search for recipes..." value="{{ query }}">
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </div>
+
+    <h3>Available Recipes</h3>
+    <ul>
+        {% for recipe in recipes %}
+        <li>
+            <a href="{% url 'main:recipe_detail' recipe.id %}">{{ recipe.title }}</a>
+        </li>
+        {% empty %}
+        <li>No recipes available. Add your first recipe!</li>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'main:add_recipe' %}" class="add-recipe-btn">Add a New Recipe</a>
+    {% else %}
+        <p>You need to <a href="{% url 'accounts:login' %}">login</a> to add a recipe.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
