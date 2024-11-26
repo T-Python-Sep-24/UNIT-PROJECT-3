@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Product Details{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center mt-5">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 600px; border-radius: 8px;">
+        <h2 class="text-center mb-4">{{ product.name }}</h2>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <strong>About:</strong> {{ product.about }}
+            </li>
+            <li class="list-group-item">
+                <strong>About:</strong> {{ product.city }}
+            </li>
+            <li class="list-group-item">
+                <strong>Price:</strong> ${{ product.price }}
+            </li>
+        </ul>
+        <div class="text-center mt-4">
+            <a href="{% url 'products:products_view' %}" class="btn btn-secondary me-2">Back to All products</a>
+            <a href="{% url 'services:product_update_view' product.id %}" class="btn btn-primary me-2">Update</a>
+            <a href="{% url 'services:product_delete_view' product.id %}" class="btn btn-danger me-2">Delete</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

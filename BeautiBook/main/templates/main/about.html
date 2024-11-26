@@ -1,0 +1,63 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}About Us{% endblock %}
+{% block style %}{% endblock %}
+{% block content %}
+<header class="bg-dark py-5">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center">
+            <div class="col-lg-8 col-xl-7 col-xxl-6">
+                <div class="my-5 text-center text-xl-start">
+                    <h1 class="display-5 fw-bolder text-white mb-2">About Us</h1>
+                    <p class="lead fw-normal text-white-50 mb-4">
+                        Discover who we are and why we are your trusted partner for booking your dream car. 
+                        With years of experience and a passion for excellence, we aim to deliver exceptional service to every customer.
+                    </p>
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                        <a class="btn btn-outline-light btn-lg px-4 me-sm-3" href="#why-us">See artists</a>
+                        <a class="btn btn-outline-light btn-lg px-4" href="#history">Contact Us Right Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
+                <img class="img-fluid rounded-3 my-5" 
+                     src="" 
+                     alt="About Us - Luxury Car Booking" />
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="pt-4">
+    <div class="container px-lg-5">
+        <div class="row gx-lg-5">
+            <div class="col-lg-6 col-xxl-4 mb-5">
+                <div class="card bg-light border-0 h-100">
+                    <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
+                        <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><i class="bi bi-collection"></i></div>
+                        <h2 class="fs-4 fw-bold">Why Us ?</h2>
+                        <p class="mb-0">We have more than 1000000+ satisfied Customers!</p>
+                    </div>
+                </div>
+            </div>
+                <div class="col-lg-6 col-xxl-4 mb-5">
+                    <div class="card bg-light border-0 h-100">
+                        <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
+                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><i class="bi bi-card-heading"></i></div>
+                            <h2 class="fs-4 fw-bold">Since 1947</h2>
+                            <p class="mb-0">After the World War 2</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-xxl-4 mb-5">
+                    <div class="card bg-light border-0 h-100">
+                        <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
+                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><i class="bi bi-card-heading"></i></div>
+                            <h2 class="fs-4 fw-bold">Speed service </h2>
+                            <p class="mb-0">Get your artist right to your doorstep!</p>
+                        </div>
+                    </div>
+                </div>
+        </section>
+{% endblock %}

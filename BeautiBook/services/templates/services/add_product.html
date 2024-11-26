@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Add Car{% endblock %}
+{% block style %}
+{% endblock %}
+{% block content %} 
+<div class="container d-flex justify-content-center mt-5">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 600px; border-radius: 8px;">
+      <h2 class="text-center mb-4">Add New Product</h2>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+          <label for="title">Name</label>
+          <input type="text" id="title" name="name" class="form-control" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="About">About</label>
+            <input type="text" id="about" name="about" class="form-control" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="categorySelect" class="form-label">Avaliable In</label>
+            <select class="form-select" id="categorySelect" name="city" required>
+                <option value="" disabled selected>Select a City</option>
+                <option value="Jeddah">Jeddah</option>
+                <option value="Riyadh">Riyadh</option>
+                <option value="Dammam">Dammam</option>
+                <option value="Abha">Abha</option>
+            </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="price">Price</label>
+          <input type="text" id="price" name="price" class="form-control" placeholder="E.g., 2000" required>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-dark">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

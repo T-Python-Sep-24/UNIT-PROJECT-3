@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Update Product{% endblock %}
+{% block style %}{% endblock %}
+
+{% block content %} 
+<div class="container d-flex justify-content-center mt-5">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 600px; border-radius: 8px;">
+        <h2 class="text-center mb-4">Update Product</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group mb-3">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ product.name }}" required>
+            </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="About">About</label>
+                <input type="text" id="about" name="about" class="form-control" value="{{ product.about }}" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="categorySelect" class="form-label">Avaliable In</label>
+                <select class="form-select" id="categorySelect" name="city" required>
+                    <option value="" disabled selected>Select a City</option>
+                    <option value="Jeddah">Jeddah</option>
+                    <option value="Riyadh">Riyadh</option>
+                    <option value="Dammam">Dammam</option>
+                    <option value="Abha">Abha</option>
+                </select>
+            </div>
+            <div class="form-group mb-3">
+                <label for="price">Price</label>
+                <input type="number" id="price" name="price" class="form-control" value="{{ product.price }}" step="0.01" required>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-dark">Update Product</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1>Products</h1>
+    <hr style="width: 80px; border-top: 3px solid #1d3557; margin: 0 auto 2rem;">
+</div>
+
+<div class="container mt-5">
+    <div class="row gy-4">
+        {% for product in products %}
+        <div class="col-md-4 d-flex justify-content-center">
+            <div class="card shadow-sm" style="width: 18rem; border-radius: 12px;">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-uppercase" style="color: #333;">{{ product.name }}</h5>
+                    <p class="card-text">
+                        <strong>About:</strong> {{ product.about }}<br>
+                        <strong>Avaliable In:</strong> {{ product.city }}<br>                        
+                        <strong>Price:</strong> ${{ product.price }}<br>
+                    </p>
+                    <a href="{% url 'services:product_detail_view' product.id %}" class="btn btn-dark">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if products.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+            </li>
+        {% endif %}
+        <li class="page-item disabled">
+            <span class="page-link">{{ products.number }} of {{ products.paginator.num_pages }}</span>
+        </li>
+        {% if products.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock %}
