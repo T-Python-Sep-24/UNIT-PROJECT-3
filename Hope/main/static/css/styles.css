@@ -1,0 +1,186 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Header */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px 20px;
+}
+
+header .navbar-brand img {
+  height: 50px;
+}
+
+header .nav-links {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  text-align: center;
+}
+
+header .nav-links a {
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+header .nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* Home Page */
+main {
+  height: 100vh;
+  background-image: url("/static/images/wheat-back.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+
+main h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  color:transparent;
+  -webkit-text-stroke: 1px #FABE28; 
+}
+
+main h2 {
+  font-size: 2rem;
+  font-weight: lighter;
+  color: white;
+}
+
+main .cta-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: rgba(217, 217, 0217, 0.18);
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  backdrop-filter: blur(10px); 
+  transition: background-color 0.2s ease, transform 0.2s ease; 
+}
+
+main .cta-button:hover {
+  background-color: #FABE28;
+  transform: scale(1.05);
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 10px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  color: white;
+}
+
+footer span {
+  font-size: 1rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  margin-bottom: 20px;
+}
+
+footer a {
+  font-size: 1rem;
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s;
+}
+
+footer a:hover {
+  color: #FABE28;
+}
+
+/* Hamburger Menu */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: black;
+  cursor: pointer;
+  z-index: 15;
+}
+
+.nav-links-2 {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+  }
+
+  header .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  main {
+    height: calc(100vh - 120px);
+    padding: 20px;
+    background-position: center;
+    background-size: cover;
+  }
+
+  main h1 {
+    font-size: 2.5rem;
+  }
+
+  main h2 {
+    font-size: 1.2rem;
+  }
+
+  footer {
+    left: 10px;
+    gap: 10px;
+  }
+
+  footer span {
+    font-size: 0.8rem;
+  }
+
+  footer a {
+    font-size: 1.2rem;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+}
