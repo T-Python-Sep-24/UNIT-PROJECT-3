@@ -2,7 +2,7 @@
 
 ## Art Gallery
 
-# Overview:
+### Overview:
 A platform that displays recent art pieces submitted by artists. And provides information about each piece and its artist.
 
 **Features:**
