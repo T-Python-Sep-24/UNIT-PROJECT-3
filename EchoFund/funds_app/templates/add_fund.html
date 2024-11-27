@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}New Fund{% endblock %}
+
+{% block main %}
+
+<main>
+    <h1 class="display-6 text-center special-color pt-2">New Car</h1>
+    <hr class="special-color2" style="width:15%;margin: 0 auto;">
+    <div class="container pt-5">
+        <div class="row row-cols-1 row-cols-md-2 g-5 justify-content-center">
+            <div class="col shadow rounded p-3 special-color">
+                <h1 class="">New Fund</h1>
+                <h4>Fill the form bellow</h4>
+                <form class="mt-5" action="{% url 'funds_app:add_fund_view' %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="name">Fund Name</label>
+                        <input type="text" id="name" name="fund_name" class="form-control" placeholder="Camry" required/>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="about">Funds Description</label>
+                        <textarea id="about" name="about" class="form-control" placeholder="Describe The Fund" required></textarea>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="policies">Funds Policies</label>
+                        <textarea id="policies" name="policies" class="form-control" placeholder="Set The Fund Policies" required></textarea>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="monthly_stock">Monthly Stock</label>
+                        <input type="number" id="monthly_stock" name="monthly_stock" class="form-number" max="2025" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="hold_duration">Hold Duration Years</label>
+                        <input type="number" id="hold_duration" name="hold_duration" class="form-number" min="1" aria-describedby="HoldDurationHelp" required>
+                        <div id="HoldDurationHelp" class="form-text">Hold Durations is the duration of saving before allowing fund requests to members</div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-block p-2 mb-4">Add Car</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</main>
+{% endblock %}

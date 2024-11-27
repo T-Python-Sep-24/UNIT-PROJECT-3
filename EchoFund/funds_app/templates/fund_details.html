@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Fund Details{% endblock %}
+
+{% block main %}
+<main>
+    <div class="container">
+        <div class="row  p-5 shadow rounded">
+
+            <div class="col p-3 g-2">
+                <div class="d-flex justify-content-between mb-4">
+
+                    <h1>{{fund.fund_name}}</h1>
+
+                    <div>
+                        {% if is_bookmarked %}
+                        <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_check</span></a>
+                        {% else %}
+                        <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_add</span></a>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                        <a class="btn btn-primary" href="{% url 'funds_app:update_fund_view' fund.id %}"><span class="material-symbols-outlined">edit_square</span></a>
+                        <a class="btn btn-danger" href="{% url 'funds_app:delete_fund_view' fund.id %}"><span class="material-symbols-outlined">delete</span></a>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <h6>Specs: </h6>
+                <p>{{fund.about}}</p>
+                <div class="d-flex gap-2">
+                    <h6> Available Colors: </h6>
+
+                </div>
+                <h6>Model: {{fund.monthly_stock}}</h6>
+
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Reviews ({{reviews.count}})</h2>
+        <div class="container shadow p-5">
+            {% for review in reviews %}
+            <div class="p-2 shadow rounded">
+                <h3>{{review.user.first_name}}{{review.user.last_name}}</h3>
+                <a href="{% url 'accounts:profile_view' review.user.username %}"><h5>@{{review.user.username}}</h5></a>
+                <p class="text-muted">{{review.comment}}</p>
+                <h5>Rating: {{review.rating}}</h5>
+                <p>{{review.reviewed_at}}</p>
+                <a href="{% url 'funds_app:delete_review_view' review.id %}"><span class="material-symbols-outlined">delete</span></a>
+            </div>
+            {% endfor %}
+        </div>
+        {% if request.user.is_authenticated %}
+        <h3 class="mt-4">Add new Review</h3>
+        <form class="d-flex flex-column gap-4" action="{% url 'funds_app:add_review_view' fund.id %}" method="post">
+            {% csrf_token %}
+            <div>
+
+                <label for="review" class="form-label">review</label>
+                <textarea class="form-control" id="review" name="comment" required placeholder="review"></textarea>
+            </div>
+
+            <div class="d-flex gap-4 align-items-center">
+                <p class="form-label m-0 p-0">Rating: </p>
+                <div class="rate d-flex gap-2">
+
+                    {% for rate, value in rates %}
+                    <input type="radio" id="{{rate}}" name="rating" value="{{rate}}" required/>
+                    <label for="{{rate}}" title="text">{{rate}}</label>
+                    {% endfor %}
+                </div>
+            </div>
+            <input type="submit" name="Add">
+        </form>
+        {% else %}
+        <div class="p-3 rounded bg-warning g-3 mt-3 d-flex flex-column gap-3">
+            <p>Only Users can add comments</p>
+            <a href="">Sign in to your account to add comments</a>
+            <a href="">Or Create a New account now!</a>
+        </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

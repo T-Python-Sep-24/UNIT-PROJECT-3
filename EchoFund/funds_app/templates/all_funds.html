@@ -5,7 +5,32 @@
 {% block main %}
 <main>
     <div class="container">
-    {% include 'funds_cards.html' %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% include 'funds_cards.html' %}
+        </div>
+    </div>
+
+    </div>
+    <div class="container pt-5">
+
+        <div class="pagination justify-content-center">
+            <ul class="pagination justify-content-center">
+
+                {% if page_obj.has_previous %}
+                <a class="page-link text-dark" href="?page=1">first</a>
+                <a class="page-link text-dark" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <div class="text-center">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </div>
+                {% if page_obj.has_next %}
+                <a class="page-link text-dark" href="?page={{ page_obj.next_page_number }}">next</a>
+                <a class="page-link text-dark" href="?page={{ page_obj.paginator.num_pages }}">last</a>
+                {% endif %}
+            </ul>
+        </div>
+
+
     </div>
 </main>
 {% endblock %}

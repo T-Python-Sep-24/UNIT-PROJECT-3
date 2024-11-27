@@ -26,10 +26,10 @@
                 <div class="container shadow rounded p-5 mb-4">
                     <h2><span class="material-symbols-outlined">reviews</span>Reviews</h2>
 
-                    {% for review in user.carreview_set.all %}
+                    {% for review in user.review_set.all %}
                     <div class="row p-3 rounded shadow m-3">
                         <div class="col ">
-                            <h4><a href="{% url 'brands:brand_details_view' review.car.brand.id %}">{{ review.car.brand }}</a> : <a href="{% url 'cars:car_details_view' review.car.id %}">{{review.car}}</a></h4>
+                            <h4><a href="{% url 'funds_app:fund_details_view' review.fund.id %}">{{ review.fund.fund_name }}</a></h4>
                             <h5>Rating: {{review.rating}}</h5>
                             <p>Comment: {{review.comment}}</p>
                             <h6>At: {{review.reviewed_at}}</h6>
@@ -46,13 +46,13 @@
                 {% for bookmark in request.user.bookmark_set.all %}
                 <div class="row p-3 rounded shadow m-3">
                     <div class="col ">
-                        <h4><a href="{% url 'brands:brand_details_view' bookmark.car.brand.id %}">{{ bookmark.car.brand }}</a> : <a href="{% url 'cars:car_details_view' bookmark.car.id %}">{{bookmark.car}}</a></h4>
+                        <h4><a href="{% url 'funds_app:fund_details_view' bookmark.fund.id %}">{{ bookmark.fund.fund_name }}</a></h4>
 
                         <h6>At: {{bookmark.created_at}}</h6>
                         {% if is_bookmarked %}
-                        <a href="{% url 'cars:add_bookmark_view' bookmark.car.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_check</span></a>
+                        <a href="{% url 'funds_app:add_bookmark_view' bookmark.fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_check</span></a>
                         {% else %}
-                        <a href="{% url 'cars:add_bookmark_view' bookmark.car.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_add</span></a>
+                        <a href="{% url 'funds_app:add_bookmark_view' bookmark.fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_add</span></a>
                         {% endif %}
                     </div>
                     <div class="col text-end">

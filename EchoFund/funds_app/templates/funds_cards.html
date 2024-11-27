@@ -1,25 +1,21 @@
-
-<div class="row pt-5 m-auto">
-    <div class="col-md-6 col-lg-4 pb-3">
-
-        <!-- Copy the content below until next comment -->
-        <div class="card card-custom bg-white border-white border-0">
-            <div class="card-custom-img" style="background-image: url(http://res.cloudinary.com/d3/image/upload/c_scale,q_auto:good,w_1110/trianglify-v1-cs85g_cc5d2i.jpg);"></div>
-            <div class="card-custom-avatar">
-                <img class="img-fluid" src="http://res.cloudinary.com/d3/image/upload/c_pad,g_center,h_200,q_auto:eco,w_200/bootstrap-logo_u3c8dx.jpg" alt="Avatar" />
-            </div>
-            <div class="card-body" style="overflow-y: auto">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">Card has minimum height set but will expand if more space is needed for card body content. You can use Bootstrap <a href="https://getbootstrap.com/docs/4.0/components/card/#card-decks" target="_blank">card-decks</a> to align multiple cards nicely in a row.</p>
-            </div>
-            <div class="card-footer" style="background: inherit; border-color: inherit;">
-                <a href="#" class="btn btn-primary">Option</a>
-                <a href="#" class="btn btn-outline-primary">Other option</a>
-            </div>
+{% for fund in funds %}
+<div class="col">
+    <div class="card h-100">
+        <div class="position-relative">
+            <img class="card-img-top" style="height: 200px; object-fit: cover;" src="http://res.cloudinary.com/d3/image/upload/c_scale,q_auto:good,w_1110/trianglify-v1-cs85g_cc5d2i.jpg" alt="Card background">
+            <img class="position-absolute" style="width: 100px; height: 100px; object-fit: cover; bottom: -50px; left: 50%; transform: translateX(-50%); border: 5px solid white; border-radius: 50%;" src="http://res.cloudinary.com/d3/image/upload/c_pad,g_center,h_200,q_auto:eco,w_200/bootstrap-logo_u3c8dx.jpg" alt="Avatar">
         </div>
-        <!-- Copy until here -->
-
+        <div class="card-body pt-5 mt-4">
+            <h4 class="card-title">{{ fund.fund_name }}</h4>
+            <p class="card-text">{{ fund.about }}</p>
+            <p class="card-text">{{ fund.policies }}</p>
+            <p class="card-text">Stock: {{ fund.monthly_stock }} Per Month</p>
+            <p class="card-text">Hold Duration: {{ fund.hold_duration }}</p>
+        </div>
+        <div class="card-footer bg-transparent">
+            <a href="{% url 'funds_app:fund_details_view' fund.id %}" class="btn btn-primary">Details</a>
+            <a href="#" class="btn btn-outline-primary">Participate</a>
+        </div>
     </div>
 </div>
-
-
+{% endfor %}

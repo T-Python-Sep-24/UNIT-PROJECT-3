@@ -4,8 +4,8 @@
 
 {% block main  %}
 <main>
-
-    <div class="container">
+<div class="container-fluid ">
+    <div class="container m-5 p-5 shadow align-items-center">
         <form action="{% url 'accounts:sign_up' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3">
@@ -43,5 +43,6 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
+</div>
 </main>
 {% endblock %}
