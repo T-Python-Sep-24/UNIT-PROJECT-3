@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <title>{% block title %}  {% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'images/small-logo.png' %}"/>
     <style>
         .card-custom {
   overflow: hidden;
@@ -71,81 +72,48 @@
             <!-- Left elements -->
             <div class="d-flex">
                 <!-- Brand -->
-                <a class="navbar-brand me-2 mb-1 d-flex align-items-center" href="/">
-                    <img src="{% static 'images/logo.png' %}" alt="Logo" loading="lazy" style="margin-top: 2px; width:250px;"/>
+                <a class="navbar-brand ms-5 ps-5 me-2 mb-1 d-flex align-items-center" href="/">
+                    <img src="{% static 'images/logo.png' %}" alt="Logo" loading="lazy" style="margin-top: 2px; width:200px;"/>
                 </a>
 
                 <!-- Search form -->
                 <form class="input-group w-auto my-auto d-none d-sm-flex">
-                    <input
-                            autocomplete="off"
-                            type="search"
-                            class="form-control rounded"
-                            placeholder="Search"
-                            style="min-width: 125px;"
-                    />
-                    <span class="input-group-text border-0 d-none d-lg-flex"
-                    ><i class="fas fa-search"></i
-                    ></span>
+                    <input autocomplete="off" type="search" class="form-control rounded" placeholder="Search" style="min-width: 125px;"/>
+                    <span class="input-group-text border-0 d-none d-lg-flex"><i class="fas fa-search"></i></span>
                 </form>
             </div>
             <!-- Left elements -->
 
             <!-- Center elements -->
             <ul class="navbar-nav flex-row d-none d-md-flex">
+                <li>
+                    <a class="nav-link" href="/">How it <span class="text-success">works</span></a>
+                </li>
+                <li>
+                    <a class="nav-link" href="/"><span class="text-success">Help</span></a>
+                </li>
+                <li>
+                    <a class="nav-link" href="/"><span class="text-success">Contact</span> Us</a>
+                </li>
+
+            </ul>
+            <!-- Center elements -->
+
+            <!-- Right elements -->
+            <ul class="navbar-nav flex-row me-5 pe-5">
+
                 <li class="nav-item me-3 me-lg-1 active">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="/">
                         <span><i class="fas fa-home fa-lg"></i></span>
-                        <span class="badge rounded-pill badge-notification bg-danger">1</span>
                     </a>
                 </li>
 
                 <li class="nav-item me-3 me-lg-1">
                     <a class="nav-link" href="{% url 'funds_app:all_funds_view' %}">
-                        <span><i class="fas fa-wallet"></i></span>
+                        <span><i class="fas fa-wallet fa-lg"></i></span>
                     </a>
                 </li>
 
-                <li class="nav-item me-3 me-lg-1">
-                    <a class="nav-link" href="#">
-                        <span><i class="fas fa-video fa-lg"></i></span>
-                    </a>
-                </li>
-
-                <li class="nav-item me-3 me-lg-1">
-                    <a class="nav-link" href="#">
-                        <span><i class="fas fa-shopping-bag fa-lg"></i></span>
-                    </a>
-                </li>
-
-                <li class="nav-item me-3 me-lg-1">
-                    <a class="nav-link" href="#">
-                        <span><i class="fas fa-users fa-lg"></i></span>
-                        <span class="badge rounded-pill badge-notification bg-danger">2</span>
-                    </a>
-                </li>
-            </ul>
-            <!-- Center elements -->
-
-            <!-- Right elements -->
-            <ul class="navbar-nav flex-row">
-                <li class="nav-item me-3 me-lg-1">
-                    <a class="nav-link d-sm-flex align-items-sm-center" href="#">
-                        <img
-                                src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
-                                class="rounded-circle"
-                                height="22"
-                                alt="Black and White Portrait of a Man"
-                                loading="lazy"
-                        />
-                        <strong class="d-none d-sm-block ms-1">John</strong>
-                    </a>
-                </li>
-                <li class="nav-item me-3 me-lg-1">
-                    <a class="nav-link" href="#">
-                        <span><i class="fas fa-plus-circle fa-lg"></i></span>
-                    </a>
-                </li>
                 <li class="nav-item dropdown me-3 me-lg-1">
                     <a data-bs-toggle="dropdown" class="nav-link dropdown-toggle hidden-arrow" href="#" role="button" aria-expanded="false"><i class="fas fa-comments fa-lg"></i><span class="badge rounded-pill badge-notification bg-danger">6</span></a>
                     <ul class="dropdown-menu dropdown-menu-end">
@@ -160,11 +128,60 @@
                         </li>
                     </ul>
                 </li>
+
+
+                <li class="nav-item  me-3 me-lg-1">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle hidden-arrow" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-chevron-circle-down fa-lg"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'funds_app:add_fund_view' %}">Create Fund</a>
+                        </li>
+                        {% if request.user.is_authenticated %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'accounts:profile_view' request.user.username %}">My Funds</a>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </li>
+                    </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown me-3 me-lg-1">
+                    <a data-bs-toggle="dropdown" class="nav-link d-sm-flex dropdown-toggle hidden-arrow align-items-sm-center" href="#">
+                        <img
+                                src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+                                class="rounded-circle"
+                                height="22"
+                                alt="Black and White Portrait of a Man"
+                                loading="lazy"
+                        />
+                        <strong class="d-none d-sm-block ms-1">{% if request.user.is_authenticated %}
+                            welcome, {{request.user.username}}
+                            {% else %}
+                            Log In
+                            {% endif %}
+                        </strong>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if request.user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'accounts:log_out' %}?next={{request.path}}">Log Out</a></li>
+                        <li> <a class="dropdown-item " href="{% url 'accounts:profile_view' request.user.username %}">Account Settings</a></li>
+                        {% else %}
+                        <li><a class="dropdown-item" href="{% url 'accounts:sign_up' %}?next={{request.path}}">Sign Up</a></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:sign_in' %}?next={{request.path}}">Sign In</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                {% if request.user.is_authenticated %}
                 <li class="nav-item me-3 me-lg-1">
                     <div class="dropdown">
                         <a class="nav-link dropdown-toggle hidden-arrow" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-bell fa-lg"></i>
-                        <span class="badge rounded-pill badge-notification bg-danger">12</span>
-                    </a>
+                            <span class="badge rounded-pill badge-notification bg-danger">12</span>
+                        </a>
                         <ul
                                 class="dropdown-menu dropdown-menu-end"
                                 aria-labelledby="navbarDropdownMenuLink2"
@@ -181,44 +198,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item  me-3 me-lg-1">
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle hidden-arrow" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-chevron-circle-down fa-lg"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <a class="dropdown-item" href="#">Some news</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">Another news</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </li>
-                    </ul>
-                    </div>
-                </li>
-                <li>
-                    <div class="dropdown">
-                        <a class="btn btn-primary rounded-pill dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-
-                            {% if request.user.is_authenticated %}
-                            welcome, {{request.user.username}}
-                            {% else %}
-                            Log In
-                            {% endif %}
-                        </a>
-
-                        <ul class="dropdown-menu">
-                            {% if request.user.is_authenticated %}
-                            <li><a class="dropdown-item" href="{% url 'accounts:log_out' %}?next={{request.path}}">Log Out</a></li>
-                            <li> <a class="dropdown-item " href="{% url 'accounts:profile_view' request.user.username %}">Account Settings</a></li>
-                            {% else %}
-                            <li><a class="dropdown-item" href="{% url 'accounts:sign_up' %}?next={{request.path}}">Sign Up</a></li>
-                            <li><a class="dropdown-item" href="{% url 'accounts:sign_in' %}?next={{request.path}}">Sign In</a></li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                </li>
+                {% endif %}
             </ul>
 
             <!-- Right elements -->
@@ -227,6 +207,16 @@
     <!-- Navbar -->
 </header>
 {% endblock %}
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="container alert {{message.tags}} alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    {% endif %}
 
 {% block main %}
 {% endblock %}

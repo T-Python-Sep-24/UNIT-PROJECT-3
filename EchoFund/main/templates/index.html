@@ -5,17 +5,45 @@
 {% block main %}
 <main>
     <div class="container">
-        <div class="row row-cols-1 row-cols-2 p-5 border m-5">
-            <div class="col-5 p-5">
-                <h1>Lorem ipsum dolor sit icing elit. Accusamus</h1>
-                <p>Lorem ipsum dolor sit icing elit. Accusamus Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad atque commodi, consequuntur eos esse, laboriosam laborum necessitatibus nobis, officia placeat repudiandae rerum similique totam. Consequuntur illum nobis perspiciatis ratione sunt? </p>
-                <button class="btn btn-dark">Add us</button>
-                <button class="btn btn-dark">visit us</button>
+
+        <div class="row row-cols-1 row-cols-lg-2 d-flex p-2 m-2">
+            <div class="pt-5 mt-5">
+                <h1>Your Funding is Online Now !</h1>
+                <p>With <span class="text-success bg-light pe-2 ps-2">EchoFund</span> You can now Search for the appropriate Funding opportunity, And Even Create and manage your own funding</p>
+                <a href="{% url 'funds_app:all_funds_view' %}" class="btn btn-success">Explore Opportunities</a>
+                <a href="{% url 'funds_app:add_fund_view' %}" class="btn btn-outline-success">Create You own Fund</a>
             </div>
-            <div class="col-5 p-5">
-                
-                <img src="{% static 'images/logo.png' %}">
+            <div class="p-5">
+                <img src="{% static 'images/home-laptop.png' %}" class="w-100">
             </div>
+        </div>
+        <div class="container-fluid mt-5 mb-5">
+            <div class="row row-cols-1 row-cols-lg-2 d-flex">
+                <div>
+                    <img src="{% static 'images/curly-line.png' %}">
+                </div>
+                <div class="mt-5 pt-5">
+                    <h1 class="text-success">Features & Benefits</h1>
+                    <div class="cards mt-5">
+                        <div class="col m-5">
+                            <div class="card border-0 shadow-lg h-100">
+                                <div class="position-relative">
+
+                                    <img class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" src="https://hakbah.sa/wp-content/uploads/2021/03/icon-1.png" alt="Avatar">
+                                </div>
+                                <div class="card-body pt-5 mt-4">
+                                    <h4 class="card-title">{{ fund.fund_name }}</h4>
+                                    <p class="card-text">{{ fund.about }}</p>
+                                    <p class="card-text">{{ fund.policies }}</p>
+                                    <p class="card-text">Stock: {{ fund.monthly_stock }} Per Month</p>
+                                    <p class="card-text">Hold Duration: {{ fund.hold_duration }}</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
         </div>
         <!--  Why is Section -->
         <div class="container text-center mb-5">
@@ -97,33 +125,16 @@
             </div>
         </div>
         <!-- Fund cards -->
+        {% if funds %}
         <div class="container">
-            <h2 class="text-center">Featured Funds </h2>
-            <a class="text-decoration-none" href="/"><h5 class="text-end">More Funds</h5></a>
-            <div class="row row-cols-2 row-cols-3 text-center mb-5 shadow">
-            <div class="fund-card bg-light border">
-                <h4>Fund Title</h4>
-                <h4>Fund Icon</h4>
-                <h4>Fund monthly Stock</h4>
-                <h4>About, info</h4>
-                <button class="btn btn-primary ">Details</button>
-            </div>
-            <div class="fund-card bg-light border">
-                <h4>Fund Title</h4>
-                <h4>Fund Icon</h4>
-                <h4>Fund monthly Stock</h4>
-                <h4>About, info</h4>
-                <button class="btn btn-primary">Details</button>
-            </div>
-            <div class="fund-card bg-light border">
-                <h4>Fund Title</h4>
-                <h4>Fund Icon</h4>
-                <h4>Fund monthly Stock</h4>
-                <h4>About, info</h4>
-                <button class="btn btn-primary">Details</button>
+            <h3>Featured Funds</h3>
+            <div class="container">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    {% include 'funds_cards.html' %}
+                </div>
             </div>
         </div>
-        </div>
+        {% endif %}
     </div>
 
 </main>
