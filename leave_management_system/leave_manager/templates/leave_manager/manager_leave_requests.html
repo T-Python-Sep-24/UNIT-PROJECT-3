@@ -1,0 +1,106 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Manager Leave Requests{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="text-center mb-4">Leave Requests</h2>
+
+        {% if pending_leaves %}
+            <h4>Pending Requests</h4>
+            <ul class="list-group">
+                {% for leave in pending_leaves %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ leave.employee.get_full_name }} - {{ leave.leave_type }}
+                        
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#leaveModal{{ leave.id }}">
+                            View Details
+                        </button>
+                    </li>
+
+                    <div class="modal fade" id="leaveModal{{ leave.id }}" tabindex="-1" role="dialog" aria-labelledby="leaveModalLabel{{ leave.id }}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="leaveModalLabel{{ leave.id }}">Leave Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Employee:</strong> {{ leave.employee.get_full_name }}</p>
+                                    <p><strong>Leave Type:</strong> {{ leave.leave_type }}</p>
+                                    <p><strong>Start Date:</strong> {{ leave.start_date }}</p>
+                                    <p><strong>End Date:</strong> {{ leave.end_date }}</p>
+                                    <p><strong>Document:</strong> 
+                                        {% if leave.document %}
+                                            <a href="{{ leave.document.url }}" target="_blank">View Document</a>
+                                        {% else %}
+                                            No document uploaded
+                                        {% endif %}
+                                    </p>
+                                    <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>  
+                                    
+                                    <form action="{% url 'leave_manager:approve_or_reject_leave' leave.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="actionReason{{ leave.id }}">Reason for Decision:</label>
+                                            <textarea id="actionReason{{ leave.id }}" name="reason" class="form-control" rows="3" placeholder="Provide a reason..."></textarea>
+                                        </div>
+
+                                        <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+                                        <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No pending leave requests.</p>
+        {% endif %}
+        
+        {% if approved_leaves %}
+            <h4>Approved Requests</h4>
+            <ul class="list-group">
+                {% for leave in approved_leaves %}
+                    <li class="list-group-item">
+                        {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
+                        <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
+                        <div id="details-{{ leave.id }}" class="collapse">
+                            <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
+                            <p><strong>Manager Reason:</strong> {% if leave.manager_reason %}{{ leave.manager_reason }}{% else %}No manager reason provided{% endif %}</p>
+                            <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No approved leave requests.</p>
+        {% endif %}
+        
+        {% if rejected_leaves %}
+            <h4>Rejected Requests</h4>
+            <ul class="list-group">
+                {% for leave in rejected_leaves %}
+                    <li class="list-group-item">
+                        {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
+                        <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
+                        <div id="details-{{ leave.id }}" class="collapse">
+                            <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
+                            <p><strong>Manager Reason:</strong> {% if leave.manager_reason %}{{ leave.manager_reason }}{% else %}No manager reason provided{% endif %}</p>
+                            <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No rejected leave requests.</p>
+        {% endif %}
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

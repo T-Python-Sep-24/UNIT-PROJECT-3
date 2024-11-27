@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Approve or Reject Leave (HR){% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Leave Request for {{ leave_request.employee.get_full_name }}</h2>
+        <p><strong>Leave Type:</strong> {{ leave_request.leave_type }}</p>
+        <p><strong>Start Date:</strong> {{ leave_request.start_date }}</p>
+        <p><strong>End Date:</strong> {{ leave_request.end_date }}</p>
+        <p><strong>Manager's Reason:</strong> {{ leave_request.manager_reason }}</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="actionReason">Reason for Final Decision:</label>
+                <textarea id="actionReason" name="reason" class="form-control" rows="3" placeholder="Provide a final decision reason..."></textarea>
+            </div>
+
+            <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+            <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
+        </form>
+    </div>
+{% endblock %}

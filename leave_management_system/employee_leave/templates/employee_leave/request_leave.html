@@ -1,0 +1,106 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Leave Requests{% endblock %}
+
+<style>
+    .container {
+        max-width: 600px;
+        margin-top: 50px;
+    }
+    .form-container {
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+{% block content %}
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li><strong>{{ field.label }}</strong>: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div class="container">
+        <div class="form-container">
+            <h2 class="text-center mb-4">Leave Request Form</h2>
+
+            {% if messages %}
+                <div class="alert alert-info">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="employee-name" class="form-label">Employee Name</label>
+                    <input type="text" class="form-control" id="employee-name" value="{{ request.user.first_name }} {{ request.user.last_name }}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="employee-number" class="form-label">Employee Number</label>
+                    <input type="text" class="form-control" id="employee-number" value="{{ request.user.username }}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="leave_type" class="form-label">Leave Type</label>
+                    {{ form.leave_type }}
+                </div>
+            
+                <div class="mb-3">
+                    <label for="start_date" class="form-label">Start Date</label>
+                    {{ form.start_date }}
+                </div>
+            
+                <div class="mb-3">
+                    <label for="end_date" class="form-label">End Date</label>
+                    {{ form.end_date }}
+                </div>
+            
+                <div class="mb-3" id="reason-container" style="display: none;">
+                    <label for="reason" class="form-label">Reason</label>
+                    {{ form.reason }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="document" class="form-label">Upload Document (Optional)</label>
+                    {{ form.document }}
+                </div>
+            
+                <button type="submit" class="btn btn-primary w-100">Submit Request</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const leaveTypeSelect = document.querySelector('select[name="leave_type"]');
+        const reasonField = document.querySelector('textarea[name="reason"]');
+        const reasonContainer = document.getElementById('reason-container');
+
+        leaveTypeSelect.addEventListener('change', function() {
+            if (leaveTypeSelect.value === 'other') {
+                reasonContainer.style.display = 'block';
+                reasonField.required = true;
+            } else {
+                reasonContainer.style.display = 'none';
+                reasonField.required = false;
+            }
+        });
+
+        if (leaveTypeSelect.value === 'other') {
+            reasonContainer.style.display = 'block';
+            reasonField.required = true;
+        }
+    </script>
+{% endblock %}
