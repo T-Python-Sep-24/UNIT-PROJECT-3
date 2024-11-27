@@ -40,7 +40,7 @@
 
       {% if request.user.is_authenticated %}
       <div class="auth-logout">
-        <h6>Welcome {{request.user.username}}</h6>
+        <span class="welcome-message">Welcome, {{ request.user.username }}</span>
         <a href="{% url 'accounts:logout_view' %}?next={{request.path}}" class="auth-button">Logout</a>
       </div>
 

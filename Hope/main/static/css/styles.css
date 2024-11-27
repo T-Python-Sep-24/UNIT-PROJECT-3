@@ -148,6 +148,36 @@ header .login-page-header {
   transform: translateY(0);
 }
 
+.auth-logout {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 1rem;
+  color: white;
+}
+
+.auth-logout .welcome-message {
+  color: white; 
+}
+
+.auth-logout .auth-button {
+  padding: 5px 10px;
+  background-color: rgba(217, 217, 0217, 0.18);
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  backdrop-filter: blur(10px);   
+  color: #ffffff;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.auth-logout .auth-button:hover {
+  background-color: #FABE28;
+  color: #333;
+}
+
+
 
 
 /* Home Page */
