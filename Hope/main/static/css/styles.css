@@ -10,13 +10,12 @@ html {
 /* Header */
 header {
   position: fixed;
-  top: 0;
+  top: 10px;
   left: 0;
-  width: 100%;
+  width: 90%;
   z-index: 10;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   padding: 15px 20px;
 }
@@ -27,26 +26,132 @@ header .navbar-brand img {
 
 header .nav-links {
   display: flex;
-  flex-direction: row;
-  gap: 20px;
+  gap: 30px;
   text-align: center;
+  justify-content: center;
+  flex-grow: 1;
 }
 
 header .nav-links a {
   text-decoration: none;
-  align-items: center;
-  justify-content: center;
   color: white;
   font-size: 1rem;
   font-weight: bold;
 }
 
 header .nav-links a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  color: #FABE28;
 }
 
+header .nav-links.active {
+  color: #FABE28;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+header .login-page-header {
+  background-color: #FABE28;
+  color: #333;
+}
+
+
+.nav-profile-links{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  position: absolute;
+  right: 20px;
+}
+
+.add-button {
+  color: white;
+  background-color: #FABE28;
+  border-radius: 10px;
+  text-decoration: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  transition: background-color 0.2s ease; 
+
+
+}
+
+.add-button:hover {
+  background-color: #FABE28;
+  transform: scale(1.05);
+}
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  border: none;
+  cursor: pointer;
+  font-size: 25px; 
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: none;
+}
+
+.dropbtn:hover i {
+  color: #FABE28;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 120px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  right: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown-content a {
+  color: black;
+  font-size: 0.8rem;
+  padding: 12px 30px;
+  text-decoration: none;
+  display: block;
+  transition: all 0.2s ease;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown:hover .dropdown-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+
 /* Home Page */
-main {
+.home-page {
   height: 100vh;
   background-image: url("/static/images/wheat-back.png");
   background-repeat: no-repeat;
@@ -54,10 +159,18 @@ main {
   background-size: cover;
   display: flex;
   flex-direction: column;
+}
+
+.home-text{
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items:first baseline;
+  padding-top: 200px;
+  padding-left: 200px;
   color: white;
-  text-align: center;
+  text-align: left;
+
 }
 
 main h1 {
@@ -65,6 +178,7 @@ main h1 {
   font-weight: bold;
   color:transparent;
   -webkit-text-stroke: 1px #FABE28; 
+
 }
 
 main h2 {
@@ -80,7 +194,7 @@ main .cta-button {
   color: white;
   background-color: rgba(217, 217, 0217, 0.18);
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   text-decoration: none;
   backdrop-filter: blur(10px); 
   transition: background-color 0.2s ease, transform 0.2s ease; 
@@ -94,8 +208,8 @@ main .cta-button:hover {
 /* Footer */
 footer {
   position: fixed;
-  bottom: 10px;
-  left: 20px;
+  bottom: 30px;
+  left: 30px;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -136,6 +250,399 @@ footer a:hover {
   gap: 20px;
   transition: transform 0.3s ease-in-out;
 }
+
+/* Organization Sign Up Page */
+
+.signup-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #ffffff;
+  color: #fff;
+  gap: 1rem;
+  padding: 1rem;
+
+}
+
+/* Left section */
+.signup-left {
+  flex: 1;
+  background: url('/static/images/Ithra3.jpg') center/cover no-repeat;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+
+.signup-left .back-to-site {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  text-align: right;
+}
+
+.signup-left .left-content h1 {
+  font-size: 1.8rem;
+  color:transparent;
+  -webkit-text-stroke: 1px #FABE28; 
+  text-align: center;
+}
+
+/* Right section */
+.signup-right {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 0 10px 10px 0;
+}
+
+.signup-right .signup-right-header {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #FABE28;
+}
+
+.signup-right p {
+  margin-bottom: 2rem;
+  color: black;
+}
+
+.signup-right a {
+  color:#FABE28;
+  text-decoration: none;
+}
+
+.signup-right .signup-form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.signup-right .form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.signup-right .form-control {
+  flex: 1;
+  padding: 0.8rem;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  border: none;
+  background-color: #f2f2f2;
+  color: black;
+  font-size: 1rem;
+}
+
+.signup-right .form-control::placeholder {
+  color: rgb(154, 154, 154);
+  font-size: 0.9rem;
+  font-family: Arial, sans-serif;
+
+}
+
+.signup-right .terms {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: black;
+
+}
+
+.signup-right .signup-submit-button {
+  padding: 0.8rem;
+  background-color: #FABE28;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-right .signup-submit-button:hover {
+  background-color: #bd9327;
+}
+
+
+/* Volunteer Sign Up Page */
+
+.volunteer-signup-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #ffffff;
+  color: #fff;
+  gap: 1rem;
+  padding: 1rem;
+
+}
+
+/* Left section */
+.volunteer-signup-left {
+  flex: 1;
+  background: url('/static/images/Volunteer2.jpg') center/cover no-repeat;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+
+.volunteer-signup-left .back-to-site {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  text-align: right;
+}
+
+.volunteer-signup-left .volunteer-left-content h1 {
+  font-size: 2rem;
+  color:transparent;
+  -webkit-text-stroke: 1px #FABE28; 
+  text-align: center;
+}
+
+/* Right section */
+.volunteer-signup-right {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 0 10px 10px 0;
+}
+
+.volunteer-signup-right .volunteer-signup-right-header {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #FABE28;
+}
+
+.volunteer-signup-right p {
+  margin-bottom: 2rem;
+  color: black;
+}
+
+.volunteer-signup-right a {
+  color:#FABE28;
+  text-decoration: none;
+}
+
+.volunteer-signup-right .signup-form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.volunteer-signup-right .form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.volunteer-signup-right .form-control {
+  flex: 1;
+  padding: 0.8rem;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  border: none;
+  background-color: #f2f2f2;
+  color: black;
+  font-size: 1rem;
+}
+
+.volunteer-signup-right .form-control::placeholder {
+  color: rgb(154, 154, 154);
+  font-size: 0.9rem;
+  font-family: Arial, sans-serif;
+
+}
+
+.volunteer-signup-right .terms {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: black;
+
+}
+
+.volunteer-signup-right .signup-submit-button {
+  padding: 0.8rem;
+  background-color: #FABE28;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.volunteer-signup-right .signup-submit-button:hover {
+  background-color: #bd9327;
+}
+
+
+
+
+/* Login Page */
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #ffffff; 
+}
+
+.login-box {
+  width: 100%;
+  max-width: 600px;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-header {
+  font-size: 2rem;
+  color: #FABE28; 
+  margin-bottom: 2rem;
+}
+
+.login-form .form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+  width: 100%;
+}
+
+.login-form label {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.login-form .form-control {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #cccccc;
+  border: none;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  font-size: 1rem;
+  color: black;
+  box-sizing: border-box;
+
+}
+
+.login-form .form-control::placeholder {
+  color: rgb(154, 154, 154);
+  font-size: 0.9rem;
+  font-family: Arial, sans-serif;
+
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper .toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  color: #FABE28;
+  cursor: pointer;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #FABE28; 
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #bd9327; 
+}
+
+.login-links {
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+
+.login-links a {
+  color: #FABE28;
+  text-decoration: none;
+}
+
+/* Messages for user */
+
+.notification-container {
+  position: fixed;
+  top: 10px;
+  left: 40%;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: auto;
+  max-width: 90%;
+}
+
+.notification {
+  padding: 15px;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.5s ease;
+}
+
+.notification.success {
+  background-color: #4caf50;
+}
+
+.notification.error {
+  background-color: #f44336;
+}
+
+.notification.info {
+  background-color: #2196f3;
+}
+
+.notification.warning {
+  background-color: #ff9800;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -182,5 +689,66 @@ footer a:hover {
 
   .nav-links.show {
     display: flex;
+  }
+
+  .signup-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .signup-left, .signup-right {
+    flex: 1;
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .signup-left {
+    margin-bottom: 1rem;
+    background-size: cover;
+  }
+
+  .volunteer-signup-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .volunteer-signup-left, .volunteer-signup-right {
+    flex: 1;
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .volunteer-signup-left {
+    margin-bottom: 1rem;
+    background-size: cover;
+  }
+
+  .login-box {
+    padding: 1.5rem; /* Reduce padding for smaller screens */
+  }
+
+  .login-header {
+    font-size: 1.5rem; /* Slightly smaller heading */
+  }
+
+  .form-control {
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .login-button,
+  .create-account-button {
+    font-size: 0.9rem; /* Adjust button font size */
+    padding: 0.6rem; /* Reduce padding */
+  }
+
+  .login-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .login-links a {
+    margin-bottom: 0.5rem;
   }
 }

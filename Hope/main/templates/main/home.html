@@ -2,14 +2,18 @@
 
 {% load static %}
 
-{% block title %}Home{%endblock %}
+{% block body_class %}Home{% endblock %}
+{% block header_class %}home-header{% endblock %}
+
 
 {% block content %}
 
-<main>
-    <h1>Your Time, Your Impact</h1>
-    <h2>Building a Better Tomorrow</h2>
-    <a href="#" class="cta-button">Volunteer Today</a>
+<main class="home-page">
+    <div class="home-text">
+        <h1>Your Time, Your Impact</h1>
+        <h2>Building a Better Tomorrow</h2>
+        <a href="#" class="cta-button">Volunteer Today</a>
+    </div>
 </main>
   
 

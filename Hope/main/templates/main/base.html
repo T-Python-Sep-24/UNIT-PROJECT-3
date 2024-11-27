@@ -5,12 +5,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Volunteer Hub</title>
+  <title>Hope</title>
   
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
 
 
   {% if messages %}
@@ -23,28 +23,50 @@
   </div>
   {% endif %}
 
-  <header>
-    <a class="navbar-brand" href="#">
+  <header class="base-header {% block header_class %}{% endblock %}">
+    <a class="navbar-brand" href="/">
       <img src="{% static 'images/wheat-icon.png' %}" alt="Logo">
     </a>
     <button class="hamburger" aria-label="Toggle navigation">
         <i class="fas fa-bars"></i>
     </button>
     <nav class="nav-links">
-      <a href="#">About Us</a>
-      <a href="#">All Opportunities</a>
-      <a href="#">All Organizations</a>
+      <a href="{% url 'opportunities:all_opportunities_view' %}" class="{% if request.path == '/opportunities/all/'%}active{%endif%}">All Opportunities</a>
+      <a href="{% url 'organizations:all_organizations_view' %}" class="{% if request.path == '/organizations/all/'%}active{%endif%}">All Organizations</a>
+    </nav>
+
+    <nav class="nav-profile-links">
+      <a href="#" class="add-button">Add Opportunity</a>
+
+      {% if request.user.is_authenticated %}
+      <div class="auth-logout">
+        <h6>Welcome {{request.user.username}}</h6>
+        <a href="{% url 'accounts:logout_view' %}?next={{request.path}}" class="auth-button">Logout</a>
+      </div>
+
+      {% else %}
+      <div class="dropdown">
+        <button class="dropbtn">
+          <i class="fas fa-user"></i> 
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'accounts:organization_signup_view'%}">Sign Up as Organization</a>
+          <a href="{% url 'accounts:volunteer_signup_view'%}">Sign Up as Volunteer</a>
+          <a href="{% url 'accounts:login_view'%}?next={{request.path}}">Login</a>
+        </div>
+      </div>
+      {% endif %}
+
     </nav>
   </header>
 
-  <div>{% block content %} {% endblock %}</div>
+  <main>{% block content %} {% endblock %}</main>
 
   <footer>
     <span>Contact Us</span>
     <a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
     <a href="https://www.behance.net" target="_blank"><i class="fab fa-behance"></i></a>
     <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
-    <a href="mailto:contact@example.com" target="_blank"><i class="fas fa-envelope"></i></a>
   </footer>
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
