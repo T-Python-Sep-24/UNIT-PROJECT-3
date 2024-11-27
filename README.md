@@ -1,4 +1,12 @@
 # UNIT-PROJECT-3
+## Pawtential 
+- **Overview:** A platform for managing pet adoption and rescue, allowing individuals and organizations to list animals, request adoptions, and provide or receive support for animal care
+- **Features:**
+- User registration and profile management.
+- Pet listing and adoption request submission.
+- Financial and material support (donations for food, medical care, etc.).
+- Adoption status updates and notifications.
+- Pet status tracking after adoption.
 
 ## Create a Project of your own choosing
 
