@@ -1,0 +1,335 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+
+.itim-regular {
+    font-family: "Itim", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+.logo{
+    color: #fe5532;
+}
+.nav-link{
+    font-weight: 500;
+}
+.active{
+    color: #fe5532;
+}
+
+.btn-orange{
+    background-color:#fe5532 ;
+    color: white;
+    transition: background-color 0.3s ease-in-out ,color  0.3s ease-in-out;
+}
+
+.btn-orange:hover{
+    background-color:#c23f25 ;
+    color: rgb(255, 255, 255);
+}
+
+.btn-orange-white{
+    border: 1px solid #fe5532;
+    color: #fe5532;
+    transition: background-color 0.3s ease-in-out ,color  0.3s ease-in-out;
+}
+.btn-orange-white:hover{
+    background-color:#fe5532 ;
+    color: #ffffff;
+}
+
+
+.btn-posts{
+    background-color:#ffeeea ;
+    color: #fe5532;
+    transition: background-color 0.3s ease-in-out ,color  0.3s ease-in-out;
+  
+}
+
+.btn-posts:hover{
+    background-color:#f4d3ca ;
+    color: #fe5532;
+    transition: background-color 0.3s ease-in-out ,color  0.3s ease-in-out; 
+}
+.btn-secondary{
+    background-color:#d3d3d3 ;
+    border: #bfbfbf;
+    color:black;
+    transition: background-color 0.3s ease-in-out,color  0.3s ease-in-out;
+}
+
+.btn-secondary:hover{
+    background-color:#bdbdbd ;
+    color:black;
+
+}
+
+.link-images{
+    position: relative;
+    height: 25px;
+    width: 60px;
+    margin-right: 1rem;
+}
+
+
+.img1{
+    height: 100%;
+    width: 25px;
+    position: absolute;
+    left: 0;
+    border: #cacaca 1px solid;
+}
+
+.img2{
+    height: 100%;
+    width: 25px;
+    position: absolute;
+    left: 20px;
+    border: #cacaca 1px solid;
+}
+
+.img3{
+    height: 100%;
+    width: 25px;
+    position: absolute;
+    left: 40px;
+    border: #cacaca 1px solid;
+}
+
+.orange-link{
+    color: black;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color  0.3s ease-in-out;
+
+}
+
+.orange-link:hover{
+    color: #fe5532;
+}
+.arrow-right-container .fa-arrow-right-long{
+    transform: translateX(0%);
+    color: black;
+    transition: transform  0.3s ease-in-out, color  0.3s ease-in-out;
+}
+.arrow-right-container:hover .fa-arrow-right-long{
+   transform: translateX(30%);
+   color: #fe5532;
+}
+
+.intro-phrase{
+    font-size: 4rem;
+}
+
+main{
+    min-height: 87vh;
+}
+
+
+
+
+
+
+.left-top{
+    background-image: url("../images/left-top.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius:0% 23% 22% 21% / 0% 23% 24% 22% ;
+    height: 10rem;
+    width: 10rem;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+.left-top:hover{
+    transform: scale(1.10);
+}
+.middle-top{
+    background-image: url("../images/middle-top.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius:23% 21% 22% 21% / 21% 20% 24% 22%  ;
+    height: 10rem;
+    width: 10rem;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+.middle-top:hover{
+    transform: scale(1.10);
+}
+.right-top{
+    background-image: url("../images/right-top.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius:23% 0% 22% 21% / 21% 0% 24% 22% ;
+    height: 10rem;
+    width: 10rem;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+.right-top:hover{
+    transform: scale(1.10);
+}
+
+.middle-middle{
+    background-image: url("../images/middle-middle.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius:23% 21% 22% 21% / 21% 20% 24% 22%  ;
+    height: 11rem;
+    width: 10rem;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+.middle-middle:hover{
+    transform: scale(1.10);
+}
+
+
+.left-middle{
+    background-image: url("../images/left-middle.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius:42% 39% 39% 0% / 41% 42% 41% 22%   ;
+    height: 12rem;
+    width: 10rem;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+.left-middle:hover{
+    transform: scale(1.10);
+}
+
+.right-middle{
+    background-image: url("../images/right-middle.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 42% 39% 0% 41% / 41% 42% 41% 41%    ;
+    height: 12rem;
+    width: 10rem;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+.right-middle:hover{
+    transform: scale(1.10);
+}
+
+.bottom{
+    background-image: url("../images/bottom.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 30% 30% 0% 0% / 30% 30% 30% 30%    ;
+    height: 11rem;
+    width: 30rem;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+.bottom:hover{
+    transform: scale(1.10);
+}
+
+ /* Card container */
+ .card {
+    position: relative; /* Make sure the info can be absolutely positioned */
+    overflow: hidden; /* Hide anything outside the card */
+  }
+
+  /* Image inside the card */
+  .card img {
+    width: 100%; /* Ensure the image fills the card */
+    height: 100%; /* Ensure the image covers the entire card */
+    object-fit: cover; /* Makes the image fill the space without distorting */
+    transition: opacity 0.3s ease; /* Fade effect */
+  }
+
+  /* Info overlay on hover */
+  .card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    color: white;
+    padding: 20px;
+    opacity: 0; /* Start with hidden info */
+    transition: opacity 0.3s ease; /* Smooth transition */
+  }
+
+  /* Hover effect */
+  .card:hover .card-info {
+    opacity: 1; /* Show info on hover */
+  }
+
+  /* Link styles */
+  .card-link {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Keep the text color */
+  }
+
+  .card:hover img {
+    opacity: 0.6; /* Slightly fade the image on hover */
+  }
+
+
+  /* Styling for the blog post links */
+  .blog-card {
+    position: relative;
+    padding: 10px 20px;
+    text-align: left;
+    border-radius: 30px;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+
+  /* Hidden content that will appear on hover */
+  .blog-card .slider-content {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: left 0.3s ease; /* Smooth sliding effect */
+  }
+
+  /* Show the content when hovering over the .btn-posts */
+  .blog-card:hover .slider-content {
+    left: 0; /* Slide the content in */
+  }
+
+  /* Basic styling for image inside slider */
+  .slider-content img {
+    max-width: 100px;
+    margin-right: 20px;
+  }
+
+footer a{
+    text-decoration: none;
+    color:rgb(118, 116, 116);
+    transition: text-decoration 0.3s ease-in-out,color  0.3s ease-in-out;
+
+}
+
+footer a:hover{
+    text-decoration: underline;
+    color:#fe5532;
+}
+
