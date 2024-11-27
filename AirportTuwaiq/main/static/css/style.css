@@ -1,0 +1,33 @@
+/* Navbar Styles */
+.navbar {
+    background-color: #580ab8; /* Custom color for the navbar */
+}
+.navbar .nav-link {
+    color: white !important; /* White text for navbar links */
+    font-weight: bold;
+}
+.navbar-brand img {
+    max-height: 50px; /* Adjust logo size */
+}
+
+/* Right Side Buttons */
+.navbar .btn-outline-light {
+    border-color: white;
+    color: white;
+}
+.navbar .btn-outline-light:hover {
+    background-color: white;
+    color: #580ab8;
+}
+.navbar .btn-light {
+    background-color: white;
+    color: #580ab8;
+}
+/*-------------------------------------*/
+/* Footer Styles */
+footer {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    font-size: 14px;
+    padding: 15px 0;
+}
