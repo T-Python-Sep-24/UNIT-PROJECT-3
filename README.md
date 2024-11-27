@@ -8,7 +8,7 @@
 - Adoption status updates and notifications.
 - Pet status tracking after adoption.
 
-- **UML link**
+## UML link
 - [UML](https://lucid.app/lucidchart/9d07aaa2-e133-4f98-a805-d37d963d7819/edit?viewport_loc=-719%2C-275%2C2384%2C1395%2CHWEp-vi-RSFO&invitationId=inv_6f54713b-2af9-4aea-abcc-d1001242bd77)
 
 ## Create a Project of your own choosing
