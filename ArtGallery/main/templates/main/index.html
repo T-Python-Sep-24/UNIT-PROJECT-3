@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}The Gallery{% endblock %}
+
+{% block intro %}
+<section class="container-lg">
+    <div class="hero rounded-1 shadow">
+        <div class="d-flex flex-column text-start">
+            <h1 class="display-4">The Gallery</h1>
+            <h3>Dive into creativity with our gallery collection</h3>
+        </div>
+        
+        <video autoplay loop muted class="video-bg">
+            <source src="{% static  'videos/TheGalleryVid.mp4' %}" type="video/mp4" alt="hero video">
+        </video>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}

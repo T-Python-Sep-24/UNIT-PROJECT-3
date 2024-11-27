@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Judson:ital,wght@0,400;0,700;1,400&display=swap');
+
+* {
+    font-family: 'Judson', serif;
+}
+
+body {
+    background-color: #2c1d1f !important;
+}
+
+body a {
+    color: #f9dfd5;
+    text-decoration: none;
+}
+
+/* Colors */
+
+
+/* Base styles */
+.navigation {
+    background-color: rgba(247, 211, 198, 0.1);
+    backdrop-filter: blur(10px);
+    margin-bottom: 5px;
+}
+
+/* Home page styles */
+.hero {
+    display: flex;
+    align-items: end;
+    text-align: center;
+    padding: 30px;
+    background-image: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.8));
+    color: white;
+    margin-bottom: 200px;
+    position: relative;
+    overflow: hidden;
+    min-height: 75vh;
+}
+
+.video-bg {
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    min-width: 100%;
+    min-height: 100%;
+}
