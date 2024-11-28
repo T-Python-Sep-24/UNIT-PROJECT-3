@@ -5,47 +5,100 @@
 {% block main %}
 <main>
     <div class="container">
-
+        <!-- main top-section  -->
         <div class="row row-cols-1 row-cols-lg-2 d-flex p-2 m-2">
-            <div class="pt-5 mt-5">
-                <h1>Your Funding is Online Now !</h1>
-                <p>With <span class="text-success bg-light pe-2 ps-2">EchoFund</span> You can now Search for the appropriate Funding opportunity, And Even Create and manage your own funding</p>
-                <a href="{% url 'funds_app:all_funds_view' %}" class="btn btn-success">Explore Opportunities</a>
-                <a href="{% url 'funds_app:add_fund_view' %}" class="btn btn-outline-success">Create You own Fund</a>
+                <div class="pt-5 mt-5">
+                    <h1>Your Funding is Online Now !</h1>
+                    <p>With <span class="text-success bg-light pe-2 ps-2">EchoFund</span> You can now Search for the appropriate Funding opportunity, And Even Create and manage your own funding with our fund management application</p>
+                    <a href="{% url 'funds_app:all_funds_view' %}" class="btn btn-success">Explore Opportunities</a>
+                    <a href="{% url 'funds_app:add_fund_view' %}" class="btn btn-outline-success">Create You own Fund</a>
+                </div>
+                <div class="p-5">
+                    <img src="{% static 'images/home-laptop.png' %}" class="w-100">
+                </div>
             </div>
-            <div class="p-5">
-                <img src="{% static 'images/home-laptop.png' %}" class="w-100">
-            </div>
-        </div>
+        <!-- main mid-section features and benefits  -->
         <div class="container-fluid mt-5 mb-5">
             <div class="row row-cols-1 row-cols-lg-2 d-flex">
-                <div>
-                    <img src="{% static 'images/curly-line.png' %}">
+                <div class="mt-4">
+                    <img src="{% static 'images/curly-line.png' %}" class="h-100">
+
                 </div>
                 <div class="mt-5 pt-5">
                     <h1 class="text-success">Features & Benefits</h1>
-                    <div class="cards mt-5">
-                        <div class="col m-5">
+                        <div class="cards mt-5">
+                            <div class="col m-5 pt-5">
+                                <div class="card border-0 shadow-lg h-100">
+                                    <div class="position-relative">
+                                        <img class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" src="https://hakbah.sa/wp-content/uploads/2021/03/icon-1.png" alt="Avatar">
+                                    </div>
+
+                                    <div class="card-body pt-5 mt-4 text-center">
+                                        <h3>Trust And Verification</h3>
+                                        <p class="card-title">All Transaction are Verified before actions, Secured from breaches ands unauthorized access</p>
+                                        <p class="card-title">Financial Transactions are secured with the highest international standards, and protocols</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col m-5 pt-5">
+                                <div class="card border-0 shadow-lg h-100">
+                                    <div class="position-relative">
+                                        <img class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" src="https://hakbah.sa/wp-content/uploads/2021/03/icon-1.png" alt="Avatar">
+                                    </div>
+
+                                    <div class="card-body pt-5 mt-4 text-center">
+                                        <h3>Easy & Simple</h3>
+                                        <p class="card-title">Create, Manage, And Participate in funds easily, with clear identifications and smart categorization</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row row-cols-1 row-cols-lg-2 d-flex">
+                <div class="">
+                    <div class="cards">
+                        <div class="col m-5 pt-5">
                             <div class="card border-0 shadow-lg h-100">
                                 <div class="position-relative">
-
                                     <img class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" src="https://hakbah.sa/wp-content/uploads/2021/03/icon-1.png" alt="Avatar">
                                 </div>
-                                <div class="card-body pt-5 mt-4">
-                                    <h4 class="card-title">{{ fund.fund_name }}</h4>
-                                    <p class="card-text">{{ fund.about }}</p>
-                                    <p class="card-text">{{ fund.policies }}</p>
-                                    <p class="card-text">Stock: {{ fund.monthly_stock }} Per Month</p>
-                                    <p class="card-text">Hold Duration: {{ fund.hold_duration }}</p>
+
+                                <div class="card-body pt-5 mt-4 text-center">
+                                    <h3>Very Fast</h3>
+                                    <p class="card-title">Complete Your Business in Seconds, Add, Delete, Update Funds amd personal Information in Seconds</p>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col m-5 pt-5">
+                            <div class="card border-0 shadow-lg h-100">
+                                <div class="position-relative">
+                                    <img class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" src="https://hakbah.sa/wp-content/uploads/2021/03/icon-1.png" alt="Avatar">
+                                </div>
+
+                                <div class="card-body pt-5 mt-4 text-center">
+                                    <h3>Mobility and modularity</h3>
+                                    <p class="card-title">Check Your funds and data From anywhere at anytime with cloud based funding management system</p>
                                 </div>
 
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>            
+                <div class="mt-4">
+                    <img src="{% static 'images/curly-line.png' %}" class="h-75">
+
+                </div>
+                </div>
         </div>
-        <!--  Why is Section -->
+
+
+        <!--  Why_is-Section -->
         <div class="container text-center mb-5">
             <h2>Why Us ?</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto, eum exercitationem facilis magni natus nihil nisi provident quibusdam tempore! Esse exercitationem fugit harum in laborum nulla officia quis sapiente ullam.</p>
@@ -136,6 +189,5 @@
         </div>
         {% endif %}
     </div>
-
 </main>
 {% endblock %}
