@@ -6,14 +6,14 @@
 <main>
     <div class="container">
         <!-- main top-section  -->
-        <div class="row row-cols-1 row-cols-lg-2 d-flex p-2 m-2">
-                <div class="pt-5 mt-5">
-                    <h1>Your Funding is Online Now !</h1>
+        <div class="row row-cols-1 row-cols-lg-2 d-flex p-2 m-2 pt-5 pb-5 mt-5">
+                <div class="pt-3 mt-5">
+                    <h1 class="display-3">Your Funding is Online Now !</h1>
                     <p>With <span class="text-success bg-light pe-2 ps-2">EchoFund</span> You can now Search for the appropriate Funding opportunity, And Even Create and manage your own funding with our fund management application</p>
                     <a href="{% url 'funds_app:all_funds_view' %}" class="btn btn-success">Explore Opportunities</a>
                     <a href="{% url 'funds_app:add_fund_view' %}" class="btn btn-outline-success">Create You own Fund</a>
                 </div>
-                <div class="p-5">
+                <div class="p-1 pt-5 mt-2">
                     <img src="{% static 'images/home-laptop.png' %}" class="w-100">
                 </div>
             </div>
@@ -21,20 +21,20 @@
         <div class="container-fluid mt-5 mb-5">
             <div class="row row-cols-1 row-cols-lg-2 d-flex">
                 <div class="mt-4">
-                    <img src="{% static 'images/curly-line.png' %}" class="h-100">
+                    <img src="{% static 'images/curly-line.png' %}" class="h-75">
 
                 </div>
                 <div class="mt-5 pt-5">
-                    <h1 class="text-success">Features & Benefits</h1>
+                    <h1 class="text-success">Features <span class="text-dark">&</span> Benefits</h1>
                         <div class="cards mt-5">
                             <div class="col m-5 pt-5">
                                 <div class="card border-0 shadow-lg h-100">
                                     <div class="position-relative">
-                                        <img class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" src="https://hakbah.sa/wp-content/uploads/2021/03/icon-1.png" alt="Avatar">
+                                        <img src="{% static 'images/verifiedAndTrust.png' %}" class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" alt="Avatar">
                                     </div>
 
                                     <div class="card-body pt-5 mt-4 text-center">
-                                        <h3>Trust And Verification</h3>
+                                        <h3>Trust & Verification</h3>
                                         <p class="card-title">All Transaction are Verified before actions, Secured from breaches ands unauthorized access</p>
                                         <p class="card-title">Financial Transactions are secured with the highest international standards, and protocols</p>
                                     </div>
@@ -44,7 +44,7 @@
                             <div class="col m-5 pt-5">
                                 <div class="card border-0 shadow-lg h-100">
                                     <div class="position-relative">
-                                        <img class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" src="https://hakbah.sa/wp-content/uploads/2021/03/icon-1.png" alt="Avatar">
+                                        <img src="{% static 'images/easyAndSimple.png' %}" class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" alt="Avatar">
                                     </div>
 
                                     <div class="card-body pt-5 mt-4 text-center">
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+            </div>
         </div>
         <div class="container-fluid">
             <div class="row row-cols-1 row-cols-lg-2 d-flex">
@@ -65,7 +65,7 @@
                         <div class="col m-5 pt-5">
                             <div class="card border-0 shadow-lg h-100">
                                 <div class="position-relative">
-                                    <img class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" src="https://hakbah.sa/wp-content/uploads/2021/03/icon-1.png" alt="Avatar">
+                                    <img src="{% static 'images/fast.png' %}" class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" alt="Avatar">
                                 </div>
 
                                 <div class="card-body pt-5 mt-4 text-center">
@@ -78,11 +78,11 @@
                         <div class="col m-5 pt-5">
                             <div class="card border-0 shadow-lg h-100">
                                 <div class="position-relative">
-                                    <img class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" src="https://hakbah.sa/wp-content/uploads/2021/03/icon-1.png" alt="Avatar">
+                                    <img src="{% static 'images/modular.png' %}" class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" alt="Avatar">
                                 </div>
 
                                 <div class="card-body pt-5 mt-4 text-center">
-                                    <h3>Mobility and modularity</h3>
+                                    <h3>Mobility & modularity</h3>
                                     <p class="card-title">Check Your funds and data From anywhere at anytime with cloud based funding management system</p>
                                 </div>
 
@@ -97,97 +97,261 @@
                 </div>
         </div>
 
-
-        <!--  Why_is-Section -->
-        <div class="container text-center mb-5">
-            <h2>Why Us ?</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto, eum exercitationem facilis magni natus nihil nisi provident quibusdam tempore! Esse exercitationem fugit harum in laborum nulla officia quis sapiente ullam.</p>
+        <!--  Why_us-Section -->
+        <div class="container mt-5 mb-5">
             <div class="row">
-                <div class="col">
-                    <img src="">
-                    <h5>contribution</h5>
-                    <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci cumque, debitis dolor doloribus ducimus ea fugiat fugit id laboriosam, libero natus odit possimus quod repudiandae sint soluta ullam ut, voluptates. </p>
-                </div>
-                <div class="col">
-                    <img src="">
-                    <h5>Sustainability</h5>
-                    <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci cumque, debitis dolor doloribus ducimus ea fugiat fugit id laboriosam, libero natus odit possimus quod repudiandae sint soluta ullam ut, voluptates. </p>
-                </div>
-                <div class="col">
-                    <img src="">
-                    <h5>Trust</h5>
-                    <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci cumque, debitis dolor doloribus ducimus ea fugiat fugit id laboriosam, libero natus odit possimus quod repudiandae sint soluta ullam ut, voluptates. </p>
+                <div class="col-md-12">
+                    <div class="text-center">
+                        <h1>What Makes <span class="text-success">EchoFunds</span> Special</h1>
+
+                        <p>We Create a safe environment for saving and funding money where you can participate and create whatever funding style you like as long as you know how to manage it we will support you with a semantic processing and operations for affective management</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12">
+                                <div class="media single-feature wow fadeInUp">
+                                    <div class="text-right pe-4">
+                                        <h5>Fast Processing</h5>
+                                        <p>Participate, Create, Update, Manage, and Delete funds in seconds</p>
+                                    </div>
+                                    <div class=" icon-border"> <span class="fa fa-bolt"></span> </div>
+                                </div>
+                                <div class="media single-feature wow fadeInUp">
+                                    <div class="text-right pe-4">
+                                        <h5>Funds Management</h5>
+                                        <p>Add, Delete, Notify, Warn Member of your fund with complete control and overall specified policies and constraints</p>
+                                    </div>
+                                    <div class="media-right icon-border"> <span class="fa fa-users"></span> </div>
+                                </div>
+                                <div class="media single-feature wow fadeInUp">
+                                    <div class="text-right pe-4">
+                                        <h5>Cloud-Based Hosting</h5>
+                                        <p>Unlimited Accessibility to your information, funds and processes, as our web application will be hosted on cloud. </p>
+                                    </div>
+                                    <div class="media-right icon-border"> <span class="fa fa-cloud" ></span> </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 py-5 my-5">
+                                <div class="feature-laptop"> <img src="{% static 'images/features_laptop.png' %}" class="img-fluid wow fadeInUp"/> </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="media single-feature wow fadeInUp">
+                                    <div class="icon-border pe-4"> <span class="fa fa-check-double" ></span> </div>
+                                    <div class="text-left">
+                                        <h5>Regular Updates</h5>
+                                        <p>Checks on security concerns to ensure data integrity and security, Updating requirements to match security trends</p>
+                                    </div>
+                                </div>
+                                <div class="media single-feature wow fadeInUp">
+                                    <div class="icon-border pe-4"> <span class="fa fa-dollar-sign" aria-hidden="true"></span> </div>
+                                    <div class="text-left">
+                                        <h5>Save Your Money</h5>
+                                        <p>Search and Find the appropriate opportunity that satisfy your funding and savings needs </p>
+                                    </div>
+                                </div>
+                                <div class="media single-feature wow fadeInUp">
+                                    <div class="icon-border pe-4"> <span class="fa fa-hdd" aria-hidden="true"></span> </div>
+                                    <div class="text-left">
+                                        <h5>Full Control</h5>
+                                        <p>You have full access to your funds operations, even participating you have full access within the policies and roles</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- Features Section -->
+        <!-- How It Works Section -->
         <div class=" align-items-center text-center ">
-            <h2>Features</h2>
+            <h2>How <span class="text-success">EchoFund</span> works !</h2>
             <div class="ms-4 row row-cols-1 row-cols-3 justify-content-center text-center mb-5">
 
                     <div class="col justify-content-center">
-                        <div id="feature" class="d-flex">
-                            <img src="">
-                            <div id="feature-desc">
-                                <h5>Fully Responsive</h5>
-                                <p>Lorem ipsum dossssssssssssssssssssssssssss</p>
-                            </div>
-                        </div>
-                        <div id="feature" class="d-flex">
-                            <img src="">
-                            <div id="feature-desc">
-                                <h5>Fully Responsive</h5>
-                                <p>Lorem ipsum dossssssssssssssssssssssssssss</p>
-                            </div>
-                        </div>
-                        <div id="feature" class="d-flex">
-                            <img src="">
-                            <div id="feature-desc">
-                                <h5>Fully Responsive</h5>
-                                <p>Lorem ipsum dossssssssssssssssssssssssssss</p>
-                            </div>
-                        </div>
+                      <img class="w-100" src="{% static 'images/steps.png' %}">
                     </div>
-                    <div class="col justify-content-center">
-                      <img class="w-100" src="{% static 'images/logo.png' %}">
-                    </div>
-                    <div class="col justify-content-center">
-                        <div id="feature" class="d-flex">
-                            <img src="">
-                            <div id="feature-desc">
-                                <h5>Fully Responsive</h5>
-                                <p>Lorem ipsum dossssssssssssssssssssssssssss</p>
-                            </div>
-                        </div>
-                        <div id="feature" class="d-flex">
-                            <img src="">
-                            <div id="feature-desc">
-                                <h5>Fully Responsive</h5>
-                                <p>Lorem ipsum dossssssssssssssssssssssssssss</p>
-                            </div>
-                        </div>
-                        <div id="feature" class="d-flex">
-                            <img src="">
-                            <div id="feature-desc">
-                                <h5>Fully Responsive</h5>
-                                <p>Lorem ipsum dossssssssssssssssssssssssssss</p>
-                            </div>
-                        </div>
-                    </div>
+
 
             </div>
         </div>
-        <!-- Fund cards -->
-        {% if funds %}
-        <div class="container">
-            <h3>Featured Funds</h3>
-            <div class="container">
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    {% include 'funds_cards.html' %}
+        <div class="container-fluid text-center shadow mb-5 p-5">
+            <div class=""><img src="{% static 'images/wallet-big-icon.png' %}" width="110px"></div>
+            <h1 class="pt-5">Join Us Now ! </h1>
+            <div class="d-flex justify-content-center gap-5 pt-5">
+                <a href="{% url 'accounts:sign_up' %}" class="btn btn-primary">Login Now</a>
+                <a href="#contact" class="btn btn-outline-primary">Contact Us</a>
+
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="container-fluid pt-5 mt-5  shadow rounded bg-light p-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="sectioner-header text-center">
+                        <h1 class="text-success">Frequently Asked Questions</h1>
+                        <span class="line"></span>
+                        <p>Supporting Your Experience In my Site Here are some Frequently Asked Questions That Can help You make a picture about my products and operations.</p>
+                    </div>
+                    <div class="section-content">
+                        <div class="row gap-3 justify-content-center">
+                            <!-- q1 -->
+                            <div class="col-md-6 faq-content wow fadeInUp bg-success rounded">
+                                <div class="accordion-item ">
+                                    <h2 class="accordion-header">
+                                        <button class="h3 accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                                            Is the web app safe?
+                                        </button>
+                                    </h2>
+                                    <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            Yes, Hakbah application abides by the guidelines for the security of Internet banking services issued by the Saudi Central Bank, and it saves and processes data in computer servers in the Kingdom of Saudi Arabia, and applies the highest standards of protection and compliance, such as the ISO27001 certificate.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- q2 -->
+                            <div class="col-md-6 faq-content wow fadeInUp bg-success rounded">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="h3 accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                                            What are the current guarantees between members in the same fund?
+                                        </button>
+                                    </h2>
+                                    <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            The current guarantees are based on the regularity declarations, the commitment to pay, and the verification of the identity of each member through electronic approval in connection with the databases of government systems. Also, issuing electronic Sanad for each member.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- q3 -->
+                            <div class="col-md-6 faq-content wow fadeInUp bg-success rounded">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="h3 accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                                            Is there a notice of payment?
+                                        </button>
+                                    </h2>
+                                    <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            Yes, there are payment notices, as well as your account statement for each fund.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- q4 -->
+                            <div class="col-md-6 faq-content wow fadeInUp bg-success rounded">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="h3 accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+                                            Is there a fee to participate in Jameya?
+                                        </button>
+                                    </h2>
+                                    <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            Yes, service fees start from 199 riyals as a one-time inclusive fee when joining the association. Includes all services such as Sanad, verification, tax, payments, administrative fees, and others.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- q5 -->
+                            <div class="col-md-6 faq-content wow fadeInUp bg-success rounded">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="h3 accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5">
+                                            How can I pay my fund amount monthly?
+                                        </button>
+                                    </h2>
+                                    <div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            You can pay with (Apple Pay) or any (Mada) card issued by any bank in the Kingdom of Saudi Arabia through the application.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- q6 -->
+                            <div class="col-md-6 faq-content wow fadeInUp bg-success rounded">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="h3 accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6">
+                                            How do I receive my funding amount?
+                                        </button>
+                                    </h2>
+                                    <div id="collapse6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            The amount of Jameya is deposited directly into your bank account after the payment of all members is completed, within one working day, and within two working days for the first month of the new Jameyas. To transfer the amount to your account you must accept Sanad.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        {% endif %}
+
+        <!-- Contacts Section -->
+        <div id="contact" class="container-fluid mt-5 mb-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="sectioner-header text-center">
+                        <h1 class="text-success">Contact us</h1>
+
+                        <p>Feel Free To Ask Questions, Suggest Improvements, Report Problems and Errors </p>
+                    </div>
+                    <div class="section-content">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-8">
+                                <form id="contact_form" action="{% url 'main:contact_view' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="text" id="your_name" class="form-input w-100" name="name" placeholder="Full Name" required>
+                                        </div>
+                                        <div class="col">
+                                            <input type="email" id="email" class="form-input w-100" name="email" placeholder="Email" required>
+                                        </div>
+                                    </div>
+                                    <input type="text" id="subject" class="form-input w-100" name="subject" placeholder="Subject">
+                                    <textarea class="form-input w-100" id="message" placeholder="Message" name="message"></textarea>
+                                    <button class="btn-grad w-100 text-uppercase" type="submit">submit</button>
+                                </form>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-4">
+                                <div class="contact-info white">
+                                    <div class="contact-item media"> <i class="fa fa-map-marker-alt media-left media-right-margin"></i>
+                                        <div class="media-body">
+                                            <p class="text-uppercase">Address</p>
+                                            <p class="text-uppercase">Riyadh, Qurtoba</p>
+                                        </div>
+                                    </div>
+                                    <div class="contact-item media"> <i class="fa fa-mobile media-left media-right-margin"></i>
+                                        <div class="media-body">
+                                            <p class="text-uppercase">Phone</p>
+                                            <p class="text-uppercase"><a class="text-white" href="tel:+15173977100">+966 544581821</a> </p>
+                                        </div>
+                                    </div>
+                                    <div class="contact-item media"> <i class="fa fa-envelope media-left media-right-margin"></i>
+                                        <div class="media-body">
+                                            <p class="text-uppercase">E-mail</p>
+                                            <p class="text-uppercase"><a class="text-white" href="mailto:abcdefg@gmail.com">hamza.helal.d@gmail.com</a> </p>
+                                        </div>
+                                    </div>
+                                    <div class="contact-item media"> <i class="fa fa-clock media-left media-right-margin"></i>
+                                        <div class="">
+                                            <p class="text-uppercase">Working Hours</p>
+                                            <p class="text-uppercase">Sat-Thu 10.00 AM to 2.30 PM.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 {% endblock %}
