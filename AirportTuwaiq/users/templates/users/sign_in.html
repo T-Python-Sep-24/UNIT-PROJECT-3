@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center justify-content-center mt-5" style="min-height: 90vh;">
+    <h1 class="text-center mb-4">Sign In</h1>
+    <form method="post" action="{% url 'users:sign_in_view' %}{% if 'next' in request.GET %}?next={{request.GET.next}}{% endif %}" class="w-50">
+        {% csrf_token %}
+        
+        <!-- Username -->
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+        
+        <!-- Password -->
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="d-flex justify-content-center mt-5">
+            <button type="submit" class="btn btn-primary w-50">Sign In</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -44,17 +44,25 @@
             </div>
 
             <!-- Right Side Links -->
-            <div class="d-flex align-items-center me-2">
-                <a href="#" class="btn btn-outline-light me-2">Sign-Up</a>
-                <a href="#" class="btn btn-outline-light me-2">Sign-In</a>
-                <a href="#" class="btn btn-light">Log-Out</a>
+            <div class="d-flex align-items-center me-4">
+                {% if request.user.is_authenticated %}
+                    <!-- Welcome Message and Logout -->
+                    <div class="d-flex align-items-center ms-5">
+                        <span class="me-2 text-white">Welcome, {{ request.user.username }}</span>
+                        <a class="btn btn-outline-light" href="{% url 'users:logout_view' %}?next={{ request.path }}">Log Out</a>
+                    </div>
+                {% else %}
+                    <!-- Sign-Up and Sign-In Buttons -->
+                    <a href="{% url 'users:customer_sign_up_view' %}?next={{request.path}}" class="btn btn-outline-light me-2">Sign-Up</a>
+                    <a href="{% url 'users:sign_in_view' %}?next={{request.path}}" class="btn btn-outline-light me-2">Sign-In</a>
+                {% endif %}
             </div>
         </div>
     </nav>
     <div class="container my-3">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -79,7 +87,7 @@
                         <i class="fas fa-phone-alt"></i> +966-123-456-789
                     </p>
                     <p>
-                        New employee? <a href="#" class="text-primary">Sign Up Here</a> to register.
+                        New employee? <a href="{% url 'users:employee_sign_up_view' %}?next={{request.path}}" class="text-primary">Sign Up Here</a> to register.
                     </p>
                 </div>
     
