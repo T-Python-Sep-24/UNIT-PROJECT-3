@@ -1,0 +1,25 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Your Profile</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+
+    <hr>
+    <h3>Profile Details</h3>
+    <p><strong>Username:</strong> {{ profile.user.username }}</p>
+    <p><strong>Email:</strong> {{ profile.user.email }}</p>
+    <p><strong>About:</strong> {{ profile.about }}</p>
+    <p><strong>Role:</strong> {{ profile.roll }}</p>
+    <p><strong>Profile Photo:</strong></p>
+    {% if profile.photo %}
+        <img src="{{ profile.photo.url }}" alt="Profile Photo" width="150">
+    {% else %}
+        <p>No photo uploaded.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Not found{% endblock %}
+
+
+{% block content %}
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <h2>Sorry , the page is not found</h2>
+        <h5><a href="{% url 'main:index_view' %}">return to home</a></h5>
+        <img src="{% static 'gif/404.gif.' %}" alt="Cool Car" class="img-fluid rounded">
+    </div>
+{% endblock %}

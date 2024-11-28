@@ -1,8 +1,64 @@
 # UNIT-PROJECT-3
 
-## Create a Project of your own choosing
+**TaskFlow Management System**
+- **Description:** A Task Management System designed for teams to collaborate effectively, track tasks, and manage projects with milestones. It will include robust user authentication, role-based access control, task assignments, file uploads, and notifications.
 
-Base on what you’ve learned until now , create a project of your choosing. Impress us with your creativity and execution.
+- **Features:**
+- **User authentication and role-based access control:** Secure login system with permissions for Admins 
+to manage users, projects, and tasks, and Team Members to access assigned tasks.
+
+- **Task creation, assignment, and tracking:** Admins and team members can create tasks, assign them, set priorities and deadlines, and update progress statuses.
+
+- **Project management with milestones:** Organize tasks within projects, define milestones, and track 
+progress to meet goals efficiently.
+
+- **File uploads and comments:** Facilitate collaboration by allowing users to upload task-related files and engage in discussions through a comment system.
+  
+- **Notification system:** Notify users of new assignments, task updates, and approaching deadlines to 
+ensure timely completion of work.
+
+
+**User Story**
+1- User Authentication and Role-Based Access Control
+    -As a user, I want to securely register and log in, so I can access my tasks and projects safely.
+    -As an Admin, I want to manage user roles and permissions, so I can control access to different 
+    features.
+    -As a Team Member, I want to view and interact only with my assigned tasks and projects, so I stay  
+    focused on my responsibilities.
+
+2- Task Creation, Assignment, and Tracking
+    -As an Admin, I want to create tasks and assign them to team members, so everyone knows their 
+    responsibilities.
+    -As a user, I want to update task statuses, so I can track and report progress.
+    -As an Admin or Team Member, I want to prioritize tasks by urgency, so critical work is completed   
+    first.
+
+3- Project Management with Milestones
+    -As an Admin, I want to create projects with milestones, so that I can plan and monitor progress 
+    effectively.
+    -As a Team Member, I want to view tasks linked to milestones, so that I understand the project 
+    goals.
+    -As an Admin, I want to track milestone completion, so that I can measure overall progress.
+
+4- File Uploads and Comments
+    -As a user, I want to upload files to tasks, so that I can share important documents with the team.
+    -As a user, I want to comment on tasks, so that I can discuss progress with my team members.
+    -As an Admin, I want to view files and comments, so that I can monitor collaboration.
+
+5- Notification System
+   -As a user, I want to be notified of new task assignments, so that I stay updated on my 
+    responsibilities.
+    -As a user, I want reminders for task deadlines, so that I can manage my time effectively.
+    -As an Admin, I want to notify users about task updates, so that the team is informed about changes.
+
+**Model**
+
+![alt text](image.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
+![alt text](image-4.png)
+
 
 
 ## Minimum Requirements
@@ -16,20 +72,6 @@ Base on what you’ve learned until now , create a project of your choosing. Imp
 - Use naming conventions & best practices.
 - Strive to make the user journey intuitive and complete.
 
-
-
-## Example Projects :
-
-
-1. **Task Management System:**
-- **Overview:** Create a platform for managing tasks and projects within a team or organization.
-- **Features:**
-- User authentication and role-based access control.
-- Task creation, assignment, and tracking.
-- Project management with milestones.
-- File uploads and comments on tasks.
-- Notification system for task updates.
-
 ## Use python-dotenv to save your sensitive data.
 - https://pypi.org/project/python-dotenv/
 
@@ -40,61 +82,6 @@ Base on what you’ve learned until now , create a project of your choosing. Imp
 ## Use Git & Github to manage and track changes in your project.
 - At lease commit and sync the changes once at the end of everyday.
 
-## Edit the README.md file to include (include the info at the top):
-- Project Name
-- Project Description
-- Features list.
-
-
-**Online Learning Platform:**
-
-- **Overview:** Develop a platform for online courses, quizzes, and educational resources.
-- **Features:**
-- User registration and profile management.
-- Course creation and enrollment.
-- Quiz and assessment functionalities.
-- Progress tracking and certificates.
-
-
-
-
-**Crowdfunding Platform:**
-
-- **Overview:** Build a crowdfunding website where users can create campaigns and seek financial support for their projects.
-- **Features:**
-    - User profiles with project history.
-    - Campaign creation and customization.
-    - Payment integration for contributions.
-    - Progress tracking and updates.
-
-**Job Board and Recruitment System:**
-
-- **Overview:** Develop a platform for job seekers and employers to connect.
-- **Features:**
-    - User profiles with resumes.
-    - Job posting and application functionalities.
-    - Search and filter options for jobs.
-    - Employer dashboards for managing postings.
-
-
-**Inventory Management System:**
-
-- **Overview:** Build a system for tracking and managing inventory for businesses.
-- **Features:**
-    - User authentication with roles (e.g., admin, staff).
-    - Product catalog with stock levels.
-    - Order processing and tracking.
-    - Reporting and analytics.
-
-
-**Recipe Sharing Platform:**
-
-- **Overview:** Create a platform where users can share and discover recipes.
-- **Features:**
-    - User accounts with saved recipes.
-    - Recipe creation and editing.
-    - Search and categorization of recipes.
-    - User ratings and reviews.
       
 ## Resources:
 
