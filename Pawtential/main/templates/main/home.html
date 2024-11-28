@@ -3,6 +3,13 @@
 {% block content %}
 <title>{% block title %}Home Page{% endblock %}</title>
 <div class="container">
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+  {% endif %}  
   <h1>Pawtential</h1>
   <h3>we believe every pet has the potential to thrive in a loving home</h3>
     <div class="row text-center" style="--bs-gap: 1rem;">
