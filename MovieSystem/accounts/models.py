@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class UserProfile(models.Model):
+class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     about = models.TextField(blank=True)
     avatar = models.ImageField(upload_to="images/avatars/", default="images/avatars/a.png")
