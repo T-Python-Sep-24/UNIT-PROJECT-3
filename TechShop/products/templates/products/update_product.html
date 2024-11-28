@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        {{ product_form.as_p }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">save</button>
+    
+{% endblock %}
