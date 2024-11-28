@@ -1,0 +1,131 @@
+{% extends 'main/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block style %}
+<style>
+    /* Sidebar */
+    .sidebar {
+        min-width: 250px;
+        max-width: 250px;
+        background: linear-gradient(180deg, #ffdbef, #ffdae6);
+        color: #fff;
+        padding-top: 20px;
+        height: 100vh;
+        position: fixed;
+        border-radius: 0 15px 15px 0;
+    }
+    .sidebar h2 {
+        color: #ff69b4;
+        font-family: 'Poppins', sans-serif;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .sidebar a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 10px 20px;
+        display: block;
+        border-radius: 5px;
+        margin: 5px 10px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .sidebar a:hover, .sidebar a.active {
+        background-color: #ff69b4;
+        color: #fff;
+    }
+
+    /* Header */
+    .header {
+        background: linear-gradient(180deg, #ffdbef, #ffdae6);
+        color: #fff;
+        padding: 15px;
+        margin-left: 250px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #FFDEE9;
+        border-radius: 0 0 15px 15px;
+    }
+    .header h1 {
+        font-size: 24px;
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        font-weight: bold;
+    }
+    .header form label {
+        font-weight: bold;
+        font-family: 'Poppins', sans-serif;
+    }
+    .header form select {
+        border-radius: 5px;
+    }
+
+    .main-content {
+        margin-left: 250px;
+        padding: 20px;
+    }
+    table {
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="sidebar">
+        <h2 class="text-center">Dashboard</h2>
+        <a href="{% url 'dashboard:dashboard_view' %}" class="{% if data_filter == 'all' %}active{% endif %}">All</a>
+        <a href="{% url 'dashboard:dashboard_view' %}?data=products" class="{% if data_filter == 'products' %}active{% endif %}">Products</a>
+    </div>
+
+    <div class="header">
+        <form method="get" class="d-inline-flex ms-3 text-end">
+            <input type="hidden" name="data" value="{{ data_filter }}"> 
+            <label for="sort" class="me-2">Sort by:</label>
+            <select name="sort" id="sort" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="newest" {% if sort_option == 'newest' %}selected{% endif %}>Newest</option>
+                <option value="oldest" {% if sort_option == 'oldest' %}selected{% endif %}>Oldest</option>
+            </select>
+        </form>
+
+        {% if data_filter == 'products' %}
+        <a class="btn btn-dark ms-auto" href="{% url 'services:add_product_view' %}">Add Product</a>
+        <a class="btn btn-dark ms-auto" href="{% url 'providers:add_artist_view' %}">Add Artist</a>
+        {% endif %}
+    </div>
+    <div class="main-content">
+        <h2 class="text-center text-pink mb-4">Products</h2>
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>About</th>
+                    <th>City</th>
+                    <th style="width: 20%;">Price</th>
+                    <th style="width: 20%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pro in product %}
+                <tr>    
+                    <td>{{ pro.name }}</td>
+                    <td>{{ pro.about }}</td>
+                    <td>{{ pro.city }}</td>
+                    <td>{{ pro.price }}</td>
+                    <td class="d-flex gap-2">
+                        <a href="{% url 'services:product_detail_view' pro.id %}" class="btn btn-dark">View</a>
+                        <a href="{% url 'services:update_product_view' pro.id %}" class="btn btn-secondary">Edit</a>
+                        <a href="{% url 'services:product_delete_view' pro.id %}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %} 
+            </tbody>
+        </table>
+    </div>
+    {% block footer %}
+    {% endblock %}
+{% endblock %}
+
+

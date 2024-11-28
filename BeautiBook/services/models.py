@@ -6,6 +6,6 @@ class Product(models.Model):
     name = models.CharField(max_length=100) 
     about= models.ImageField(upload_to='images/')  
     price = models.DecimalField(max_digits=10, decimal_places=2) 
-    city = models.CharField(max_length=255,choices=category_options)
+    city = models.CharField(max_length=255,choices=category_options,default='Jeddah')
     def __str__(self) -> str:
       return self.name

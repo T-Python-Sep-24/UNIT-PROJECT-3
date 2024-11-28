@@ -19,12 +19,12 @@ def add_product_view(request: HttpRequest):
         city = request.POST.get("city")
         new_product   = Product(
             name=name,
-            about=int(about),
+            about=(about),
             price=float(price),
             city =city,
         )
         new_product  .save()
-        return redirect("services:all_products_view")
+        return redirect("services:products_view")
     return render(request, "services/add_product.html")
 
 def product_detail_view(request:HttpRequest, product_id:int):
@@ -39,13 +39,13 @@ def update_product_view(request: HttpRequest,product_id:int):
         product_detail.city = request.POST["city"]
         product_detail.price = request.POST["price"]
         product_detail.save()
-        return redirect("services:products_view")
+        return redirect("dashboard:dashboard_view")
     return render(request, "services/update_product.html",{"product_detail": product_detail})
 
 def product_delete_view(request:HttpRequest, product_id:int):
     product_detail = Product.objects.get(pk=product_id)
     product_detail.delete()
-    return redirect("services:all_products_view",{"product_detail":product_detail})
+    return redirect("dashboard:dashboard_view")
 
 
 
