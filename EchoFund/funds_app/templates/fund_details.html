@@ -3,7 +3,8 @@
 
 {% block main %}
 <main>
-    <div class="container">
+    <div class="container mt-5">
+        <h1 class="display-2 text-center p-3">Fund Details</h1>
         <div class="row  p-5 shadow rounded">
 
             <div class="col p-3 g-2">
@@ -17,7 +18,7 @@
                         {% else %}
                         <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_add</span></a>
                         {% endif %}
-                        {% if request.user.is_superuser %}
+                        {% if request.user.is_superuser or request.user == fund.fund_owner %}
                         <a class="btn btn-primary" href="{% url 'funds_app:update_fund_view' fund.id %}"><span class="material-symbols-outlined">edit_square</span></a>
                         <a class="btn btn-danger" href="{% url 'funds_app:delete_fund_view' fund.id %}"><span class="material-symbols-outlined">delete</span></a>
                         {% endif %}
@@ -25,18 +26,19 @@
 
                 </div>
 
-                <h6>Specs: </h6>
+                <h6>Description: </h6>
                 <p>{{fund.about}}</p>
-                <div class="d-flex gap-2">
-                    <h6> Available Colors: </h6>
 
-                </div>
-                <h6>Model: {{fund.monthly_stock}}</h6>
+                <h6>Monthly Stock: {{fund.monthly_stock}}</h6>
 
+                {% for member in fund.fund_members.all %}
+                    <h1>{{member}}</h1>
+                {% endfor %}
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container mt-5 mb-5">
+        {% if reviews %}
         <h2>Reviews ({{reviews.count}})</h2>
         <div class="container shadow p-5">
             {% for review in reviews %}
@@ -50,9 +52,10 @@
             </div>
             {% endfor %}
         </div>
+        {% endif %}
         {% if request.user.is_authenticated %}
         <h3 class="mt-4">Add new Review</h3>
-        <form class="d-flex flex-column gap-4" action="{% url 'funds_app:add_review_view' fund.id %}" method="post">
+        <form class="d-flex flex-column gap-4 shadow rounded p-5 m-5" action="{% url 'funds_app:add_review_view' fund.id %}" method="post">
             {% csrf_token %}
             <div>
 

@@ -1,56 +1,56 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}New Fund{% endblock %}
+{% block title %}Update Fund{% endblock %}
 
 {% block main %}
 
 <main>
-    <h1 class="display-6 text-center special-color pt-2">New Car</h1>
+    <h1 class="display-6 text-center special-color pt-2">Update Fund</h1>
     <hr class="special-color2" style="width:15%;margin: 0 auto;">
     <div class="container pt-5">
         <div class="row row-cols-1 row-cols-md-2 g-5 justify-content-center">
             <div class="col shadow rounded p-3 special-color">
-                <h1 class="">New Fund</h1>
+                <h1 class="">Update Fund</h1>
                 <h4>Fill the form bellow</h4>
-                <form class="mt-5" action="{% url 'funds_app:add_fund_view' %}" method="post">
+                <form class="mt-5" action="{% url 'funds_app:update_fund_view' fund.id %}" method="post">
                     {% csrf_token %}
 
                     <div class="form-outline mb-4">
                         <label class="form-label" for="name">Fund Name</label>
-                        <input type="text" id="name" name="fund_name" class="form-control" placeholder="FamilyFund" required/>
+                        <input type="text" id="name" name="fund_name" class="form-control" value="{{fund.fund_name}}" placeholder="Camry" required/>
                     </div>
 
                     <div class="form-outline mb-4">
                         <label class="form-label" for="about">Funds Description</label>
-                        <textarea id="about" name="about" class="form-control" placeholder="Describe The Fund" required></textarea>
+                        <textarea id="about" name="about" class="form-control" placeholder="Describe The Fund" required>{{fund.about}}</textarea>
                     </div>
 
                     <div class="form-outline mb-4">
                         <label class="form-label" for="policies">Funds Policies</label>
-                        <textarea id="policies" name="policies" class="form-control" placeholder="Set The Fund Policies" required></textarea>
+                        <textarea id="policies" name="policies" class="form-control" placeholder="Set The Fund Policies" required>{{fund.policies}}</textarea>
                     </div>
 
                     <div class="form-outline mb-4">
                         <label class="form-label" for="monthly_stock">Monthly Stock</label>
-                        <input type="number" id="monthly_stock" name="monthly_stock" class="form-number" max="2025" required>
+                        <input type="number" id="monthly_stock" name="monthly_stock" class="form-number" value="{{fund.monthly_stock}}" max="2025" required>
                     </div>
 
                     <div class="form-outline mb-4">
                         <label class="form-label" for="hold_duration">Hold Duration Years</label>
-                        <input type="number" id="hold_duration" name="hold_duration" class="form-number" min="1" aria-describedby="HoldDurationHelp" required>
+                        <input type="number" id="hold_duration" name="hold_duration" class="form-number" value="{{fund.hold_duration}}" min="1" aria-describedby="HoldDurationHelp" required>
                         <div id="HoldDurationHelp" class="form-text">Hold Durations is the duration of saving before allowing fund requests to members</div>
                     </div>
 
                     <div class="form-outline mb-4">
                         <h6>Members</h6>
-                        {% for member in members %}
+                        {% for member in fund.members %}
+                        <label for="member-{{member.id}}">{{member.username}}</label>
                         <input class="form-check-input" id="member-{{member.id}}" name="members" type="checkbox" value="{{member.id}}">
-                        <label class="form-label" for="member-{{member.id}}">{{member.username}}</label>
                         {% endfor %}
                     </div>
 
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-block p-2 mb-4">Add New Fund</button>
+                        <button type="submit" class="btn btn-primary btn-block p-2 mb-4">Update Fund</button>
                     </div>
                 </form>
             </div>

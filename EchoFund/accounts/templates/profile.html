@@ -4,7 +4,7 @@
 {% block main %}
 <main>
 
-    <div class="container">
+    <div class="container pt-5">
         <div class="row">
             <div class="col-3 m-3">
                 <img src="{{user.profile.avatar.url}}" class="rounded-4 w-100">
@@ -23,6 +23,27 @@
                     <h3>About: </h3>
                     <p>{{user.profile.about}}</p>
                 </div>
+                {% if request.user == user %}
+                {% if funds %}
+                <div class="container shadow rounded p-5 mb-4">
+                    <h2><span class="material-symbols-outlined">wallet</span>Funds</h2>
+
+                    {% for fund in funds %}
+                    <div class="row p-3 rounded shadow m-3">
+                        <div class="col ">
+                            <h4><a href="{% url 'funds_app:fund_details_view' fund.id %}">{{ fund.fund_name }}</a></h4>
+                            <h5>Name {{fund.fund_name}}</h5>
+                            <p>Description: {{fund.about}}</p>
+                            <h6>At: {{fund.created_at}}</h6>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endif %}
+
+                {% if user.review_set.all %}
                 <div class="container shadow rounded p-5 mb-4">
                     <h2><span class="material-symbols-outlined">reviews</span>Reviews</h2>
 
@@ -40,28 +61,33 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="container shadow rounded p-5">
-                {% if request.user == user %}
-                <h3><span class="material-symbols-outlined">bookmarks</span>Bookmarks</h3>
-                {% for bookmark in request.user.bookmark_set.all %}
-                <div class="row p-3 rounded shadow m-3">
-                    <div class="col ">
-                        <h4><a href="{% url 'funds_app:fund_details_view' bookmark.fund.id %}">{{ bookmark.fund.fund_name }}</a></h4>
-
-                        <h6>At: {{bookmark.created_at}}</h6>
-                        {% if is_bookmarked %}
-                        <a href="{% url 'funds_app:add_bookmark_view' bookmark.fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_check</span></a>
-                        {% else %}
-                        <a href="{% url 'funds_app:add_bookmark_view' bookmark.fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_add</span></a>
-                        {% endif %}
-                    </div>
-                    <div class="col text-end">
-                        <img src="{{ bookmark.car.photo.url}}">
-                    </div>
-                </div>
-                {% endfor %}
                 {% endif %}
+
+                {% if request.user == user %}
+                {% if bookmarks %}
+                <div class="container shadow rounded p-5 mb-4">
+
+                    <h3><span class="material-symbols-outlined">bookmarks</span>Bookmarks</h3>
+                    {% for bookmark in request.user.bookmark_set.all %}
+                    <div class="row p-3 rounded shadow m-3">
+                        <div class="col ">
+                            <h4><a href="{% url 'funds_app:fund_details_view' bookmark.fund.id %}">{{ bookmark.fund.fund_name }}</a></h4>
+
+                            <h6>At: {{bookmark.created_at}}</h6>
+                            {% if is_bookmarked %}
+                            <a href="{% url 'funds_app:add_bookmark_view' bookmark.fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_check</span></a>
+                            {% else %}
+                            <a href="{% url 'funds_app:add_bookmark_view' bookmark.fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_add</span></a>
+                            {% endif %}
+                        </div>
+                        <div class="col text-end">
+                            <img src="{{ bookmark.car.photo.url}}">
+                        </div>
+                    </div>
+                {% endfor %}
                 </div>
+                {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>

@@ -12,6 +12,9 @@ class Fund(models.Model):
     hold_duration = models.SmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    fund_owner = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name='fund_owner')
+    fund_members = models.ManyToManyField(User, related_name='fund_members', blank=True)
+
 
 class Review(models.Model):
 

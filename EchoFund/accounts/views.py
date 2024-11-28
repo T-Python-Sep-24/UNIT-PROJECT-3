@@ -68,6 +68,7 @@ def log_out(request: HttpRequest):
 def profile_view(request: HttpRequest, user_name):
 
     user = User.objects.get(username=user_name)
+    funds = Fund.objects.filter(fund_owner=user)
     if not Profile.objects.filter(user = user).first():
         new_profile = Profile(user=user)
         new_profile.save()
@@ -75,7 +76,7 @@ def profile_view(request: HttpRequest, user_name):
     # profile = Profile.objects.get(user=user)
 
 
-    return render(request, 'profile.html', context={'user':user })
+    return render(request, 'profile.html', context={'user':user, 'funds':funds})
 
 
 def update_profile_view(request: HttpRequest):

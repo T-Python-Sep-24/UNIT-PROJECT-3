@@ -1,6 +1,6 @@
 {% for fund in funds %}
-<div class="col">
-    <div class="card h-100">
+<div class="col " style="width: 22rem; ">
+    <div class="card ">
         <div class="position-relative">
             <img class="card-img-top" style="height: 200px; object-fit: cover;" src="http://res.cloudinary.com/d3/image/upload/c_scale,q_auto:good,w_1110/trianglify-v1-cs85g_cc5d2i.jpg" alt="Card background">
             <img class="position-absolute" style="width: 100px; height: 100px; object-fit: cover; bottom: -50px; left: 50%; transform: translateX(-50%); border: 5px solid white; border-radius: 50%;" src="http://res.cloudinary.com/d3/image/upload/c_pad,g_center,h_200,q_auto:eco,w_200/bootstrap-logo_u3c8dx.jpg" alt="Avatar">
@@ -11,6 +11,8 @@
             <p class="card-text">{{ fund.policies }}</p>
             <p class="card-text">Stock: {{ fund.monthly_stock }} Per Month</p>
             <p class="card-text">Hold Duration: {{ fund.hold_duration }}</p>
+            <p class="card-text">Created By: {{ fund.fund_owner }}</p>
+            <p class="card-text">Created At: {{ fund.created_at }}</p>
         </div>
         <div class="card-footer bg-transparent">
             <a href="{% url 'funds_app:fund_details_view' fund.id %}" class="btn btn-primary">Details</a>

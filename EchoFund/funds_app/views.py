@@ -2,6 +2,8 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
+
+from django.contrib.auth.models import User
 from .models import Fund, Review
 from accounts.models import Bookmark
 # Create your views here.
@@ -28,6 +30,8 @@ def fund_details_view(request: HttpRequest, fund_id):
 
 def add_fund_view(request: HttpRequest):
 
+    members = User.objects.all()
+
     if not request.user.is_authenticated:
         messages.error(request, "Register to create new Fund", 'alert-danger')
         return redirect('accounts:sign_in')
@@ -35,8 +39,8 @@ def add_fund_view(request: HttpRequest):
 
         if request.method == "POST":
             new_fund = Fund(
-                # founder = request.user
-                # fund_members = request.POST.getlist('members')
+                fund_owner = request.user,
+                # fund_members = request.POST.getlist('members'),
                 fund_name = request.POST['fund_name'],
                 about = request.POST['about'],
                 policies = request.POST['policies'],
@@ -45,22 +49,11 @@ def add_fund_view(request: HttpRequest):
 
             )
             new_fund.save()
-
+            new_fund.fund_members.set(request.POST.getlist('members'))
             messages.success(request, "fund was added successfully", "alert-success")
             return redirect("funds_app:all_funds_view")
-        # if request.method == "POST":
-        #     car_brand = Brand.objects.filter(name=request.POST['brand'])
-        #     car_form = CarForm(request.POST,car_brand, request.FILES)
-        #     if car_form.is_valid():
-        #         car_form.save()
-        #         messages.success(request, "Car was added successfully", "alert-success")
-        #         return redirect(request, "cars:all_cars_view")
-        #     else:
-        #         print("add car form is not valid")
-        #         print(request.POST)
-        #         print(car_form.errors)
-        #         messages.error(request, "Error in adding car", "alert-danger")
-        return render(request, 'add_fund.html')
+
+        return render(request, 'add_fund.html', context={'members': members})
     except Exception as e:
         print(e)
         messages.error(request, "Error adding fund", "alert-danger")
@@ -68,12 +61,42 @@ def add_fund_view(request: HttpRequest):
 
 
 
-def update_fund_view(request: HttpRequest):
-    return None
+def update_fund_view(request: HttpRequest,fund_id):
+
+    if not (request.user.is_superuser or request.user.is_authenticated):
+        messages.error(request, "Only Authorized Uses Can update funds", 'alert-danger')
+        return redirect('funds_app:fund_details_view', fund_id=fund_id)
+
+    try:
+
+        fund = Fund.objects.get(pk=fund_id)
+        members = User.objects.all()
+
+        if request.method == "POST":
+
+            fund.fund_name = request.POST['fund_name']
+            fund.about = request.POST['about']
+            fund.policies = request.POST['policies']
+            fund.monthly_stock = request.POST['monthly_stock']
+            fund.hold_duration = request.POST['hold_duration']
+            fund.save()
+            fund.fund_members.set(request.POST.getlist('members'))
+
+            messages.success(request, "fund was added successfully", "alert-success")
+            return redirect("funds_app:fund_details_view", fund_id = fund_id)
+
+        return render(request, 'update_fund.html', context={'fund':fund, 'members': members})
+
+    except Exception as e:
+
+        print(e)
+        messages.error(request, "Error adding fund", "alert-danger")
+        return redirect(request, 'funds_app:all_funds_view')
+
 
 def delete_fund_view(request: HttpRequest, fund_id):
 
-    if request.user.is_superuser:
+    if request.user.is_superuser or request.user.is_authenticated:
         fund = Fund.objects.get(pk=fund_id)
         fund.delete()
         messages.success(request, 'Fund was deleted successfully', 'alert-success')
@@ -132,3 +155,7 @@ def add_bookmark_view(request: HttpRequest, fund_id):
         print(e)
 
     return redirect('funds_app:fund_details_view', fund_id = fund_id)
+
+def fund_participate_view(request: HttpRequest, fund_id):
+
+    pass
