@@ -40,24 +40,34 @@
 
       {% if request.user.is_authenticated %}
       <div class="auth-logout">
-        <span class="welcome-message">Welcome, {{ request.user.username }}</span>
-        <a href="{% url 'accounts:logout_view' %}?next={{request.path}}" class="auth-button">Logout</a>
+        <span class="welcome-message">
+          Welcome,
+          {% if request.user.volunteerprofile %}
+          <a href="{% url 'accounts:volunteer_profile' request.user.username %}" class="profile-link">
+            {{ request.user.username }}
+          </a>
+          {% elif request.user.organizationprofile %}
+          <a href="{% url 'accounts:organization_profile' request.user.username %}" class="profile-link">
+            {{ request.user.username }}
+          </a>
+          {% endif %}
+        </span>
+        <a href="{% url 'accounts:logout_view' %}?next={{ request.path }}" class="auth-button">Logout</a>
       </div>
-
       {% else %}
       <div class="dropdown">
         <button class="dropbtn">
           <i class="fas fa-user"></i> 
         </button>
         <div class="dropdown-content">
-          <a href="{% url 'accounts:organization_signup_view'%}">Sign Up as Organization</a>
-          <a href="{% url 'accounts:volunteer_signup_view'%}">Sign Up as Volunteer</a>
-          <a href="{% url 'accounts:login_view'%}?next={{request.path}}">Login</a>
+          <a href="{% url 'accounts:organization_signup_view' %}">Sign Up as Organization</a>
+          <a href="{% url 'accounts:volunteer_signup_view' %}">Sign Up as Volunteer</a>
+          <a href="{% url 'accounts:login_view' %}?next={{ request.path }}">Login</a>
         </div>
       </div>
       {% endif %}
-
     </nav>
+  
   </header>
 
   <main>{% block content %} {% endblock %}</main>

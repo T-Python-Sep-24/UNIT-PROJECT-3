@@ -1,0 +1,47 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+
+{% block body_class %}{{profile.volunteer_user.username}} Profile{% endblock %}
+
+{% block content %}
+
+<div class="profile-container">
+    <div class="profile-left-section">
+        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-photo">
+        <h2>{{ profile.full_name }}</h2>
+        <p>{{ profile.bio }}</p>
+    </div>
+    <div class="profile-right-section">
+        <form action="{% url 'accounts:volunteer_profile_view' profile.volunteer_user.username %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="full_name">Full Name</label>
+                <input type="text" name="full_name" id="full_name" value="{{ profile.full_name }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="bio">Bio/About Me</label>
+                <textarea name="bio" id="bio" rows="3" class="form-control">{{ profile.bio }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="skills">Skills/Expertise</label>
+                <input type="text" name="skills" id="skills" value="{{ profile.skills }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="experience">Experience</label>
+                <textarea name="experience" id="experience" rows="3" class="form-control">{{ profile.experience }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="profile_picture">Profile Picture</label>
+                <input type="file" name="profile_picture" id="profile_picture" class="form-control">
+            </div>
+            <button type="submit" class="update-button">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
