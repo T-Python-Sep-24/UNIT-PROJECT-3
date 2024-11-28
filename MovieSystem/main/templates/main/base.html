@@ -15,19 +15,91 @@
 </head>
 <body>
     <header>
-
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">MovieTicket</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        
+                        <!-- Movies Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMovies" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Movies
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMovies">
+                                <li><a class="dropdown-item" href="">All Movies</a></li>
+                                <li><a class="dropdown-item" href="">Actors</a></li>
+                                <li><a class="dropdown-item" href="">Directors</a></li>
+                            </ul>
+                        </li>
+        
+                        <!-- Add Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdd" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Add
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdd">
+                                <li><a class="dropdown-item" href="">New Movie</a></li>
+                                <li><a class="dropdown-item" href="">New Actor</a></li>
+                                <li><a class="dropdown-item" href="">New Director</a></li>
+                            </ul>
+                        </li>
+        
+                        <!-- Book Now -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Book Now</a>
+                        </li>
+        
+                        <!-- Login/Sign Up Buttons -->
+                        {% if request.user.is_authenticated %}
+                        <div class="d-flex  align-content-center align-items-center">
+                            <a class="nav-link " href="">{{request.user.username}}</a>
+                            <img src="{{request.user.profile.avatar.url}}" class="rounded-circle avatar" alt="">
+                        </div>
+                        {% endif %}
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item">
+                                <div class="d-flex gap-2 align-content-center align-items-center">
+                                <a class="nav-link " href="">Log Out</a>
+                                </div>  
+                            </li>
+                        {% else %}
+                            <div class="d-flex gap-2">
+                                <li class="nav-item">
+                                    <a class="btn btn-primary" href="" role="button">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-secondary" href="" role="button">Sign Up</a>
+                                </li>
+                            </div>
+                        
+                        {% endif %}
+                        
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
     </header>
     <main>
         
-        {% block content %}
-            
-        {% endblock content %}
+        <div class="content-wrapper">
+            <div class="container mt-4">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
             
     </main>
 
-    <footer>
-
+    
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p>&copy; 2024 MovieTicket. All rights reserved.</p>
     </footer>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org@1.7.0"></script>
 </body>
