@@ -1,22 +1,118 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Leave Requests - HR{% endblock %}
-
+{% block title %}Leave Requests{% endblock %}
+<style>
+    .container {
+        max-width: 800px;
+        margin-top: 50px;
+    }
+    .form-container {
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .table th, .table td {
+        text-align: center;
+    }
+</style>
 {% block content %}
-    <div class="container">
-        <h2 class="text-center mb-4">Pending Leave Requests</h2>
-
-        {% if leave_requests %}
-            <ul class="list-group">
-                {% for leave in leave_requests %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
-                        <a href="{% url 'hr_leave_management:approve_reject_leave' leave.id %}" class="btn btn-info btn-sm">Approve/Reject</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No pending leave requests.</p>
-        {% endif %}
+{% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
     </div>
+{% endif %}
+<div class="container">
+    <div class="form-container">
+        <h2 class="text-center mb-4">Leave Requests</h2>
+
+        <h4>Pending Leaves</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Employee Name:</th>
+                    <th>Leave Type</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in pending_leaves %}
+                <tr>
+                    <td> {{ leave.employee.get_full_name }}</td>
+                    <td>{{ leave.leave_type }}</td>
+                    <td>{{ leave.start_date }}</td>
+                    <td>{{ leave.end_date }}</td>
+                    <td class="text-warning">Pending</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No pending leaves</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h4>Approved Leaves</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Employee Name:</th>
+                    <th>Leave Type</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in approved_leaves %}
+                <tr>
+                    <td> {{ leave.employee.get_full_name }}</td>
+                    <td>{{ leave.leave_type }}</td>
+                    <td>{{ leave.start_date }}</td>
+                    <td>{{ leave.end_date }}</td>
+                    <td class="text-success">Approved by HR</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No approved leaves</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h4>Rejected Leaves</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Leave Type</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in rejected_leaves %}
+                <tr>
+                    <td> {{ leave.employee.get_full_name }}</td>
+                    <td>{{ leave.leave_type }}</td>
+                    <td>{{ leave.start_date }}</td>
+                    <td>{{ leave.end_date }}</td>
+                    <td class="text-danger">Rejected by HR</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No rejected leaves</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}

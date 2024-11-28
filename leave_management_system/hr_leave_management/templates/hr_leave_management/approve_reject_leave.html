@@ -3,12 +3,21 @@
 {% block title %}Approve or Reject Leave (HR){% endblock %}
 
 {% block content %}
+ {% if messages %}
+                <div class="alert alert-info">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
     <div class="container">
         <h2>Leave Request for {{ leave_request.employee.get_full_name }}</h2>
         <p><strong>Leave Type:</strong> {{ leave_request.leave_type }}</p>
         <p><strong>Start Date:</strong> {{ leave_request.start_date }}</p>
         <p><strong>End Date:</strong> {{ leave_request.end_date }}</p>
         <p><strong>Manager's Reason:</strong> {{ leave_request.manager_reason }}</p>
+        <p><strong>status:</strong> {{ leave_request.status}}</p>
+
 
         <form method="post">
             {% csrf_token %}

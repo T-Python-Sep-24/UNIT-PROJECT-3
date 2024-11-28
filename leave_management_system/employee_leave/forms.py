@@ -4,7 +4,7 @@ from .models import LeaveRequest
 class LeaveRequestForm(forms.ModelForm):
     class Meta:
         model = LeaveRequest
-        fields = ['start_date', 'end_date', 'leave_type', 'reason', 'document']
+        fields = ['start_date', 'end_date', 'leave_type', 'reason','document']
 
     start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))

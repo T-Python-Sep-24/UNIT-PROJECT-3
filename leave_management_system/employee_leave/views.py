@@ -1,9 +1,9 @@
-from django.contrib.auth.models import User, Group
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import LeaveRequestForm
 from .models import LeaveRequest
+from django.contrib.auth.models import User
 
 @login_required
 def request_leave(request):
@@ -19,7 +19,6 @@ def request_leave(request):
             leave_request.status = 'pending'
 
             employee_group = request.user.groups.filter(name='Employee').first()
-            
             if employee_group:
                 try:
                     manager = User.objects.get(username='Abdullah1')
@@ -35,7 +34,6 @@ def request_leave(request):
         form = LeaveRequestForm()
 
     return render(request, 'employee_leave/request_leave.html', {'form': form})
-
 
 @login_required
 def leave_requests(request):

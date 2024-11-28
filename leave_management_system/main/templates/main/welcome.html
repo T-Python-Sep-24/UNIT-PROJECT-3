@@ -132,6 +132,14 @@
                     </ul>
                 </div>
             {% endif %}
+            {% if messages %}
+            <div class="alert alert-info">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
         <h1>Welcome to the Leave Management System</h1>
         <p>Please select your role to continue:</p>
 
