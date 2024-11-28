@@ -1,0 +1,114 @@
+.root{
+    --primary-color:#FFAAA7;
+    --secondary-color: #FF8551;
+    --bakground-color: #FAF0E4;
+    --text-color : #98ddca;
+    --text-color-h: #24A19C;
+}
+html, body{
+    font-family: "Geist Mono", serif;
+    height: 100%;
+    margin: 0;
+    background-color: #FAF0E4;
+}
+
+main{
+    flex: 1;
+    margin: 10px;
+}
+header{
+    height: 200px; 
+    border-bottom: 2px solid #FF8551;
+}
+.navbar-logo img{
+    width: 200px;
+    height:auto;
+}
+.navbar-nav .nav-link , .bi-box-arrow-in-right{
+    color: #98DDCA;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+.navbar-nav .nav-link:hover , .bi-box-arrow-in-right{
+    color: #FFAAA7;
+
+}
+.navbar-toggler{
+    color: #98DDCA;
+}
+.navbar-toggler-icon{
+    background-color: #98DDCA;
+    border-radius: 4px;
+}
+h1{
+    color: #24A19C;
+}
+.search-form {
+    position: absolute;
+    top: 50%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+.search-form .form-control {
+    flex-grow: 1;
+    margin-right: 10px;
+    background-color: rgba(255, 255, 255, 0.636);
+    border: 1px solid #FFAAA7;
+}
+.search-form i {
+    color: #98DDCA;
+    font-size: 1.5rem; 
+    cursor: pointer; 
+}
+footer{
+    padding: 10px 0;
+    align-items: center;
+    text-align: center;
+}
+
+/*accounts*/
+
+.custom-form-container {
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 20px;
+    background-color: #f8f9fa91; 
+    border-radius: 30px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.custom-form-container .card-header {
+    color: #24A19C;
+    font-size: 1.5rem;
+    padding: 10px;
+}
+
+.form-label {
+    font-weight: bold; 
+}
+
+.form-control {
+    border-radius: 0.375rem; 
+    border-color: #ccc; 
+}
+
+.btn-primary {
+    background-color: #24A19C;
+    border-color: #24A19C;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.btn-primary:hover {
+    background-color: #98ddca;
+    border-color: #98ddca;
+}
+
+.account-fields {
+    display: none;
+}

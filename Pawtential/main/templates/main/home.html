@@ -1,0 +1,19 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Home Page{% endblock %}</title>
+<div class="container">
+  <h1>Pawtential</h1>
+  <h3>we believe every pet has the potential to thrive in a loving home</h3>
+    <div class="row text-center" style="--bs-gap: 1rem;">
+      <div class="col-6">
+         <img src="{% static 'images/paw.png'%}" alt="home.png" class="img-fluid">
+          <form class="search-form">
+            <input type="text" class="form-control" placeholder="Search here..." aria-label="Search">
+            <i class="bi bi-search"></i>
+          </form>   
+        </div>
+      <div class="col-4"></div>
+    </div>
+</div>
+{% endblock %}
