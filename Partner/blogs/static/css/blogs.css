@@ -1,0 +1,66 @@
+.challenge-area{
+    background-color: #f4d3ca;
+    border-radius: 10px; /* Optional: to add rounded corners */
+    min-height: 100vh !important;
+   }
+
+.challenge-area-img{
+    border-right:1px solid #fe5532 !important;
+}   
+.head-challenge{
+    color: black; /* Text color */
+        font-weight: bold; /* Make the text bold */
+        text-transform: uppercase; /* Make the text uppercase */
+        text-shadow: 2px 2px #fe5532;
+        text-align: center;
+
+}
+.quiz-area{
+    background-image: url("../images/chat-bubble.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 30vh;
+
+}
+
+/* Hide the default radio button */
+.form-check-input {
+    display: none;
+  }
+  
+  /* Style the label to resemble a custom radio button with letters */
+  .radio-label {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .form-check-input:checked + .form-check-label .radio-label {
+    background-color: #fe5532;
+    color: white;
+  }
+  
+  /* Change color on hover */
+  .form-check-input:hover + .form-check-label .radio-label {
+    background-color: #e2e6ea;
+  }
+  
+  /* Additional styles for text inside the radio label */
+  .form-check-label {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+  }
+
+.details-info{
+    border-left:#bdbdbd 1px solid  !important;
+}
+

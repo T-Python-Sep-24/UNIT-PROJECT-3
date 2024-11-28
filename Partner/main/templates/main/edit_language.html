@@ -1,0 +1,80 @@
+{% extends 'main/base.html'%}
+{%load static%}
+
+   
+    {%block head%}
+
+    {%endblock%}
+    {%block title%}<title>Edit Language</title>{%endblock%}
+
+     {%block content%}
+
+     <h1 class="space-grotesk text-white mb-3">Edit Language</h1>
+     {% if messages %}
+     <div class="messages">
+         {% for message in messages %}
+             <div class="alert {{ message.tags }}">
+                 {{ message }}
+             </div>
+         {% endfor %}
+     </div>
+ {% endif %}
+    <div class="form-container py-4 rounded-4 d-flex flex-column justify-content-center mt-2">
+        
+            <div class="p-0 gap-4 d-flex justify-content-center align-items-center ">
+                <form action="{% url 'main:update_language_view' language.id%}" class="container-fluid " method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                <div class="row">
+                    <div class="mb-3 col-md-6 col-sm-12">
+                        <label for="name" class="form-label">Language Name</label>
+                        <input type="text" class="form-control" value="{{language.name}}" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3 col-md-6 col-sm-12">
+                        <label for="native_name" class="form-label">Native name</label>
+                        <input type="text" class="form-control" value="{{language.native_name}}" maxlength="7" placeholder="(e.g., Arabic: العربية)." id="native_name" name="native_name" required>
+                    </div>   
+                </div>
+                
+
+                <div class="row align-items-center">
+                    <div class="d-flex mt-2 justify-content-end gap-4">
+                        <input type="submit" value="Update Language" class="btn btn-success text-white"/>
+                        <a href="{%url 'main:home_view'%}" class="btn btn-secondary text-white">Cancel</a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Delete
+                        </button> 
+                        </div>
+                </div>    
+                </form>
+        
+        </div>
+    </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete language</h5>
+                        <!-- Close button using btn-close -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete the language "{{ language.name }}"?
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Button to close the modal -->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        
+                        <!-- Secure delete action via POST request (use a form) -->
+                        <form action="{%url 'main:delete_language_view' language.id%}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
+     
+     {%endblock%}

@@ -1,0 +1,52 @@
+{% extends 'main/base.html'%}
+{%load static%}
+
+   
+    {%block head%}
+
+    {%endblock%}
+    {%block title%}<title>Add Language</title>{%endblock%}
+
+     {%block content%}
+
+     <h1 class="space-grotesk text-white mb-3">Add Language</h1>
+     {% if messages %}
+     <div class="messages">
+         {% for message in messages %}
+             <div class="alert {{ message.tags }}">
+                 {{ message }}
+             </div>
+         {% endfor %}
+     </div>
+ {% endif %}
+    <div class="form-container py-4 rounded-4 d-flex flex-column justify-content-center mt-2">
+        
+            <div class="p-0 gap-4 d-flex justify-content-center align-items-center ">
+                <form action="{% url 'main:add_language_view'%}" class="container-fluid " method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                <div class="row">
+                    <div class="mb-3 col-md-6 col-sm-12">
+                        <label for="name" class="form-label">Language Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3 col-md-6 col-sm-12">
+                        <label for="native_name" class="form-label">Native name</label>
+                        <input type="text" class="form-control" maxlength="7" placeholder="(e.g., Arabic: العربية)." id="native_name" name="native_name" required>
+                    </div>   
+                </div>
+                
+
+                <div class="row align-items-center">
+                    <div class="d-flex mt-2 justify-content-end gap-4">
+                        <input type="submit" value="Add Language" class="btn btn-success text-white"/>
+                        <a href="{%url 'main:home_view'%}" class="btn btn-danger text-white">Cancel</a>
+                    </div>
+                </div>    
+                </form>
+        
+        </div>
+    </div>
+
+    
+     
+     {%endblock%}

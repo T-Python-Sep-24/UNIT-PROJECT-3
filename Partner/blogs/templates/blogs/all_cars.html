@@ -1,0 +1,140 @@
+{% extends 'main/base.html'%}
+{%load static%}
+
+   
+    {%block head%}
+    {%endblock%}
+    {%block title%}<title>All Cars</title>{%endblock%}
+
+     {%block content%}
+        <div class="row justify-content-between">
+        <h1 class="col-md-3 space-grotesk text-white mb-5">All Cars</h1>
+        <form class=" col-md-6" method="get" action="{% url 'cars:all_cars_view' %}">
+            <div class="filtring-and-search  gap-3 d-flex justify-content-center ">
+                <input type="search" class="form-control" placeholder="Search" value="{{request.GET.search}}" name="search" minlength="1"/>
+                <select name="filter_by_brand" class="form-select">
+                    <option value="" disabled selected>Filter By Brand</option>
+                    {%for brand in brands%}
+                    <option value="{{brand.id}}" {%if request.GET.filter_by_brand == brand.id %} selected {%endif%}>{{brand.name}}</option>
+                    {%endfor%}
+                </select>
+                <select name="filter_by_color" class="form-select">
+                    <option value="" disabled selected>Filter By Color</option>
+                    {%for color in colors%}
+                    <option value="{{color.id}}" {%if request.GET.filter_by_color == color.id %} selected {%endif%}>{{color.name}}</option>
+                    {%endfor%}
+                </select>
+                <input type="submit" class="btn btn-success text-white " value="Apply"/>
+                <a href="{% url 'cars:all_cars_view' %}" class="btn btn-danger text-white " value="clear">Clear </a>
+            </div>
+        </form>
+       </div>
+       <div class="container p-0 ">
+        <div class="row gap-4 d-flex justify-content-center align-items-center">
+            {%for car in cars%}
+            <a href="{%url 'cars:detail_car_view' car.id%}" class="card mb-2 p-0 pr-1 col-md-8 col-sm-12 border-warning" style="max-width: 540px;">   
+                <div class="row gap-0">
+                  <div class="col-md-4">
+                    <img src="{{car.photos.first.image.url}}" class="img-card rounded-start" alt="...">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">{{car.year}} - {{car.name|truncatechars:12}}</h5>
+                            <p class="text-muted">{{car.model|truncatechars:12}}</p>
+                        </div>
+                        <div class="d-flex flex-column justify-content-start">
+                            <p class="card-text"> {{car.specs|truncatechars:50}}</p>
+                                <div class="d-flex container justify-content-start align-items-center text-muted">
+                                    <div class="row align-items-start">
+                                        <p class=" col-sm-5" ><i class="fa-solid fa-car-side"></i> {{car.doors}} doors</p>
+                                        <p class=" col-sm-5 "><i class="fa-solid fa-users-between-lines"></i> {{car.seats}} seats</p>
+                                        <p class=" col-sm-5"><i class="fa-solid fa-gear"></i> {{car.engine}}</p>
+                                        <p class=" col-sm-5"><i class="fa-solid fa-gas-pump"></i> {{car.get_fuel_display}}</p>
+
+                                    </div>
+                                </div>        
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                           
+                    <div>
+                        <h5>{{car.price}} SAR</h5>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center justify-content-center">
+                        <p class="card-text text-center text-body-secondary mb-2">Colors:</p>
+                        <div class="colors-container">
+                            {%for color in car.colors.all%}
+                          <span class="rounded-circle" style="background-color: {{color.hex_code}};"></span>
+                          {%endfor%}
+                        </div>
+                      </div>
+                </div>
+               
+                    </div>
+                  </div>
+                </div>
+            </a>
+            {%endfor%}
+        </div>
+    </div>
+
+    <br/><br/>
+          <navbar aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+            
+                {% if cars.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">
+                            <span aria-hidden="true"> First</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ cars.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true"> First</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">&laquo;</span>
+                    </li>
+                {% endif %}
+    
+                {% for num in cars.paginator.page_range %}
+                    {% if num == cars.number %}
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+        
+                {% if cars.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ cars.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ cars.paginator.num_pages }}" aria-label="Last">
+                            <span aria-hidden="true">Last </span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">&raquo;</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">Last</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </navbar>
+        
+     
+     {%endblock%}

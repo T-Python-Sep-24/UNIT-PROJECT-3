@@ -46,7 +46,7 @@
     background-color:#ffeeea ;
     color: #fe5532;
     transition: background-color 0.3s ease-in-out ,color  0.3s ease-in-out;
-  
+    text-decoration: none;
 }
 
 .btn-posts:hover{
@@ -110,15 +110,8 @@
 .orange-link:hover{
     color: #fe5532;
 }
-.arrow-right-container .fa-arrow-right-long{
-    transform: translateX(0%);
-    color: black;
-    transition: transform  0.3s ease-in-out, color  0.3s ease-in-out;
-}
-.arrow-right-container:hover .fa-arrow-right-long{
-   transform: translateX(30%);
-   color: #fe5532;
-}
+
+
 
 .intro-phrase{
     font-size: 4rem;
@@ -276,50 +269,58 @@ main{
   }
 
   .card:hover img {
-    opacity: 0.6; /* Slightly fade the image on hover */
+    opacity: 0.6; 
   }
 
-
-  /* Styling for the blog post links */
-  .blog-card {
+/* blogs style */
+.dropbtn {
+    border: none;
+  }
+  
+  .dropdown {
     position: relative;
-    padding: 10px 20px;
-    text-align: left;
-    border-radius: 30px;
-    overflow: hidden;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    transition: all 0.3s ease;
+    display: inline-block;
   }
-
-  /* Hidden content that will appear on hover */
-  .blog-card .slider-content {
+  
+  .dropdown-content {
+    display: none;
     position: absolute;
-    top: 0;
-    left: 100%;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
-    transition: left 0.3s ease; /* Smooth sliding effect */
+    background-color: #f4d3ca;
+    width: 18rem;
+    height: 13.5rem;
+    opacity: 0;
+    transform: translateX(5%);
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    transition: opacity 0.3s ease;
   }
+  .text{
+    background-color: #f4d3ca;
+    border-radius: 0px 15px 15px 0;
+  }
+  .dropdown-img{
+    border-radius: 15px 0 0 15px;
 
-  /* Show the content when hovering over the .btn-posts */
-  .blog-card:hover .slider-content {
-    left: 0; /* Slide the content in */
   }
+  .dropdown:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+  }
+  
+  
 
-  /* Basic styling for image inside slider */
-  .slider-content img {
-    max-width: 100px;
-    margin-right: 20px;
-  }
+
+
+.arrow-right-container .fa-arrow-right-long{
+    transform: translateX(0%);
+    color: black;
+    transition: transform  0.3s ease-in-out, color  0.3s ease-in-out;
+}
+.arrow-right-container:hover .fa-arrow-right-long{
+   transform: translateX(30%);
+   color: #fe5532;
+}
+
 
 footer a{
     text-decoration: none;
@@ -332,4 +333,6 @@ footer a:hover{
     text-decoration: underline;
     color:#fe5532;
 }
+
+
 
