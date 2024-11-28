@@ -1,0 +1,340 @@
+/* General Reset */
+body, h1, h2, h3, p, ul, ol, li, a {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+}
+
+/* Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    background: url('/static/images/backg11.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #71322c;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background-color: rgba(67, 63, 63, 0.805);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header nav a {
+    color: #312f2f;
+    margin-right: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+header nav a:hover {
+    color: #73e6d2;
+}
+
+/* Main Content */
+main {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+/* Titles */
+h1, h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #f0f0ef;
+}
+
+/* Horizontal Scroll Container */
+.horizontal-scroll-container {
+    display: flex
+;
+    overflow-x: auto;
+    padding: 10px;
+    gap: 20px;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    flex-wrap: wrap;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+    height: 10px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-thumb {
+    background-color: #ddd;
+    border-radius: 10px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-track {
+    background-color: #151414;
+}
+
+/* Card Styling */
+.card {
+    position: relative;
+    width: 770px;
+    height: 340px;
+    background-color: #243137bd; /* Changed to original color */
+    border-radius: 71px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    perspective: 548px;
+    box-shadow: 0 0 0 5px #ffffff56; /* Added from the second snippet */
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card:hover {
+    transform: scale(1.05); /* Modified scaling */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Slightly adjusted shadow */
+}
+
+/* Card Content */
+.card__content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #243137c0; /* Maintain background */
+    transform: rotateX(-90deg);
+    transform-origin: bottom;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card:hover .card__content {
+    transform: rotateX(0deg);
+}
+
+/* Card Image */
+.card img {
+    width: 38%;
+    height: 160px;
+    object-fit: cover;
+}
+
+/* Card Title */
+.card__title {
+    margin: 0;
+    font-size: 20px; /* Adjusted font size */
+    color: #bd9f67; /* Maintained original color */
+    font-weight: 700;
+}
+
+/* Card Description */
+.card__description {
+    margin: 10px 0 0;
+    font-size: 14px;
+    color: #ffffff; /* Changed to match original text color */
+    line-height: 1.4;
+}
+
+/* Logo and Animation */
+#logo-main, #logo-second {
+    height: 100%;
+}
+
+#logo-main {
+    fill: #bd9f67;
+}
+
+#logo-second {
+    padding-bottom: 10px;
+    fill: none;
+    stroke: #bd9f67;
+    stroke-width: 1px;
+}
+
+/* Border Effect */
+.border {
+    position: absolute;
+    inset: 0px;
+    border: 2px solid #bd9f67;
+    opacity: 0;
+    transform: rotate(10deg);
+    transition: all 0.5s ease-in-out;
+}
+
+.card:hover .border {
+    inset: 15px;
+    opacity: 1;
+    transform: rotate(0);
+}
+
+/* Bottom Text */
+.bottom-text {
+    position: absolute;
+    left: 50%;
+    bottom: 13px;
+    transform: translateX(-50%);
+    font-size: 6px;
+    text-transform: uppercase;
+    padding: 0px 5px 0px 8px;
+    color: #bd9f67;
+    background: #243137;
+    opacity: 0;
+    letter-spacing: 7px;
+    transition: all 0.5s ease-in-out;
+}
+
+.card:hover .bottom-text {
+    letter-spacing: 3px;
+    opacity: 1;
+    transform: translateX(-50%);
+}
+
+
+/* Forms */
+form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.791);
+}
+
+form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #f4a261;
+}
+
+form input, form select, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #888484;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #110f0f;
+}
+
+form input[type="submit"], form button {
+    background-color: #71f3e0e3;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #000;
+    transition: background-color 0.3s;
+}
+
+form input[type="submit"]:hover, form button:hover {
+    background-color: #72e7df;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px 20px;
+    background-color: rgba(0, 0, 0, 0.613);
+    color: #ffffff;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 10px 15px;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.pagination a:hover {
+    background-color: #f4a261;
+    color: #000;
+}
+
+.pagination .active {
+    background-color: #f4a261;
+    color: #000;
+    pointer-events: none;
+}
+
+
+
+
+.flip-card {
+    background-color: transparent;
+    width: 200px; /* Adjust the width as needed */
+    height: 300px; /* Adjust the height as needed */
+    perspective: 1000px;
+    margin: 10px;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.flip-card-front {
+    background-color: #ffffffa2; /* Front background color */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.flip-card-back {
+    background-color: #f1f1f18e; /* Back background color */
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.flip-card img {
+    max-width: 100%;
+    max-height: 70%; /* Adjust as needed */
+}
+
+.about-card {
+    background-color: #ffffff3a; /* Card background color */
+    border: 1px solid #ddd; /* Border for the card */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Inner padding */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    max-width: 600px; /* Maximum width of the card */
+    margin: 0 auto; /* Center the card */
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column; /* Stack the content vertically */
+}
