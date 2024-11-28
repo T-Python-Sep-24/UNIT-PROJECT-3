@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
     <!-- Local stylesheet -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -19,92 +19,91 @@
 </head>
 
 <body>
-    <header class="container-fluid sticky-top shadow-sm rounded-bottom-2 navigation">
+    <header class="container-fluid fixed-top shadow-sm rounded-bottom-2 bg-blur">
         <!-- This navbar expands at large screens, screens smaller than that toggle the collapse property -->
-        <nav class="navbar navbar-expand-lg py-2">
-            <div class="container mx-0 justify-content-between">
-                <!-- Brand name -->
-                <a class="navbar-brand px-2 fw-bold fs-3" href="/">
-                    The Gallery
-                </a>
+        <nav class="navbar navbar-expand-md py-1 justify-content-center navbar-dark">
+            <!-- Brand name -->
+            <a class="px-4" href="/">
+                <img src="{% static 'images/Logo.png' %}" alt="Logo" width="120">
+            </a>
 
-                <!-- Toggle button to display navbar on small screens -->
-                <button class="navbar-toggler order-4" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarCollapseItems" aria-controls="navbarCollapseItems" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+            <!-- Toggle button to display navbar on small screens -->
+            <button class="navbar-toggler order-3" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapseItems" aria-controls="navbarCollapseItems" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
 
-                {% url 'main:homeView' as homeUrl %}
+            {% url 'main:homeView' as homeUrl %}
 
-                <!-- Nav bar components -->
-                <div class="collapse navbar-collapse justify-content-end my-3" id="navbarCollapseItems">
-                    <!-- Nav links -->
-                    <ul class="navbar-nav align-items-center gap-3 px-4">
-                        <li class="nav-item p-1">
-                            <a class="" href="{{homeUrl}}">Home</a>
-                        </li>
-                        <li class="nav-item p-1">
-                            <a class="" href="">Art Pieces</a>
-                        </li>
-                        <li class="nav-item p-1">
-                            <a class="" href="">Artists</a>
-                        </li>
-                        <li class="nav-item p-1">
-                            <a class="" href="">About</a>
-                        </li>
-                        <li class="nav-item p-1">
-                            <a class="" href="">Contact</a>
-                        </li>
-                    </ul>
+            {% url 'accounts:registerView' as registerUrl %}
+            {% url 'accounts:loginView' as loginUrl %}
+            {% url 'accounts:logoutView' as logoutUrl %}
+
+            <!-- Nav bar components -->
+            <div class="collapse navbar-collapse my-3 justify-content-center" id="navbarCollapseItems">
+                <!-- Nav links -->
+                <ul class="navbar-nav align-items-center gap-3 px-4">
+                    <li class="nav-item p-1">
+                        <a class="" href="{{homeUrl}}">Home</a>
+                    </li>
+                    <li class="nav-item p-1">
+                        <a class="" href="">Art Pieces</a>
+                    </li>
+                    <li class="nav-item p-1">
+                        <a class="" href="">Artists</a>
+                    </li>
+                    <li class="nav-item p-1">
+                        <a class="" href="">About</a>
+                    </li>
+                    <li class="nav-item p-1">
+                        <a class="" href="">Contact</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Account -->
+            <div class="d-flex flex-row mx-3 gap-2">
+                {% if user.is_authenticated %}
+                <div class="d-flex gap-3 align-items-end">
+                    <a href="" class="d-flex flex-row gap-1 align-items-end">
+                        <img src="" class="rounded-circle avatar-sm">
+                        <p class="m-0 fw-medium">{{user.first_name}}</p>
+                    </a>
+                    <a class="btn-beige-400 py-0" href="{{logoutUrl}}">Logout</a>
                 </div>
-
-                <!-- Account -->
-                <div class="d-flex flex-row mx-3 gap-2">
-                    {% if user.is_authenticated %}
-                    <div class="d-flex gap-3 align-items-end">
-                        <a href="" class="d-flex flex-row gap-1 align-items-end">
-                            <img src="" class="rounded-circle avatar-sm">
-                            <p class="m-0 fw-medium">{{user.first_name}}</p>
-                        </a>
-                        <a class="btn py-0 btn-secondary" href="">Logout</a>
-                    </div>  
-                    {% else %}
-                    <a class="btn btn-secondary py-0 border-2" href="">Login</a>
-                    <a class="btn btn-secondary py-0 border-2" href="">Register</a>
-                    {% endif %}
-                </div>
+                {% else %}
+                <a class="btn-beige-400 py-0 my-auto" href="{{loginUrl}}">Login</a>
+                <a class="btn-beige-400 py-0 my-auto" href="{{registerUrl}}">Register</a>
+                {% endif %}
             </div>
         </nav>
     </header>
-
-    <main style="min-height: 70vh;">
+    
+    {% block intro %}
+    {% endblock %}
+    <main class="mt-5 pt-5" style="min-height: 75vh;">
         <!-- Alerts after any user action ex: add, delete -->
-        {% if messages %}
-            {% for msg in messages %}
-            <div class="container my-3 justify-items-center">
-                <div class="alert {{msg.tags}} alert-dismissible fade show mx-auto" role="alert">
-                    {{msg}}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+    {% if messages %}
+        {% for msg in messages %}
+        <div class="container justify-items-center">
+            <div class="alert {{msg.tags}} alert-dismissible fade show mx-auto" role="alert">
+                {{msg}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            {% endfor %}
-        {% endif %}
+        </div>
+        {% endfor %}
+    {% endif %}
 
-        {% block intro %}
-
-        {% endblock %}
-
-        {% block content %}
-
-        {% endblock %}
+    {% block content %}
+    {% endblock %}
     </main>
 
-    <footer class="container-fluid py-3 border-1 border-top border-secondary-subtle text-center mt-5">
+    <footer class="container-fluid py-3 border-1 border-top border-dark text-center mt-4">
         <div class="row gap-5">
-            <div class="col" href="">
-                <a href="" class="display-6">The Gallery</a>
+            <div class="col text-beige-200">
+                <a href="" class=""><img src="{% static 'images/Logo.png' %}" alt="Logo" width="100"></a>
                 <p>© 2024</p>
             </div>
 
@@ -138,7 +137,7 @@
     <!-- Bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
+        </script>
 </body>
 
 </html>

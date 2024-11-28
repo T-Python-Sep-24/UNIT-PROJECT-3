@@ -29,8 +29,8 @@ function previewImage(event) {
     })
 })()
 
-// Infinite scroll 
 const scrollers = document.querySelectorAll(".scroller");
+
 // If a user hasn't opted in for recuded motion, then we add the animation
 if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   addAnimation();
@@ -42,7 +42,7 @@ function addAnimation() {
     scroller.setAttribute("data-animated", true);
 
     // Make an array from the elements within `.scroller-inner`
-    const scrollerInner = scroller.querySelector(".scroller__inner");
+    const scrollerInner = scroller.querySelector(".scroller-inner");
     const scrollerContent = Array.from(scrollerInner.children);
 
     // For each item in the array, clone it
