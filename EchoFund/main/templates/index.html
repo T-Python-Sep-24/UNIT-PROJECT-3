@@ -11,14 +11,14 @@
                     <h1 class="display-3">Your Funding is Online Now !</h1>
                     <p>With <span class="text-success bg-light pe-2 ps-2">EchoFund</span> You can now Search for the appropriate Funding opportunity, And Even Create and manage your own funding with our fund management application</p>
                     <a href="{% url 'funds_app:all_funds_view' %}" class="btn btn-success">Explore Opportunities</a>
-                    <a href="{% url 'funds_app:add_fund_view' %}" class="btn btn-outline-success">Create You own Fund</a>
+                    <a href="{% url 'funds_app:add_fund_view' %}" class="btn btn-outline-primary">Create You own Fund</a>
                 </div>
                 <div class="p-1 pt-5 mt-2">
-                    <img src="{% static 'images/home-laptop.png' %}" class="w-100">
+                    <img src="{% static 'images/home-laptop.png' %}" class="w-100 home-laptop-img">
                 </div>
             </div>
         <!-- main mid-section features and benefits  -->
-        <div class="container-fluid mt-5 mb-5">
+        <div id="features" class="container-fluid mt-5 mb-5">
             <div class="row row-cols-1 row-cols-lg-2 d-flex">
                 <div class="mt-4">
                     <img src="{% static 'images/curly-line.png' %}" class="h-75">
@@ -28,7 +28,7 @@
                     <h1 class="text-success">Features <span class="text-dark">&</span> Benefits</h1>
                         <div class="cards mt-5">
                             <div class="col m-5 pt-5">
-                                <div class="card border-0 shadow-lg h-100">
+                                <div class="card border-0 shadow-lg rounded-5 h-100">
                                     <div class="position-relative">
                                         <img src="{% static 'images/verifiedAndTrust.png' %}" class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" alt="Avatar">
                                     </div>
@@ -42,7 +42,7 @@
                                 </div>
                             </div>
                             <div class="col m-5 pt-5">
-                                <div class="card border-0 shadow-lg h-100">
+                                <div class="card border-0 shadow-lg rounded-5 h-100">
                                     <div class="position-relative">
                                         <img src="{% static 'images/easyAndSimple.png' %}" class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" alt="Avatar">
                                     </div>
@@ -61,9 +61,9 @@
         <div class="container-fluid">
             <div class="row row-cols-1 row-cols-lg-2 d-flex">
                 <div class="">
-                    <div class="cards">
+                    <div class="cards features-cards">
                         <div class="col m-5 pt-5">
-                            <div class="card border-0 shadow-lg h-100">
+                            <div class="card features-card border-0 shadow-lg rounded-5 h-100">
                                 <div class="position-relative">
                                     <img src="{% static 'images/fast.png' %}" class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" alt="Avatar">
                                 </div>
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <div class="col m-5 pt-5">
-                            <div class="card border-0 shadow-lg h-100">
+                            <div class="card features-card border-0 rounded-5 shadow-lg h-100">
                                 <div class="position-relative">
                                     <img src="{% static 'images/modular.png' %}" class="position-absolute" style="width: 100px; height: 100px; bottom: -60px; left: 50%; transform: translateX(-50%);" alt="Avatar">
                                 </div>
@@ -163,7 +163,7 @@
             </div>
         </div>
         <!-- How It Works Section -->
-        <div class=" align-items-center text-center ">
+        <div id="how_it_works" class=" align-items-center text-center ">
             <h2>How <span class="text-success">EchoFund</span> works !</h2>
             <div class="ms-4 row row-cols-1 row-cols-3 justify-content-center text-center mb-5">
 
@@ -174,24 +174,25 @@
 
             </div>
         </div>
-        <div class="container-fluid text-center shadow mb-5 p-5">
+        <!-- Join us Section -->
+        <div class="container-fluid text-center shadow bg-light rounded-4 mb-5 p-5">
             <div class=""><img src="{% static 'images/wallet-big-icon.png' %}" width="110px"></div>
             <h1 class="pt-5">Join Us Now ! </h1>
             <div class="d-flex justify-content-center gap-5 pt-5">
-                <a href="{% url 'accounts:sign_up' %}" class="btn btn-primary">Login Now</a>
+                <a href="{% url 'accounts:sign_up' %}" class="btn btn-success">Login Now</a>
                 <a href="#contact" class="btn btn-outline-primary">Contact Us</a>
 
             </div>
         </div>
-
         <!-- FAQ Section -->
-        <div class="container-fluid pt-5 mt-5  shadow rounded bg-light p-5">
+        <div id="faq" class="container-fluid pt-5 mt-5  shadow rounded-4 bg-light p-5">
             <div class="row">
                 <div class="col-md-12">
                     <div class="sectioner-header text-center">
                         <h1 class="text-success">Frequently Asked Questions</h1>
                         <span class="line"></span>
                         <p>Supporting Your Experience In my Site Here are some Frequently Asked Questions That Can help You make a picture about my products and operations.</p>
+                        <p>Click On the Questions Bellow To see the answer</p>
                     </div>
                     <div class="section-content">
                         <div class="row gap-3 justify-content-center">
@@ -205,7 +206,7 @@
                                     </h2>
                                     <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                         <div class="accordion-body">
-                                            Yes, Hakbah application abides by the guidelines for the security of Internet banking services issued by the Saudi Central Bank, and it saves and processes data in computer servers in the Kingdom of Saudi Arabia, and applies the highest standards of protection and compliance, such as the ISO27001 certificate.
+                                            Yes, EchoFund web application abides by the guidelines for the security of Internet transactions services issued by HmzH, and it saves and processes data in cloud servers, and applies the highest standards of protection and compliance, such as db transactions and authentication.
                                         </div>
                                     </div>
                                 </div>
@@ -291,7 +292,42 @@
                 </div>
             </div>
         </div>
+        <!-- Testimonials Section -->
+        <section class="testimonials py-5 bg-light mt-5 rounded-4 shadow">
+            <div class="container">
+                <div class="text-center mb-4">
+                    <h1 class="text-success">Testimonials</h1>
+                    <h4>What Our Clients Say</h4>
+                </div>
 
+                <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+                    <div class="carousel-inner">
+                        {% for testimonial in testimonials %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <div class="shadow bg-white rounded-4 p-4">
+                                <div class="d-flex align-items-center gap-4">
+                                    <img src="{{ testimonial.image.url }}" class="rounded-circle" width="100" height="100">
+                                    <div>
+                                        <h4 class="mb-1">{{ testimonial.name }}</h4>
+                                        <p class="text-muted mb-0">{{ testimonial.subject }}</p>
+                                    </div>
+                                    <p class="mt-3 mb-0">{{ testimonial.comment }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="carousel-indicators position-relative mt-4">
+                        {% for testimonial in testimonials %}
+                        <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+                                class="bg-success {% if forloop.first %}active{% endif %}"
+                                aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
         <!-- Contacts Section -->
         <div id="contact" class="container-fluid mt-5 mb-5">
             <div class="row">
@@ -308,7 +344,7 @@
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="col">
-                                            <input type="text" id="your_name" class="form-input w-100" name="name" placeholder="Full Name" required>
+                                            <input type="text" id="contact-input" class="form-input w-100" name="name" placeholder="Full Name" required>
                                         </div>
                                         <div class="col">
                                             <input type="email" id="email" class="form-input w-100" name="email" placeholder="Email" required>

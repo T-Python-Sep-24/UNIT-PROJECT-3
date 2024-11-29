@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <!-- My Styles -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <!-- Animation -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <title>{% block title %}  {% endblock %}</title>
@@ -23,52 +25,54 @@
         * {
             font-family: 'Poppins', sans-serif;
         }
+        body {
+            scroll-behaviour: smooth;
+        }
         .card-custom {
-  overflow: hidden;
-  min-height: 450px;
-  box-shadow: 0 0 15px rgba(10, 10, 10, 0.3);
-}
+          overflow: hidden;
+          min-height: 450px;
+          box-shadow: 0 0 15px rgba(10, 10, 10, 0.3);
+        }
 
-.card-custom-img {
-  height: 200px;
-  min-height: 200px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  border-color: inherit;
-}
+        .card-custom-img {
+          height: 200px;
+          min-height: 200px;
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+          border-color: inherit;
+        }
 
-/* First border-left-width setting is a fallback */
-.card-custom-img::after {
-  position: absolute;
-  content: '';
-  top: 161px;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-top-width: 40px;
-  border-right-width: 0;
-  border-bottom-width: 0;
-  border-left-width: 545px;
-  border-left-width: calc(575px - 5vw);
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  border-left-color: inherit;
-}
+        /* First border-left-width setting is a fallback */
+        .card-custom-img::after {
+          position: absolute;
+          content: '';
+          top: 161px;
+          left: 0;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-top-width: 40px;
+          border-right-width: 0;
+          border-bottom-width: 0;
+          border-left-width: 545px;
+          border-left-width: calc(575px - 5vw);
+          border-top-color: transparent;
+          border-right-color: transparent;
+          border-bottom-color: transparent;
+          border-left-color: inherit;
+        }
 
-.card-custom-avatar img {
-  border-radius: 50%;
-  box-shadow: 0 0 15px rgba(10, 10, 10, 0.3);
-  position: absolute;
-  top: 100px;
-  left: 1.25rem;
-  width: 100px;
-  height: 100px;
-}
+        .card-custom-avatar img {
+          border-radius: 50%;
+          box-shadow: 0 0 15px rgba(10, 10, 10, 0.3);
+          position: absolute;
+          top: 100px;
+          left: 1.25rem;
+          width: 100px;
+          height: 100px;
+        }
     </style>
-
 </head>
 <body>
 
@@ -95,14 +99,23 @@
             <!-- Center elements -->
             <ul class="navbar-nav flex-row d-none d-md-flex">
                 <li>
-                    <a class="nav-link" href="/">How it <span class="text-success">works</span></a>
+                    <a class="nav-link" href="/#features"><span class="text-success">Features</span></a>
                 </li>
                 <li>
-                    <a class="nav-link" href="/"><span class="text-success">Help</span></a>
+                    <a  class="nav-link" href="/#how_it_works">How it <span class="text-success">works</span></a>
                 </li>
-                <li>
-                    <a class="nav-link" href="/"><span class="text-success">Contact</span> Us</a>
+                <li class="dropdown">
+                    <a data-bs-toggle="dropdown" class="nav-link dropdown-toggle" href="/"><span class="text-success">Help</span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/#faq" class="dropdown-item">FAQs</a>
+                        </li>
+                        <li>
+                            <a href="/#contact" class="dropdown-item">Contact Us</a>
+                        </li>
+                    </ul>
                 </li>
+
 
             </ul>
             <!-- Center elements -->
@@ -110,14 +123,14 @@
             <!-- Right elements -->
             <ul class="navbar-nav flex-row me-5 pe-5">
 
-                <li class="nav-item me-3 me-lg-1 active">
+                <li class="nav-item me-3 me-lg-1 {% if request.resolver_match.view_name == 'main:home_view' %} active {% endif %}">
                     <a class="nav-link" href="/">
                         <span><i class="fas fa-home fa-lg"></i></span>
                     </a>
                 </li>
-                <li class="nav-item  me-3 me-lg-1">
+                <li class="nav-item  me-3 me-lg-1 ">
                     <div class="dropdown">
-                        <a class="nav-link dropdown-toggle hidden-arrow" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wallet fa-lg"></i></a>
+                        <a class="nav-link dropdown-toggle hidden-arrow {% if request.resolver_match.app_name == 'funds_app' %} active {% endif %}" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-wallet fa-lg"></i></a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
                                 <a class="dropdown-item" href="{% url 'funds_app:all_funds_view' %}">All Funds</a>
@@ -127,7 +140,7 @@
                             </li>
                             {% if request.user.is_authenticated %}
                             <li>
-                                <a class="dropdown-item" href="{% url 'accounts:profile_view' request.user.username %}">My Funds</a>
+                                <a class="dropdown-item" href="{% url 'funds_app:user_funds_view' %}">My Funds</a>
                             </li>
                             {% endif %}
 
@@ -135,35 +148,13 @@
                     </div>
                 </li>
 
-
                 <li class="nav-item dropdown me-3 me-lg-1">
-                    <a data-bs-toggle="dropdown" class="nav-link dropdown-toggle hidden-arrow" href="#" role="button" aria-expanded="false"><i class="fas fa-comments fa-lg"></i><span class="badge rounded-pill badge-notification bg-danger">6</span></a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <a class="dropdown-item" href="#">Some news</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">Another news</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </li>
-                    </ul>
-                </li>
-
-
-
-
-                <li class="nav-item dropdown me-3 me-lg-1">
-                    <a data-bs-toggle="dropdown" class="nav-link d-sm-flex dropdown-toggle hidden-arrow align-items-sm-center" href="#">
-                        <img
-                                src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
-                                class="rounded-circle"
-                                height="22"
-                                alt="Black and White Portrait of a Man"
-                                loading="lazy"
-                        />
-                        <strong class="d-none d-sm-block ms-1">{% if request.user.is_authenticated %}
+                    <a data-bs-toggle="dropdown" class="{% if request.resolver_match.app_name == 'accounts' %} active {% endif %} nav-link d-sm-flex dropdown-toggle hidden-arrow align-items-sm-center" href="#">
+                        {% if request.user.is_authenticated %}
+                        <img src="{{ request.user.profile.avatar.url }}" class="rounded-circle" height="22" loading="lazy"/>
+                        {% endif %}
+                        <strong class="d-none d-sm-block ms-1">
+                            {% if request.user.is_authenticated %}
                             welcome, {{request.user.username}}
                             {% else %}
                             Log In
@@ -185,21 +176,21 @@
                 <li class="nav-item me-3 me-lg-1">
                     <div class="dropdown">
                         <a class="nav-link dropdown-toggle hidden-arrow" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-bell fa-lg"></i>
-                            <span class="badge rounded-pill badge-notification bg-danger">12</span>
+                            {% if request.user.receiver.all.count > 0 %}
+                            <span class="badge rounded-pill badge-notification bg-danger">{{ request.user.receiver.all.count}}</span>
+                            {% endif %}
                         </a>
                         <ul
                                 class="dropdown-menu dropdown-menu-end"
                                 aria-labelledby="navbarDropdownMenuLink2"
                         >
-                            <li>
-                                <a class="dropdown-item" href="#">Some news</a>
+                            {% for message in request.user.receiver.all %}
+                            <li class="rounded">
+                                <p class="ps-2">new message:</p>
+                                <p class="dropdown-item shadow">{{message.content}}</p>
                             </li>
-                            <li>
-                                <a class="dropdown-item" href="#">Another news</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </li>
+                            {% endfor %}
+
                         </ul>
                     </div>
                 </li>
@@ -234,6 +225,7 @@
         <!-- Left -->
         <div class="me-5 d-none d-lg-block">
             <span>Get connected with us on social networks:</span>
+
         </div>
         <!-- Left -->
 
@@ -257,43 +249,41 @@
             <a href="" class="me-4 text-reset text-decoration-none">
                 <i class="fab fa-github"></i>
             </a>
+            <a href="{% url 'main:rate_us_view' %}" class="btn btn-primary">Rate Us Now</a>
         </div>
-        <!-- Right -->
+
     </section>
-    <!-- Section: Social media -->
+
 
     <!-- Section: Links  -->
     <section class="">
         <div class="container text-center text-md-start mt-5">
-            <!-- Grid row -->
+
             <div class="row mt-3">
-                <!-- Grid column -->
+
                 <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                    <!-- Content -->
+
                     <h6 class="text-uppercase fw-bold mb-4">
-                        <i class="fas fa-gem me-3"></i>Company name
+                        <i class="fas fa-gem me-3"></i>EchoFund HmzH
                     </h6>
                     <p>
-                        Here you can use rows and columns to organize your footer content. Lorem ipsum
-                        dolor sit amet, consectetur adipisicing elit.
+                        EchoFund is one of HmzH company products, this web app offers a community of funding opportunities
                     </p>
                 </div>
-                <!-- Grid column -->
 
-                <!-- Grid column -->
                 <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <!-- Links -->
+                    <!-- useful Links -->
                     <h6 class="text-uppercase fw-bold mb-4">
                         Products
                     </h6>
                     <p>
-                        <a href="#!" class="text-reset">Angular</a>
+                        <a href="{% url 'funds_app:all_funds_view' %}" class="text-reset">Funds</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset">React</a>
+                        <a href="{% url 'funds_app:add_fund_view' %}" class="text-reset">New Fund</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset">Vue</a>
+                        <a href="{% url 'funds_app:user_funds_view' %}" class="text-reset">My Funds</a>
                     </p>
                     <p>
                         <a href="#!" class="text-reset">Laravel</a>
@@ -308,31 +298,29 @@
                         Useful links
                     </h6>
                     <p>
-                        <a href="#!" class="text-reset">Pricing</a>
+                        <a href="{% url 'funds_app:all_funds_view' %}" class="text-reset">All Funds</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset">Settings</a>
+                        <a href="#join" class="text-reset">Join EchoFund</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset">Orders</a>
+                        <a href="#how_it_works" class="text-reset">How it works</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset">Help</a>
+                        <a href="#faq" class="text-reset">Help</a>
                     </p>
                 </div>
-                <!-- Grid column -->
 
-                <!-- Grid column -->
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                    <!-- Links -->
+                    <!-- contacts -->
                     <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-                    <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+                    <p><i class="fas fa-home me-3"></i> Riyadh, Qortoba 23523, KSA</p>
                     <p>
                         <i class="fas fa-envelope me-3"></i>
-                        info@example.com
+                        hmzh@support.com
                     </p>
-                    <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
-                    <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+                    <p><i class="fas fa-phone me-3"></i> +966 544581821</p>
+                    <p><i class="fas fa-print me-3"></i> +966 544581821</p>
                 </div>
                 <!-- Grid column -->
             </div>
