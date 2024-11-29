@@ -3,13 +3,89 @@
 {% load static %}
 
 
-{% block body_class %}Volunteer Sign Up{% endblock %}
+{% block body_class %}{{ profile.organization_user.username }} Profile{% endblock %}
 
 {% block content %}
 
+<div class="organization-profile-container">
+    <!-- Profile Header -->
+
+    <div class="profile-header">
+        <div class="profile-left">
+          <div class="profile-logo">
+          </div>
+          <div class="profile-info">
+            <h1>{{ profile.organization_name }}</h1>
+            <p>{{ profile.description }}</p>
+            {% if profile.website_url %}
+            <a href="{{ profile.website_url }}" target="_blank" class="profile-website-link">Visit Website</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="profile-right">
+
+          <!-- Tabs Navigation -->
+          <nav class="tabs-navigation">
+            <button class="tab-button active" data-tab="about">About</button>
+            <button class="tab-button" data-tab="opportunities">Opportunities</button>
+          </nav>
+    
+          <!-- Tabs Content -->
+          <div class="tabs-content">
+
+            <!-- About Section -->
+            <section id="about" class="tab-content active">
+              <h2>About</h2>
+              <p><strong>Type of Organization:</strong> {{ profile.type_of_organization|default:"N/A" }}</p>
+              <p><strong>Focus Area:</strong> {{ profile.focus_area|default:"N/A" }}</p>
+              <p><strong>Contact:</strong></p>
+              <ul>
+                <li><strong>Email:</strong> {{ profile.organization_user.email }}</li>
+                {% if profile.website_url %}
+                <li><strong>Website:</strong> <a href="{{ profile.website_url }}" target="_blank">{{ profile.website_url }}</a></li>
+                {% endif %}
+              </ul>
+            </section>
+    
+            <!-- Opportunities Section -->
+            <section id="opportunities" class="tab-content">
+              <h2>Volunteering Opportunities</h2>
+              <div class="opportunities-grid">
+                {% for opportunity in opportunities %}
+                <div class="opportunity-card">
+                  <h3>{{ opportunity.title }}</h3>
+                  <p>{{ opportunity.description|truncatewords:15 }}</p>
+                  <a href="{% url 'opportunities:opportunity_detail' opportunity.id %}" class="view-details">View Details</a>
+                </div>
+                {% empty %}
+                <p>No opportunities added yet.</p>
+                {% endfor %}
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
-
-
+  <script>
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    const tabs = document.querySelectorAll(".tab-button");
+    const contents = document.querySelectorAll(".tab-content");
+    
+    tabs.forEach((tab) => {
+        tab.addEventListener("click", function () {
+            tabs.forEach((t) => t.classList.remove("active"));
+            contents.forEach((c) => c.classList.remove("active"));
+            
+            this.classList.add("active");
+            document.getElementById(this.dataset.tab).classList.add("active");
+        });
+    });
+});
+</script>
+  
 
 {% endblock %}
+

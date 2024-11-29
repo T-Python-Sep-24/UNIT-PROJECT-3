@@ -103,6 +103,7 @@ def login_view(request:HttpRequest):
 
             if hasattr(user, "organizationprofile"):
                 return redirect(reverse("accounts:organization_profile", kwargs={"username": user.username}))
+            
             elif hasattr(user, "volunteerprofile"):
                 return redirect(reverse("accounts:volunteer_profile", kwargs={"username": user.username}))
             else:
@@ -139,12 +140,17 @@ def organization_profile(request:HttpRequest, username):
     if request.method == "POST":
         profile.organization_name = request.POST.get("organization_name", profile.organization_name)
         profile.description = request.POST.get("description", profile.description)
+        profile.website_url = request.POST.get("website_url", profile.website_url)
+        profile.organization_type = request.POST.get("organization_type", profile.organization_type)
+        profile.industry_focus_area = request.POST.get("industry_focus_area", profile.industry_focus_area)
 
-        if request.FILES.get("logo"):
-            profile.logo = request.FILES.get("logo")
+        if request.FILES.get("organization_logo"):
+            profile.organization_logo = request.FILES.get("organization_logo")
         
         profile.save()
         messages.success(request, "Profile updated successfully!")
+        return redirect("accounts:organization_profile", username=user.username)
+    
 
     return render(request, 'accounts/organization_profile.html', {'profile': profile})
 
@@ -177,10 +183,10 @@ def volunteer_profile(request:HttpRequest, username):
 
         profile.save()
 
-        messages.success(request, "Your profile has been updated successfully!")
-
-    return redirect(request, 'accounts/volunteer_profile.html', {'profile': profile})
-
+        messages.success(request, "Profile updated successfully!")
+        return redirect("accounts:volunteer_profile", username=user.username)
+    
+    return render(request, 'accounts/volunteer_profile.html', {'profile': profile})
 
 
 

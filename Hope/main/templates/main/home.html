@@ -9,11 +9,19 @@
 {% block content %}
 
 <main class="home-page">
+    <div class="video-container">
+        <video autoplay muted loop id="background-video">
+            <source src="{% static 'videos/wheat-background.mp4' %}" type="video/mp4">
+        </video>
+        <div class="overlay"></div> 
+    </div>
+    
     <div class="home-text">
         <h1>Your Time, Your Impact</h1>
         <h2>Building a Better Tomorrow</h2>
-        <a href="#" class="cta-button">Volunteer Today</a>
+        <a href="{% url 'opportunities:all_opportunities_view' %}" class="cta-button">Volunteer Today</a>
     </div>
+
 </main>
   
 
