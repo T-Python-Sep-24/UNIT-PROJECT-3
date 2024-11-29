@@ -9,19 +9,21 @@
 
             <div class="col p-3 g-2">
                 <div class="d-flex justify-content-between mb-4">
-
-                    <h1>{{fund.fund_name}}</h1>
-
+                    <div class="">
+                        <h1>{{fund.fund_name}}</h1>
+                    </div>
                     <div>
                         {% if is_bookmarked %}
-                        <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_check</span></a>
+                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_check</span></a>
                         {% else %}
-                        <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_add</span></a>
+                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_add</span></a>
                         {% endif %}
+
                         {% if request.user.is_superuser or request.user == fund.fund_owner %}
-                        <a class="btn btn-primary" href="{% url 'funds_app:update_fund_view' fund.id %}"><span class="material-symbols-outlined">edit_square</span></a>
-                        <a class="btn btn-danger" href="{% url 'funds_app:delete_fund_view' fund.id %}"><span class="material-symbols-outlined">delete</span></a>
+                            <a class="btn btn-primary" href="{% url 'funds_app:update_fund_view' fund.id %}"><span class="material-symbols-outlined">edit_square</span></a>
+                            <a class="btn btn-danger" href="{% url 'funds_app:delete_fund_view' fund.id %}"><span class="material-symbols-outlined">delete</span></a>
                         {% endif %}
+
                     </div>
 
                 </div>
@@ -30,10 +32,12 @@
                 <p>{{fund.about}}</p>
 
                 <h6>Monthly Stock: {{fund.monthly_stock}}</h6>
-
-                {% for member in fund.fund_members.all %}
-                    <h1>{{member}}</h1>
-                {% endfor %}
+                <div class="mt-3">
+                    <h4>Members:</h4>
+                    {% for member in fund.fund_members.all %}
+                        <a href="{% url 'accounts:profile_view' member.username %}"><h5>@{{member}}</h5></a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %} My Funds {% endblock %}
+
+{% block main %}
+<main>
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Owned Funds</h1>
+        <div class="row row-cols-1 row-cols justify-content-center gap-4 m-2 mt-5">
+
+            {% include 'funds_cards.html' %}
+        </div>
+    </div>
+
+    <div class="container pt-5">
+
+        <div class="pagination justify-content-center">
+            <ul class="pagination justify-content-center">
+
+                {% if page_obj.has_previous %}
+                <a class="page-link text-dark" href="?page=1">first</a>
+                <a class="page-link text-dark" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <div class="text-center">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </div>
+                {% if page_obj.has_next %}
+                <a class="page-link text-dark" href="?page={{ page_obj.next_page_number }}">next</a>
+                <a class="page-link text-dark" href="?page={{ page_obj.paginator.num_pages }}">last</a>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
+</main>
+{% endblock %}

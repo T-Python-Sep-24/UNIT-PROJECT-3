@@ -6,9 +6,38 @@
 <main>
     <div class="container mt-5">
         <h1 class="text-center text-primary">All funds</h1>
+
+        <div class="container d-flex pt-5 align-items-center justify-content-center">
+            <form action="{% url 'funds_app:all_funds_view' %}" method="get" class="justify-content-center" role="search">
+
+                <div class="d-flex gap-1 align-items-center">
+                    <div class="d-flex gap-1 align-items-center">
+                        <label class="">Search</label>
+                        <input class="form-control text-center" type="search" name="keyword" value="{{ request.GET.keyword }}" placeholder="Search ShowRoom" aria-label="Search">
+                    </div>
+                    <div>
+                        <select name="order_by" class="rounded bg-success text-light p-2">
+                            <option> Order By</option>
+                            <option> Any</option>
+                            <option value="newest" {% if request.GET.order_by == 'newest' %}selected{% endif %}> Newest </option>
+                            <option value="oldest" {% if request.GET.order_by == 'oldest' %}selected{% endif %}> Oldest </option>
+                        </select>
+
+                        <select name="availability" class="rounded bg-success text-light p-2">
+                            <option> Availability </option>
+                            <option> All </option>
+                            <option value="True" {% if request.GET.availability == True %}selected{% endif %}> Available </option>
+                            <option value="False" {% if request.GET.availability == False %}selected{% endif %}> Not Available </option>
+                        </select>
+
+                        <input type="submit" class="btn btn-outline-primary" value="Apply">
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="row row-cols-1 row-cols justify-content-center gap-4 m-2 mt-5">
 
-            {% include 'funds_cards.html' %}
+            {% include 'funds_cards.html' with funds=page_obj %}
         </div>
     </div>
 
@@ -18,19 +47,18 @@
             <ul class="pagination justify-content-center">
 
                 {% if page_obj.has_previous %}
-                <a class="page-link text-dark" href="?page=1">first</a>
-                <a class="page-link text-dark" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                <a class="page-link bg-success text-light rounded" href="?page=1">first</a>
+                <a class="page-link bg-success text-light rounded" href="?page={{ page_obj.previous_page_number }}">previous</a>
                 {% endif %}
-                <div class="text-center">
+                <div class="text-center p-2">
                     Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
                 </div>
                 {% if page_obj.has_next %}
-                <a class="page-link text-dark" href="?page={{ page_obj.next_page_number }}">next</a>
-                <a class="page-link text-dark" href="?page={{ page_obj.paginator.num_pages }}">last</a>
+                <a class="page-link bg-success text-light rounded" href="?page={{ page_obj.next_page_number }}">next</a>
+                <a class="page-link bg-success text-light rounded" href="?page={{ page_obj.paginator.num_pages }}">last</a>
                 {% endif %}
             </ul>
         </div>
-
 
     </div>
 </main>

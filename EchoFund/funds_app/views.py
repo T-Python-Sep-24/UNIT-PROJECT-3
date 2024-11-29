@@ -1,17 +1,36 @@
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 
 from django.contrib.auth.models import User
 from .models import Fund, Review
-from accounts.models import Bookmark
+from accounts.models import Bookmark, UserMessage
 # Create your views here.
+
+
 def all_funds_view(request: HttpRequest):
 
     funds = Fund.objects.all()
 
-    paginator = Paginator(funds, 10)
+    if 'keyword' in request.GET:
+
+        keyword = request.GET['keyword']
+        funds = funds.filter(fund_name__contains = keyword)
+
+    if 'order_by' in request.GET:
+
+        if request.GET['order_by'] == 'newest':
+            funds = funds.order_by('-created_at')
+        elif request.GET['order_by'] == 'oldest':
+            funds = funds.order_by('created_at')
+
+    if 'availability' in request.GET:
+
+        funds = funds.filter(is_available = request.GET['availability'])
+
+    paginator = Paginator(funds, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -51,6 +70,16 @@ def add_fund_view(request: HttpRequest):
             new_fund.save()
             new_fund.fund_members.set(request.POST.getlist('members'))
             messages.success(request, "fund was added successfully", "alert-success")
+
+            # Send message to user
+            new_user_message = UserMessage(
+                sender = User.objects.get(pk=1),
+                receiver = request.user,
+                subject = 'Add Fund',
+                content = 'You Added New Fund',
+            )
+            new_user_message.save()
+
             return redirect("funds_app:all_funds_view")
 
         return render(request, 'add_fund.html', context={'members': members})
@@ -58,7 +87,6 @@ def add_fund_view(request: HttpRequest):
         print(e)
         messages.error(request, "Error adding fund", "alert-danger")
         return redirect(request, 'funds_app:all_funds_view')
-
 
 
 def update_fund_view(request: HttpRequest,fund_id):
@@ -102,6 +130,7 @@ def delete_fund_view(request: HttpRequest, fund_id):
         messages.success(request, 'Fund was deleted successfully', 'alert-success')
     return redirect('funds_app:all_funds_view')
 
+
 def add_review_view(request: HttpRequest, fund_id):
 
     try:
@@ -122,6 +151,7 @@ def add_review_view(request: HttpRequest, fund_id):
         return render(request,'page_not_found.html')
         print(e)
 
+
 def delete_review_view(request: HttpRequest, review_id):
 
     if request.user.is_superuser:
@@ -129,6 +159,7 @@ def delete_review_view(request: HttpRequest, review_id):
         review.delete()
         messages.success(request, 'Review Deleted Successfully', 'alert-success')
     return redirect('funds_app:fund_details_view', fund_id=review.fund.id)
+
 
 def add_bookmark_view(request: HttpRequest, fund_id):
     if not request.user.is_authenticated:
@@ -156,6 +187,25 @@ def add_bookmark_view(request: HttpRequest, fund_id):
 
     return redirect('funds_app:fund_details_view', fund_id = fund_id)
 
+
+def user_funds_view(request: HttpRequest):
+
+    funds = Fund.objects.filter(fund_owner = request.user)
+    return render(request, 'user_funds.html', context={'funds':funds})
+
+
 def fund_participate_view(request: HttpRequest, fund_id):
 
-    pass
+    fund = Fund.objects.get(pk=fund_id)
+    try:
+        if fund.is_available:
+            fund.fund_members.add(request.user.id)
+            messages.success(request, "Your Participated in this Fund successfully", "alert-success")
+        else:
+            messages.warning(request, "This Fund is Not available for participation", 'alert-warning')
+        return redirect('funds_app:fund_details_view', fund_id=fund_id)
+
+    except Exception as e:
+        print(e)
+        messages.error(request, "couldn't Participate in this", "alert-danger")
+
