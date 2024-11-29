@@ -1,7 +1,7 @@
 from django.db import models
 
 class Artist(models.Model):
-    fullName = models.CharField(max_length=1024)
+    fullName = models.CharField(max_length=1024, default='Anonymous')
     about = models.TextField()
     birthDate = models.DateField()
     exhibit = models.CharField(max_length=1024)

@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}{{profile.user.username|capfirst}} Profile{% endblock %}
+
+{% block content %}
+<section class="container-lg my-5">
+    <div class="profile-grid">
+        <div class="profile text-beige-100">
+            <img src="{{profile.pfp.url}}" class="pfp rounded-1 shadow" alt="">
+            <h4 class="text-center my-2">@{{profile.user.username}}</h4>
+            {% if request.user == profile.user %}
+            <a href="{% url 'accounts:updateProfileView' %}" class="mx-auto btn-beige-400 px-2"><i class="bi bi-pencil-square pe-2"></i>Update</a>
+            {% endif %}
+        </div>
+        <div class="profile rounded-1 text-beige-100">
+            <h2 class="mb-0 text-offwhite">
+                {{profile.user.first_name}} {{profile.user.last_name}}
+            </h2>
+            <div class="half-border mb-2"></div>
+            <p class="fs-5 my-1"><span class="fw-medium text-offwhite">About: </span>{{profile.about}}</p>    
+        </div>
+    </div>
+</section>
+{% endblock %}

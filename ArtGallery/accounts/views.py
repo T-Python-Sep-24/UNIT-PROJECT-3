@@ -7,25 +7,25 @@ from .models import Profile
 from django.db import transaction, IntegrityError
 
 # Create new account View
-@transaction.atomic
 def registerView(request:HttpRequest):
  
     if request.method == "POST":
         try:
-            newUser = User.objects.create_user(first_name=request.POST['fname'], last_name=request.POST['lname'], username=request.POST['username'].lower(), email=request.POST['email'], password=request.POST['password'])
-            newUser.save()
+            with transaction.atomic():
+                newUser = User.objects.create_user(first_name=request.POST['fname'], last_name=request.POST['lname'], username=request.POST['username'].lower(), email=request.POST['email'], password=request.POST['password'])
+                newUser.save()
 
-            # Create profile
-            profile = Profile(user=newUser, about=request.POST['about'], avatar=request.FILES.get('avatar', Profile.avatar.field.get_default()))
-            profile.save()
+                # Create profile
+                profile = Profile(user=newUser, about=request.POST['about'], pfp=request.FILES.get('pfp', Profile.pfp.field.get_default()))
+                profile.save()
 
             messages.success(request, "Register successfull.", "alert-success")   
             return redirect('accounts:loginView')
             
         except IntegrityError:
             messages.warning(request, "The username is already taken. Please choose another one.", "alert-warning")
-        except Exception:
-            messages.error(request, "Register failed. Try again", "alert-danger")    
+        except Exception as e:
+            messages.error(request, f"{e} Register failed. Try again", "alert-danger")    
 
     return render(request, 'accounts/register.html')
 
@@ -66,7 +66,6 @@ def profileView(request: HttpRequest, username: str):
     return render(request, 'accounts/profile.html', {'profile': profile})
 
 # Display profile View
-@transaction.atomic
 def updateProfileView(request: HttpRequest):
     
     if not request.user.is_authenticated:
@@ -77,24 +76,23 @@ def updateProfileView(request: HttpRequest):
         try:
             user:User = request.user
             profile:Profile = user.profile
-
-            # Update user instance
-            user.first_name=request.POST['fname']
-            user.last_name=request.POST['lname']
-            user.username=request.POST['username']
-            user.email=request.POST['email']
-            user.save()
-            
-            # Update user profile
-            profile.about=request.POST['about']
-            profile.avatar=request.FILES.get('avatar', profile.avatar)
-            profile.save()
+            with transaction.atomic():
+                # Update user instance
+                user.first_name=request.POST['fname']
+                user.last_name=request.POST['lname']
+                user.username=request.POST['username']
+                user.email=request.POST['email']
+                user.save()
+                
+                # Update user profile
+                profile.about=request.POST['about']
+                profile.pfp=request.FILES.get('pfp', profile.pfp)
+                profile.save()
 
             messages.success(request, "Profile updated successfully.", "alert-success")
-            
-            return redirect('accounts:profileView')
+            return redirect('accounts:profileView', user.username)
         
-        except Exception:
-            messages.error(request, "Profile wasn't updated.", "alert-danger")
+        except Exception as e:
+            messages.error(request, f"{e}Profile wasn't updated.", "alert-danger")
 
     return render(request, 'accounts/updateProfile.html')

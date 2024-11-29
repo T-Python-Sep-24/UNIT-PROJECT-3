@@ -67,35 +67,38 @@
             <div class="d-flex flex-row mx-3 gap-2">
                 {% if user.is_authenticated %}
                 <div class="d-flex gap-3 align-items-end">
-                    <a href="" class="d-flex flex-row gap-1 align-items-end">
-                        <img src="" class="rounded-circle avatar-sm">
+                    <a href="{% url 'accounts:profileView' user.username %}" class="d-flex flex-row gap-1 align-items-end">
+                        <img src="{{user.profile.pfp.url}}" class="rounded-circle pfp-sm">
                         <p class="m-0 fw-medium">{{user.first_name}}</p>
                     </a>
-                    <a class="btn-beige-400 py-0" href="{{logoutUrl}}">Logout</a>
+                    <a class="btn-beige-400 py-0" href="{{logoutUrl}}?next={{request.path}}">Logout</a>
                 </div>
                 {% else %}
-                <a class="btn-beige-400 py-0 my-auto" href="{{loginUrl}}">Login</a>
-                <a class="btn-beige-400 py-0 my-auto" href="{{registerUrl}}">Register</a>
+                <a class="py-0 my-auto {% if request.path == loginUrl %}btn btn-light rounded-1 fw-bold disabled{% else %}btn-beige-400{% endif %}" href="{{loginUrl}}">Login</a>
+                <a class="py-0 my-auto {% if request.path == registerUrl %}btn btn-light rounded-1 fw-bold disabled{% else %}btn-beige-400{% endif %}" href="{{registerUrl}}">Register</a>
                 {% endif %}
             </div>
         </nav>
     </header>
     
+    <!-- Alerts after any user action ex: add, delete -->
+    {% if messages %}
+    {% for msg in messages %}
+    <div class="container-fluid alerts-container">
+        <div class="alert {{msg.tags}} alert-dismissible fade show mx-auto" role="alert">
+            {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    
+    <!-- Hero will be inside this block -->
     {% block intro %}
     {% endblock %}
-    <main class="mt-5 pt-5" style="min-height: 75vh;">
-        <!-- Alerts after any user action ex: add, delete -->
-    {% if messages %}
-        {% for msg in messages %}
-        <div class="container justify-items-center">
-            <div class="alert {{msg.tags}} alert-dismissible fade show mx-auto" role="alert">
-                {{msg}}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
-        {% endfor %}
-    {% endif %}
 
+    <main class="mt-5 pt-5" style="min-height: 75vh;">
+    <!-- Main contetn inside this block -->
     {% block content %}
     {% endblock %}
     </main>
@@ -103,7 +106,7 @@
     <footer class="container-fluid py-3 border-1 border-top border-dark text-center mt-4">
         <div class="row gap-5">
             <div class="col text-beige-200">
-                <a href="" class=""><img src="{% static 'images/Logo.png' %}" alt="Logo" width="100"></a>
+                <a href="/" class=""><img src="{% static 'images/Logo.png' %}" alt="Logo" width="100"></a>
                 <p>© 2024</p>
             </div>
 

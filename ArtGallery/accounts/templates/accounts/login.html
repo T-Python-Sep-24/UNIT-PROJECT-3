@@ -1,21 +1,24 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
     <section class="container-md text-center">
-        <h1 class="mt-3 text-beige-100">
+        <h1 class="mb-0 mt-3 text-beige-100">
         Login
         </h1>
+        <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
+        
+        <!-- Login form -->
         <div class="d-flex justify-content-center text-beige-100">
-            <form action="{% url 'accounts:loginView' %}" method="post" enctype="multipart/form-data" class="text-start p-4 rounded-4 shadow-sm bg-blur needs-validation text-light" novalidate>
+            <form action="{% url 'accounts:loginView' %}" method="post" enctype="multipart/form-data" class="text-start p-4 rounded-1 shadow-sm bg-blur needs-validation text-light" novalidate>
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="username" class="form-label fw-medium fs-5">Username</label>
                     <div class="input-group has-validation">
-                        <span class="input-group-text bg-blur text-offwhite border-0 focus-ring focus-ring-light" id="inputGroupPrepend"><i class="bi bi-at"></i></span>
-                        <input type="text" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-light" id="username" name="username" aria-describedby="inputGroupPrepend" required>
+                        <span class="input-group-text bg-blur text-offwhite border-0" id="inputGroupPrepend"><i class="bi bi-at"></i></span>
+                        <input type="text" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="username" name="username" aria-describedby="inputGroupPrepend" required>
                         <div class="invalid-feedback fs-5">
                             Please choose a username.
                         </div>
@@ -24,8 +27,8 @@
                 <div class="mb-3">
                     <label for="password" class="form-label fw-medium fs-5">Password</label>
                     <div class="input-group has-validation">
-                        <span class="input-group-text bg-blur text-offwhite border-0 focus-ring focus-ring-light" id="inputGroupPrepend"><i class="bi bi-key"></i></span>
-                        <input type="password" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-light" id="password" name="password" minlength="6" maxlength="20" aria-describedby="inputGroupPrepend" required>
+                        <span class="input-group-text bg-blur text-offwhite border-0" id="inputGroupPrepend"><i class="bi bi-key"></i></span>
+                        <input type="password" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="password" name="password" minlength="6" maxlength="20" aria-describedby="inputGroupPrepend" required>
                         <div class="invalid-feedback fs-5">
                             Please enter a password.
                         </div>
