@@ -89,16 +89,12 @@ def artistDetailsView(request: HttpRequest, artistId:int):
     return response
 
 # Display artists View
-def displayArtistsView(request: HttpRequest, filter: str):
+def displayArtistsView(request: HttpRequest):
 
-    if filter == 'all':
-        artists = Artist.objects.all()
+    artists = Artist.objects.all()
     
     if 'search' in request.GET and len(request.GET['search']) >= 2:
-        artists = artists.filter(fullName__contains=request.GET['search']).order_by('-addedAt')
-
-    # Group results by id to avoid repeatition
-    # pieces = pieces.annotate(Count("id"))
+        artists = artists.filter(fullName__contains=request.GET['search'])
 
     paginator = Paginator(artists, 6)
     pageNumber = request.GET.get('page', 1)

@@ -43,7 +43,7 @@ label {
 }
 
 .text-offwhite {
-    color: #ffefe9 !important;
+    color: #ffefe9;
 }
 
 .text-beige-100 {
@@ -76,25 +76,51 @@ label {
     backdrop-filter: blur(15px);
 }
 
+.hover-underline {
+    display: inline-block;
+    position: relative;
+}
+
+.hover-underline::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background-color: #e9bfb1;
+    transition: transform 0.25s ease-out;
+}
+
+.hover-underline:hover::after {
+    transform: scaleX(1);
+}
+
+.hover-underline::after {
+    transform-origin: bottom center;
+}
+
+.hover-underline:hover::after {
+    transform-origin: bottom center;
+}
+
 /* button */
 .btn-beige-400 {
+    display: block;
     padding: 0 .7rem;
     align-items: center;
     background-color: #653a36;
     border: 1px solid transparent;
     border-radius: .25rem;
     box-shadow: rgba(0, 0, 0, 0.15) 0 1px 3px;
-    box-sizing: border-box;
     color: #fbeeea;
     font-size: 1.1rem;
     cursor: pointer;
-    display: inline-flex;
     justify-content: center;
-    position: relative;
     transition: all 250ms;
     user-select: none;
     -webkit-user-select: none;
-    vertical-align: baseline;
     width: auto;
 }
 
@@ -373,4 +399,17 @@ label {
     opacity: 1;
     visibility: visible;
     transform: scale(1);
+}
+
+/* Display artists page */
+.custom-crd {
+    max-height: 18rem;
+    overflow: hidden;
+
+}
+
+.custom-crd-img {
+    object-fit: cover;
+    object-position: top;
+    aspect-ratio: 1/1;
 }

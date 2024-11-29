@@ -8,5 +8,5 @@ urlpatterns = [
     path('update/<int:artistId>', views.updateArtistView, name="updateArtistView"),
     path('delete/<int:artistId>', views.deleteArtistView, name="deleteArtistView"),
     path('artistDetails/<int:artistId>', views.artistDetailsView, name="artistDetailsView"),
-    path('<filter>/', views.displayArtistsView, name="displayArtistsView"),
+    path('all/', views.displayArtistsView, name="displayArtistsView"),
 ]

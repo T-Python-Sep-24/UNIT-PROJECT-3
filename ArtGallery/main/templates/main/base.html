@@ -36,6 +36,8 @@
 
 
             {% url 'main:homeView' as homeUrl %}
+            {% url 'artists:displayArtistsView' as artistsUrl %}
+            {% url 'artPieces:displayArtPiecesView' 'all' as artPiecesUrl %}
 
             {% url 'accounts:registerView' as registerUrl %}
             {% url 'accounts:loginView' as loginUrl %}
@@ -49,10 +51,10 @@
                         <a class="" href="{{homeUrl}}">Home</a>
                     </li>
                     <li class="nav-item p-1">
-                        <a class="" href="">Art Pieces</a>
+                        <a class="" href="{{artPiecesUrl}}">Art Pieces</a>
                     </li>
                     <li class="nav-item p-1">
-                        <a class="" href="">Artists</a>
+                        <a class="" href="{{artistsUrl}}">Artists</a>
                     </li>
                     <li class="nav-item p-1">
                         <a class="" href="">About</a>

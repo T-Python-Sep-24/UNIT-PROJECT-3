@@ -9,6 +9,41 @@
         Our Artists
         </h1>
         <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
-        
+        <div class="d-flex justify-content-center">
+            {% if user.is_staff and perms.artists.add_artist %}
+            <a href="{% url 'artists:addArtistView' %}" class="btn-beige-400">New</a>
+            {% endif %}
+        </div>
+       
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-4 justify-content-center mt-4">
+            {% for artist in artists %}
+            <div class="col">
+                <div class="card text-light border-0 custom-crd">
+                    <img src="{{artist.photo.url}}" class="card-img shadow custom-crd-img" alt="Art Piece">
+                    <div class="card-img-overlay align-content-end">
+                        <a href="{% url 'artists:artistDetailsView' artist.id %}" class="my-0 fs-4">{{artist.fullName}}</a>
+                        <p class="my-0 fs-5 text-beige-200"><span class="text-offwhite">Exhibit:</span> {{artist.exhibit}}</p>
+                        <a href="{% url 'artists:artistDetailsView' artist.id %}" class="hover-underline"><small>More..</small></a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="fs-5 fw-medium text-beige-300">No results for '{{request.GET.search}}'..</p>
+            {% endfor %}
+        </div>
+        <!-- Pagination -->
+        <div class="container justify-content-center my-5">
+            <span>
+                {% if artists.has_previous %}
+                <a href="{% url 'artists:displayArtistsView' %}{% querystring page=artists.previous_page_number %}" class="p-2">Previous</a>
+                {% endif %}
+                <span class="p-2 text-beige-100">
+                    Page {{ artists.number }} of {{ artists.paginator.num_pages }}
+                </span>
+                {% if artists.has_next %}
+                <a href="{% url 'artists:displayArtistsView' %}{% querystring page=artists.next_page_number %}" class="p-2">Next</a>
+                {% endif %}
+            </span>
+        </div>
     </section>
 {% endblock %}

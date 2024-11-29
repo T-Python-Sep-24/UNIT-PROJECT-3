@@ -9,6 +9,45 @@
         Art Pieces
         </h1>
         <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
-        
+        <div class="d-flex justify-content-center">
+            {% if user.is_staff and perms.artpieces.add_artpiece %}
+            <a href="{% url 'artPieces:addArtPieceView' %}" class="btn-beige-400">New</a>
+            {% endif %}
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-4 justify-content-center mt-4">
+            {% for piece in pieces %}
+            <div class="col">
+                <div class="card text-light border-0 custom-crd">
+                    {% for img in piece.attachment_set.all %}
+                    {% if "display" in img.image.url %}
+                    <img src="{{img.url}}" class="card-img shadow custom-crd-img" alt="Art Piece">
+                    {% endif %}
+                    {% endfor %}
+                    <div class="card-img-overlay align-content-end">
+                        <a href="{% url 'artPieces:artPieceDetailsView' piece.id %}" class="my-0 fs-4 text-beige-200 hover-underline">{{piece.name}}</h5>
+                        <p class="my-0 text-beige-100">By: {{piece.artist.fullName}}</p>
+                        <a href="{% url 'artPieces:artPieceDetailsView' piece.id %}" class="text-beige-100 hover-underline"><small>More..</small></a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="fs-5 fw-medium text-beige-300">No results for '{{request.GET.search}}' ..</p>
+            {% endfor %}
+        </div>
+        <!-- Pagination -->
+        <div class="container justify-content-center my-5">
+            <span>
+                {% if pieces.has_previous %}
+                <a href="{% url 'artPieces:displayArtPiecesView' %}{% querystring page=pieces.previous_page_number %}" class="p-2">Previous</a>
+                {% endif %}
+                <span class="p-2 text-beige-100">
+                    Page {{ pieces.number }} of {{ pieces.paginator.num_pages }}
+                </span>
+                {% if pieces.has_next %}
+                <a href="{% url 'artPieces:displayArtPiecesView' %}{% querystring page=pieces.next_page_number %}" class="p-2">Next</a>
+                {% endif %}
+            </span>
+        </div>
     </section>
 {% endblock %}
