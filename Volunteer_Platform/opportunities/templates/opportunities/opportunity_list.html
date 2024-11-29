@@ -1,6 +1,7 @@
-{% extends 'main/base.html' %}
-
-{% block content %}
-<h1>Available Opportunities</h1>
-<p>List of all volunteer opportunities will appear here.</p>
-{% endblock %}
+<h1>Opportunities</h1>
+<ul>
+    {% for opportunity in opportunities %}
+        <li><a href="{% url 'opportunity-detail' opportunity.id %}">{{ opportunity.title }}</a></li>
+    {% endfor %}
+</ul>
+<a href="{% url 'opportunity-create' %}" class="btn btn-primary">Create Opportunity</a>
