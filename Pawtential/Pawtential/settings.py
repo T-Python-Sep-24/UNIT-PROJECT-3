@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'adoptions',
     'donations',
     'pets',
+    'widget_tweaks',
 
 ]
 

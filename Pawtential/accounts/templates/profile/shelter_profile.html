@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="mb-4">Shelter Profile</h2>
+    {% if messages %}
+      <div class="alert alert-success" role="alert">
+          {% for message in messages %}
+              <p>{{ message }}</p>
+          {% endfor %}
+      </div>
+    {% endif %}
+    <div class="row">
+      <div class="col-md-4 text-center">
+      
+        <div class="border" style="border-color: #FF8551; padding: 5px; border-radius: 50%;">
+          <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}/media/profile_pics/default_profile_pic.jpg{% endif %}" 
+              alt="Shelter Picture" 
+              class="img-fluid rounded-circle" 
+              style="width: 200px; height: 200px; object-fit: cover;">
+        </div>
+            <p><strong>Address:</strong> {{ profile.address }}</p>
+
+            {% if profile.user == request.user %}
+            <a href="{% url 'accounts:shelter_edit_profile' %}" class="btn btn-warning">Edit Profile</a> 
+            {% endif %}
+      </div>
+      <div class="col-md-8">
+       
+        <h3>{{ profile.name }}</h3>
+        <p><strong>Username:</strong> {{ profile.user }}</p>
+        <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+        <p><strong>License Number:</strong> {{ profile.license_number }}</p>
+        <p><strong>Bio:</strong> {{ profile.bio }}</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

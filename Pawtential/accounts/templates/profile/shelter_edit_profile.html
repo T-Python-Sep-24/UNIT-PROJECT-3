@@ -1,0 +1,76 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Edit Shelter Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card custom-form-container">
+                <div class="card-header text-center">
+                    <h4>Edit {{ form.instance.user.username }}'s Shelter Profile</h4>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        
+                        <div class="mb-3">
+                            <label for="id_name" class="form-label">Shelter Name</label>
+                            {{ form.name|add_class:"form-control" }}
+                        </div>
+
+                        
+                        <div class="mb-3">
+                            <label for="id_phone_number" class="form-label">Phone Number</label>
+                            {{ form.phone_number|add_class:"form-control" }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_address" class="form-label">Shelter Address</label>
+                            {{ form.address|add_class:"form-control" }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_license_number" class="form-label">License Number</label>
+                            {{ form.license_number|add_class:"form-control" }}
+                        </div>
+
+                       
+                        <div class="mb-3">
+                            <label for="id_bio" class="form-label">Bio (Optional)</label>
+                            {{ form.bio|add_class:"form-control" }}
+                        </div>
+
+                        
+                        <div class="mb-3">
+                            <label for="id_profile_picture" class="form-label">Profile Picture</label>
+                            {{ form.profile_picture|add_class:"form-control" }}
+                            {% if form.instance.profile_picture %}
+                                <img src="{{ form.instance.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mt-3" style="width: 150px; height: 150px; object-fit: cover;">
+                            {% else %}
+                                <img src="/media/profile_pics/default_profile_pic.jpg" alt="Profile Picture" class="img-fluid rounded-circle mt-3" style="width: 150px; height: 150px; object-fit: cover;">
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+                    </form>
+
+                    <div class="mt-3 text-center">
+                        <a href="{% url 'accounts:shelter_profile' %}" class="btn btn-secondary w-100">Back to Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

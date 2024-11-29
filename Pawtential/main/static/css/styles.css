@@ -25,20 +25,20 @@ header{
     height:auto;
 }
 .navbar-nav .nav-link , .bi-box-arrow-in-right{
-    color: #98DDCA;
+    color: #98ddca;
     font-size: 20px;
     font-weight: bold;
   }
   
 .navbar-nav .nav-link:hover , .bi-box-arrow-in-right{
-    color: #FFAAA7;
+    
+    color: #24A19C;
 
 }
 .navbar-toggler{
     color: #98DDCA;
 }
 .navbar-toggler-icon{
-    background-color: #98DDCA;
     border-radius: 4px;
 }
 h1{

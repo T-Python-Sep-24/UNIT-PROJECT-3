@@ -26,4 +26,5 @@ urlpatterns = [
     #path('adoptions/',include("adoptions.urls")),
     #path('donations/',include("donations.urls")),
     #path('pets/',include("pets.urls")),
-] +static(settings.MEDIA_URL,decument_root=settings.MEDIA_ROOT)
+] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

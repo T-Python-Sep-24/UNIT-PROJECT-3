@@ -3,22 +3,23 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card custom-form-container">
                 <div class="card-header text-center">
                     <h4>Create New Account</h4>
+                </div>
+                <div class="card-body">
                     {% if messages %}
+                    <div class="container mt-3">
                         {% for message in messages %}
                             <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
                                 {{ message }}
                             </div>
                         {% endfor %}
-                    {% endif %}   
-                </div>
-                <div class="card-body">
+                    </div>
+                    {% endif %}
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         
@@ -30,8 +31,8 @@
                             </select>
                         </div>
 
-                         <!-- individual fields -->
-                          <div id="individual_fields" class="account-fields">
+                        <!-- individual fields -->
+                        <div id="individual_fields" class="account-fields" style="display:none;">
                             <div class="mb-3">
                                 <label for="frist_name" class="form-label">First Name</label>
                                 <input type="text" class="form-control" id="frist_name" name="frist_name" required>
@@ -41,8 +42,8 @@
                                 <input type="text" class="form-control" id="last_name" name="last_name" required>
                             </div>
                             <div class="mb-3">
-                                <label for="shelter_username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="shelter_username" name="shelter_username" required>
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
@@ -64,10 +65,10 @@
                                 <label for="birth_date" class="form-label">Birth Date</label>
                                 <input type="date" class="form-control" id="birth_date" name="birth_date">
                             </div>
-                          </div>
+                        </div>
 
-                          <!-- shelter fields -->
-                          <div id="shelter_fields" class="account-fields">
+                        <!-- shelter fields -->
+                        <div id="shelter_fields" class="account-fields" style="display:none;">
                             <div class="mb-3">
                                 <label for="shelter_name" class="form-label">Shelter Name</label>
                                 <input type="text" class="form-control" id="shelter_name" name="shelter_name" required>
@@ -100,23 +101,23 @@
                                 <label for="license_number" class="form-label">License Number</label>
                                 <input type="text" class="form-control" id="license_number" name="license_number" required>
                             </div>
-                          </div>
+                        </div>
 
-                          <!-- for both individuals and shelters -->
-                          <div id="password_fields" style="display: none;">
+                        <!-- for both individuals and shelters -->
+                        <div id="password_fields" style="display:none;">
                            <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
                            </div>
                            <div class="mb-3">
-                            <label for="confirm_password" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                                <label for="confirm_password" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
                            </div>
-                          </div>
+                        </div>
 
-                           <button type="submit" class="btn btn-primary w-100">Register</button>
-                           <div class="mt-3 text-center">
-                            <p>Already have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                        <div class="mt-3 text-center">
+                            <p>Already have an account? <a href="{% url 'accounts:login' %}"class="btn btn-link" style="color: #24A19C; background: none; border: none; text-decoration: none;">Login</a></p>
                         </div>
                     </form>
                 </div>

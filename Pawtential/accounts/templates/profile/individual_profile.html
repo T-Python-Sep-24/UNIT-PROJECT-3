@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="mb-4">Individual User Profile</h2>
+    {% if messages %}
+      <div class="alert alert-success" role="alert">
+          {% for message in messages %}
+              <p>{{ message }}</p>
+          {% endfor %}
+      </div>
+    {% endif %}
+    <div class="row">
+      <div class="col-md-4 text-center">
+      
+        <div>
+          <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}/media/profile_pics/default_profile_pic.jpg{% endif %}" 
+          alt="User Picture" 
+          class="img-fluid rounded-circle" 
+          style="width: 200px; height: 200px; object-fit: cover; border: 5px solid #FF8551; ">
+      
+        </div>
+        
+        <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+        <p><strong>Bio:</strong> {{ profile.bio }}</p>
+
+        {% if profile.user == request.user %}
+        <a href="{% url 'accounts:individual_edit_profile' %}" class="btn btn-warning">Edit Profile</a> 
+        {% endif %}
+      </div>
+      <div class="col-md-8">
+       
+        <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
+        <p><strong>Username:</strong> {{ profile.username }}</p>
+        <p><strong>Email:</strong> {{ profile.email }}</p>
+        <p><strong>Birth Date:</strong> {{ profile.birth_date }}</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}
