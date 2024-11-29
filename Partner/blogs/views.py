@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.contrib import messages
-from .models import Blog
+from .models import Blog,Comment
 from main.models import Language
+from accounts.models import Bookmark
 from .forms import BlogForm
 from django.core.paginator import Paginator
 # Create your views here.
@@ -31,13 +32,15 @@ def blogs_all_view(request:HttpRequest):
 
 def blog_details_view(request:HttpRequest,blog_id):
     blog =Blog.objects.get(pk=blog_id)
-    
+    comments = Comment.objects.filter(blog=blog_id).order_by('-created_at')
+    is_bookmarked=  Bookmark.objects.filter(blog=blog, user=request.user).exists() if request.user.is_authenticated else False
+
     if blog.url_video:
       url_id = blog.url_video.split("=")[-1]
     else:
        url_id = ''
 
-    return render(request,"blogs/blog_details.html",{"blog":blog,"url_id":url_id})
+    return render(request,"blogs/blog_details.html",{"blog":blog,"url_id":url_id,"comments":comments,"is_bookmarked":is_bookmarked})
 
 
 def new_blog_view(request:HttpRequest):
@@ -104,3 +107,61 @@ def delete_blog_view(request,blog_id):
     except Exception as e:
         messages.error(request, f"An error occurred: {str(e)}",'alert-danger')
         return redirect('main:home_view')
+
+def add_comment_view(request:HttpRequest,blog_id):
+    if not request.user.is_authenticated:
+        messages.error(request,"only registed user can add comment",'alert-danger')
+        return redirect("accounts:sign_in")
+    if request.method=="POST":
+        blog_obj = Blog.objects.get(pk=blog_id)
+        comment=Comment(user=request.user,comment=request.POST['comment'],blog=blog_obj)
+        comment.save()
+        messages.success(request, "Thank you for your comment",'alert-success')
+    return redirect("blogs:blog_details_view",blog_id=blog_id)    
+
+
+
+
+def delete_comment_view(request:HttpRequest,comment_id):
+  
+    try:
+            comment = Comment.objects.get(pk=comment_id)
+            blog_id=comment.blog.id
+            if request.user != comment.user :
+                messages.error(request,"you don't have permisstion to delete a comment",'alert-danger')
+                return redirect("blogs:blog_details_view",blog_id=blog_id)  
+            else:    
+                comment.delete()
+                messages.success(request, "comment deleted successfully",'alert-success')
+                return redirect("blogs:blog_details_view",blog_id=blog_id)  
+    except Comment.DoesNotExist:
+        messages.error(request, "The comment does not exist", 'alert-danger')
+        return redirect("blogs:blog_details_view",blog_id=blog_id)
+    
+    except Exception as e:
+        print(e)
+        messages.error(request, "An error occurred while trying to delete the comment", 'alert-danger')
+        return redirect("blogs:blog_details_view",blog_id=blog_id)
+
+
+def add_bookmark_view(request,blog_id):
+    if not request.user.is_authenticated:
+            messages.warning(request,"only rigisted user can save blogs","alert-warning")
+            return redirect("accounts:sign_in")
+
+    try:
+       blog=Blog.objects.get(pk=blog_id)
+       bookmark =Bookmark.objects.filter(user=request.user,blog=blog).first()
+       if not bookmark:
+            new_bookmark= Bookmark(user=request.user,blog=blog)
+            new_bookmark.save()
+            messages.success(request, "added to Saved blogs",'alert-success')
+       else:
+           bookmark.delete()
+           messages.warning(request, "removed Saved blog",'alert-warning')
+     
+    except Exception as e:
+        print(e)
+
+
+    return redirect("blogs:blog_details_view",blog_id=blog_id) 

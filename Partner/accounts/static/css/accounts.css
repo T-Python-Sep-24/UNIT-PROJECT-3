@@ -1,0 +1,19 @@
+.profile-nav-link{
+    color: #fe5532;
+}
+
+.profile-nav-link:hover{
+    color: #94321f;
+}
+.profile-nav-link.active{
+    background-color: #fe5532 !important;
+}
+
+.bookmark-container{
+    background-color: #f4d3ca ;
+}
+
+.bookmark-container img{
+    border-radius: 8px 0px 0 8px;
+}
+

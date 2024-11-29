@@ -17,7 +17,7 @@
                 Language Challenge
             </h4>
             <form class="d-flex flex-column gap-3 justify-content-center ">
-               
+                {% csrf_token %}
                 <div class="quiz-area py-5">
                     <p class="my-3 fs-4 text-center"> 
                         Q: Some text here <span class="head-challenge">?</span>            
@@ -69,6 +69,7 @@
         </div>
         <div class="d-flex justify-content-end row"> 
             <form class=" py-2" method="get" action="{%url 'blogs:blogs_all_view'%}">
+                {% csrf_token %}
                 <div class="filtring-and-search   gap-1 d-flex justify-content-center ">
                     <input type="search" class="form-control " placeholder="Search" value="{{request.GET.search}}" name="search" minlength="1"/>
                     <select name="filter_by_lang" class="form-select ">

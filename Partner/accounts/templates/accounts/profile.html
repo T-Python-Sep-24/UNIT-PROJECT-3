@@ -1,0 +1,140 @@
+{% extends 'main/base.html'%}
+{%load static%}
+
+{% block title %} <title> Profile for {{user.username}}</title>  {% endblock %}
+{% block head%}
+<link href="{% static 'css/accounts.css' %}" rel="stylesheet" />
+
+{%endblock%}
+{% block content %}
+
+
+<div class="row">
+    <div class="col-md-4">
+
+        <img src="{{user.profile.avatar.url}}" class="w-100 h-50 rounded-3" style="object-fit: cover;" />
+        <div class="d-flex justify-content-between mt-3">
+            <h5 class=""><i class="fa-solid fa-user text-orange"></i> Profile: {{user.username}} </h5>
+            {% if request.user == user %}
+            <a href="{%url 'accounts:update_profile_view'%}" class=""><i class="fa-solid fa-pen-to-square rounded-circle p-2 btn btn-success"></i></a>
+            {% endif %}
+        </div>
+        <hr/>
+        <div class="d-flex flex-column gap-2">
+            <p><i class="fa-solid fa-venus-mars text-orange"></i> <span class="fw-bold">Gender: </span>
+              {%if user.profile.gender == 'M'%} 
+                <span style="color: blue;">Male</span>
+              {%else%}
+                 <span style="color: pink;">Female</span>
+                {%endif%}
+
+            </p>
+            <p><i class="fa-brands fa-creative-commons-by text-orange"></i> <span class="fw-bold">Native Language: </span> {{user.profile.native_language.name}}</p>
+            <p><i class="fa-solid fa-bullseye text-orange"></i> <span class="fw-bold">Target Language: </span>{{user.profile.target_language.name}}</p>
+        </div>
+       
+    </div>
+    <div class="col-md-8">
+
+        <div class="d-flex flex-column gap-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>{{user.username}}</h1>  
+                {%if request.user.is_authenticated and request.user != user %}
+                    {%if is_requested%}
+                    <a href="{%url 'partners:new_request_view' request.user.id user.id%}" class="btn btn-success rounded-pill">
+                        <i class="fa-solid fa-check"></i> Pending Request</a>  
+                        {%else%}
+                    <a href="{%url 'partners:new_request_view' request.user.id user.id%}" class="btn btn-success rounded-pill">
+                        <i class="fa-solid fa-plus"></i> Partnership Request</a>  
+        
+                    {% endif %}
+                {% endif %}
+            </div>
+            
+            <p class="">{{user.profile.about}}</p>
+            <hr class=""/>
+            <nav class="nav nav-pills nav-fill">
+                <a class="nav-link profile-nav-link active" aria-current="page" href="#" onclick="changeContent('Saved Blogs')">Saved Blogs</a>
+                <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Requests')">Requests</a>
+                <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Partners')">Partners</a>
+                <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Messages')">Messages</a>
+            </nav>
+        
+                    <!-- Content -->
+            <div id="changableContent">
+                <div class="px-2 py-4 row-cols-3 gap-4" id="savedBlogsContent">
+                    <!--  Saved Blogs-->
+                    {% for bookmark in request.user.bookmark_set.all %}
+                        <div class="col d-flex rounded-3 gap-2 shadow align-items-center p-0 bookmark-container">
+                            <img src="{{ bookmark.blog.image.url }}" class="w-50 h-100" />
+                            <a href="{% url 'blogs:blog_details_view' bookmark.blog.id %}" class="text-decoration-none p-1">
+                                <h6 class="orange-link">{{ bookmark.blog.title }}</h6>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Placeholder for other sections -->
+                <div class="row row-cols-3 gap-4" id="requestsContent" style="display: none;">
+                    <p>Content for Requests</p>
+                </div>
+                <div class="row row-cols-3 gap-4" id="partnersContent" style="display: none;">
+                    <p>Content for Partners</p>
+                </div>
+                <div class="row row-cols-3 gap-4" id="messagesContent" style="display: none;">
+                    <p>Content for Messages</p>
+                </div>
+            </div>
+
+
+          
+
+
+
+        </div>
+        
+    </div>
+
+   
+
+</div>
+
+
+
+
+
+{% endblock %}
+{% block script%}
+<script>
+    function changeContent(content) {
+        document.getElementById('savedBlogsContent').style.display = 'none';
+        document.getElementById('requestsContent').style.display = 'none';
+        document.getElementById('partnersContent').style.display = 'none';
+        document.getElementById('messagesContent').style.display = 'none';
+
+        let links = document.querySelectorAll('.nav-link');
+        links.forEach(link => {
+            link.classList.remove('active');
+        });
+
+        if (content === 'Saved Blogs') {
+            document.getElementById('savedBlogsContent').style.display = 'block';
+        } else if (content === 'Requests') {
+            document.getElementById('requestsContent').style.display = 'block';
+        } else if (content === 'Partners') {
+            document.getElementById('partnersContent').style.display = 'block';
+        } else if (content === 'Messages') {
+            document.getElementById('messagesContent').style.display = 'block';
+        }
+
+        let activeLink = document.querySelector(`.nav-link[href='#'][onclick="changeContent('${content}')"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    }
+
+    window.onload = function() {
+        changeContent('Saved Blogs');
+    }
+</script>
+{%endblock%}

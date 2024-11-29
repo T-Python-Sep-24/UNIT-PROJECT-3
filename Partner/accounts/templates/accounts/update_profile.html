@@ -1,0 +1,85 @@
+{% extends 'main/base.html'%}
+
+
+{% block title %}<title>Update {{request.user.username}}</title>  {% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column justify-content-center align-items-center">
+  {% if messages %}
+  <div class="messages">
+{% for message in messages %}
+   <div class="alert {{ message.tags }}">
+       {{ message }}
+          </div>
+      {% endfor %}
+  </div>
+{% endif %}
+    <h2 class="text-white">Update Profile </h2>
+    <form class="d-flex flex-column gap-3 w-50" action="{% url 'accounts:update_profile_view' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+    
+      <div class="form-floating ">
+          <input type="text" value="{{user.username}}" class="form-control" id="floatingInput" placeholder="username" name="username" >
+          <label for="floatingInput">Username</label>
+      </div>
+
+      <div class="form-floating">
+        <input type="email" value="{{user.email}}" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" >
+        <label for="floatingInput">Email address</label>
+      </div>
+
+      <div class="form-floating">
+        <textarea type="" class="form-control" id="floatingAbout" placeholder="Talk about yourself, intrests, experiences, etc..." name="about">{{request.user.profile.about}}</textarea>
+        <label for="floatingAbout">Talk about yourself, intrests, experiences, etc...</label>
+      </div>
+
+
+
+      <div class="row">
+        <div class="mb-3 col-md-6 col-sm-12">
+            <label for="native_language" class="form-label">Native language</label>
+            <select name="native_language" class="form-select" >
+              <option>Choose Language</option>
+              {% for language in languages %}
+                  <option value="{{ language.id }}" {%if language.id == user.profile.native_language.id%} selected {%endif%}>{{ language.native_name }}</option>
+              {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3 col-md-6 col-sm-12">
+          <label for="target_language" class="form-label">Target language</label>
+          <select name="target_language" class="form-select" >
+            <option>Choose Language</option>
+            {% for language in languages %}
+                <option value="{{ language.id }}" {%if language.id == user.profile.target_language.id %} selected {%endif%} >{{ language.native_name }}</option>
+            {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class=" mb-3 col-md-6 col-sm-12">
+        <label class="mb-2">Choose Avatar:</label>
+        <img src="{{user.profile.avatar.url}}" class="rounded-4 p-1" style="width: 40px; height: 40px;" />
+      <input type="file" name="avatar" accept="image/*" class="form-control"/>
+    </div>
+    <div class="mb-3 mt-2 col-md-6 col-sm-12">
+      <label for="gender" class="form-label">Gender</label>
+      <select name="gender" class="form-select" >
+        <option>Select Gender</option>
+        {% for val, label in GenderChoices %}
+            <option value="{{ val }}" {%if val == user.profile.gender%} selected {%endif%}>{{ label }}</option>
+        {% endfor %}
+    </select>
+  </div>
+    </div>
+
+    <div class="form-floating">
+      <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" >
+      <label for="floatingPassword">Reset Password</label>
+    </div>
+        <button class="btn btn-orange rounded-pill w-100 py-2" type="submit">Update</button>
+      </form>
+</div>
+
+{% endblock %}
