@@ -32,8 +32,7 @@ def addArtPieceView(request: HttpRequest):
             else:
                 messages.error(request, f"'{request.POST['name']}' wasn't added.", "alert-danger")
                 
-            # response = redirect('artPieces:displayPiecesView', 'all')
-            response = redirect('main:homeView')
+            response = redirect('artPieces:displayPiecesView', 'all')
     
     return response
 
@@ -59,7 +58,6 @@ def updateArtPieceView(request: HttpRequest, pieceId:int):
                 if pieceData.is_valid():
                     piece:ArtPiece = pieceData.save(commit=False)
                     piece.save()
-                    piece.colors.set(request.POST.getlist("colors"))
                     if images:
                         Attachment.objects.filter(piece=piece).delete()
                         for img in images:
@@ -69,8 +67,7 @@ def updateArtPieceView(request: HttpRequest, pieceId:int):
                 else:
                     messages.error(request, f"'{request.POST['name']}' wasn't updated.", "alert-danger")
                     
-                # response = redirect('artPieces:pieceDetailsView', pieceId)
-                response = redirect('main:homeView')
+                response = redirect('artPieces:pieceDetailsView', pieceId)
 
     return response
 
@@ -93,6 +90,53 @@ def deleteArtPieceView(request: HttpRequest, pieceId:int):
             else: 
                 messages.success(request, f"'{piece.name}' deleted successfully.", "alert-success")    
             
-            # response = redirect('artPieces:displayPiecesView', 'all')
+            response = redirect('artPieces:displayArtPiecesView', 'all')
 
     return response
+
+# Diplay art pieces View
+def displayArtPiecesView(request: HttpRequest, filter: str):
+
+    artists = Artist.objects.all()
+
+    if filter == 'all':
+        pieces = ArtPiece.objects.all()
+    
+    if 'search' in request.GET and len(request.GET['search']) >= 2:
+        pieces = pieces.filter(name__contains=request.GET['search']).order_by('-addedAt')
+
+    if 'artist' in request.GET and request.GET['artist'] != '':
+        pieces = pieces.filter(artist__fullName=request.GET['artist'])
+
+    # Group results by id to avoid repeatition
+    # pieces = pieces.annotate(Count("id"))
+
+    paginator = Paginator(pieces, 6)
+    pageNumber = request.GET.get('page', 1)
+    page_obj = paginator.get_page(pageNumber)
+
+    response = render(request, 'artPieces/displayPieces.html', {'pieces': page_obj, 'selected': filter, 'artists': artists})
+    
+    return response
+
+# Art piece details View
+def artPieceDetailsView(request: HttpRequest, pieceId:int):
+    try:
+        piece = ArtPiece.objects.get(pk=pieceId)
+    except Exception:
+        response = render(request, '404.html')
+    else:
+
+        relatedPieces = ArtPiece.objects.exclude(pk=pieceId).filter(artist=piece.artist)[0:3]
+
+        response = render(request, 'artPieces/pieceDetails.html', {'piece': piece, 'relatedPieces': relatedPieces})
+    return response
+
+# Add comment View
+
+
+# # Delete comment View
+
+
+# Add favorite View
+

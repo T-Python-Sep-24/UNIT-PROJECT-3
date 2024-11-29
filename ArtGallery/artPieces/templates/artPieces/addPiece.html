@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Add Art Piece{% endblock %}
 
 {% block content %}
     <section class="container-md text-center">
@@ -23,10 +23,6 @@
                 <div class="mb-3">
                     <label for="description" class="form-label fw-medium fs-5">Description</label>
                     <textarea class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="description" name="description" rows="2"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="images" class="form-label fw-medium fs-5">Attachments</label>
-                    <input class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" type="file" id="images" name="images" accept="image/*" multiple>
                 </div>
                 <div class="mb-3">
                     <label for="artist" class="form-label fw-medium fs-5">Artist <span class="small text-burgundy-darker">(Leave empty for anonymous artist)</span></label>
@@ -60,6 +56,10 @@
                             Please enter a valid location.
                         </div>
                     </div>
+                </div>
+                <div class="mb-3">
+                    <label for="images" class="form-label fw-medium fs-5">Attachments</label>
+                    <input class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" type="file" id="images" name="images" accept="image/*" multiple>
                 </div>
                 <div class="mb-3">
                     <div class="radio-list">
