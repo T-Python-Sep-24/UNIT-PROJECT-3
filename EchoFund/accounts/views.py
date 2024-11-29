@@ -41,7 +41,7 @@ def sign_up(request: HttpRequest):
         except Exception as e:
             print(e)
             messages.error(request, 'error in creating your account', 'alert-danger')
-    return render(request, 'signup.html')
+    return render(request, 'login_form.html')
 
 
 def sign_in(request: HttpRequest):
@@ -54,7 +54,7 @@ def sign_in(request: HttpRequest):
             return redirect(request.GET.get('next', '/'))
         else:
             messages.error(request, 'Username or password is wrong, please try again', 'alert-danger')
-    return render(request, 'signin.html')
+    return render(request, 'login_form.html')
 
 
 def log_out(request: HttpRequest):
