@@ -1,0 +1,12 @@
+.card {
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.btn {
+    font-weight: bold;
+}
+
+a.text-primary:hover {
+    text-decoration: underline;
+}
