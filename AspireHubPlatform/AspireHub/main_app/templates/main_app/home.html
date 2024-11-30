@@ -3,81 +3,63 @@
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
-<section class="bg-white dark:bg-gray-900 rounded-full px-20">
-    <div class="grid max-w-screen-xl px-8 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
-        <div class="mr-auto place-self-center lg:col-span-7">
-            <div id="typewriter" class="typewriter max-w-2xl mb-6 text-2xl font-extrabold tracking-tight leading-none md:text-2xl xl:text-4xl dark:text-white"></div>منصة مسار تقدم لك الأدوات اللازمة لاكتشاف ميولك المهني وتحقيق أهدافك التعليمية</p>
-            <a href="#" class=" bg-amber-400 inline-flex items-center justify-center mt-4  px-5 py-3 text-base font-medium text-center text-white border border-gray-300 rounded-lg hover:bg-sky-600 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
-                ابدأ الان رحلتك
-            </a> 
+<div class="flex justify-center items-center flex-col gap-y-6 mt-32">
+    <h1 class="text-4xl font-bold">التحول الذكي لمسيرتك المهنية</h1>
+    <p class="text-gray-500 text-lg">اكتشف ميولك المهنية بسهولة وكفاءة مع منصة مسار، ابدأ رحلتك نحو تحقيق أهدافك التعليمية الآن.</p>
+    <button class="bg-orange-500 text-white p-2 rounded-lg">زر ابدا الآن</button>
+  </div>
+  <div class="flex justify-center items-center">
+    <img src="https://hal.com.sa/assets/LandingPageImages/MacHero.webp" alt="">
+  </div>
+
+          <!-- Services Offered Section -->
+          <section class="mb-12 p-20">
+            <h2 class="text-2xl font-semibold mt-20 mb-12 flex justify-center items-center">ميزات مسار </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/carreer.png'%}" alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">اختبارات تحديد المسار </h3>
+                    <p class="text-gray-500" >اختبارات تفاعلية متعددة الخيارات لتحديد ميولك المهني بدقة</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/chatbot.png'%}" alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">تشات بوت ذكي </h3>
+                    <p class="text-gray-500">يوفر إجابات فورية على استفسارات المشتخدمين حول المنصة </p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/certificate.png'%}"  alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">شهادات احترافية</h3>
+                    <p class="text-gray-500" >قائمة بالشهادات المطلوبة في السوق مع تفاصيل الدورات التدريبية المرتبطة بها </p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/events.png'%}"  alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">معارض وفعاليات مهنية </h3>
+                    <p  class="text-gray-500">معلومات عن الفعاليات القدامة ، مع امكانية التسجيل في المشاركة</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/customer-support.png'%}"  alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">دعم فني واستفسارات </h3>
+                    <p class="text-gray-500">قسم للأسئلة الشائعة ونموذج للتواصل مع الدعم الفني</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/business-growth.png'%}"  alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">قسم الشركات الناجحة </h3>
+                    <p class="text-gray-500 ">نبذة عن رواد الأعمال الناجحين ومعلومات للتواصل معهم وحجز جلسات استشارية</p>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="bg-orange-500  w-full flex justify-center items-center flex-col gap-y-6 mt-10">
+            <h1 class="text-4xl text-white font-bold mt-10">كيف يمكن لمسار ان تساعدك ؟</h1>
+            <p class="text-white text-lg py-8 px-32 text-justify text-start   mb-12   ">مسار هي منصة مهنية مبتكرة تهدف إلى مساعدة الطلاب وحديثي التخرج في اختيار ميولهم ومساراتهم المهنية المناسبة. تقدم المنصة اختبارات متعددة الخيارات لتحديد التوجهات الشخصية، وتوفر معلومات شاملة حول الجامعات والدراسات العليا المتاحة بناءً على التخصصات المطلوبة</p>
+
+
+
         </div>
-        <div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
-            <img src="https://www.technomak.com/static/core/images/new_gifs2/Career%20page.gif" alt="hero-image">
-        </div>                
-    </div>
-</section>
 
-
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
-<script>
-
-    function typeWriter(element, sentences, speed, pause) {
-        let sentenceIndex = 0;
-        let charIndex = 0;
-
-        function type() {
-            if (sentenceIndex < sentences.length) {
-                const currentSentence = sentences[sentenceIndex];
-
-                if (charIndex < currentSentence.length) {
-                    element.textContent += currentSentence.charAt(charIndex);
-                    charIndex++;
-                    setTimeout(type, speed);
-                } else {
-                    charIndex = 0;
-                    sentenceIndex++;
-
-                    if (sentenceIndex === sentences.length) {
-                        sentenceIndex = 0; // Reset to loop
-                    }
-
-                    setTimeout(() => {
-                        element.textContent = ''; // Clear the previous sentence
-                        type();
-                    }, pause);
-                }
-            }
-        }
-
-        type();
-    }
-
-
-    const typewriterElement = document.getElementById('typewriter');
-    const sentences = [
-        "  🚶‍♀️ ضايع؟ لسه ما عرفت تحدد مسارك؟ ",
-        " مو عارف المجال اللي راح تبدع فيه؟  ",
-        "مع منصة مسار جبنا لك الحل ",
-      
-    ];
-    const typingSpeed = 100; // milliseconds per character
-    const pauseBetweenSentences = 1000; // milliseconds before starting the next sentence
-
-    typeWriter(typewriterElement, sentences, typingSpeed, pauseBetweenSentences);
-
-
-    const progressCircle = document.querySelector(".autoplay-progress svg");
-    const progressContent = document.querySelector(".autoplay-progress span");
-
-    const swiperEl = document.querySelector("swiper-container");
-    swiperEl.addEventListener("autoplaytimeleft", (e) => {
-      const [swiper, time, progress] = e.detail;
-      progressCircle.style.setProperty("--progress", 1 - progress);
-      progressContent.textContent = `${Math.ceil(time / 1000)}s`;
-    });
-
-
-</script>
-
+  
+  
+   <!-- Default content can be added here  -->
 
 {% endblock %}

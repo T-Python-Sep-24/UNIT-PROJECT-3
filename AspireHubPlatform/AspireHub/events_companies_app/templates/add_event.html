@@ -1,0 +1,31 @@
+{% extends 'main_app/base.html' %}
+
+{% block content %}
+    <h2 class="text-2xl font-bold mb-4">Add Event</h2>
+    <form action="{% url 'events_companies_app:add_event_view' %}" method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        <div>
+            <label for="title" class="block text-sm font-medium text-gray-700">Event Title</label>
+            <input type="text" name="title" id="title" required
+                   class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        <div>
+            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea name="description" id="description" required
+                      class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200"></textarea>
+        </div>
+        <div>
+            <label for="image" class="block text-sm font-medium text-gray-700">Event Image</label>
+            <input type="file" name="image" id="image" accept="image/*"
+                   class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        <div>
+            <label for="date" class="block text-sm font-medium text-gray-700">Event Date</label>
+            <input type="date" name="date" id="date" required
+                   class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        <button type="submit" class="bg-gradient-to-r from-sky-600 to-sky-900 text-white px-4 py-2 rounded transition duration-200 hover:from-sky-700 hover:to-sky-800">
+            Add Event
+        </button>
+    </form>
+{% endblock %}
