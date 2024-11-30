@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h1>{{ user.username }}'s Bookmarked Places</h1>
+
+<div>
+    {% for bookmark in bookmarks %}
+        <div>
+            <h3><a href="{% url 'places:place_detail_view' bookmark.place.pk %}">{{ bookmark.place.name }}</a></h3>
+            <p>City: {{ bookmark.place.city }}</p>
+            <img src="{{ bookmark.place.photo.url }}" alt="{{ bookmark.place.name }}" width="200">
+        </div>
+    {% empty %}
+        <p>You have no bookmarked places yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}
