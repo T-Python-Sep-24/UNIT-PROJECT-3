@@ -1,0 +1,87 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}Add Opportunity{%endblock %}
+
+{% block content %}
+
+<main class="add-opportunity-page">
+    <div class="add-opportunity-container">
+        <h1 class="add-form-header">Add New Opportunity</h1>
+        <form action="{% url 'organizations:add_opportunity_view' %}" method="post" enctype="multipart/form-data" class="add-opportunity-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Opportunity Name</label>
+                <input type="text" name="name" id="name" class="form-control" placeholder="Enter Opportunity Name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" name="city" id="city" class="form-control" placeholder="Enter City" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="location">Location</label>
+                <textarea name="location" id="location" class="form-control" placeholder="Enter Location" rows="2" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="time">Time</label>
+                <input type="datetime-local" name="time" id="time" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="event_type">Event Type</label>
+                <select name="event_type" id="event_type" class="form-control" required>
+                    <option value="">Select Event Type</option>
+                    <option value="Profit">Profit</option>
+                    <option value="Non-Profit">Non-Profit</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="focus_industry">Focus Industry</label>
+                <select name="focus_industry" id="focus_industry" class="form-control" required>
+                    <option value="">Select Focus Industry</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Education">Education</option>
+                    <option value="Environment">Environment</option>
+                    <option value="Technology">Technology</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="education_level_required">Education Level Required</label>
+                <select name="education_level_required" id="education_level_required" class="form-control" required>
+                    <option value="">Select Education Level</option>
+                    <option value="None">No Education Required</option>
+                    <option value="High School">High School Diploma</option>
+                    <option value="Bachelor">Bachelor’s Degree</option>
+                    <option value="Master">Master’s Degree</option>
+                    <option value="PhD">PhD</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="number_of_volunteers_needed">Number of Volunteers Needed</label>
+                <input type="number" name="number_of_volunteers_needed" id="number_of_volunteers_needed" class="form-control" placeholder="Enter Number of Volunteers" min="1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" class="form-control" placeholder="Enter Opportunity Description" rows="4" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="image">Upload Image</label>
+                <input type="file" name="image" id="image" class="form-control">
+            </div>
+
+            <button type="submit" class="submit-button">Add Opportunity</button>
+        </form>
+    </div>
+</main>
+
+{% endblock %}
