@@ -4,11 +4,75 @@
 {% block title %}{{artist.fullName}} Details{% endblock %}
 
 {% block content %}
-    <section class="container-md text-center">
-        <h1 class="mb-0 mt-3 text-beige-100">
+<section class="container-md text-center">
+    <h1 class="mb-0 mt-3 text-beige-100">
         {{artist.fullName}}
-        </h1>
-        <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
-        
-    </section>
+    </h1>
+    <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
+    <div class="d-flex gap-2 justify-content-end my-2">
+        {% if user.is_staff and perms.artists.change_artist %}
+        <a href="{% url 'artists:updateArtistView' artist.id %}" class="btn-beige-200 border-2 shadow-sm my-auto">
+            Update
+        </a>
+        {% endif %}
+        <!-- Button to trigger delete modal -->
+        {% if user.is_staff and perms.artists.delete_artist %}
+        <button type="button" class="btn-beige-200 border-2 shadow-sm my-auto" data-bs-toggle="modal"
+            data-bs-target="#deleteModal">
+            Delete
+        </button>
+        {% endif %}
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 p-3 bg-blur-lighter rounded-1 shadow-lg">
+        <div class="col col-md-4 p-0">
+            <img src="{{artist.photo.url}}" alt="Artist Image" class="rounded-circle w-50 custom-img">
+            <div class="d-flex flex-column justify-content-center">
+                <p class="fs-2 m-0 text-burgundy-darker">{{artist.fullName}}</p>
+                <img src="{% static 'images/underlineDark.png' %}" class="mb-3 mx-auto" width="220" alt="">
+            </div>
+        </div>
+        <div class="col col-md-8 p-2 ps-5 align-content-center">
+            <div class="d-flex flex-column text-start">
+                <p class="fs-5 text-burgundy-darker">
+                    <span class="fw-bold fs-4 text-burgundy">About: </span>{{artist.about}}
+                </p>
+                <p class="fs-5 text-burgundy-darker">
+                    <span class="fw-bold fs-4 text-burgundy">Exhibit: </span>{{artist.exhibit}}
+                </p>
+                <p class="fs-5 text-burgundy-darker">
+                    <span class="fw-bold fs-4 text-burgundy">Birth Date: </span>{{artist.birthDate}} 
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- Delete artist modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-blur-lighter">
+                <div class="modal-header">
+                    <h1 class="modal-title text-burgundy-darker fs-4" id="deleteModalLabel">Delete Artist</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-burgundy fs-5">
+                    Are you sure you want to delete '<strong class="text-burgundy-darker">
+                        {{artist.fullName}}</strong>'?
+                </div>
+                <div class="modal-footer py-1">
+                    <button type="button" class="btn-beige-200 shadow-sm py-0" data-bs-dismiss="modal">Close</button>
+                    <a href="{% url 'artists:deleteArtistView' artist.id %}"
+                        class="btn-beige-400 shadow-sm py-0 text-white">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container-lg my-5">
+    <p class="fs-3 fw-medium mt-3 mb-2 text-beige-200">
+        Art Pieces From <span>{{artist.fullName}}:</span>
+    </p>
+    {% with relatedPieces as pieces %}
+       {% include 'artPieces/components/piecesList.html' %}
+    {% endwith %}
+</section>
 {% endblock %}

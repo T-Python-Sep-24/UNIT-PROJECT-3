@@ -180,8 +180,7 @@ label {
 }
 
 .btn-beige-200:hover {
-    background-color: #6f5556;
-    color: #ffefe9;
+    background-color: #b19389;
     box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
 }
 
@@ -190,7 +189,41 @@ label {
 }
 
 .btn-beige-200:active {
-    background-color: #685256;
+    background-color: #b19389;
+    box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+    transform: translateY(0);
+}
+
+.btn-beige-300 {
+    display: block;
+    padding: 0 .7rem;
+    align-items: center;
+    background-color: #876d6f;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.15) 0 1px 3px;
+    color: #fbeeea;
+    font-size: 1.1rem;
+    cursor: pointer;
+    justify-content: center;
+    transition: all 250ms;
+    user-select: none;
+    -webkit-user-select: none;
+    width: auto;
+}
+
+.btn-beige-300:hover {
+    background-color: #7c6263;
+    color: #ffefe9;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.btn-beige-300:hover {
+    transform: translateY(-2px);
+}
+
+.btn-beige-300:active {
+    background-color: #7c6263;
     box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
     transform: translateY(0);
 }

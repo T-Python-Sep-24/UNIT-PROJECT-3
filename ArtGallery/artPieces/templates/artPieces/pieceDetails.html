@@ -40,6 +40,9 @@
                         <span class="fw-bold fs-4 text-burgundy">Artist: </span><a href="{% url 'artists:artistDetailsView' piece.artist.id %}" class="hover-color fs-5">{{piece.artist.fullName}}</a>
                     </p>
                     <p class="fs-5 text-burgundy-darker">
+                        <span class="fw-bold fs-4 text-burgundy">Price: </span>{{piece.price}}.00 SAR
+                    </p>
+                    <p class="fs-5 text-burgundy-darker">
                         <span class="fw-bold fs-4 text-burgundy">Sold: </span>{% if piece.isSold %}Yes{% else %}No{% endif %}  
                     </p>
                     <p class="fs-5 text-burgundy-darker">
@@ -70,7 +73,7 @@
 </section>
 
 <section class="container-lg my-5">
-    <p class="fs-3 fw-medium mt-3 mb-0 text-beige-100">
+    <p class="fs-3 fw-medium mt-3 mb-2 text-beige-200">
         More Art Pieces From <a href="{% url 'artists:artistDetailsView' piece.artist.id %}" class="fs-3 hover-underline text-offwhite">{{piece.artist.fullName}}:</a>
     </p>
     {% with relatedPieces as pieces %}
