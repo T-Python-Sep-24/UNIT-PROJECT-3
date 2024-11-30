@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect , get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import IndividualUser, Shelter
 from django.contrib.auth.decorators import login_required
 from .forms import ShelterProfileForm ,IndividualUserForm
+from pets.models import Pet
+from adoptions.models import AdoptionRequest
 
 
 def login_view(request):
@@ -22,6 +24,7 @@ def login_view(request):
             return render(request, 'accounts/login.html')
 
     return render(request, 'accounts/login.html')
+
 
 def register_individual_view(request):
     if request.method == 'POST':
@@ -66,6 +69,7 @@ def register_individual_view(request):
         return redirect('accounts:login') 
 
     return render(request, 'accounts/individual_registration.html')
+
 
 def register_shelter_view(request):
     if request.method == 'POST':
@@ -114,12 +118,33 @@ def logout_view(request):
     messages.success(request, "You have logged out successfully.")
     return redirect('main:home_view')
 
-def individual_profile(request):
-    profile = IndividualUser.objects.get(user=request.user )
-    return render(request, 'profile/individual_profile.html', {'profile': profile})
 
-def edit_individual_profile(request):
-    profile = IndividualUser.objects.get(user=request.user)
+def individual_profile(request, individual_id):
+    try:
+        individual_profile = IndividualUser.objects.get(id=individual_id)
+    except IndividualUser.DoesNotExist:
+        individual_profile = None
+
+    if individual_profile:
+        pets = Pet.objects.filter(user=individual_profile.user)
+        sent_requests = AdoptionRequest.objects.filter(user=individual_profile.user)
+        adoption_requests = AdoptionRequest.objects.filter(pet__user=individual_profile.user)
+    else:
+        pets = []
+        sent_requests = []
+        adoption_requests = []
+
+    return render(request, 'profile/individual_profile.html', {
+        'profile': individual_profile,
+        'pets': pets,
+        'sent_requests': sent_requests,
+        'adoption_requests': adoption_requests
+    })
+
+
+def edit_individual_profile(request, individual_id):
+
+    profile = get_object_or_404(IndividualUser, id=individual_id)
 
     if request.method == 'POST':
         form = IndividualUserForm(request.POST, request.FILES, instance=profile)
@@ -127,7 +152,7 @@ def edit_individual_profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated successfully.')
-            return redirect('accounts:individual_profile')  
+            return redirect('accounts:individual_profile', individual_id=profile.id)
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -135,20 +160,38 @@ def edit_individual_profile(request):
 
     return render(request, 'profile/individual_edit_profile.html', {'form': form})
 
-def shelter_profile(request):
-    shelter_profile = Shelter.objects.get(user=request.user)
-    return render(request, 'profile/shelter_profile.html', {'profile': shelter_profile})
+def shelter_profile(request, shelter_id):
+    try:
+        shelter_profile = Shelter.objects.get(id=shelter_id)
+    except Shelter.DoesNotExist:
+        shelter_profile = None 
 
-def edit_shelter_profile(request):
-    profile = Shelter.objects.get(user=request.user)
+    if shelter_profile:
+        
+        pets = Pet.objects.filter(user=shelter_profile.user)
+        adoption_requests = AdoptionRequest.objects.filter(pet__user=shelter_profile.user)
+
+    else:
+        pets = []
+        adoption_requests = []
+    return render(request, 'profile/shelter_profile.html', {'profile': shelter_profile , 'pets': pets , 'adoption_requests': adoption_requests,})
+
+
+def edit_shelter_profile(request, shelter_id):
+    profile = Shelter.objects.get(id=shelter_id)
 
     if request.method == 'POST':
         form = ShelterProfileForm(request.POST, request.FILES, instance=profile)
         
         if form.is_valid():
-            form.save()  
-            return redirect('accounts:shelter_profile')  
+            form.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('accounts:shelter_profile', shelter_id=profile.id) 
     else:
         form = ShelterProfileForm(instance=profile)
 
     return render(request, 'profile/shelter_edit_profile.html', {'form': form})
+
+
+
+

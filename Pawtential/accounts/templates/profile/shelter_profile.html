@@ -4,36 +4,105 @@
 {% block content %}
   <div class="container mt-5">
     <h2 class="mb-4">Shelter Profile</h2>
+
     {% if messages %}
       <div class="alert alert-success" role="alert">
-          {% for message in messages %}
-              <p>{{ message }}</p>
-          {% endfor %}
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
       </div>
     {% endif %}
+
     <div class="row">
       <div class="col-md-4 text-center">
-      
-        <div class="border" style="border-color: #FF8551; padding: 5px; border-radius: 50%;">
+        <div>
           <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}/media/profile_pics/default_profile_pic.jpg{% endif %}" 
-              alt="Shelter Picture" 
-              class="img-fluid rounded-circle" 
-              style="width: 200px; height: 200px; object-fit: cover;">
+            alt="User Picture" class="img-fluid rounded-circle" 
+            style="width: 200px; height: 200px; object-fit: cover; border: 5px solid #FF8551;">
         </div>
-            <p><strong>Address:</strong> {{ profile.address }}</p>
 
-            {% if profile.user == request.user %}
-            <a href="{% url 'accounts:shelter_edit_profile' %}" class="btn btn-warning">Edit Profile</a> 
-            {% endif %}
+        <p><strong>Address:</strong> {{ profile.address }}</p>
+
+        {% if profile.user == request.user %}
+          <a href="{% url 'accounts:shelter_edit_profile' shelter_id=profile.id %}" class="btn btn-warning">Edit Profile</a>
+        {% endif %}
       </div>
+
       <div class="col-md-8">
-       
         <h3>{{ profile.name }}</h3>
-        <p><strong>Username:</strong> {{ profile.user }}</p>
+        <p><strong>Username:</strong> {{ profile.user.username }}</p>
         <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
         <p><strong>License Number:</strong> {{ profile.license_number }}</p>
         <p><strong>Bio:</strong> {{ profile.bio }}</p>
       </div>
     </div>
+
+    <hr class="my-4" style="border-top: 3px solid #FF8551;">
+
+    <h4>Pets Added by {{ profile.name }}</h4>
+    {% if pets %}
+      <ul class="list-group">
+        {% for pet in pets %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <img src="{{ pet.image.url }}" alt="{{ pet.name }}" class="img-thumbnail" style="max-width: 100px;">
+              <strong>{{ pet.name }}</strong> - {{ pet.species }}<br>
+              <small>Age: {{ pet.age }} years</small><br>
+              <small>Status: {{ pet.get_adoption_status_display }}</small>
+            </div>
+
+            <div>
+              {% if pet.user == request.user %}
+                <a href="{% url 'pets:edit_pet' pet_id=pet.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                <form action="{% url 'pets:delete_pet' pet_id=pet.id %}" method="POST" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this pet?');">Delete Pet</button>
+                </form>
+              {% endif %}
+              <a href="{% url 'pets:pet_detail' pet_id=pet.id %}" class="btn btn-info btn-sm">Details</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No pets added yet.</p>
+    {% endif %}
+
+    <hr class="my-4" style="border-top: 3px solid #FF8551;">
+
+    {% if profile.user == request.user %}
+    <h4>Adoption Requests</h4>
+      <ul class="list-group">
+        {% for request in adoption_requests %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <p><strong>Pet:</strong> {{ request.pet.name }} | 
+              <strong>User:</strong> 
+              {% if request.user %}
+                {% if request.user.individual_user %}
+                  <a href="{% url 'accounts:individual_profile' individual_id=request.user.individual_user.id %}" class="btn btn-link">
+                    {{ request.user.username }}
+                  </a>
+                {% elif request.user.shelter %}
+                  <a href="{% url 'accounts:shelter_profile' shelter_id=request.user.shelter.id %}" class="btn btn-link">
+                    {{ request.user.username }}
+                  </a>
+                {% endif %}
+              {% else %}
+                <span>No user linked with this request</span>
+              {% endif %}
+              | 
+              <strong>Status:</strong> {{ request.get_status_display }}</p>
+            </div>
+            <div>
+              {% if request.status == 'pending' %}
+                <a href="{% url 'adoptions:handle_adoption_request' request_id=request.id action='accept' %}" class="btn btn-success btn-sm me-2">Accept</a>
+                <a href="{% url 'adoptions:handle_adoption_request' request_id=request.id action='reject' %}" class="btn btn-danger btn-sm">Reject</a>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   </div>
 {% endblock %}

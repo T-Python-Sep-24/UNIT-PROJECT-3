@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}{{ pet.name }} Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0 mt-5">
+
+    <h2 class="text-center mb-5 display-3">{{ pet.name }} Details</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-12 col-lg-10">
+            <div class="card border-light shadow-lg rounded-4 w-100 mb-4" style="max-width: 90%; height: auto;">
+                <div class="card-body">
+                    <div class="row mb-4">
+                    
+                        <div class="col-md-6 p-0">  
+                            <img src="{{ pet.image.url }}" class="img-fluid rounded-3" alt="{{ pet.name }}" style="object-fit: cover; width: 100%; height: 100%; max-height: 400px;">
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="card-title display-3 font-weight-bold" style="border-bottom: 3px solid #FFAAA7; font-size: 2.5em;">{{ pet.name }}</h5>
+
+                            <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Species:</strong> <span class="text-info">{{ pet.species }}</span></p>
+                            <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Breed:</strong> <span class="text-info">{{ pet.breed }}</span></p>
+                            <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Age:</strong> <span class="text-info">{{ pet.age }} years</span></p>
+                            <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Health Status:</strong> <span class="text-info">{{ pet.get_health_status_display }}</span></p>
+                            <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Adoption Status:</strong> <span class="text-info">{{ pet.get_adoption_status_display }}</span></p>
+                            <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Medical History:</strong> <span class="text-info">{{ pet.medical_history|default:"No medical history" }}</span></p>
+                            <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Location:</strong> <span class="text-info">{{ pet.location|default:"Not specified" }}</span></p>
+
+                            <p class="card-text text-dark" style="font-size: 1.5em;">
+                                <strong>Added by:</strong> 
+                                {% if pet.user.individual_user %}
+                                    <a href="{% url 'accounts:individual_profile' individual_id=pet.user.individual_user.id %}" class="btn btn-link" style="color: #FFAAA7; font-size: 1em;">{{ pet.user.username }}</a>
+                                {% elif pet.user.shelter %}
+                                    <a href="{% url 'accounts:shelter_profile' shelter_id=pet.user.shelter.id %}" class="btn btn-link" style="color: #FFAAA7; font-size: 1em;">{{ pet.user.username }}</a>
+                                {% endif %}
+                            </p>
+
+                            <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Created At:</strong> <span class="text-info">{{ pet.created_at|date:"F j, Y, g:i a" }}</span></p>
+                            <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Last Updated:</strong> <span class="text-info">{{ pet.updated_at|date:"F j, Y, g:i a" }}</span></p>
+                            {% if request.user.is_authenticated %}
+                                {% if pet.adoption_status == 'available' %}
+                                <a href="{% url 'adoptions:request_adoption' pet_id=pet.id %}" class="btn btn-primary mt-3 btn-lg">Request Adoption</a>
+                                {% endif %}
+                            {% else %}
+                                <p>Please log in to request adoption.</p>
+                            {% endif %}
+
+                            {% if pet.user == request.user %}
+                                <a href="{% url 'pets:edit_pet' pet_id=pet.id %}" class="btn btn-warning mt-3 btn-lg">Edit Pet</a>
+                                <form action="{% url 'pets:delete_pet' pet.id %}" method="POST" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger mt-3 btn-lg" onclick="return confirm('Are you sure you want to delete this pet?');">Delete Pet</button>
+                                </form>
+                            {% endif %}
+                            <a href="{% url 'pets:pet_list_view' %}" class="btn btn-primary mt-3 btn-lg">Back to Pet List</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

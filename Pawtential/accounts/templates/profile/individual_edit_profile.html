@@ -84,8 +84,12 @@
                     </form>
 
                     <div class="mt-3 text-center">
-                        <a href="{% url 'accounts:individual_profile' %}" class="btn btn-secondary w-100">Back to Profile</a>
-                    </div>
+                        {% if profile.id %}
+                            <a href="{% url 'accounts:individual_profile' individual_id=profile.id %}" class="btn btn-secondary w-100">Back to Profile</a>
+                        {% else %}
+                            <p>Profile ID is not available.</p>
+                        {% endif %}
+                    </div>                    
                 </div>
             </div>
         </div>

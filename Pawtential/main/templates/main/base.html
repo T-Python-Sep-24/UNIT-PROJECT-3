@@ -36,28 +36,33 @@
                             <a class="nav-link" href="{% url 'main:home_view' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Add</a>
+                            <a class="nav-link" href="{% url 'pets:pet_list_view' %}">All Pets</a> 
                         </li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'pets:add_pet' %}">Add Pet</a>
+                        </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="#">Contact</a>
                         </li>
 
                         {% if user.is_authenticated %}
-                        <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #24A19C;">
-                              Welcome, {{ user.username }}
-                          </a>
-                          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li>
-                                {% if request.user.individual_user %}
-                                    <a class="dropdown-item" href="{% url 'accounts:individual_profile' %}">View Profile</a>
-                                {% elif request.user.shelter %}
-                                    <a class="dropdown-item" href="{% url 'accounts:shelter_profile' %}">View Profile</a>                    
-                                {% endif %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #24A19C;">
+                                    Welcome, {{ user.username }}
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        {% if request.user.individual_user %}
+                                            <a class="dropdown-item" href="{% url 'accounts:individual_profile' individual_id=request.user.individual_user.id %}">View Profile</a>
+                                        {% elif request.user.shelter %}
+                                            <a class="dropdown-item" href="{% url 'accounts:shelter_profile' shelter_id=request.user.shelter.id %}">View Profile</a>                    
+                                        {% endif %}
+                                    </li>
+                                    <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
+                                </ul>
                             </li>
-                              <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
-                          </ul>
-                        </li>
                         {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'accounts:login' %}">
