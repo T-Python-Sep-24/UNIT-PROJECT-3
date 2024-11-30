@@ -6,7 +6,7 @@
     .sidebar {
         min-width: 250px;
         max-width: 250px;
-        background: linear-gradient(180deg, #ffdbef, #ffdae6);
+        background: linear-gradient(180deg, #969696, #FFFFFF);
         color: #fff;
         padding-top: 20px;
         height: 100vh;
@@ -14,7 +14,7 @@
         border-radius: 0 15px 15px 0;
     }
     .sidebar h2 {
-        color: #ff69b4;
+        color: #ffffff;
         font-family: 'Poppins', sans-serif;
         font-weight: bold;
         margin-bottom: 20px;
@@ -30,13 +30,13 @@
         font-family: 'Poppins', sans-serif;
     }
     .sidebar a:hover, .sidebar a.active {
-        background-color: #ff69b4;
+        background-color: #FFFFFF;
         color: #fff;
     }
 
     /* Header */
     .header {
-        background: linear-gradient(180deg, #ffdbef, #ffdae6);
+        background: linear-gradient(180deg, #383434, #FFFFFF);
         color: #fff;
         padding: 15px;
         margin-left: 250px;
@@ -78,6 +78,7 @@
         <h2 class="text-center">Dashboard</h2>
         <a href="{% url 'dashboard:dashboard_view' %}" class="{% if data_filter == 'all' %}active{% endif %}">All</a>
         <a href="{% url 'dashboard:dashboard_view' %}?data=products" class="{% if data_filter == 'products' %}active{% endif %}">Products</a>
+        <a href="{% url 'dashboard:dashboard_view' %}?data=artists" class="{% if data_filter == 'artists' %}active{% endif %}">Artists</a>
     </div>
 
     <div class="header">
@@ -124,7 +125,36 @@
             </tbody>
         </table>
     </div>
-    {% block footer %}
+    <div class="main-content">
+        <h2 class="text-center text-pink mb-4">Artists</h2>
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>About</th>
+                    <th>email</th>
+                    <th style="width: 20%;">title</th>
+                    <th style="width: 20%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for art in artist %}
+                <tr>    
+                    <td>{{ art.name }}</td>
+                    <td>{{ art.about }}</td>
+                    <td>{{ art.email }}</td>
+                    <td>{{ art.title }}</td>
+                    <td class="d-flex gap-2">
+                        <a href="{% url 'providers:artist_detail_view' art.id %}" class="btn btn-dark">View</a>
+                        <a href="{% url 'providers:update_artist_view' art.id %}" class="btn btn-secondary">Edit</a>
+                        <a href="{% url 'providers:artist_delete_view' art.id %}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %} 
+            </tbody>
+        </table>
+    </div>
+{% block footer %}
     {% endblock %}
 {% endblock %}
 

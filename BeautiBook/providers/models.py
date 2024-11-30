@@ -5,6 +5,7 @@ class Artist(models.Model):
     name = models.CharField(max_length=255)
     title = models.CharField(max_length=255 ,default='Artist')
     about = models.TextField()
+    logo = models.ImageField(upload_to="images/",default="static/images/default.png")
     insta_url = models.URLField()
     email = models.EmailField()
     
