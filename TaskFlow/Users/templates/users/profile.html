@@ -1,0 +1,27 @@
+{% extends "main/base.html" %}
+{% block title %}Profile - {{ user.username }}{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-primary">User Profile</h2>
+    <div class="card shadow-sm mt-3">
+        <div class="card-body">
+            <h4 class="card-title">{{ user.username }}</h4>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Role:</strong> {{ user.profile.get_roll_display }}</p> <!-- Display human-readable role -->
+            <p><strong>About:</strong> {{ user.profile.about }}</p>
+
+            {% if user.profile.photo %}
+            <div class="text-center">
+                <img src="{{ user.profile.photo.url }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px;" alt="Profile Photo">
+            </div>
+            {% else %}
+            <p class="text-muted text-center">No profile photo uploaded</p>
+            {% endif %}
+
+            <div class="mt-3">
+                <a href="{% url 'Users:update_user_profile' %}" class="btn btn-primary">Edit Profile</a
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -11,45 +11,81 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
         <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" href="/">
+            <!-- Logo and Brand -->
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'main:index_view' %}">
                 <img src="{% static 'images/logo.png' %}" alt="TaskFlow Logo" style="width: 40px; height: 40px; margin-right: 10px;">
-                <span>TaskFlow</span>
+                <span class="fw-bold">TaskFlow</span>
             </a>
+
+            <!-- Navbar Toggle Button -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" href="{% url 'main:index_view' %}">Home</a>
                     </li>
+                    {% if not request.user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'Users:sign_up' %}">Sign Up</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'Users:sign_in' %}">Sign In</a>
                     </li>
+                    {% else %}
+                    <!-- Authenticated User Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            {% if request.user.profile and request.user.profile.photo %}
+                            <img src="{{ request.user.profile.photo.url }}" class="rounded-circle" alt="Avatar" style="width: 30px; height: 30px; margin-right: 5px;">
+                            {% endif %}
+                            {{ request.user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'Users:user_profile_view' request.user.username %}">Profile</a></li>
+                            <li><a class="dropdown-item text-danger" href="{% url 'Users:log_out' %}?next={{ request.path }}">Log Out</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
+
+            <!-- Admin/Staff Options -->
+            {% if user.is_superuser or user.is_staff %}
+            <div class="d-flex gap-2">
+                {% if user.is_superuser %}
+                <a href="#" class="btn btn-light btn-sm">Add Project</a>
+                {% endif %}
+                <a href="#" class="btn btn-light btn-sm">Add Task</a>
+            </div>
+            {% endif %}
         </div>
     </nav>
-    <main class="container  mt-4">
+
+    <!-- Main Content -->
+    <main class="container mt-4">
         {% if messages %}
         {% for message in messages %}
-        <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
-            {{message}}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {% endfor %}
         {% endif %}
-    {% block content %}
-    {% endblock %}
+        {% block content %}
+        {% endblock %}
     </main>
-    <footer class="bg-primary text-white text-center py-3">
-        <p>&copy; 2024 TaskFlow Management System</p>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white text-center py-3 mt-4">
+        <p>&copy; {% now "Y" %} TaskFlow Management System</p>
     </footer>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

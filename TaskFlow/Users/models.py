@@ -15,7 +15,7 @@ class Profile(models.Model):
     email = models.EmailField()
     about = models.TextField(blank=True, null=True)
     roll = models.CharField(max_length=50, choices=ROLE_CHOICES)
-    photo = models.ImageField(upload_to='profile_photos/', blank=True, null=True)
+    photo = models.ImageField(upload_to='media/images/', blank=True, null=True)
     password = models.CharField(max_length=128)
 
     def __str__(self):

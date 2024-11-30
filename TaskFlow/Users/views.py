@@ -69,23 +69,43 @@ def user_profile_view(request:HttpRequest, user_name):
     except Exception as e:
         print(e)
         return render(request,'main/404.html')
-    return render(request, 'users/profile.html', {"user" : user})
+    return render(request, 'users/profile.html', {"user": user})
+
 
 
 @login_required
 def update_user_profile(request: HttpRequest):
-        profile = Profile.objects.get(user=request.user)
-        if request.method == "POST":
-            form = ProfileForm(request.POST, request.FILES, instance=profile)
-            if form.is_valid():
-                form.save()
-                messages.success(request, "Your profile has been updated successfully.", "alert-success")
-                return redirect("users:user_profile_view", user_name=request.user.username)  # Redirect to the profile view
-            else:
-                messages.error(request, "Please correct the errors below.", "alert-danger")
-        else:
-            form = ProfileForm(instance=profile)
-        return render(request, "users/update_profile.html", {"form": form, "profile": profile})
+    if request.method == "POST":
+        try:
+            with transaction.atomic():
+                user = request.user
+
+                # Update user fields
+                user.first_name = request.POST.get("first_name", user.first_name)
+                user.last_name = request.POST.get("last_name", user.last_name)
+                user.email = request.POST.get("email", user.email)
+                user.save()
+
+                # Update profile fields
+                profile = user.profile
+                profile.about = request.POST.get("about", profile.about)
+                profile.roll = request.POST.get("roll", profile.roll)
+                if "photo" in request.FILES:
+                    profile.photo = request.FILES["photo"]
+                profile.save()
+
+            messages.success(request, "Profile updated successfully!", "alert-success")
+        except Exception as e:
+            messages.error(request, "An error occurred while updating your profile.", "alert-danger")
+            print(e)
+
+    user = request.user
+    profile = user.profile
+
+    return render(request, "users/update_profile.html", {
+        "user": user,
+        "profile": profile,
+    })
 
 
 
