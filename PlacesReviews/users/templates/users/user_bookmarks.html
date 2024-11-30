@@ -1,17 +1,29 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h1>{{ user.username }}'s Bookmarked Places</h1>
+<div class="container mt-5">
+    <h1 class="text-center">{{ user.username }}'s Bookmarked Places</h1>
 
-<div>
-    {% for bookmark in bookmarks %}
-        <div>
-            <h3><a href="{% url 'places:place_detail_view' bookmark.place.pk %}">{{ bookmark.place.name }}</a></h3>
-            <p>City: {{ bookmark.place.city }}</p>
-            <img src="{{ bookmark.place.photo.url }}" alt="{{ bookmark.place.name }}" width="200">
-        </div>
-    {% empty %}
-        <p>You have no bookmarked places yet.</p>
-    {% endfor %}
+    <div class="row">
+        {% for bookmark in bookmarks %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ bookmark.place.photo.url }}" class="card-img-top" alt="{{ bookmark.place.name }}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'places:place_detail_view' bookmark.place.pk %}" class="text-decoration-none text-dark">
+                                {{ bookmark.place.name }}
+                            </a>
+                        </h5>
+                        <p class="card-text"><strong>City:</strong> {{ bookmark.place.city }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-center text-muted">You have no bookmarked places yet.</p>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
