@@ -1,0 +1,36 @@
+/* details card */
+.details-card-image {
+    height: 250px !important;
+}
+
+.details-card-image img {
+    width: 100% !important;
+    height: 100%;
+    object-fit: contain !important;
+}
+
+
+/*** form ***/
+.color-label {
+    text-decoration: underline;
+    text-decoration-thickness: 0.2rem;
+}
+
+.update-image-thumb {
+    height: 80px;
+    margin-bottom: 0.5rem;
+}
+
+.update-image-thumb img {
+    width: 100% !important;
+    height: 100%;
+    object-fit: contain !important;
+}
+
+
+/*** media queries ***/
+@media (max-width: 1000px) {
+    form {
+        flex-direction: column;
+    }
+}
