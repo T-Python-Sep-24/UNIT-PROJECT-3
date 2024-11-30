@@ -23,6 +23,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('main.urls')),  # Main app
     path('users/',include('Users.urls')), # Users app
+    path('projects/',include('projects.urls')), # projects app
+    path('tasks/',include('tasks.urls')), # tasks app
+    
 ]
 # Serve media files in development
 if settings.DEBUG:

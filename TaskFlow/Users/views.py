@@ -7,8 +7,11 @@ from django.db import IntegrityError, transaction
 # Models
 from django.contrib.auth.models import User
 from .models import Profile
+from projects.models import Project
+from tasks.models import Task
 # Forms
 from .forms import ProfileForm
+
 
 def sign_up(request):
     if request.method == "POST":
@@ -107,7 +110,22 @@ def update_user_profile(request: HttpRequest):
         "profile": profile,
     })
 
+@login_required
+def dashboard_view(request, username):
+    user = get_object_or_404(User, username=username)
+    if user.profile.roll in ["Manager", "Team Lead"]:
+        projects = Project.objects.filter(created_by=user) | Project.objects.filter(members=user)
+        tasks = Task.objects.filter(project__in=projects)
+        context = {
+            'user': user,
+            'projects': projects,
+            'tasks': tasks,
+        }
+        return render(request, 'users/dashboard.html', context)
 
+
+
+    
 
 def log_out(request: HttpRequest):
     logout(request)

@@ -1,0 +1,32 @@
+{% extends "main/base.html" %}
+{% block content %}
+<h1>{% if project %}Edit{% else %}Create{% endif %} Project</h1>
+<form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="name" class="form-label">Project Name</label>
+        <input type="text" name="name" id="name" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea name="description" id="description" rows="4" class="form-control" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="start_date" class="form-label">Start Date</label>
+        <input type="date" name="start_date" id="start_date" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="end_date" class="form-label">End Date</label>
+        <input type="date" name="end_date" id="end_date" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="members" class="form-label">Assign Members</label>
+        <select name="members" id="members" class="form-select" multiple>
+            {% for user in user_list %}
+            <option value="{{ user.id }}">{{ user.username }} ({{ user.profile.roll }})</option>
+            {% endfor %}
+        </select>
+    </div>    
+    <button type="submit" class="btn btn-primary">Save Project</button>
+</form>
+{% endblock %}

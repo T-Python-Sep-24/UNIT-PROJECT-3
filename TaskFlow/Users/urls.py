@@ -10,7 +10,9 @@ urlpatterns = [
     path('signin/', views.sign_in, name="sign_in"),
     path('logout/', views.log_out, name="log_out"),
     path('profile/update/', views.update_user_profile, name="update_user_profile"),
-    path('profile/<user_name>/', views.user_profile_view, name="user_profile_view"), 
+    path('profile/<user_name>/', views.user_profile_view, name="user_profile_view"),
+    path('dashboard/<str:username>/', views.dashboard_view, name='dashboard_view'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

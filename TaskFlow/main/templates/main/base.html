@@ -48,6 +48,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{% url 'Users:user_profile_view' request.user.username %}">Profile</a></li>
+                            <a class="dropdown-item" href="{% url 'Users:dashboard_view' request.user.username %}">Dashboard</a>
                             <li><a class="dropdown-item text-danger" href="{% url 'Users:log_out' %}?next={{ request.path }}">Log Out</a></li>
                         </ul>
                     </li>
@@ -59,9 +60,9 @@
             {% if user.is_superuser or user.is_staff %}
             <div class="d-flex gap-2">
                 {% if user.is_superuser %}
-                <a href="#" class="btn btn-light btn-sm">Add Project</a>
+                <a href="{% url 'projects:project_create' %}" class="btn btn-light btn-sm">Add Project</a>
                 {% endif %}
-                <a href="#" class="btn btn-light btn-sm">Add Task</a>
+                <a href="{% url 'tasks:create_task' %}" class="btn btn-light btn-sm">Add Task</a>
             </div>
             {% endif %}
         </div>
