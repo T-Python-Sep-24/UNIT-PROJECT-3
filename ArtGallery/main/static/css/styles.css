@@ -14,6 +14,15 @@ body a {
     text-decoration: none;
 }
 
+.hover-color{
+    color: #2c1d1f;
+    transition: all 0.4s;
+}
+
+.hover-color:hover{
+    color: #f9dfd5;
+}
+
 form {
     min-width: 45%;
 }
@@ -31,7 +40,7 @@ label {
 
 /* Text styles */
 .text-burgundy {
-    color: #412b2e;
+    color: #412b2e !important;
 }
 
 .text-burgundy-darker {
@@ -43,7 +52,7 @@ label {
 }
 
 .text-offwhite {
-    color: #ffefe9;
+    color: #ffefe9 !important;
 }
 
 .text-beige-100 {
@@ -71,8 +80,21 @@ label {
 }
 
 /* Base styles */
+.active {
+    padding: 0 0.2rem;
+    border-radius: .2rem;
+    border-bottom: 3px solid #3c2729;
+    color: #ffefe9;
+    text-shadow: 0 0 8px rgba(255, 225, 229, 0.5);
+}
+
 .bg-blur {
     background-color: rgba(247, 211, 198, 0.18) !important;
+    backdrop-filter: blur(15px);
+}
+
+.bg-blur-lighter {
+    background-color: rgba(255, 224, 213, 0.4) !important;
     backdrop-filter: blur(15px);
 }
 
@@ -105,7 +127,7 @@ label {
     transform-origin: bottom center;
 }
 
-/* button */
+/* buttons */
 .btn-beige-400 {
     display: block;
     padding: 0 .7rem;
@@ -124,8 +146,7 @@ label {
     width: auto;
 }
 
-.btn-beige-400:hover,
-.btn-beige-400:focus {
+.btn-beige-400:hover {
     background-color: #8d5c4f;
     box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
 }
@@ -136,6 +157,40 @@ label {
 
 .btn-beige-400:active {
     background-color: #532f2c;
+    box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+    transform: translateY(0);
+}
+
+.btn-beige-200 {
+    display: block;
+    padding: 0 .7rem;
+    align-items: center;
+    background-color: #debbb0;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.15) 0 1px 3px;
+    color: #4a3437;
+    font-size: 1.1rem;
+    cursor: pointer;
+    justify-content: center;
+    transition: all 250ms;
+    user-select: none;
+    -webkit-user-select: none;
+    width: auto;
+}
+
+.btn-beige-200:hover {
+    background-color: #6f5556;
+    color: #ffefe9;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.btn-beige-200:hover {
+    transform: translateY(-2px);
+}
+
+.btn-beige-200:active {
+    background-color: #685256;
     box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
     transform: translateY(0);
 }
@@ -403,13 +458,11 @@ label {
 
 /* Display artists page */
 .custom-crd {
-    max-height: 18rem;
+    max-height: 20rem;
     overflow: hidden;
-
 }
 
-.custom-crd-img {
+.custom-img {
     object-fit: cover;
-    object-position: top;
     aspect-ratio: 1/1;
 }

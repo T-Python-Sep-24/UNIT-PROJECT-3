@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.contrib import messages
-from artPieces.models import ArtPiece, Attachment
+from artPieces.models import ArtPiece
 from artPieces.forms import ArtPieceForm
 from artists.models import Artist
 from django.core.paginator import Paginator
@@ -21,18 +21,14 @@ def addArtPieceView(request: HttpRequest):
         response = render(request, 'artPieces/addPiece.html', context={'artists': artists})
         
         if request.method == "POST":
-            pieceData = ArtPieceForm(request.POST)
-            images = request.FILES.getlist('images')
+            pieceData = ArtPieceForm(request.POST, request.FILES)
             if pieceData.is_valid():
-                piece:ArtPiece = pieceData.save(commit=False)
-                piece.save()
-                for img in images:
-                    Attachment.objects.create(piece=piece, image=img)
+                pieceData.save()
                 messages.success(request, f"'{request.POST['name']}' was added successfully.", "alert-success")
             else:
                 messages.error(request, f"'{request.POST['name']}' wasn't added.", "alert-danger")
                 
-            response = redirect('artPieces:displayPiecesView', 'all')
+            response = redirect('artPieces:displayArtPiecesView', 'all')
     
     return response
 
@@ -50,24 +46,17 @@ def updateArtPieceView(request: HttpRequest, pieceId:int):
         else:
             pieceData = ArtPieceForm()
             artists = Artist.objects.all()
-            response = render(request, 'artPieces/updatePiece.html', {'piece': piece, 'artist': artists})
+            response = render(request, 'artPieces/updatePiece.html', {'piece': piece, 'artists': artists})
             
             if request.method == "POST":
-                pieceData = ArtPieceForm(request.POST, instance=piece)
-                images = request.FILES.getlist('images')
+                pieceData = ArtPieceForm(request.POST, request.FILES, instance=piece)
                 if pieceData.is_valid():
-                    piece:ArtPiece = pieceData.save(commit=False)
-                    piece.save()
-                    if images:
-                        Attachment.objects.filter(piece=piece).delete()
-                        for img in images:
-                            Attachment.objects.create(piece=piece, image=img)
-                    
+                    pieceData.save()
                     messages.success(request, f"'{request.POST['name']}' was updated successfully.", "alert-success")
                 else:
                     messages.error(request, f"'{request.POST['name']}' wasn't updated.", "alert-danger")
                     
-                response = redirect('artPieces:pieceDetailsView', pieceId)
+                response = redirect('artPieces:artPieceDetailsView', pieceId)
 
     return response
 
@@ -135,7 +124,7 @@ def artPieceDetailsView(request: HttpRequest, pieceId:int):
 # Add comment View
 
 
-# # Delete comment View
+# Delete comment View
 
 
 # Add favorite View

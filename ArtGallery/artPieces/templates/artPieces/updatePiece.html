@@ -6,7 +6,7 @@
 {% block content %}
     <section class="container-md text-center">
         <h1 class="mb-0 mt-3 text-beige-100">
-        Update {{piece.name}}
+        Update ' {{piece.name}} '
         </h1>
         <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
         <!-- Update piece form -->
@@ -27,10 +27,10 @@
                 <div class="mb-3">
                     <label for="artist" class="form-label fw-medium fs-5">Artist <span class="small text-burgundy-darker">(Leave empty for anonymous artist)</span></label>
                     <select id="artist" name="artist" class="form-select bg-blur text-burgundy-darker border-0 focus-ring focus-ring-dark" aria-label="Piece select">
-                        <option disabled selected>Choose Artist..</option>
+                        <option disabled>Choose Artist..</option>
                         <option value="">Anonymous</option>
                         {% for artist in artists %}
-                        <option value="{{artist.id}}">{{artist.fullName}}</option>
+                        <option value="{{artist.id}}" {% if piece.artist.id == artist.id %}selected{% endif %}>{{artist.fullName}}</option>
                         {% endfor %}
                     </select>
                     <div class="invalid-feedback">
@@ -41,7 +41,7 @@
                     <label for="price" class="form-label fw-medium fs-5">Price</label>
                     <div class="input-group has-validation">
                         <span class="input-group-text bg-blur text-offwhite border-0" id="inputGroupPrepend"><i class="bi bi-tags"></i></span>
-                        <input type="number" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="price" name="price" aria-describedby="inputGroupPrepend" min=1 required>
+                        <input type="number" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="price" name="price" value="{{piece.price}}" aria-describedby="inputGroupPrepend" min=1 required>
                         <div class="invalid-feedback fs-5">
                             Please enter a valid price.
                         </div>
@@ -51,25 +51,28 @@
                     <label for="currentLocation" class="form-label fw-medium fs-5">Current Location</label>
                     <div class="input-group has-validation">
                         <span class="input-group-text bg-blur text-offwhite border-0" id="inputGroupPrepend"><i class="bi bi-geo-alt"></i></span>
-                        <input type="text" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="currentLocation" name="currentLocation" aria-describedby="inputGroupPrepend"required>
+                        <input type="text" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="currentLocation" name="currentLocation" value="{{piece.currentLocation}}" aria-describedby="inputGroupPrepend" required>
                         <div class="invalid-feedback fs-5">
                             Please enter a valid location.
                         </div>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="images" class="form-label fw-medium fs-5">Attachments</label>
-                    <input class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" type="file" id="images" name="images" accept="image/*" multiple>
+                <div class="mb-3 d-flex gap-3 align-items-end">
+                    <img src="{{piece.photo.url}}" id="preview" class="preview rounded-3 shadow-sm" alt="Preview">
+                    <div class="flex-fill">
+                        <label for="photo" class="form-label fw-medium fs-5">Photo</label>
+                        <input class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" type="file" id="photo" name="photo" onchange="previewImage(event)" accept="image/*">
+                    </div>
                 </div>
                 <div class="mb-3">
                     <div class="radio-list">
-                        <p class="fs-5 m-0">Sold</p>
-                        <div class="radio-item"><input name="sold" id="sold" value="true" type="radio"><label for="sold">Yes</label></div>
-                        <div class="radio-item"><input name="sold" id="notSold" value="false" type="radio" checked><label for="notSold">No</label></div>
+                        <p class="fs-5 m-0">Is Sold</p>
+                        <div class="radio-item"><input name="isSold" id="sold" value="true" type="radio" {% if piece.isSold %}checked{% endif %}><label for="sold">Yes</label></div>
+                        <div class="radio-item"><input name="isSold" id="notSold" value="false" type="radio" {% if not piece.isSold %}checked{% endif %}><label for="notSold">No</label></div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button class="w-50 btn-beige-400 py-1" type="submit">
+                    <button class="w-50 btn-beige-200 py-1" type="submit">
                         Update
                     </button>
                 </div>
