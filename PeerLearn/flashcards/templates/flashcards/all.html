@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}Flashcards{% endblock %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'css/flashcards.css' %}">{% endblock %}
+
+{% block content %}
+ <section class="container">
+   <div>
+      <div class="d-flex justify-content-between">
+        <h1>All flashcards</h1>
+        <div>
+          <form action="{% url 'flashcards:all_flashcards_view' %}" method="get" class="d-flex gap-2 ">
+            <select name="subject" class="form-select">
+              <option value="">Select a subject</option>
+              {% for subject in subjects %}
+                <option value="{{ subject.id }}" {% if request.GET.subject == subject.id|stringformat:'s' %} selected {% endif %}>{{ subject.name }}</option>
+              {% endfor %}
+            </select>
+            <input type="search" name="search" value="{{ request.GET.search }}" placeholder="search" class="form-select" />
+            <input type="submit" class="btn btn-dark ms-auto" />
+          </form>
+        </div>
+      </div>
+      {% include 'flashcards/components/flashcards_list.html' %}
+   </div>
+ </section>
+{% endblock %}

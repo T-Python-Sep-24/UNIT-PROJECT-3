@@ -1,0 +1,109 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}Flashcard{% endblock %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'css/flashcards.css' %}">{% endblock %}
+
+{% block content %}
+<section class="container">
+    <div class="row">
+        <div class="col">
+            <div class="d-flex flex-column gap-2 p-3 shadow">
+                <div class="d-flex justify-content-between">
+                    <h1>{{ flashcard.name }}</h1>
+                    {% if request.user.is_superuser %}
+                    <div class="d-flex gap-2">
+                        <!-- Button trigger modal -->
+                        <a href="#">
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Delete
+                            </button>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="details-card-image">
+                    <img src="{{ flashcard.photo.url }}" alt="{{ flashcard.name }} logo">
+                </div>
+                <div class="d-flex justify-content-between">
+                    <h3>Published: {{ flashcard.created_at }}</h3>
+                    <div class="d-flex justify-content-between gap-3">
+                        <h3>description: </h3>
+                        <p>{{ flashcard.description }}</p>
+                    </div>
+                </div>         
+                <div>
+                    <p>test</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<hr />
+<!-- Review section -->
+<section class="container">
+    <h2>Reviews</h2>
+
+    <div class="d-flex flex-column gap-3">
+        {% for review in flashcard.review_set.all %}
+            <div class="d-flex flex-column p-3 shadow">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4>{{review.user.first_name}} {{review.user.last_name}}</h4>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-star-fill"></i>
+                        <h5 class="m-0 p-0">{{review.rating}}</h5>
+                    </div>
+                </div>
+                
+                <p>{{review.comment}}</p>
+                <p class="text-muted">{{review.created_at}}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if request.user.is_authenticated %}
+    <h2 class="mt-5">Add Review</h2>
+    <form class="d-flex flex-column gap-2" action="{% url 'flashcards:add_review_view' flashcard.id %}" method="post">
+        {% csrf_token %}
+        <textarea class="form-control" name="comment" required minlength="3" placeholder="Comment..."></textarea>
+        <select class="form-select" name="rating" required>
+            <option value="">Rating</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <input type="submit" class="btn btn-dark" value="Add Review" />
+    </form>
+    {% else %}
+        <div class="p-3 rounded bg-warning mt-4 d-flex flex-column gap-2">
+            <p>Only registered users can add reviews</p>
+        </div>
+    {% endif %}
+</section>
+
+{% if request.user.is_superuser %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Deleting the flashcard</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete the flashcard?
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">No</button>
+        <a href="{% url 'flashcards:delete_flashcard_view' flashcard.id %}"><button type="button" class="btn btn-dark">Yes</button></a>
+    </div>
+    </div>
+</div>
+</div>
+{% endif %}
+{% endblock %}

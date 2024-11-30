@@ -1,0 +1,40 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}Add Flashcard{% endblock %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'css/flashcards.css' %}">{% endblock %}
+
+{% block content %}
+ <section class="container">
+    <h1>Add a New Flashcard</h1>
+    <div class="row">
+        <div class="col-8">
+            <form action="{% url 'flashcards:new_flashcard_view' %}" method="post" enctype="multipart/form-data" class="d-flex flex-column gap-2">
+                {% csrf_token %}
+                <input type="text" name="name" class="form-control" placeholder="Name" required />
+                <select name="subject" class="form-select" required>
+                    <option value="">Select a subject</option>
+                {% for subject in subjects %}
+                    <option value="{{ subject.id }}">{{ subject.name }}</option>
+                {% endfor %}
+                </select>
+                <h5>description:</h5>
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <textarea name="description" class="form-control" placeholder="Description" required></textarea>
+                </div>
+                <div>
+                    <h5>Photo:</h5>
+                    <input type="file" name="photo" class="form-control" accept="images/*" required>
+                </div>
+                <div>
+                    <h5>PDF:</h5>
+                    <input type="file" name="pdf" class="form-control" accept="application/pdf" required>
+                </div>
+                <input type="submit" class="btn btn-dark">
+            </form>
+        </div>
+    </div>
+ </section>
+{% endblock %}

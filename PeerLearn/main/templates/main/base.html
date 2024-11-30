@@ -12,7 +12,57 @@
 </head>
 <body>
     <div class="wrapper d-flex flex-column justify-content-between">
-        <header>Header</header>
+        <header>
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                <div class="container-fluid">
+                  <a class="navbar-brand" href="{% url 'main:home_view' %}">PeerLearn</a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'main:home_view' %}">Home</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'flashcards:all_flashcards_view' %}">All Flashcards</a>
+                      </li>
+                      <!-- {% if request.user.is_superuser %} -->
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'flashcards:new_flashcard_view' %}">New Flashcard</a>
+                      </li>
+                      <!-- {% endif %} -->
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'subjects:all_subjects_view' %}">Subjects</a>
+                      </li>
+                      <!-- {% if request.user.is_superuser %} -->
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'subjects:new_subject_view' %}">New Subject</a>
+                      </li>
+                      <!-- {% endif %} -->
+                      <!-- {% if request.user.is_authenticated %} -->
+                      <li class="nav-item d-flex">
+                        <!-- <p class="text-white my-auto">| Welcome {{ request.user.username }}</p> -->
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:log_out' %}">Logout</a>
+                      </li>
+                      <!-- {% else %} -->
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Login
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li><a class="dropdown-item" href="{% url 'accounts:sign_in' %}?next={{ request.path }}">Sign In</a></li>
+                          <li><a class="dropdown-item" href="{% url 'accounts:sign_up' %}?next={{ request.path }}">Sign Up</a></li>
+                        </ul>
+                      </li>
+                      <!-- {% endif %} -->
+                    </ul>
+                  </div>
+                </div>
+              </nav>
+        </header>
         <main>
             {% block content %}
             {% endblock %}
