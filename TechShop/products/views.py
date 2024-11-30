@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.http import HttpRequest,HttpResponse
+from django.http import Http404, HttpRequest,HttpResponse
 from .models import Product, Review, Category
 from products.forms import ProductForm
 from django.contrib import messages
@@ -72,4 +72,53 @@ def delete_product(request: HttpRequest, product_id: int):
     return redirect('products:all_product') 
 
 
+def product_reviews_view(request, product_id):
+    try:
+        product = Product.objects.get(pk=product_id)
+    except Product.DoesNotExist:
+        raise Http404("Product not found")
+    
+    reviews = Review.objects.filter(product=product).order_by('-created_at')
 
+    return render(request, 'reviews/product_reviews.html', {'product': product, 'reviews': reviews})
+
+
+def add_review_view(request, product_id):
+    try:
+        product = Product.objects.get(pk=product_id)
+    except Product.DoesNotExist:
+        raise Http404("Product not found")
+    
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+
+        if rating and comment:
+            review = Review.objects.create(
+                product=product,
+                user=request.user,
+                rating=rating,
+                comment=comment
+            )
+            review.save()
+            messages.success(request, 'Review added successfully!')
+        else:
+            messages.error(request, 'All fields are required.')
+        
+        return redirect('product_reviews', product_id=product.id)
+
+    return render(request, 'reviews/add_review.html', {'product_id': product_id})
+
+
+def delete_review_view(request, review_id):
+    try:
+        review = Review.objects.get(pk=review_id, user=request.user)
+    except Review.DoesNotExist:
+        raise Http404("Review not found")
+    
+    if request.method == 'POST':
+        review.delete()
+        messages.success(request, 'Review deleted successfully!')
+        return redirect('product_reviews', product_id=review.product.id)
+
+    return render(request, 'reviews/delete_review.html', {'review': review})
