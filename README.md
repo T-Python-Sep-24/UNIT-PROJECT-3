@@ -52,9 +52,7 @@ ensure timely completion of work.
     -As an Admin, I want to notify users about task updates, so that the team is informed about changes.
 
 **Model**
-![alt text](image-1.png)
-![alt text](image-3.png)
-![alt text](image.png)
+
 
 
 
