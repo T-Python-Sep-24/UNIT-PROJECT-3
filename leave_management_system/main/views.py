@@ -20,7 +20,7 @@ def login_view(request, role=None):
 
             if role == 'employee':
                 if user.groups.filter(name='Employee').exists():
-                    return redirect('employee_leave:request_leave')
+                    return redirect('employee_leave:leave_requests')
                 else:
                     messages.error(request, "You are not an employee.")
                     return redirect('main:welcome')

@@ -23,3 +23,4 @@ class LeaveRequestForm(forms.ModelForm):
                 self.fields['reason'].required = False
         elif self.instance and self.instance.leave_type == 'other':
             self.fields['reason'].required = True
+# Delete *******

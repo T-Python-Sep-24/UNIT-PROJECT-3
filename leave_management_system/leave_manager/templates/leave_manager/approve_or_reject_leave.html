@@ -3,25 +3,60 @@
 {% block title %}Approve/Reject Leave Request{% endblock %}
 
 {% block content %}
-{% if messages %}
-<div class="alert alert-info">
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-</div>
-{% endif %}
-    <div class="container">
-        <h2 class="text-center mb-4">Leave Request from {{ leave_request.employee.get_full_name }}</h2>
+    {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+<br>
+    <div class="container mt-5">
+        <div class="card shadow-lg mx-auto" style="max-width: 600px;">
+            <div class="card-header text-center bg-warning">
+                <h2 class="mb-0">Leave Request from {{ leave_request.employee.get_full_name }}</h2>
+            </div>
 
-        <p><strong>Leave Type:</strong> {{ leave_request.leave_type }}</p>
-        <p><strong>Start Date:</strong> {{ leave_request.start_date }}</p>
-        <p><strong>End Date:</strong> {{ leave_request.end_date }}</p>
-        <p><strong>Reason:</strong> {{ leave_request.reason }}</p>
+            <div class="card-body">
+                <p><strong>Leave Type:</strong> {{ leave_request.leave_type }}</p>
+                <p><strong>Start Date:</strong> {{ leave_request.start_date }}</p>
+                <p><strong>End Date:</strong> {{ leave_request.end_date }}</p>
 
-        <form method="POST">
-            {% csrf_token %}
-            <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
-            <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
-        </form>
+                <p><strong>Reason:</strong>
+                    {% if leave_request.reason %}
+                        {{ leave_request.reason }}
+                    {% else %}
+                        <span class="text-warning">No reason provided by employee.</span>
+                    {% endif %}
+                </p>
+
+                {% if leave_request.document %}
+                    <p><strong>Attachment:</strong></p>
+                    <p><a href="{{ leave_request.document.url }}" target="_blank">Download File</a></p>
+                {% else %}
+                    <p>No file attached.</p>
+                {% endif %}
+            </div>
+
+            <div class="card-footer">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <label for="reason" class="form-label">Manager's Reason (Required)</label>
+                        <textarea name="reason" id="reason" class="form-control" rows="4" placeholder="Enter your reason here" required>{{ request.POST.reason }}</textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" name="action" value="approve" class="btn btn-success btn-lg mx-2">Approve</button>
+                        <button type="submit" name="action" value="reject" class="btn btn-danger btn-lg mx-2">Reject</button>
+                        <br><br>
+                        <a href="{% url 'leave_manager:manager_leave_requests' %}" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Leave Request</a>
+
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock %}

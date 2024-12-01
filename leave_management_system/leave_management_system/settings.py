@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'employee_leave',
     'leave_manager',
     'hr_leave_management',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

@@ -3,31 +3,71 @@
 {% block title %}Approve or Reject Leave (HR){% endblock %}
 
 {% block content %}
- {% if messages %}
-                <div class="alert alert-info">
-                    {% for message in messages %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-    <div class="container">
-        <h2>Leave Request for {{ leave_request.employee.get_full_name }}</h2>
-        <p><strong>Leave Type:</strong> {{ leave_request.leave_type }}</p>
-        <p><strong>Start Date:</strong> {{ leave_request.start_date }}</p>
-        <p><strong>End Date:</strong> {{ leave_request.end_date }}</p>
-        <p><strong>Manager's Reason:</strong> {{ leave_request.manager_reason }}</p>
-        <p><strong>status:</strong> {{ leave_request.status}}</p>
+    {% if messages %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
 
-
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="actionReason">Reason for Final Decision:</label>
-                <textarea id="actionReason" name="reason" class="form-control" rows="3" placeholder="Provide a final decision reason..."></textarea>
+    <div class="container my-5">
+        <div class="card shadow-sm border-0 rounded-3 " style="max-width: 500px; margin: 0 auto; background-color: #f9f9f9;">
+            <div class="card-header text-center bg-warning" style="background-color: rgba(0, 0, 0, 0.419)">
+                <h5 class="mb-0 text-white">Leave Request for {{ leave_request.employee.get_full_name }}</h5>
             </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <p><strong>Leave Type:</strong> <span class="text-muted">{{ leave_request.leave_type }}</span></p>
+                    <p><strong>Status:</strong> 
+                        <span class="badge {% if leave_request.status == 'approved_by_hr' %}bg-success{% elif leave_request.status == 'rejected_by_hr' %}bg-danger{% else %}bg-warning{% endif %}">
+                            {{ leave_request.status }}
+                        </span>
+                    </p>
+                </div>
 
-            <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
-            <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
-        </form>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <p><strong>Start Date:</strong> <span class="text-muted">{{ leave_request.start_date }}</span></p>
+                    </div>
+                    <div class="col-6">
+                        <p><strong>End Date:</strong> <span class="text-muted">{{ leave_request.end_date }}</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <p><strong>Manager's Reason:</strong></p>
+                    {% if leave_request.manager_reason %}
+                        <blockquote class="blockquote" style="background-color: #f1f3f5; padding: 10px; border-left: 5px solid grey;">
+                            <p>{{ leave_request.manager_reason }}</p>
+                        </blockquote>
+                    {% else %}
+                        <div class="alert alert-secondary">
+                            No reason provided by the manager.
+                        </div>
+                    {% endif %}
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label for="actionReason" class="form-label">Reason for Final Decision:</label>
+                        <textarea id="actionReason" name="reason" class="form-control" rows="3" style="background-color: #f7f7f7;" placeholder="Provide reason for approval or rejection..."></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" name="action" value="approve" class="btn btn-success mx-2">Approve</button>
+                        <button type="submit" name="action" value="reject" class="btn btn-danger mx-2">Reject</button>
+                    </div>
+                    <div class="mt-4 d-flex justify-content-center">
+            <a href="{% url 'hr_leave_management:leave_requests' %}" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Leave Request</a>
+        </div>
+                </form>
+            </div>
+        </div>
     </div>
+
 {% endblock %}

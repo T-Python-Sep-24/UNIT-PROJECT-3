@@ -11,102 +11,175 @@
 </div>
 {% endif %}
 
-<div class="container">
-    <h2 class="text-center mb-4">Leave Requests</h2>
+<div class="container mt-4">
+    <br>
+    <div class="text-center mb-4">
+        <h2 class="display-4">Welcome, {{ user.get_full_name }}</h2>
+        <p class="lead">You can review and manage the leave requests below.</p>
+    </div>
 
-    {% if pending_leaves %}
-    <h4>Pending Requests</h4>
-    <ul class="list-group">
-        {% for leave in pending_leaves %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
-            <a href="{% url 'leave_manager:approve_or_reject_leave' leave.id %}" class="btn btn-info btn-sm">Approve/Reject</a>
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No pending leave requests.</p>
-    {% endif %}
-
-    {% if approved_leaves %}
-    <h4>Approved Requests</h4>
-    <ul class="list-group">
-        {% for leave in approved_leaves %}
-        <li class="list-group-item">
-            {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
-            <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
-            <div id="details-{{ leave.id }}" class="collapse">
-                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
-                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
-                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+    <form method="get" action="{% url 'leave_manager:manager_leave_requests' %}" class="mb-4 d-flex justify-content-center">
+        <div class="row w-100 justify-content-center">
+            <div class="col-md-3">
+                <input type="text" name="search_query" class="form-control" placeholder="Search " value="{{ request.GET.search_query }}">
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No approved leave requests.</p>
-    {% endif %}
-
-    {% if hr_approved_leaves %}
-    <h4>HR Approved Requests</h4>
-    <ul class="list-group">
-        {% for leave in hr_approved_leaves %}
-        <li class="list-group-item">
-            {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
-            <p><strong>Status:</strong> Approved by HR</p>
-            <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
-            <div id="details-{{ leave.id }}" class="collapse">
-                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
-                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
-                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+            <div class="col-md-3">
+                <select name="status" class="form-control">
+                    <option value="">Status</option>
+                    <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="manager_approved" {% if request.GET.status == 'manager_approved' %}selected{% endif %}>Approved by Manager</option>
+                    <option value="rejected" {% if request.GET.status == 'rejected' %}selected{% endif %}>Rejected by Manager</option>
+                    <option value="rejected_by_hr" {% if request.GET.status == 'rejected_by_hr' %}selected{% endif %}>Rejected by HR</option>
+                    <option value="approved_by_hr" {% if request.GET.status == 'approved_by_hr' %}selected{% endif %}>Approved by HR</option>
+                </select>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No HR approved leave requests.</p>
-    {% endif %}
-
-    {% if rejected_leaves_by_manager %}
-    <h4>Rejected by Manager</h4>
-    <ul class="list-group">
-        {% for leave in rejected_leaves_by_manager %}
-        <li class="list-group-item">
-            {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
-            <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
-            <div id="details-{{ leave.id }}" class="collapse">
-                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
-                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
-                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-secondary w-100">Search</button>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No leave requests rejected by manager.</p>
-    {% endif %}
+        </div>
+    </form>
 
-    {% if rejected_leaves_by_hr %}
-    <h4>Rejected by HR</h4>
-    <ul class="list-group">
-        {% for leave in rejected_leaves_by_hr %}
-        <li class="list-group-item">
-            {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
-            <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
-            <div id="details-{{ leave.id }}" class="collapse">
-                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
-                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
-                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-white">
+                    <h4>Pending Requests</h4>
+                </div>
+                <div class="card-body">
+                    {% if pending_leaves %}
+                    <ul class="list-group">
+                        {% for leave in pending_leaves %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
+                            <a href="{% url 'leave_manager:approve_or_reject_leave' leave.id %}" class="btn btn-warning btn-sm">Approve/Reject</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">No pending leave requests.</p>
+                    {% endif %}
+                </div>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No leave requests rejected by HR.</p>
-    {% endif %}
+        </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h4>Approved Requests</h4>
+                </div>
+                <div class="card-body">
+                    {% if approved_leaves %}
+                    <ul class="list-group">
+                        {% for leave in approved_leaves %}
+                        <li class="list-group-item">
+                            {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
+                            <br>
+                            <button class="btn btn-success btn-sm mt-2" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
+                            <div id="details-{{ leave.id }}" class="collapse mt-2">
+                                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
+                                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
+                                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">No approved leave requests.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h4>HR Approved Requests</h4>
+                </div>
+                <div class="card-body">
+                    {% if hr_approved_leaves %}
+                    <ul class="list-group">
+                        {% for leave in hr_approved_leaves %}
+                        <li class="list-group-item">
+                            {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
+                            <p><strong>Status:</strong> Approved by HR</p>
+                            <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
+                            <div id="details-{{ leave.id }}" class="collapse  mt-2">
+                                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
+                                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
+                                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">No HR approved leave requests.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h4>Rejected by Manager</h4>
+                </div>
+                <div class="card-body">
+                    {% if rejected_leaves_by_manager %}
+                    <ul class="list-group">
+                        {% for leave in rejected_leaves_by_manager %}
+                        <li class="list-group-item">
+                            {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
+                            <br>
+                            <button class="btn btn-danger btn-sm mt-2" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
+                            <div id="details-{{ leave.id }}" class="collapse  mt-2">
+                                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
+                                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
+                                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">No leave requests rejected by manager.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h4>Rejected by HR</h4>
+                </div>
+                <div class="card-body">
+                    {% if rejected_leaves_by_hr %}
+                    <ul class="list-group">
+                        {% for leave in rejected_leaves_by_hr %}
+                        <li class="list-group-item">
+                            {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
+                            <br>
+                            <button class="btn btn-secondary btn-sm mt-2" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
+                            <div id="details-{{ leave.id }}" class="collapse  mt-2">
+                                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
+                                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
+                                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">No leave requests rejected by HR.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
 {% endblock %}

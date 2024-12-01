@@ -170,15 +170,6 @@
     <div class="container">
         <div class="login-container">
             <h1>Login</h1>
-            {% if messages %}
-                <div class="alert alert-danger">
-                    <ul>
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
             {% if role == 'employee' %}
                 <h2>Employee Login</h2>
                 <form method="post" action="{% url 'main:login' role=role %}">
@@ -225,7 +216,7 @@
                     <button type="submit" class="btn btn-custom">Login</button>
                 </form>
             {% else %}
-                <p>Invalid role selected. Please go back to the welcome page</p>
+                <p>Invalid username or password.<br>Please go back to the welcome page.</p>
             {% endif %}
 
             <div class="back-link">
