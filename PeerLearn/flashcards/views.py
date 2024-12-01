@@ -4,10 +4,13 @@ from subjects.models import Subject
 from .models import Flashcard, Review
 from .forms import FlashcardForm
 from django.contrib import messages
-from PIL import Image
-import pytesseract
 import os
 from django.conf import settings
+from PIL import Image
+import pytesseract
+from pdf2image import convert_from_path
+from PyPDF2 import PdfReader
+
 
 
 # Create your views here.
@@ -68,10 +71,40 @@ def delete_flashcard_view(request: HttpRequest, flashcard_id: int):
     return redirect("flashcards:all_flashcards_view")
 
 def upload_pdf_view(request: HttpRequest):
-    img_path = os.path.join(settings.MEDIA_ROOT, 'images', 'simple.png')
+    # test extracting text from image
+    img_path = os.path.join(settings.MEDIA_ROOT, "images", "simple.png")
     img = Image.open(img_path)
     text = pytesseract.image_to_string(img)
-
     print(text)
+
+    
+    # Test extracting text from pdf
+    use_ocr = False
+    pdf_path = os.path.join(settings.MEDIA_ROOT, "pdfs", "pdf_sample3.pdf")
+    text_data = ""
+
+    if not use_ocr:
+        # Try text-based extraction first because use_ocr = False
+        pdf_reader = PdfReader(pdf_path)
+
+        for page in pdf_reader.pages:
+            page_text = page.extract_text()
+            # Check if there is text extracted
+            if page_text and not page_text.isspace():
+                text_data += page_text
+
+        # Print the text if text is found
+        if text_data.strip():
+            print("****** Printed using PdfReader ******\n", text_data)
+
+    # Fallback to OCR for image-based PDFs, if no text was extracted
+    if not text_data.strip():  
+        pages = convert_from_path(pdf_path, 500)
+        text_data = ""
+        for page in pages:
+            text_data += pytesseract.image_to_string(page) + "\n"
+        print("****** Printed using OCR ******\n", text_data) 
+
+
 
     return redirect("main:home_view")
