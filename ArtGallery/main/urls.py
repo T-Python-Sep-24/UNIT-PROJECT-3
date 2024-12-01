@@ -7,4 +7,6 @@ urlpatterns = [
     path('', views.homeView, name='homeView'),
     path("contact/", views.contactView, name="contactView"),
     path("contact/messages", views.allMessagesView, name="allMessagesView"),
+    path("contact/messages/delete/<int:msgId>", views.deleteMessageView, name="deleteMessageView"),
+
 ]

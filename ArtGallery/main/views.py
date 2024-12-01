@@ -41,9 +41,32 @@ def contactView(request: HttpRequest):
 
     return response
 
+# Delete message View
+def deleteMessageView(request:HttpRequest, msgId: int):
+    if not request.user.is_superuser:
+        messages.warning(request, "Only Admins can delete messages.", "alert-warning")
+        return redirect('main:homeView')
+    try:
+        message = Contact.objects.get(pk=msgId)
+    except Exception:
+        return render(request, '404.html')
+    else:
+        try:
+            message.delete()
+
+        except Exception:
+            messages.error(request, "Something went wrong. Message wasn't deleted.", "alert-danger")
+        else: 
+            messages.success(request, "Message deleted successfully.", "alert-success")    
+        
+        return redirect('main:allMessagesView')
+
 #All messages View
 def allMessagesView(request: HttpRequest):
-    messages = Contact.objects.all().order_by("-createdAt")
-    response = render(request, 'main/allMessages.html', {'messages': messages})
+    if not request.user.is_superuser:
+        messages.warning(request, "Only Admins can view messages.", "alert-warning")
+        return redirect('main:homeView')
+    
+    msgs = Contact.objects.all().order_by("-createdAt")
 
-    return response
+    return render(request, 'main/allMessages.html', {'msgs': msgs})

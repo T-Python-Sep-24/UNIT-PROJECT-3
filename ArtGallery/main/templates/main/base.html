@@ -37,6 +37,7 @@
 
             {% url 'main:homeView' as homeUrl %}
             {% url 'main:contactView' as contactUrl %}
+            {% url 'main:allMessagesView' as messagesUrl %}
             {% url 'artists:displayArtistsView' as artistsUrl %}
             {% url 'artPieces:displayArtPiecesView' as artPiecesUrl %}
 
@@ -61,6 +62,11 @@
                     <li class="nav-item p-1">
                         <a class="hover-color {% if request.path == contactUrl %}active{% endif %}" href="{{contactUrl}}">Contact</a>
                     </li>
+                    {% if user.is_superuser %}
+                    <li class="nav-item p-1">
+                        <a class="hover-color {% if request.path == messagesUrl %}active{% endif %}" href="{{messagesUrl}}">Messages</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
 

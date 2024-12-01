@@ -35,7 +35,7 @@ label {
 }
 
 .text-burgundy-darker {
-    color: #2c1d1f;
+    color: #2c1d1f !important;
 }
 
 .text-peach-dark {
@@ -47,15 +47,15 @@ label {
 }
 
 .text-beige-100 {
-    color: #f9dfd5;
+    color: #f9dfd5 !important;
 }
 
 .text-beige-200 {
-    color: #e9bfb1;
+    color: #e9bfb1 !important;
 }
 
 .text-beige-300 {
-    color: #d8a796;
+    color: #d8a796 !important;
 }
 
 .text-beige-400 {
