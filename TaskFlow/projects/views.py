@@ -35,7 +35,8 @@ def project_create(request):
         messages.success(request, "Project created successfully.")
         return redirect("projects:project_list")
     
-    user_list = User.objects.exclude(id=request.user.id)  # Exclude the current manager
+    user_list = User.objects.filter(profile__roll="Team Member").exclude(id=request.user.id)  # Exclude the current manager
+    print(user_list)
     return render(request, "projects/project_create.html", {"user_list": user_list})
 
 @login_required

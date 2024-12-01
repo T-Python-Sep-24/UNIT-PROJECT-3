@@ -5,13 +5,7 @@
         <div class="col-md-8">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white text-center">
-                    <h4 class="mb-0">
-                        {% if task %}
-                            Edit Task
-                        {% else %}
-                            Create Task
-                        {% endif %}
-                    </h4>
+                    <h4 class="mb-0"> Create Task</h4>
                 </div>
                 <div class="card-body">
                     <form method="post">
@@ -45,9 +39,7 @@
                             {{ form.project }}
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary w-50">
-                                {% if task %} Update Task {% else %} Save Task {% endif %}
-                            </button>
+                            <button type="submit" class="btn btn-primary w-50">Save Task </button>
                         </div>
                     </form>
                 </div>

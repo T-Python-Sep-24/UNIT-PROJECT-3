@@ -8,7 +8,7 @@
 
     <div class="row">
         <!-- Projects Section -->
-        {% if user.profile.roll == "Manager" %}
+        {% if user.profile.roll == "Manager"  %}
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
@@ -42,13 +42,15 @@
                     <ul class="list-group">
                         {% for task in tasks %}
                         <a href="{% url 'tasks:task_detail' task.pk %}">
-                            <li class="list-group-item">{{ task.title }}</li>
+                            <li class="list-group-item">
+                                {{ task.title }} 
+                            </li>
                         </a>
                         {% empty %}
-                        <li class="list-group-item text-muted">No tasks found.</li>
+                            <li class="list-group-item text-muted">No tasks found.</li>
                         {% endfor %}
                     </ul>
-                </div>                
+                </div>               
                 <div class="card-footer text-center">
                     <a href="{% url 'tasks:create_task' %}" class="btn btn-primary w-100">Add Task</a>
                 </div>

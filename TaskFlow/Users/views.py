@@ -129,6 +129,7 @@ def dashboard_view(request, username):
         "projects": projects,
         "tasks": tasks,
     })
+
     
 def log_out(request: HttpRequest):
     logout(request)

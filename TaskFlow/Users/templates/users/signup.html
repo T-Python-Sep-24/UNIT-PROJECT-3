@@ -26,22 +26,15 @@
                 <label for="about" class="form-label">About</label>
                 <textarea name="about" id="about" class="form-control" rows="4" placeholder="Tell us about yourself"></textarea>
             </div>
-            <!-- Role Field -->
-            <div class="mb-3">
-                <label for="roll" class="form-label">Role</label>
-                <select name="roll" id="roll" class="form-select" required>
-                    <option value="" disabled selected>Select your role</option>
-                    {% for role, display_name in form.fields.roll.choices %}
-                    <option value="{{ role }}">{{ display_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
             <!-- Photo Upload -->
             <div class="mb-3">
                 <label for="photo" class="form-label">Photo</label>
-                <input type="file" name="photo" id="photo" class="form-control" accept="image/*" onchange="previewImage(event)">
+                <input type="file" name="photo" id="photo" class="form-control" accept="image/*" onchange="profile_image(event)">
                 <div class="mt-3 text-center">
-                    <img id="photoPreview" src="{% static 'images/profile_image.webp' %}" alt="Profile Preview" class="img-fluid rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                    <img id="photoPreview" src="{% if user.profile.photo %}{{ user.profile.photo.url }}{% else %}{% static 'media/images/profile_image.webp' %}{% endif %}" 
+                    alt="Profile Preview" 
+                    class="img-fluid rounded-circle" 
+                    style="width: 100px; height: 100px; object-fit: cover;">
                 </div>
             </div>
             <!-- Submit Button -->
@@ -51,14 +44,13 @@
 </div>
 
 <script>
-    // JavaScript for image preview
-    function previewImage(event) {
-        const preview = document.getElementById('profile_image');
-        const file = event.target.files[0];
-        if (file) {
-            preview.src = URL.createObjectURL(file);
-        }
+function profile_image(event) {
+    const preview = document.getElementById('photoPreview'); 
+    const file = event.target.files[0];
+    if (file) {
+        preview.src = URL.createObjectURL(file);
     }
+}
 </script>
 {% endblock %}
 

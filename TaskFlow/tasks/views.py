@@ -10,10 +10,15 @@ def create_task(request):
     if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
+            print("ddd")
             task = form.save(commit=False)
+            task.assigned_to = request.user
             task.save()
+            print("dddd22")
             messages.success(request, "Task created successfully!")
             return redirect("tasks:task_list")
+        else:
+            print(form.errors)
     else:
         form = TaskForm()
     return render(request, "tasks/create_task.html", {"form": form})
@@ -74,3 +79,38 @@ def delete_task(request, task_id):
         messages.success(request, "Task deleted successfully!")
         return redirect("tasks:task_list")
     return render(request, "tasks/delete_task.html", {"task": task})
+
+
+@login_required
+def add_comment(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    user = request.user
+
+    # Ensure only valid roles can comment
+    if user.profile.roll == "Manager" and task.project.created_by == user:
+        pass  # Manager can comment
+    elif user.profile.roll == "Team Member" and task.assigned_to == user:
+        pass  # Team Member can comment
+    else:
+        messages.error(request, "You are not allowed to comment on this task.", "alert-danger")
+        return redirect("tasks:task_detail", task_id=task.id)
+
+    # Handle POST request for comment submission
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.task = task
+            comment.created_by = user
+            comment.save()
+            messages.success(request, "Comment added successfully!", "alert-success")
+            return redirect("tasks:task_detail", task_id=task.id)
+    else:
+        form = CommentForm()
+
+    return render(request, "tasks/task_detail.html", {
+        "form": form,
+        "task": task,
+        "comments": task.comments.all(),
+    })
+
