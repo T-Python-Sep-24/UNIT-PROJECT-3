@@ -82,7 +82,7 @@
 <!-- Related pieces -->
 <section class="container-lg my-5">
     <p class="fs-3 fw-medium mt-3 mb-2 text-beige-200">
-        More Art Pieces by <a href="{% url 'artists:artistDetailsView' piece.artist.id %}" class="fs-3 hover-underline text-offwhite">{{piece.artist.fullName}}:</a>
+        More Art Pieces by <a href="{% url 'artists:artistDetailsView' piece.artist.id %}" class="fs-3 hover-color">{{piece.artist.fullName}}:</a>
     </p>
     {% with relatedPieces as pieces %}
        {% include 'artPieces/components/piecesList.html' %}

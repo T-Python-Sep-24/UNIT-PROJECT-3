@@ -31,7 +31,7 @@
                 {% for com in profile.user.comment_set.all %}
                 <div class="col card my-2 text-start shadow-sm rounded-2 bg-blur" style="max-width:20rem;">
                     <div class="card-body py-1 d-flex flex-column gap-1">
-                        <p class="m-0 fs-5 fw-medium text-burgundy">On <a href="" class="text-offwhite fw-bold hover-color">{{com.piece.name}}</a></p>
+                        <p class="m-0 fs-5 fw-medium text-burgundy">On <a href="{% url 'artPieces:artPieceDetailsView' com.piece.id %}" class="text-offwhite fw-bold hover-color">{{com.piece.name}}</a></p>
                         <p class="m-0 fw-medium">
                             {{com.content}}
                         </p>
@@ -53,13 +53,13 @@
                 <div class="col g-0 card text-light border-0 custom-crd" style="max-width:14rem;">
                     <img src="{{favorite.piece.photo.url}}" class="card-img shadow custom-img" alt="Art Piece">
                     <div class="card-img-overlay align-content-end text-start">
-                        <a href="{% url 'artPieces:artPieceDetailsView' favorite.piece.id %}" class="my-0 fs-5 text-white-shadow">{{favorite.piece.name}}</a>
+                        <a href="{% url 'artPieces:artPieceDetailsView' favorite.piece.id %}" class="my-0 fs-5 hover-color">{{favorite.piece.name}}</a>
                         <p class="m-0 small text-offwhite">Added: {{favorite.addedAt}}</p>
                     </div>
                 </div>
                 {% empty %}
-                <p class="my-0">No favorites yet.</p>
-                <a href="{% url 'artPieces:displayArtPiecesView' 'all' %}" class="btn-peach-dark py-0 ms-2" style="width: fit-content;">Browse art pieces</a>
+                <p class="my-0 text-offwhite">No favorites yet.</p>
+                <a href="{% url 'artPieces:displayArtPiecesView' 'all' %}" class="btn-beige-400 py-0 ms-2 fs-6" style="width: fit-content;">Browse art pieces</a>
                 {% endfor %}
             </div>
             {% endif %} 

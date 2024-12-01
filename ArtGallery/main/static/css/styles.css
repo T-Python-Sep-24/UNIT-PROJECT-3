@@ -14,16 +14,6 @@ body a {
     text-decoration: none;
 }
 
-.hover-color{
-    transition: all 0.4s;
-}
-
-.hover-color:hover{
-    color: #f9dfd5;
-    text-shadow: 0 0 10px rgba(255, 225, 229, 0.7);
-
-}
-
 form {
     min-width: 45%;
 }
@@ -128,6 +118,16 @@ label {
     transform-origin: bottom center;
 }
 
+.hover-color{
+    transition: all 0.4s;
+}
+
+.hover-color:hover{
+    color: #fcf6f5;
+    text-shadow: 0 0 10px rgba(255, 225, 229, 0.7);
+
+}
+
 /* buttons */
 .btn-peach-dark {
     display: block;
@@ -226,6 +226,40 @@ label {
 .btn-beige-300:active {
     background-color: #7c6263;
     box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+    transform: translateY(0);
+}
+
+.btn-beige-400 {
+    display: block;
+    padding: 0 .7rem;
+    align-items: center;
+    background-color: #624c4e;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.15) 0 1px 3px;
+    color: #fbeeea;
+    font-size: 1.1rem;
+    cursor: pointer;
+    justify-content: center;
+    transition: all 250ms;
+    user-select: none;
+    -webkit-user-select: none;
+    width: auto;
+}
+
+.btn-beige-400:hover {
+    background-color: #937777;
+    color: #ffefe9;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.btn-beige-400:hover {
+    transform: translateY(-2px);
+}
+
+.btn-beige-400:active {
+    background-color: #564344;
+    box-shadow: rgba(0, 0, 0, .1) 0 2px 4px;
     transform: translateY(0);
 }
 
