@@ -20,7 +20,7 @@ body a {
 
 .hover-color:hover{
     color: #f9dfd5;
-    text-shadow: 0 0 8px rgba(255, 225, 229, 0.5);
+    text-shadow: 0 0 10px rgba(255, 225, 229, 0.7);
 
 }
 

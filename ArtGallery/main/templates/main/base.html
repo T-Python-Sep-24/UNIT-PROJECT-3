@@ -76,7 +76,7 @@
                     <a class="btn-beige-400 py-0" href="{{logoutUrl}}?next={{request.path}}">Logout</a>
                 </div>
                 {% else %}
-                <a class="py-0 my-auto {% if request.path == loginUrl %}btn btn-light rounded-1 fw-bold disabled{% else %}btn-beige-400{% endif %}" href="{{loginUrl}}">Login</a>
+                <a class="py-0 my-auto {% if request.path == loginUrl %}btn btn-light rounded-1 fw-bold disabled{% else %}btn-beige-400{% endif %}" href="{{loginUrl}}?next={{request.path}}">Login</a>
                 <a class="py-0 my-auto {% if request.path == registerUrl %}btn btn-light rounded-1 fw-bold disabled{% else %}btn-beige-400{% endif %}" href="{{registerUrl}}">Register</a>
                 {% endif %}
             </div>

@@ -12,7 +12,7 @@ from accounts.models import Favorite
 # Add art piece View
 def addArtPieceView(request: HttpRequest):
 
-    if not (request.user.is_staff and request.user.has_perm('artpieces.add_artpiece')):
+    if not (request.user.is_staff and request.user.has_perm('artPieces.add_artpiece')):
         messages.warning(request, "Only editors can add art pieces.", "alert-warning")
         response = redirect('main:homeView')
     else:
@@ -35,7 +35,7 @@ def addArtPieceView(request: HttpRequest):
 # Update art piece View
 def updateArtPieceView(request: HttpRequest, pieceId:int):
 
-    if not (request.user.is_staff and request.user.has_perm('artpieces.change_artpiece')):
+    if not (request.user.is_staff and request.user.has_perm('artPieces.change_artpiece')):
         messages.warning(request, "Only editors can update art pieces.", "alert-warning")
         response = redirect('main:homeView')
     else:
@@ -63,7 +63,7 @@ def updateArtPieceView(request: HttpRequest, pieceId:int):
 # Delete art piece View
 def deleteArtPieceView(request: HttpRequest, pieceId:int):
 
-    if not (request.user.is_staff and request.user.has_perm('artpieces.delete_artpiece')):
+    if not (request.user.is_staff and request.user.has_perm('artPieces.delete_artpiece')):
         messages.warning(request, "Only editors can delete art pieces.", "alert-warning")
         response = redirect('main:homeView')
     else:
@@ -162,7 +162,6 @@ def deleteCommentView(request: HttpRequest, commentId:int):
 
     return response
 
-
 # Add favorite View
 def addFavoriteView(request:HttpRequest, pieceId:id):
     
@@ -171,7 +170,7 @@ def addFavoriteView(request:HttpRequest, pieceId:id):
     else:
         try:
             piece = ArtPiece.objects.get(pk=pieceId)
-            
+
             favorite = Favorite.objects.filter(user=request.user, piece=piece).first()
             if not favorite:
                 newFavorite = Favorite(user=request.user, piece=piece)
@@ -182,6 +181,6 @@ def addFavoriteView(request:HttpRequest, pieceId:id):
                 messages.warning(request, f"'{piece.name}' was removed from favorites.", "alert-warning")
 
         except Exception as e:
-            messages.error(request, "Something went wrong. Couldn't add favorite.", "alert-danger")
+            messages.error(request, "Something went wrong. Couldn't add to favorite.", "alert-danger")
 
     return redirect('artPieces:artPieceDetailsView', pieceId)

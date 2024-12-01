@@ -8,14 +8,14 @@
     
     <div class="container-lg">
         <div class="d-flex gap-2 justify-content-end my-2">
-            {% if user.is_staff and perms.artpieces.change_artpiece %}
+            {% if user.is_staff and perms.artPieces.change_artpiece %}
             <a href="{% url 'artPieces:updateArtPieceView' piece.id %}"
                 class="btn-beige-200 border-2 shadow-sm my-auto">
                 Update
             </a>
             {% endif %}
             <!-- Button to trigger delete modal -->
-            {% if user.is_staff and perms.artpieces.delete_artpiece %}
+            {% if user.is_staff and perms.artPieces.delete_artpiece %}
             <button type="button" class="btn-beige-200 border-2 shadow-sm my-auto" data-bs-toggle="modal"
                 data-bs-target="#deleteModal">
                 Delete
@@ -27,7 +27,7 @@
                 <img src="{{piece.photo.url}}" alt="Art Piece Image" class="rounded-1 w-100 custom-img">
             </div>
             <div class="col col-md-7 p-2 ps-5 position-relative">
-                <a href="{% url 'artPieces:addFavoriteView' piece.id %}" class="position-absolute top-0 end-0">
+                <a href="{% url 'artPieces:addFavoriteView' piece.id %}" class="position-absolute top-0 end-0 hover-color">
                     {% if isFavorite %}
                     <i class="bi bi-star-fill h4"></i>
                     {% else %}
@@ -106,8 +106,8 @@
                             <p class="card-text fs-5 fw-medium hover-color">{{comment.user.first_name}} {{comment.user.last_name}}</p>
                         </a>
                     </div>
-                    {% if request.user == comment.user or perms.artpieces.delete_comment %}
-                    <button type="button" class="btn-beige-200 border-2 shadow-sm m-2 px-1 py-0 position-absolute top-0 end-0" data-bs-toggle="modal"
+                    {% if request.user == comment.user or perms.artPieces.delete_comment %}
+                    <button type="button" class="btn-beige-400 border-2 shadow-sm m-2 px-1 py-0 position-absolute top-0 end-0" data-bs-toggle="modal"
                         data-bs-target="#deleteCommentModal{{comment.id}}">
                         <i class="bi bi-trash3-fill small"></i>
                     </button>

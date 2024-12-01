@@ -10,7 +10,7 @@
         </h1>
         <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
         <div class="d-flex justify-content-center mb-4">
-            {% if user.is_staff and perms.artpieces.add_artpiece %}
+            {% if user.is_staff and perms.artPieces.add_artpiece %}
             <a href="{% url 'artPieces:addArtPieceView' %}" class="btn-beige-400">New</a>
             {% endif %}
         </div>
