@@ -1,0 +1,87 @@
+{% extends "main/base.html" %}
+
+{% block title %}All Flights{% endblock %}
+
+{% block content %}
+{%load static%}
+<div class="container my-5">
+    <h1 class="text-center mb-4">
+        <i class="fas fa-plane"></i> Flight Listing
+    </h1>
+    <form method="get" action="" class="d-flex justify-content-center mb-4">
+        <input type="text" name="search" class="form-control w-50 me-2" placeholder="Search by Flight Number" value="{{ search_query }}">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i> Search
+        </button>
+    </form>
+    <div class="row justify-content-center">
+        {% if page_obj %}
+        {% for flight in page_obj %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img src="{% static 'image/airline.jpg' %}" class="card-img-top" alt="Airline">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-ticket-alt"></i> {{ flight.flight_number }}
+                    </h5>
+                    <p class="card-text">
+                        <i class="fas fa-map-marker-alt"></i> From: {{ flight.from_city.name }} <br>
+                        <i class="fas fa-map-marker-alt"></i> To: {{ flight.to_city.name }} <br>
+                        <i class="fas fa-clock"></i> Departure: {{ flight.departure_time|date:"M d, Y H:i" }} <br>
+                        <i class="fas fa-clock"></i> Arrival: {{ flight.arrival_time|date:"M d, Y H:i" }} <br>
+                        <i class="fas fa-money-bill-wave"></i> Price: {{ flight.price }} SAR <br>
+                        <i class="fas fa-chair"></i> Seats Available: {{ flight.available_seats }}
+                    </p>
+                    <a href="{% url 'flights:flight_detail_view' flight.id %}" class="btn btn-primary w-100">View Details</a>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-center text-muted">No flights found matching your search.</p>
+        {% endif %}
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}
