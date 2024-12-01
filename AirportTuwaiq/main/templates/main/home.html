@@ -1,8 +1,25 @@
-{% extends 'main/base.html' %}
+{% extends "main/base.html" %}
 
-{% block title %}Airport Tuwaiq{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>Welcome to Airport Tuwaiq</h1>
-<p>Find and book your flights with ease.</p>
+<div class="container text-center my-5">
+    <h1>Welcome to Airport Tuwaiq</h1>
+    <p>Your gateway to seamless air travel.</p>
+
+    <!-- Display date and time -->
+    <div id="date-time" class="my-4"></div>
+
+    <script>
+        // Real-time date and time script
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById("date-time").innerHTML = `
+                <p>Date: ${now.toLocaleDateString()}</p>
+                <p>Time: ${now.toLocaleTimeString()}</p>
+            `;
+        }
+        setInterval(updateDateTime, 1000);
+    </script>
+</div>
 {% endblock %}

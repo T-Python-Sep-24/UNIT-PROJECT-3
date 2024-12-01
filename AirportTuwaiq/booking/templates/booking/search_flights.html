@@ -1,0 +1,97 @@
+{% extends "main/base.html" %}
+
+{% block title %}Search Flights{% endblock %}
+
+{% block content %}
+<div class="container my-5" style="min-height: 80vh;">
+    <h1 class="text-center mb-4"><i class="fas fa-search"></i> Search Flights</h1>
+    <div class="row">
+        <!-- Search Form -->
+        <div class="col-md-12">
+            <form method="get" action="{% url 'booking:search_flights' %}" class="row g-3">
+                <div class="col-md-3">
+                    <label for="from_city" class="form-label"><i class="fas fa-map-marker-alt"></i> From</label>
+                    <input type="text" class="form-control" id="from_city" name="from_city" placeholder="Enter origin city" value="{{ request.GET.from_city }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="to_city" class="form-label"><i class="fas fa-map-marker-alt"></i> To</label>
+                    <input type="text" class="form-control" id="to_city" name="to_city" placeholder="Enter destination city" value="{{ request.GET.to_city }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="date" class="form-label"><i class="fas fa-calendar-alt"></i> Date</label>
+                    <input type="date" class="form-control" id="date" name="date" value="{{ request.GET.date }}">
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100"><i class="fas fa-search"></i> Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Sidebar for Filters -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-filter"></i> Filter Options
+                </div>
+                <div class="card-body">
+                    <form method="get" action="{% url 'booking:search_flights' %}">
+                        <input type="hidden" name="from_city" value="{{ request.GET.from_city }}">
+                        <input type="hidden" name="to_city" value="{{ request.GET.to_city }}">
+                        <input type="hidden" name="date" value="{{ request.GET.date }}">
+
+                        <!-- Filter by Price -->
+                        <div class="mb-3">
+                            <label for="min_price" class="form-label">Min Price (SAR)</label>
+                            <input type="number" id="min_price" name="min_price" class="form-control" placeholder="0" value="{{ request.GET.min_price }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="max_price" class="form-label">Max Price (SAR)</label>
+                            <input type="number" id="max_price" name="max_price" class="form-control" placeholder="1000" value="{{ request.GET.max_price }}">
+                        </div>
+
+                        <!-- Filter by Departure Time -->
+                        <div class="mb-3">
+                            <label for="departure_time" class="form-label">Departure Time</label>
+                            <input type="datetime-local" id="departure_time" name="departure_time" class="form-control" value="{{ request.GET.departure_time }}">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search"></i> Apply Filter
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flights Display -->
+        <div class="col-md-9">
+            
+                <div class="row">
+                    {% for flight in flights %}
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-plane"></i> {{ flight.flight_number }}</h5>
+                                    <p class="card-text">
+                                        <i class="fas fa-map-marker-alt"></i> From: {{ flight.from_city.name }}<br>
+                                        <i class="fas fa-map-marker-alt"></i> To: {{ flight.to_city.name }}<br>
+                                        <i class="fas fa-clock"></i> Departure: {{ flight.departure_time|date:"M d, Y H:i" }}<br>
+                                        <i class="fas fa-money-bill-wave"></i> Price: {{ flight.price }} SAR
+                                    </p>
+                                    <a href="{% url 'booking:booking_detail' flight.id %}" class="btn btn-primary w-100">
+                                        <i class="fas fa-info-circle"></i> View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

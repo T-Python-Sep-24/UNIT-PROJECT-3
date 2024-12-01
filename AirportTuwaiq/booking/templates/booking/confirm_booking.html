@@ -1,0 +1,39 @@
+{% extends "main/base.html" %}
+
+{% block title %}Confirm Booking{% endblock %}
+
+{% block content %}
+<div class="container my-5 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="text-center">
+        <h1 class="mb-4"><i class="fas fa-plane"></i> Confirm Booking</h1>
+        <p>
+            <strong><i class="fas fa-ticket-alt"></i> Flight Number:</strong> {{ flight.flight_number }}
+        </p>
+        <p>
+            <strong><i class="fas fa-map-marker-alt"></i> From:</strong> {{ flight.from_city.name }}
+        </p>
+        <p>
+            <strong><i class="fas fa-map-marker-alt"></i> To:</strong> {{ flight.to_city.name }}
+        </p>
+        <p>
+            <strong><i class="fas fa-clock"></i> Departure:</strong> {{ flight.departure_time|date:"M d, Y H:i" }}
+        </p>
+        <p>
+            <strong><i class="fas fa-money-bill-wave"></i> Price:</strong> {{ flight.price }} SAR
+        </p>
+        <h5 class="mt-4"><i class="fas fa-user"></i> Customer Details</h5>
+        <p>
+            <strong><i class="fas fa-user"></i> Name:</strong> {{ customer.first_name }} {{ customer.last_name }}
+        </p>
+        <p>
+            <strong><i class="fas fa-envelope"></i> Email:</strong> {{ customer.email }}
+        </p>
+        <form method="post" action="{% url 'booking:confirm_booking' flight.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success mt-3">
+                <i class="fas fa-check-circle"></i> Confirm Booking
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "main/base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container my-5" style="min-height: 80vh;">
+    <h1 class="text-center mb-4"><i class="fas fa-user-circle"></i> Profile</h1>
+    
+    <!-- User Details Section -->
+    <div class="text-center mb-4">
+        <h5 class="mb-3"><i class="fas fa-user"></i> User Details</h5>
+        <p>
+            <strong>First Name:</strong> {{ user.first_name }}<br>
+            <strong>Last Name:</strong> {{ user.last_name }}<br>
+            <strong>Email:</strong> {{ user.email }}<br>
+            <strong>Phone Number:</strong> {{ customer.phone_number }}
+        </p>
+    </div>
+    
+    <!-- Booking History Section -->
+    <h2 class="text-center"><i class="fas fa-history"></i> Booking History</h2>
+    {% if bookings %}
+        <div class="row justify-content-center">
+            {% for booking in bookings %}
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-plane"></i> Flight {{ booking.flight.flight_number }}</h5>
+                            <p class="card-text">
+                                <strong>From:</strong> {{ booking.flight.from_city.name }}<br>
+                                <strong>To:</strong> {{ booking.flight.to_city.name }}<br>
+                                <strong>Date:</strong> {{ booking.flight.departure_time|date:"M d, Y H:i" }}<br>
+                                <strong>Status:</strong> {{ booking.status }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No booking history available.</p>
+    {% endif %}
+</div>
+{% endblock %}

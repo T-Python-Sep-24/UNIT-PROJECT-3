@@ -87,3 +87,5 @@ def edit_flight_view(request: HttpRequest, flight_id):
         print( "this is Catching:", e)
     
     return render(request, 'flights/edit_flight.html', {'flight': flight})
+
+

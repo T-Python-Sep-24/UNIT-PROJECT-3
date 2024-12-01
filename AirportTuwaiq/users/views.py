@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate , login , logout
 from .models import Employee , Customer
-
+from booking.models import Booking 
+from flights.models import Flight
 def employee_sign_up_view(request:HttpRequest):
     
     if request.method == "POST": 
@@ -49,3 +50,10 @@ def logout_view(request:HttpRequest):
     logout(request)
     messages.success(request, "You have been logged out successfully.", "alert-success")
     return redirect("main:home_view")
+
+
+def profile_view(request: HttpRequest) -> HttpResponse:
+    user = request.user  # Get the logged-in user
+    bookings = Booking.objects.filter(customer=user) 
+    customer = Customer.objects.get(user=user) # Fetch user's bookings
+    return render(request, "users/profile.html", {"user": user, "bookings": bookings ,  'customer': customer})
