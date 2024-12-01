@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
     {% block style %}
     {% endblock %}
 
@@ -17,16 +19,21 @@
     <div class="hero-section">
         <header class="header">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-2 col-md-12">
-                        <div class="header-logo" >
-                            <a href="{% url 'main:home_view' %}"><span>B</span>ueati <span>B</span>ook</a>
+                <div class="row align-items-center justify-content-between">
+                    <!-- Logo -->
+                    <div class="col-lg-2 col-md-12 text-center text-lg-start">
+                        <div class="header-logo">
+                            <a href="{% url 'main:home_view' %}" class="logo">
+                                <span>B</span>ueati<span>B</span>ook
+                            </a>
                         </div>
                     </div>
+    
+                    <!-- Navigation Menu -->
                     <div class="col-lg-8 col-md-12">
                         <nav class="header-menu">
-                            <ul>
-                                <li class="active"><a href="{% url 'main:home_view' %}">Home</a></li>
+                            <ul class="nav-list">
+                                <li><a href="{% url 'main:home_view' %}" class="active">Home</a></li>
                                 <li><a href="{% url 'providers:artists_view' %}">Artists</a></li>
                                 <li><a href="{% url 'services:products_view' %}">Products</a></li>
                                 <li><a href="{% url 'dashboard:dashboard_view' %}">Dashboard</a></li>
@@ -35,42 +42,44 @@
                             </ul>
                         </nav>
                     </div>
-                    <div class="col-lg-2 col-md-12">
+    
+                    <!-- Sign In/Register Buttons -->
+                    <div class="col-lg-2 col-md-12 text-center text-lg-end">
                         <div class="header-right">
-                            <div class="header-right-btn">
-                                <a href="">Sign in</a>
-                                <a href="">Register</a>
-                            </div>
+                            <a href="#" class="btn btn-signin">Sign in</a>
+                            <a href="#" class="btn btn-register">Register</a>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
     </div>
-
+    
 
 
         {% block content %}
         {% endblock %}
 
     {% block footer %}
-    <footer class="bg-dark text-white text-center text-lg-start mt-4">
-        <div class="container p-4">
-            <div class="row">
-                <div class="col-md-6 mb-4">
-                    <h5 class="text-uppercase">About BeautiBook</h5>
-                    <p>Your trusted platform for premium beauty products. Explore and find the best fit for your needs.</p>
+    <footer class="custom-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="about-section">
+                    <h5>About BeautiBook</h5>
+                    <p>Your trusted platform for premium beauty services and products. Discover the perfect fit for your needs with ease and confidence.</p>
                 </div>
-                <div class="col-md-6 mb-4 text-end">
-                    <h5 class="text-uppercase">Follow Us</h5>
-                    <a href="http://www.facebook.com" class="me-3 text-white"><i class="fab fa-facebook fa-lg"></i></a>
-                    <a href="http://www.twitter.com" class="me-3 text-white"><i class="fab fa-twitter fa-lg"></i></a>
-                    <a href="http://www.instagram.com" class="me-3 text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                <div class="social-section">
+                    <h5>Follow Us</h5>
+                    <div class="social-icons">
+                        <a href="http://www.facebook.com" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="http://www.twitter.com" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="http://www.instagram.com" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="text-center p-3" style="background-color: rgba(25, 25, 25, 0.1);">
-            © 2024 BeautiBook. All Rights Reserved. | <a href="#" class="text-white">Privacy Policy</a>
+        <div class="footer-bottom">
+            <p>© 2024 BeautiBook. All Rights Reserved. | <a href="#">Privacy Policy</a></p>
         </div>
     </footer>
     {% endblock %}
