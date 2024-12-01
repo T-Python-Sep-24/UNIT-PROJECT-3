@@ -37,7 +37,7 @@
                         <span class="fw-bold fs-4 text-burgundy">Description: </span>{{piece.description}}
                     </p>
                     <p class="fs-5">
-                        <span class="fw-bold fs-4 text-burgundy">Artist: </span><a href="{% url 'artists:artistDetailsView' piece.artist.id %}" class="hover-color fs-5">{{piece.artist.fullName}}</a>
+                        <span class="fw-bold fs-4 text-burgundy">Artist: </span><a href="{% url 'artists:artistDetailsView' piece.artist.id %}" class="text-burgundy-darker hover-color fs-5">{{piece.artist.fullName}}</a>
                     </p>
                     <p class="fs-5 text-burgundy-darker">
                         <span class="fw-bold fs-4 text-burgundy">Price: </span>{{piece.price}}.00 SAR
@@ -72,12 +72,107 @@
     </div>
 </section>
 
+<!-- Related pieces -->
 <section class="container-lg my-5">
     <p class="fs-3 fw-medium mt-3 mb-2 text-beige-200">
-        More Art Pieces From <a href="{% url 'artists:artistDetailsView' piece.artist.id %}" class="fs-3 hover-underline text-offwhite">{{piece.artist.fullName}}:</a>
+        More Art Pieces by <a href="{% url 'artists:artistDetailsView' piece.artist.id %}" class="fs-3 hover-underline text-offwhite">{{piece.artist.fullName}}:</a>
     </p>
     {% with relatedPieces as pieces %}
        {% include 'artPieces/components/piecesList.html' %}
     {% endwith %}
+</section>
+
+<!-- Comment section -->
+<section class="container my-5">
+    <!-- Display comments -->
+    <div class="row justify-content-center">
+        <p class="fs-3 fw-medium my-0 text-beige-200">
+            Comments ({{piece.comment_set.count}}):
+        </p>
+        <div class="d-flex flex-column gap-2 mb-5 mx-2">
+            {% for comment in piece.comment_set.all %}
+            <div class="card p-1 my-2 text-start shadow rounded-2 bg-blur-lighter" style="max-width:40rem;">
+                <div class="card-body d-flex flex-column gap-1 position-relative">
+                    <div class="d-flex gap-3 align-items-end">
+                        <a href="{% url 'accounts:profileView' comment.user.username %}" class="d-flex flex-row gap-1 align-items-end">
+                            <img src="{{comment.user.profile.pfp.url}}" class="pfp-sm rounded-circle">
+                            <p class="card-text fs-5 fw-medium hover-color">{{comment.user.first_name}} {{comment.user.last_name}}</p>
+                        </a>
+                    </div>
+                    {% if request.user == comment.user or perms.artpieces.delete_comment %}
+                    <button type="button" class="btn-beige-200 border-2 shadow-sm m-2 px-1 py-0 position-absolute top-0 end-0" data-bs-toggle="modal"
+                        data-bs-target="#deleteCommentModal{{comment.id}}">
+                        <i class="bi bi-trash3-fill small"></i>
+                    </button>
+                    {% endif %}
+                    <p class="ps-4 fw-medium text-burgundy-darker">
+                        {{comment.content}}
+                    </p>
+                    <p class="ps-4 m-0 small fw-bold text-burgundy">
+                        {{comment.createdAt}}
+                    </p>
+                </div>
+            </div>
+            <!-- Delete comment modal -->
+            <div class="modal fade" id="deleteCommentModal{{comment.id}}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-blur-lighter">
+                        <div class="modal-header">
+                            <h1 class="modal-title text-burgundy-darker fs-4" id="deleteModalLabel">Delete Comment</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-burgundy fs-5">
+                            <p class="m-0">Are you sure you want to delete 
+                                {% if request.user == comment.user %}
+                                your 
+                                {% else %}
+                                <span class="fw-medium text-burgundy-darker">{{comment.user.username}}'s </span>
+                                {% endif %}
+                                comment?</p>
+                            <p class="m-0 small"><strong class="text-burgundy-darker">Comment content: </strong>{{comment.content}}</p>
+                        </div>
+                        <div class="modal-footer py-1">
+                            <button type="button" class="btn-beige-200 shadow-sm py-0" data-bs-dismiss="modal">Close</button>
+                            <a href="{% url 'artPieces:deleteCommentView' comment.id %}" class="btn-beige-400 shadow-sm py-0 text-white">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="fs-5 fw-medium text-beige-300">No comments yet..</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Add comment -->
+    <div class="row justify-content-center">
+        <div class="col col-lg-8 shadow rounded-2 py-3 px-4 bg-blur-lighter">
+            {% if user.is_authenticated %}
+            <p class="fs-4 fw-medium text-burgundy">
+                Add your comment:
+            </p>
+            <form action="{% url 'artPieces:addCommentView' piece.id %}" class="form-floating d-flex flex-column gap-2 mt-3 px-2 needs-validation" method="post" novalidate>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="content" class="fw-medium fs-5 text-burgundy">Content</label>
+                    <textarea class="form-control focus-ring focus-ring-dark bg-blur border-0" placeholder="..."
+                        name="content" id="content" style="height: 100px;" minlength="1" required></textarea>
+                    <div class="invalid-feedback">
+                        Comment cant be empty.
+                    </div>
+                </div>
+                <div class="d-flex flex-row justify-content-center">
+                    <button class="w-25 btn-beige-400 border-2" type="submit">
+                        Add Comment
+                    </button>
+                </div>
+            </form>
+            {% else %}
+            <p class="m-0 fs-4 fw-medium text-burgundy text-center">
+                Login to add a comment!
+            </p>
+            {% endif %}
+        </div>
+    </div>
 </section>
 {% endblock %}

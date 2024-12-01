@@ -48,19 +48,19 @@
                 <!-- Nav links -->
                 <ul class="navbar-nav align-items-center gap-3 px-4">
                     <li class="nav-item p-1">
-                        <a class="{% if request.path == homeUrl %}active{% endif %}" href="{{homeUrl}}">Home</a>
+                        <a class="hover-color {% if request.path == homeUrl %}active{% endif %}" href="{{homeUrl}}">Home</a>
                     </li>
                     <li class="nav-item p-1">
-                        <a class="{% if request.path == artPiecesUrl %}active{% endif %}" href="{{artPiecesUrl}}">Art Pieces</a>
+                        <a class="hover-color {% if request.path == artPiecesUrl %}active{% endif %}" href="{{artPiecesUrl}}">Art Pieces</a>
                     </li>
                     <li class="nav-item p-1">
-                        <a class="{% if request.path == artistsUrl %}active{% endif %}" href="{{artistsUrl}}">Artists</a>
+                        <a class="hover-color {% if request.path == artistsUrl %}active{% endif %}" href="{{artistsUrl}}">Artists</a>
                     </li>
                     <li class="nav-item p-1">
-                        <a class="" href="">About</a>
+                        <a class="hover-color" href="">About</a>
                     </li>
                     <li class="nav-item p-1">
-                        <a class="" href="">Contact</a>
+                        <a class="hover-color" href="">Contact</a>
                     </li>
                 </ul>
             </div>

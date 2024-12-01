@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.contrib import messages
-from artPieces.models import ArtPiece
+from artPieces.models import ArtPiece, Comment
 from artPieces.forms import ArtPieceForm
 from artists.models import Artist
 from django.core.paginator import Paginator
@@ -122,9 +122,44 @@ def artPieceDetailsView(request: HttpRequest, pieceId:int):
     return response
 
 # Add comment View
+def addCommentView(request: HttpRequest, pieceId: int):
 
+    if not request.user.is_authenticated:
+        messages.error(request, "Only registered users can add comments.", "alert-danger")
+        response = redirect('accounts:loginView')
+    else:
+        if request.method == 'POST':
+            piece = ArtPiece.objects.get(pk=pieceId)
+            newComment = Comment(piece=piece, user=request.user , content=request.POST['content'])
+            newComment.save()
+            messages.success(request, "Your comment was added successfully.", "alert-success") 
+
+    response = redirect('artPieces:artPieceDetailsView', pieceId)
+    return response
 
 # Delete comment View
+def deleteCommentView(request: HttpRequest, commentId:int):
+
+    try:
+        comment = Comment.objects.get(pk=commentId)
+    except Exception:
+        response = render(request, '404.html')
+    else:
+        try:
+            pieceId = comment.piece.id
+            if (request.user.is_staff and request.user.has_perm('artPieces.delete_comment')) or comment.user == request.user:
+                comment.delete()
+            else:
+                messages.warning(request, "You can't delete this comment.", "alert-warning")
+
+        except Exception:
+            messages.error(request, "Something went wrong. Comment wasn't deleted.", "alert-danger")
+        else: 
+            messages.success(request, "Comment deleted successfully.", "alert-success")    
+        
+        response = redirect('artPieces:artPieceDetailsView', pieceId)
+
+    return response
 
 
 # Add favorite View

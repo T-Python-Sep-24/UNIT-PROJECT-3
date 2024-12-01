@@ -69,7 +69,7 @@
 
 <section class="container-lg my-5">
     <p class="fs-3 fw-medium mt-3 mb-2 text-beige-200">
-        Art Pieces From <span>{{artist.fullName}}:</span>
+        Art Pieces by <span class="text-offwhite">{{artist.fullName}}:</span>
     </p>
     {% with relatedPieces as pieces %}
        {% include 'artPieces/components/piecesList.html' %}
