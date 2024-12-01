@@ -1,61 +1,90 @@
 {% extends 'main/base.html' %}
 
-
-
 {% block title %}
     All Movies
 {% endblock title %}
 
-
 {% block content %}
-
 <div class="container mt-5">
-    <div class="d-flex justify-content-end gap-2">
-        <form action="{% url 'movies:all_movies_view' %}" method="GET" >
-            <div class="d-flex gap-3">
-                <input type="search" class="form-control" placeholder="search for a specfic movie" value="{{request.GET.search}}" name="search"  />
-                <select name="director" class="form-select">
-                    <option value="" >all Directors</option>
-                    {% for director in directors  %}
-                        <option value="{{director.id}}" {% if request.GET.director|stringformat:"s" == director.id|stringformat:"s" %}selected{% endif %}>
-                            {{director.name}}
-                        </option>
-                    {% endfor %}
-                </select>
-                <select name="genre"  class="form-select">
-                    <option value="">all Genres</option>
-                    
-                    {% for genre in genres  %}
-                        <option value="{{genre.id}}">
-                            {{genre.name}}
-                        </option>
-                    {% endfor %}
-                        
-                </select>
-        
-                <input type="submit" value="apply" class="btn btn-primary"/>
+    <!-- Filter and Add Movie Button Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
+        <!-- Filter Form -->
+        <form action="{% url 'movies:all_movies_view' %}" method="GET" class="w-100">
+            <div class="row g-2">
+                <!-- Search Input -->
+                <div class="col-12 col-md">
+                    <input 
+                        type="search" 
+                        class="form-control" 
+                        placeholder="Search for a specific movie" 
+                        value="{{ request.GET.search }}" 
+                        name="search"
+                    />
+                </div>
+
+                <!-- Director Dropdown -->
+                <div class="col-12 col-md">
+                    <select name="director" class="form-select">
+                        <option value="">All Directors</option>
+                        {% for director in directors %}
+                            <option 
+                                value="{{ director.id }}" 
+                                {% if request.GET.director|stringformat:"s" == director.id|stringformat:"s" %}selected{% endif %}
+                            >
+                                {{ director.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Genre Dropdown -->
+                <div class="col-12 col-md">
+                    <select name="genre" class="form-select">
+                        <option value="">All Genres</option>
+                        {% for genre in genres %}
+                            <option 
+                                value="{{ genre.id }}" 
+                                {% if request.GET.genre|stringformat:"s" == genre.id|stringformat:"s" %}selected{% endif %}
+                            >
+                                {{ genre.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Apply Button -->
+                <div class="col-12 col-md-auto">
+                    <input type="submit" value="Apply" class="btn btn-primary w-100" />
+                </div>
             </div>
         </form>
-        {% if request.user.is_superuser  %}
-        <a href="{% url 'movies:add_movie_view' %}" class="btn btn-primary ">Add a new movie +</a>
+
+        <!-- Add Movie Button -->
+        {% if request.user.is_superuser %}
+        <a 
+            href="{% url 'movies:add_movie_view' %}" 
+            class="btn btn-primary mt-2 mt-md-0 align-self-start align-self-md-center w-100 w-md-auto"
+        >
+            Add a New Movie +
+        </a>
         {% endif %}
     </div>
 
+    <!-- Movie List -->
     {% include 'movies/movies_list.html' %}
 
+    <!-- Pagination Section -->
     <div class="d-flex justify-content-center mt-4">
         <nav aria-label="Page navigation">
-            
             <ul class="pagination">
-
                 {% if movies.has_previous %}
                 <li class="page-item">
-                    <a class="page-link text-decoration-underline  text-dark" href="?page=1">
+                    <a class="page-link text-decoration-underline text-dark" href="?page=1">
                         First
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link  text-dark" href="?page={{ movies.previous_page_number }}">
+                    <a class="page-link text-dark" href="?page={{ movies.previous_page_number }}">
                         Previous
                     </a>
                 </li>
@@ -67,12 +96,12 @@
 
                 {% if movies.has_next %}
                 <li class="page-item">
-                    <a class="page-link  text-dark" href="?page={{ movies.next_page_number }}">
+                    <a class="page-link text-dark" href="?page={{ movies.next_page_number }}">
                         Next
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link text-decoration-underline  text-dark" href="?page={{ movies.paginator.num_pages }}">
+                    <a class="page-link text-decoration-underline text-dark" href="?page={{ movies.paginator.num_pages }}">
                         Last
                     </a>
                 </li>
@@ -80,8 +109,5 @@
             </ul>
         </nav>
     </div>
-
 </div>
-
 {% endblock content %}
-    

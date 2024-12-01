@@ -106,3 +106,57 @@ def delete_movie_view(request:HttpRequest,movie_id:int):
             messages.error(request, f"Couldn't Delete {movie.title} ", "alert-danger")
             return redirect ("movies:all_movies_view")
 
+def all_genres_view(request:HttpRequest):
+    genres=Genre.objects.all()
+
+    return render(request,'genres/all_genres.html',context={'genres':genres})
+
+def add_genre_view(request:HttpRequest):
+    if not request.user.is_staff:
+        messages.warning(request,'You do not have permission','alert-warning')
+        return redirect ("movies:all_genres_view")
+    if request.method == 'POST':
+        try:
+               genre=Genre(name=request.POST['name'])
+               genre.save()
+               messages.success(request, f" {request.POST['name']} Added successfully", "alert-success")
+               return redirect ("movies:all_genres_view")
+        except Exception as e:
+            messages.error(request, f"Couldn't Add {request.POST['name']} ", "alert-danger")
+            return redirect ("movies:add_genre_view")
+    
+    return render(request,'genres/add_genre.html')
+        
+        
+
+def delete_genre_view(request:HttpRequest,genre_id:int):
+    if not request.user.is_staff:
+        messages.warning(request,'You do not have permission','alert-warning')
+        return redirect ("movies:all_genres_view")
+    try:
+            genre=Genre(pk=genre_id)
+            genre.delete()
+            messages.success(request, f"Deleted {genre.name} successfully", "alert-success")
+            return redirect ("movies:all_genres_view")
+    except Exception as e:
+            print(e)
+            messages.error(request, f"Couldn't Delete {genre.name} ", "alert-danger")
+            return redirect ("movies:all_genres_view")
+    
+def update_genre_view(request:HttpRequest, genre_id:int):
+    if not request.user.is_staff:
+        messages.warning(request,'You do not have permission','alert-warning')
+        return redirect ("movies:all_genres_view")
+    genre=Genre(pk=genre_id)
+    try:
+            if request.method == 'POST':
+                genre.name=request.POST['name']
+                genre.save()
+                messages.success(request, "updated genre successfully", "alert-success")
+                return redirect ("movies:all_genres_view")
+    except Exception as e:
+            print(e)
+            messages.error(request, f"Couldn't Update {genre.name} ", "alert-danger")
+            return redirect ("movies:all_genres_view")
+
+    return render(request,'genres/update_genre.html',context={'genre':genre})

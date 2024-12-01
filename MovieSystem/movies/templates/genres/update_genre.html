@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+
+
+
+{% block title %}
+    update genre
+{% endblock title %}
+
+
+{% block content %}
+      <h1>Update  {{genre.name}}</h1>
+      <div class="row">
+          <div class="col-7">
+              <form class="d-flex flex-column gap-2" action="{% url 'movies:update_genre_view' genre.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="text" placeholder="Name" value="{{genre.name}}" name="name" class="form-control" required/>
+                  <input type="submit" value="Update genre" class="btn btn-primary mt-4" />
+              </form>
+          </div>
+      </div>
+  
+{% endblock content %}
