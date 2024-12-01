@@ -1,0 +1,50 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Add Movie{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Add a New Movie</h2>
+<form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="id_title" class="form-label">Title:</label>
+        <input type="text" name="title" id="id_title" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="id_description" class="form-label">Description:</label>
+        <textarea name="description" id="id_description" class="form-control" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="id_release_date" class="form-label">Release Date:</label>
+        <input type="date" name="release_date" id="id_release_date" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="id_poster" class="form-label">Poster:</label>
+        <input type="file" name="poster" id="id_poster" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="id_genre" class="form-label">Genre:</label><br>
+        {% for genre in genres %}
+            <div class="form-check">
+                <input type="checkbox" name="genre" value="{{ genre.id }}" class="form-check-input" id="genre_{{ genre.id }}">
+                <label class="form-check-label" for="genre_{{ genre.id }}">{{ genre.name }}</label>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb-3">
+        <label for="id_director" class="form-label">Director:</label>
+        <select name="director" id="id_director" class="form-select" required>
+          <option value="">--Select a Director--</option>
+          {% for director in directors %}
+            <option value="{{ director.id }}">{{ director.name }}</option>
+          {% endfor %}
+        </select>
+          <div class="mt-2 d-flex gap-3 align-content-center align-items-center">
+            <p class="m-0">If the director is not added, go to the director page and add it.</p>
+            <a href="{% url 'main:home_view' %}" class="text-decoration-none">Add Director</a>
+          </div>
+      
+      </div>
+    <button type="submit" class="btn btn-primary w-25">Add Movie</button>
+</form>
+{% endblock %}

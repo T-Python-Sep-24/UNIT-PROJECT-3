@@ -1,0 +1,28 @@
+<!-- movie_details.html -->
+<div class="container mt-5">
+    <div class="row">
+        <!-- Movie Poster and Information -->
+        {% for movie in movies %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <!-- Movie Poster -->
+                    <img src="{{ movie.poster.url }}" alt="{{ movie.title }} Poster" class="card-img-top img-fluid" />
+                    
+                    <!-- Movie Information -->
+                    <div class="card-body">
+                        <h5 class="card-title">{{ movie.title }}</h5>
+                        <p><strong>Director:</strong> {{ movie.director.name }}</p>
+                        
+                        <p><strong>Genres:</strong>
+                            {% for genre in movie.genre.all %}
+                                <span class="badge bg-secondary">{{ genre.name }}</span>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                        
+                        <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

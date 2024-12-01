@@ -1,0 +1,49 @@
+
+{% extends 'main/base.html' %}
+
+
+
+{% block title %}
+    {{movie.title}}
+{% endblock title %}
+    
+
+
+
+
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Movie Poster -->
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{{ movie.poster.url }}" alt="{{ movie.title }} Poster" class="card-img-top img-fluid" />
+            </div>
+        </div>
+
+        <!-- Movie Details -->
+        <div class="col-md-8">
+            <div class="card p-3">
+                <h2 class="card-title">{{ movie.title }}</h2>
+                
+                <div class="mb-3">
+                    <strong>Director:</strong> {{ movie.director.name }}
+                </div>
+
+                <div class="mb-3">
+                    <strong>Genres:</strong> 
+                    {% for genre in movie.genre.all %}
+                        <span class="badge bg-secondary">{{ genre.name }}</span>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    <strong>Release Date:</strong> {{ movie.release_date }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+    
