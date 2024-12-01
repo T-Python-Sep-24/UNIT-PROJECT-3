@@ -4,19 +4,19 @@
 {% block main %}
 <main>
     <div class="container mt-5">
-        <h1 class="display-2 text-center p-3">Fund Details</h1>
+        <h1 class="display-4 text-center p-3">Fund Details</h1>
         <div class="row  p-5 shadow rounded">
 
             <div class="col p-3 g-2">
                 <div class="d-flex justify-content-between mb-4">
                     <div class="">
-                        <h1>{{fund.fund_name}}</h1>
+                        <h1 class="">{{fund.fund_name}}</h1>
                     </div>
                     <div>
                         {% if is_bookmarked %}
-                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_check</span></a>
+                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <i class="material-symbols-outlined">bookmark_check</i></a>
                         {% else %}
-                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <span class="material-symbols-outlined">bookmark_add</span></a>
+                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <i class="material-symbols-outlined">bookmark_add</i></a>
                         {% endif %}
 
                         {% if request.user.is_superuser or request.user == fund.fund_owner %}
@@ -32,7 +32,7 @@
                 <p>{{fund.about}}</p>
 
                 <h6>Monthly Stock: {{fund.monthly_stock}}</h6>
-                <div class="mt-3">
+                <div class="d-flex gap-2 align-items-center mt-3">
                     <h4>Members:</h4>
                     {% for member in fund.fund_members.all %}
                         <a href="{% url 'accounts:profile_view' member.username %}"><h5>@{{member}}</h5></a>
@@ -43,23 +43,38 @@
     </div>
     <div class="container mt-5 mb-5">
         {% if reviews %}
-        <h2>Reviews ({{reviews.count}})</h2>
         <div class="container shadow p-5">
+            <h2>Reviews ({{reviews.count}})</h2>
             {% for review in reviews %}
-            <div class="p-2 shadow rounded">
-                <h3>{{review.user.first_name}}{{review.user.last_name}}</h3>
-                <a href="{% url 'accounts:profile_view' review.user.username %}"><h5>@{{review.user.username}}</h5></a>
-                <p class="text-muted">{{review.comment}}</p>
-                <h5>Rating: {{review.rating}}</h5>
+            <div class="p-5 shadow rounded mt-2 mb-5">
+                <div class="d-flex gap-3 justify-content-center">
+                    <h3>{{review.user.first_name}} {{review.user.last_name}}</h3>
+                    <a href="{% url 'accounts:profile_view' review.user.username %}"><h5>@{{review.user.username}}</h5></a>
+                </div>
+                <p class="text-center">comment: {{review.comment}}</p>
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex gap-3 align-items-center">
+                        <p>Rating </p>
+                        {% for i in '12345'|make_list %}
+                            {% if forloop.counter <= review.rating %}
+                                <i class="fas fa-star text-warning"></i>
+                            {% else %}
+                                <i class="far fa-star text-warning"></i>
+                            {% endif %}
+                        {% endfor %}
+
+                    </div>
+
+                    <a href="{% url 'funds_app:delete_review_view' review.id %}"><span class="material-symbols-outlined text-danger">delete</span></a>
+                </div>
                 <p>{{review.reviewed_at}}</p>
-                <a href="{% url 'funds_app:delete_review_view' review.id %}"><span class="material-symbols-outlined">delete</span></a>
             </div>
             {% endfor %}
         </div>
         {% endif %}
         {% if request.user.is_authenticated %}
-        <h3 class="mt-4">Add new Review</h3>
-        <form class="d-flex flex-column gap-4 shadow rounded p-5 m-5" action="{% url 'funds_app:add_review_view' fund.id %}" method="post">
+        <form class="d-flex flex-column gap-4 shadow rounded p-5 mt-5" action="{% url 'funds_app:add_review_view' fund.id %}" method="post">
+            <h3 class="mt-4">Add new Review</h3>
             {% csrf_token %}
             <div>
 
@@ -67,14 +82,20 @@
                 <textarea class="form-control" id="review" name="comment" required placeholder="review"></textarea>
             </div>
 
-            <div class="d-flex gap-4 align-items-center">
-                <p class="form-label m-0 p-0">Rating: </p>
-                <div class="rate d-flex gap-2">
+            <div class="">
 
-                    {% for rate, value in rates %}
-                    <input type="radio" id="{{rate}}" name="rating" value="{{rate}}" required/>
-                    <label for="{{rate}}" title="text">{{rate}}</label>
-                    {% endfor %}
+                <div class="form-outline">
+
+                    <p class="form-label">Rating: </p>
+                    <div class="star-rating">
+                        {% for rate, value in rates reversed %}
+                        <input type="radio" id="star{{ rate }}" name="rating" value="{{ rate }}" required/>
+                        <label for="star{{ rate }}" class="star">
+                            <i class="far fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </label>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
             <input type="submit" name="Add">

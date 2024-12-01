@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'main',
     'funds_app',
     'accounts',
+    'payments',
 ]
 
 MIDDLEWARE = [

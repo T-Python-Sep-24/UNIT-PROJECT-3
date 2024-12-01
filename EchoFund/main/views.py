@@ -11,8 +11,9 @@ from accounts.models import UserMessage
 # Create your views here.
 
 def home_view(request: HttpRequest):
-
-    msgs = UserMessage.objects.filter(user = request.user, is_viewed = False)
+    msgs= []
+    if request.user.is_authenticated:
+        msgs = UserMessage.objects.filter(user = request.user, is_viewed = False)
 
     funds = Fund.objects.all()[:3]
     testimonials = Testimonial.objects.all()

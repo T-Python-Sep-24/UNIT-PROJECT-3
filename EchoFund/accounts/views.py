@@ -139,6 +139,7 @@ def read_message(request: HttpRequest, msg_id):
     messages.success(request, 'Read Message', 'alert-success')
     return redirect('accounts:messages_view', user_name = request.user.username)
 
+
 def unread_message(request: HttpRequest, msg_id):
 
 
@@ -148,11 +149,13 @@ def unread_message(request: HttpRequest, msg_id):
     messages.warning(request, 'Unread Message', 'alert-warning')
     return redirect('accounts:messages_view', user_name = request.user.username)
 
+
 def delete_message(request: HttpRequest, msg_id):
 
-    msg = UserMessage.objects.get(pk = msg_id)
+    if request.user.is_authenticated:
+        msg = UserMessage.objects.get(pk = msg_id)
 
-    msg.delete()
+        msg.delete()
 
     messages.warning(request, 'message was deleted Successfully', 'alert-warning')
     return redirect('accounts:messages_view', user_name = request.user.username)

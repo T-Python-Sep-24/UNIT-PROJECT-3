@@ -179,6 +179,16 @@
                             <li>
                                 <a class="dropdown-item" href="{% url 'funds_app:user_funds_view' %}">My Funds</a>
                             </li>
+                                {% if request.user.wallet %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'payments:wallet_details' request.user.wallet.id %}">My Wallet</a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'payments:add_wallet' %}">Add Wallet</a>
+                                    </li>
+                                {% endif %}
+
                             {% endif %}
 
                         </ul>
@@ -396,14 +406,28 @@
 {% endblock %}
 <script>
     const toastTrigger = document.getElementById('liveToastBtn')
-const toastLiveExample = document.getElementById('liveToast')
+    const toastLiveExample = document.getElementById('liveToast')
 
-if (toastTrigger) {
-  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-  toastTrigger.addEventListener('click', () => {
-    toastBootstrap.show()
-  })
-}
+    if (toastTrigger) {
+      const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+      toastTrigger.addEventListener('click', () => {
+        toastBootstrap.show()
+      })
+    }
+
+    document.getElementById('toggleCVV').addEventListener('click', function() {
+     const cvv = document.getElementById('cvv');
+     const icon = document.getElementById('toggleIcon');
+
+     if (cvv.type === 'password') {
+       cvv.type = 'text';
+       icon.className = 'far fa-eye-slash';
+     } else {
+       cvv.type = 'password';
+       icon.className = 'far fa-eye';
+     }
+    });
+
 </script>
 </body>
 </html>

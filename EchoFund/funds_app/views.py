@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.db import transaction
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
@@ -7,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .models import Fund, Review
 from accounts.models import Bookmark, UserMessage
+from payments.models import Wallet
 # Create your views here.
 
 
@@ -48,6 +50,7 @@ def fund_details_view(request: HttpRequest, fund_id):
     is_bookmarked = Bookmark.objects.filter(fund=fund, user=request.user).exists() if request.user.is_authenticated else False
 
     return render(request, 'fund_details.html', context={'is_bookmarked':is_bookmarked, 'fund':fund, 'reviews':reviews, 'rates':Review.Rates.choices})
+
 
 def add_fund_view(request: HttpRequest):
 
@@ -185,7 +188,6 @@ def delete_fund_view(request: HttpRequest, fund_id):
             subject = 'Delete Fund',
             content = 'You Deleted a Fund',
         )
-
         new_user_message.save()
         messages.success(request, 'Fund was deleted successfully', 'alert-success')
     return redirect('funds_app:all_funds_view')
@@ -270,31 +272,49 @@ def add_bookmark_view(request: HttpRequest, fund_id):
 
 def user_funds_view(request: HttpRequest):
 
+    if not request.user.is_authenticated:
+        messages.error(request, "Register to create new Fund", 'alert-danger')
+        return redirect('accounts:sign_in')
+
     funds = Fund.objects.filter(fund_owner = request.user)
     return render(request, 'user_funds.html', context={'funds':funds})
 
 
 def fund_participate_view(request: HttpRequest, fund_id):
 
-    fund = Fund.objects.get(pk=fund_id)
-    try:
-        if fund.is_available:
-            fund.fund_members.add(request.user.id)
-            messages.success(request, "Your Participated in this Fund successfully", "alert-success")
-            # Send message to user
-            new_user_message = UserMessage(
-                sender = User.objects.get(pk=1),
-                user = request.user,
-                subject = 'Enroll Fund',
-                content = 'You Enrolled in a Fund',
-            )
+    if not request.user.is_authenticated:
+        messages.error(request, "Register to Participate in Funds", 'alert-danger')
+        return redirect('accounts:sign_in')
 
-            new_user_message.save()
+    fund = Fund.objects.get(pk=fund_id)
+    wallet = request.user.wallet
+
+    try:
+        if fund.is_available and wallet.balance >= 3000:
+            with transaction.atomic():
+                fund.fund_members.add(request.user.id)
+
+                # Send message to user
+                wallet.balance -= fund.monthly_stock
+                wallet.save()
+                new_user_message = UserMessage(
+                    sender = User.objects.get(pk=1),
+                    user = request.user,
+                    subject = 'Enroll in Fund ',
+                    content = f'You Enrolled in a Fund {fund.fund_name} and substitute {fund.monthly_stock} form your wallet',
+                )
+                new_user_message.save()
+                messages.success(request, "Your Participated in this Fund successfully", "alert-success")
+
+        elif wallet.balance < 3000:
+            messages.warning(request, "Your wallet Balance doesn't meet the minimum requirement for enrolling in funds", 'alert-warning')
+            return redirect('funds_app:all_funds_view')
         else:
             messages.warning(request, "This Fund is Not available for participation", 'alert-warning')
-        return redirect('funds_app:fund_details_view', fund_id=fund_id)
+            return redirect('funds_app:all_funds_view')
+        return redirect('funds_app:all_funds_view')
 
     except Exception as e:
         print(e)
-        messages.error(request, "couldn't Participate in this", "alert-danger")
+        messages.error(request, "couldn't Participate in this Fund", "alert-danger")
 

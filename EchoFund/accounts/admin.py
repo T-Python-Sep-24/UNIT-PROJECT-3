@@ -5,6 +5,9 @@ from .models import Profile, Bookmark, UserMessage
 admin.site.register(Profile)
 admin.site.register(Bookmark)
 
-class msgAdmin(admin.ModelAdmin):
+
+class MsgAdmin(admin.ModelAdmin):
     list_display = 'sender', 'is_viewed'
-admin.site.register(UserMessage, msgAdmin)
+
+
+admin.site.register(UserMessage, MsgAdmin)
