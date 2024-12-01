@@ -9,6 +9,31 @@
 
 
 {% block content %}
-    <h1>Welcome !!</h1>
+<div class="position-relative">
+    <video autoplay loop muted class="w-100" style="min-height: 100vh; object-fit: cover;">
+        <source src="{% static 'vidoes/home.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Welcome Message and Button -->
+    <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
+        <div class="display-4 fw-bold mb-4 ">Welcome to Our Movie World!</div>
+        <p class="lead mb-4">Explore the latest movies and more...</p>
+        <a href="{% url 'movies:all_movies_view' %}" class="btn btn-danger btn-lg">Go to Movies</a>
+    </div>
+    
+</div>
+<hr class="border-5  border-dark opacity-50 ">
+        
+        <a href="{% url 'movies:all_movies_view' %}" class="text-decoration-none text-dark">
+            <div class="d-flex justify-content-between align-items-center">
+                <H1 class="text-dark">Latest Movies on Theater</H1>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                    </svg>
+            </div>
+        </a>
+        {% include 'movies/movies_list.html' %}
+
 {% endblock content %}
     

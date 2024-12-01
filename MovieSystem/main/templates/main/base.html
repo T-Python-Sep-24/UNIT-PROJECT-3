@@ -35,24 +35,27 @@
                                 <li><a class="dropdown-item" href="">Directors</a></li>
                             </ul>
                         </li>
-        
-                        <!-- Add Dropdown -->
+                        
+                        {% if request.user.is_staff %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdd" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Add
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdd">
-                                <li><a class="dropdown-item" href="">New Movie</a></li>
-                                <li><a class="dropdown-item" href="">New Actor</a></li>
+                                <li><a class="dropdown-item" href="{% url 'movies:add_movie_view' %}">New Movie</a></li>
+                                
                                 <li><a class="dropdown-item" href="">New Director</a></li>
                             </ul>
                         </li>
-        
-                        <!-- Book Now -->
+                        {% endif %}
+                            
+                        {% if request.user.is_authenticated %}
+                            <!-- Book Now -->
                         <li class="nav-item">
                             <a class="nav-link" href="">Book Now</a>
                         </li>
-        
+                        {% endif %}
+                            
                         <!-- Login/Sign Up Buttons -->
                         {% if request.user.is_authenticated %}
                         <div class="d-flex  align-content-center align-items-center">

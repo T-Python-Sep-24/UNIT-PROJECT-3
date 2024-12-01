@@ -1,49 +1,54 @@
-
 {% extends 'main/base.html' %}
 
-
-
 {% block title %}
-    {{movie.title}}
+    {{ movie.title }}
 {% endblock title %}
-    
-
-
-
-
 
 {% block content %}
 <div class="container mt-5">
     <div class="row">
-        <!-- Movie Poster -->
-        <div class="col-md-4">
+        <!-- Movie Information -->
+        <div class="col-md-6 mb-4">
             <div class="card">
+                <!-- Movie Poster -->
                 <img src="{{ movie.poster.url }}" alt="{{ movie.title }} Poster" class="card-img-top img-fluid" />
+
+                <!-- Movie Information -->
+                <div class="card-body">
+                    <h5 class="card-title">{{ movie.title }}</h5>
+                    <p><strong>Director:</strong> {{ movie.director.name }}</p>
+                    <p><strong>Description:</strong> {{ movie.description }}</p>
+                    <p><strong>Genres:</strong>
+                        {% for genre in movie.genre.all %}
+                            <span class="badge bg-secondary">{{ genre.name }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+                </div>
             </div>
         </div>
 
-        <!-- Movie Details -->
-        <div class="col-md-8">
-            <div class="card p-3">
-                <h2 class="card-title">{{ movie.title }}</h2>
-                
-                <div class="mb-3">
-                    <strong>Director:</strong> {{ movie.director.name }}
-                </div>
-
-                <div class="mb-3">
-                    <strong>Genres:</strong> 
-                    {% for genre in movie.genre.all %}
-                        <span class="badge bg-secondary">{{ genre.name }}</span>{% if not forloop.last %}, {% endif %}
+        <!-- Screening Times -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Screening Times</h5>
+                    {% for date, screenings in screenings_by_date.items %}
+                        <h6 class="mt-3">{{ date }}</h6>
+                        <div class="list-group">
+                            {% for screening in screenings %}
+                                {% if screening.is_available %}
+                                <a href="" class="list-group-item list-group-item-action" >
+                                    <strong>{{ screening.showtime|date:"H:i" }}</strong> - Price: {{ screening.price }} SAR
+                                    <br>
+                                </a>
+                                {% endif %}  
+                            {% endfor %}
+                        </div>
                     {% endfor %}
-                </div>
-
-                <div class="mb-3">
-                    <strong>Release Date:</strong> {{ movie.release_date }}
                 </div>
             </div>
         </div>
     </div>
 </div>
 {% endblock content %}
-    

@@ -10,7 +10,7 @@
                     
                     <!-- Movie Information -->
                     <div class="card-body">
-                        <h5 class="card-title">{{ movie.title }}</h5>
+                        <a href="{% url 'movies:movie_detail_view' movie.id %}" class="card-title"><h5 class="card-title">{{ movie.title }}</h5></a>
                         <p><strong>Director:</strong> {{ movie.director.name }}</p>
                         
                         <p><strong>Genres:</strong>

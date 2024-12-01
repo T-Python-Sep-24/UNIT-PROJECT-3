@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Movie, Genre, Director
+from .models import Movie, Genre, Director, Screening
 from .forms import MovieForm
 from django.http import HttpRequest,HttpResponse
 from django.contrib.auth.models import User
@@ -47,4 +47,34 @@ def all_movies_view(request:HttpRequest):
     paginator = Paginator(movies, 10)
     movie_page = paginator.get_page(page_number)
     return render(request,"movies/all_movies.html",context={"movies":movie_page,"genres":genres,"directors":directors})
+
+
+def movie_detail_view(request: HttpRequest, movie_id: int):
+    movie = Movie.objects.get(pk=movie_id)
+    
+    
+    screenings = movie.screening_set.all().order_by('showtime')
+    
+    screenings_by_date = {}
+    
+    
+    for screening in screenings:
+        screening_date = screening.showtime.date()
+        
+        if screening_date not in screenings_by_date:
+            screenings_by_date[screening_date] = []
+        
+        screenings_by_date[screening_date].append(screening)
+    
+    for screening in screenings:
+        available_seat = any(available for seat, available in screening.get_seats().items() if available)
+        screening.is_available = available_seat
+    
+    return render(request, 'movies/movie_detail.html', context={'movie': movie, 'screenings_by_date': screenings_by_date})
+
+def movie_update_view(request:HttpRequest,movie_id:int):
+    pass
+
+def delete_movie_view(request:HttpRequest,movie_id:int):
+    pass
 
