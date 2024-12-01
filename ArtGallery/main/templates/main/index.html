@@ -23,42 +23,18 @@
 <section class="container-md text-beige-100 text-center light-bg mb-5">
     <h1 class="display-6 text-white-shadow mb-4">Pieces by Our Artists</h1>
     <div class="pieces-grid">
+        {% for piece in pieces %}
         <div class="pieces">
             <div class="card text-light border-0">
-                <img src="{% static 'images/painting1.jpg' %}" class="card-img shadow-lg" alt="Art Piece">
-                <div class="card-img-overlay align-content-end">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text"><small>Last updated 3 mins ago</small></p>
+                <img src="{{piece.photo.url}}" class="card-img shadow-lg" alt="Art Piece">
+                <div class="card-img-overlay align-content-end text-start">
+                    <a href="{% url 'artPieces:artPieceDetailsView' piece.id %}" class="my-0 fs-4 text-beige-300 text-white-shadow hover-color">{{piece.name}}</a>
+                    <a href="{% url 'artists:artistDetailsView' piece.artist.id %}" class="my-0 fs-5 d-block hover-color"><span class="text-beige-200">By:</span> {{piece.artist.fullName}}</a>
+                    <p class="my-0 text-offwhite"><span class="text-beige-200">Price:</span> {{piece.price}}.00 SAR</p>
                 </div>
             </div>
         </div>
-        <div class="pieces">
-            <div class="card text-light border-0">
-                <img src="{% static 'images/painting2.jpg' %}" class="card-img shadow-lg" alt="Art Piece">
-                <div class="card-img-overlay align-content-end">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text"><small>Last updated 3 mins ago</small></p>
-                </div>
-            </div>
-        </div>
-        <div class="pieces">
-            <div class="card text-light border-0">
-                <img src="{% static 'images/painting2.jpg' %}" class="card-img shadow-lg" alt="Art Piece">
-                <div class="card-img-overlay align-content-end object-fit-fill">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text"><small>Last updated 3 mins ago</small></p>
-                </div>
-            </div>
-        </div>
-        <div class="pieces">
-            <div class="card text-light border-0">
-                <img src="{% static 'images/painting1.jpg' %}" class="card-img shadow-lg" alt="Art Piece">
-                <div class="card-img-overlay align-content-end">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text"><small>Last updated 3 mins ago</small></p>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </section>
 
@@ -68,13 +44,18 @@
     <div class="mx-auto" data-direction="left" data-speed="fast">
         <!-- scroller-inner -->
         <div class="scroller-inner">
+            {% for artist in artists %}
             <div class="card text-light border-0">
-                <img src="{% static 'images/painting2.jpg' %}" class="card-img shadow" alt="Art Piece">
-                <div class="card-img-overlay align-content-end">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text"><small>Last updated 3 mins ago</small></p>
+                <img src="{{artist.photo.url}}" class="card-img shadow" alt="Artist">
+                <div class="card-img-overlay align-content-end text-start">
+                    <a href="{% url 'artists:artistDetailsView' artist.id %}" class="my-0 fs-5 text-white-shadow">{{artist.fullName}}</a>
+                    <p class="mb-1 text-offwhite"><span class="text-beige-200">Exhibit:</span> {{artist.exhibit}}</p>
+                    <div class="d-flex">
+                        <a href="{% url 'artists:artistDetailsView' artist.id %}" class="btn-beige-200 fw-bold small"><small>More..</small></a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 </section>

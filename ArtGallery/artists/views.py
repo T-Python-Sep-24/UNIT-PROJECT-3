@@ -91,7 +91,7 @@ def artistDetailsView(request: HttpRequest, artistId:int):
 # Display artists View
 def displayArtistsView(request: HttpRequest):
 
-    artists = Artist.objects.all()
+    artists = Artist.objects.all().order_by('-addedAt')
     
     if 'search' in request.GET and len(request.GET['search']) >= 2:
         artists = artists.filter(fullName__contains=request.GET['search'])
@@ -100,6 +100,6 @@ def displayArtistsView(request: HttpRequest):
     pageNumber = request.GET.get('page', 1)
     page_obj = paginator.get_page(pageNumber)
 
-    response = render(request, 'artists/displayArtists.html', {'artists': page_obj, 'selected': filter})
+    response = render(request, 'artists/displayArtists.html', {'artists': page_obj})
     
     return response

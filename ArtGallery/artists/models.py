@@ -6,6 +6,7 @@ class Artist(models.Model):
     birthDate = models.DateField()
     exhibit = models.CharField(max_length=1024)
     photo = models.ImageField(upload_to="images/atrists/", default="images/usersPfps/defaultPfp.jpg")
+    addedAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"{self.fullName}"

@@ -11,10 +11,24 @@
         <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
         <div class="d-flex justify-content-center mb-4">
             {% if user.is_staff and perms.artists.add_artist %}
-            <a href="{% url 'artists:addArtistView' %}" class="btn-peach-dark">New</a>
+            <a href="{% url 'artists:addArtistView' %}" class="btn-beige-300">New</a>
             {% endif %}
         </div>
-       
+       <!-- Search bar -->
+        <form action="{% url 'artists:displayArtistsView' %}{% querystring %}" method="get" class="my-3 needs-validation"
+        novalidate>
+            <div class="input-group justify-content-center">
+                <input class="form-control text-offwhite bg-blur-lighter focus-ring focus-ring-dark rounded-start-2 border-0" placeholder="Search.." style="max-width: 300px;"
+                    type="search" aria-label="Search" name="search"
+                    value="{{request.GET.search}}" minlength="2" required>
+                <button class="btn-search rounded-end-2" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+                <div class="invalid-feedback">
+                    Please enter more than 2 letters.
+                </div>
+            </div>
+        </form>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-4">
             {% for artist in artists %}
             <div class="col">

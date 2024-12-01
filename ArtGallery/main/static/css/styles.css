@@ -149,17 +149,14 @@ label {
 
 .btn-peach-dark:hover {
     background-color: #8d5c4f;
-    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
-}
-
-.btn-peach-dark:hover {
     transform: translateY(-2px);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
 }
 
 .btn-peach-dark:active {
     background-color: #532f2c;
     box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
-    transform: translateY(0);
+    transform: translateY(0px);
 }
 
 .btn-beige-200 {
@@ -182,11 +179,8 @@ label {
 
 .btn-beige-200:hover {
     background-color: #b19389;
-    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
-}
-
-.btn-beige-200:hover {
     transform: translateY(-2px);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
 }
 
 .btn-beige-200:active {
@@ -216,11 +210,8 @@ label {
 .btn-beige-300:hover {
     background-color: #7c6263;
     color: #ffefe9;
-    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
-}
-
-.btn-beige-300:hover {
     transform: translateY(-2px);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
 }
 
 .btn-beige-300:active {
@@ -250,11 +241,8 @@ label {
 .btn-beige-400:hover {
     background-color: #937777;
     color: #ffefe9;
-    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
-}
-
-.btn-beige-400:hover {
     transform: translateY(-2px);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
 }
 
 .btn-beige-400:active {
@@ -345,6 +333,7 @@ label {
 .pieces:nth-child(1) img,
 .pieces:nth-child(4) img {
     object-fit: cover;
+    aspect-ratio: 2/3;
     max-height: 60%;
 }
 
@@ -352,7 +341,6 @@ label {
 .pieces:nth-child(3) img {
     object-fit: cover;
     aspect-ratio: 3/2;
-    max-height: 360px;
 }
 
 .card-img-overlay {
@@ -522,6 +510,35 @@ label {
     opacity: 1;
     visibility: visible;
     transform: scale(1);
+}
+
+.btn-search {
+    display: block;
+    padding: 0 .7rem;
+    align-items: center;
+    background-color: #debbb0;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.15) 0 1px 3px;
+    color: #4a3437;
+    font-size: 1.1rem;
+    cursor: pointer;
+    justify-content: center;
+    transition: all 250ms;
+    user-select: none;
+    -webkit-user-select: none;
+    width: auto;
+}
+
+.btn-search:hover {
+    background-color: #c3a398;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.btn-search:active {
+    background-color: #624c4e;
+    color: #fbeeea;
+    box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
 }
 
 /* Display artists page */

@@ -9,11 +9,25 @@
         Art Pieces
         </h1>
         <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
-        <div class="d-flex justify-content-center mb-4">
+        <div class="d-flex justify-content-center mb-2">
             {% if user.is_staff and perms.artPieces.add_artpiece %}
             <a href="{% url 'artPieces:addArtPieceView' %}" class="btn-beige-300">New</a>
             {% endif %}
         </div>
+        <form action="{% url 'artPieces:displayArtPiecesView' %}{% querystring %}" method="get" class="my-3 needs-validation"
+        novalidate>
+            <div class="input-group justify-content-center">
+                <input class="form-control text-offwhite bg-blur-lighter focus-ring focus-ring-dark rounded-start-2 border-0" placeholder="Search.." style="max-width: 300px;"
+                    type="search" aria-label="Search" name="search"
+                    value="{{request.GET.search}}" minlength="2" required>
+                <button class="btn-search rounded-end-2" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+                <div class="invalid-feedback">
+                    Please enter more than 2 letters.
+                </div>
+            </div>
+        </form>
 
         {% include 'artPieces/components/piecesList.html' %}
         

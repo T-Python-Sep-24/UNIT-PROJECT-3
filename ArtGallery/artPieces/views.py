@@ -84,12 +84,10 @@ def deleteArtPieceView(request: HttpRequest, pieceId:int):
     return response
 
 # Diplay art pieces View
-def displayArtPiecesView(request: HttpRequest, filter: str):
+def displayArtPiecesView(request: HttpRequest):
 
     artists = Artist.objects.all()
-
-    if filter == 'all':
-        pieces = ArtPiece.objects.all()
+    pieces = ArtPiece.objects.all().order_by('-addedAt')
     
     if 'search' in request.GET and len(request.GET['search']) >= 2:
         pieces = pieces.filter(name__contains=request.GET['search']).order_by('-addedAt')
@@ -104,7 +102,7 @@ def displayArtPiecesView(request: HttpRequest, filter: str):
     pageNumber = request.GET.get('page', 1)
     page_obj = paginator.get_page(pageNumber)
 
-    response = render(request, 'artPieces/displayPieces.html', {'pieces': page_obj, 'selected': filter, 'artists': artists})
+    response = render(request, 'artPieces/displayPieces.html', {'pieces': page_obj, 'artists': artists})
     
     return response
 
