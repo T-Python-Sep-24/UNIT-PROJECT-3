@@ -150,7 +150,9 @@
     <h2>Dashboard</h2>
     <a href="{% url 'dashboard:dashboard_view' %}" class="{% if data_filter == 'all' %}active{% endif %}">All</a>
     <a href="{% url 'dashboard:dashboard_view' %}?data=products" class="{% if data_filter == 'products' %}active{% endif %}">Products</a>
+    {% if request.user.is_superuser  %}
     <a href="{% url 'dashboard:dashboard_view' %}?data=artists" class="{% if data_filter == 'artists' %}active{% endif %}">Artists</a>
+    {% endif %}
 </div>
 
 <div class="header">
@@ -164,16 +166,19 @@
     </form>
     {% if data_filter == 'products' %}
     <a class="btn btn-dark ms-auto" href="{% url 'services:add_product_view' %}">Add Product</a>
+    {% if request.user.is_superuser  %}
     <a class="btn btn-dark ms-auto" href="{% url 'providers:add_artist_view' %}">Add Artist</a>
     {% endif %}
+    {% endif %}
 </div>
-
+{% if product  %}
 <div class="main-content">
     <h2>Products</h2>
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>Name</th>
+                <th>user</th>
                 <th>About</th>
                 <th>City</th>
                 <th>Price</th>
@@ -184,9 +189,11 @@
             {% for pro in product %}
             <tr>
                 <td>{{ pro.name }}</td>
+                <td>{{ pro.artist.name }}</td>
                 <td>{{ pro.about }}</td>
                 <td>{{ pro.city }}</td>
                 <td>{{ pro.price }}</td>
+                
                 <td>
                     <a href="{% url 'services:product_detail_view' pro.id %}" class="btn btn-dark">View</a>
                     <a href="{% url 'services:update_product_view' pro.id %}" class="btn btn-secondary">Edit</a>
@@ -197,6 +204,8 @@
         </tbody>
     </table>
 </div>
+{% endif %}
+{% if request.user.is_superuser  %}
 
 <div class="main-content">
     <h2>Artists</h2>
@@ -227,4 +236,5 @@
         </tbody>
     </table>
 </div>
+{% endif %}
 {% endblock %}

@@ -108,6 +108,7 @@
                         <strong>About:</strong> {{ product.about }}<br>
                         <strong>Available In:</strong> {{ product.city }}<br>
                         <strong>Price:</strong> ${{ product.price }}
+                        <strong>Artist:</strong> {{ product.artist.name }}
                     </p>
                     <a href="{% url 'services:product_detail_view' product.id %}" class="btn">View Details</a>
                 </div>
@@ -115,6 +116,7 @@
         </div>
         {% endfor %}
     </div>
+    
 </div>
 
 <nav aria-label="Page navigation">
