@@ -51,11 +51,11 @@ label {
 }
 
 .text-beige-200 {
-    color: #e9bfb1 !important;
+    color: #e9bfb1;
 }
 
 .text-beige-300 {
-    color: #d8a796 !important;
+    color: #d8a796;
 }
 
 .text-beige-400 {
@@ -118,11 +118,11 @@ label {
     transform-origin: bottom center;
 }
 
-.hover-color{
+.hover-color {
     transition: all 0.4s;
 }
 
-.hover-color:hover{
+.hover-color:hover {
     color: #fcf6f5;
     text-shadow: 0 0 10px rgba(255, 225, 229, 0.7);
 
@@ -550,4 +550,40 @@ label {
 .custom-img {
     object-fit: cover;
     aspect-ratio: 1/1;
+}
+
+/* 404 styling */
+.four {
+    fill: none;
+    stroke: #72413d;
+    stroke-width: 10;
+    stroke-dasharray: 200 100;
+}
+
+.zero {
+    fill: none;
+    stroke: #81534e;
+    stroke-width: 10;
+    stroke-dasharray: 200 100;
+}
+
+.animate {
+    -webkit-animation: swirls 2s linear infinite;
+    -moz-animation: swirls 2s linear infinite;
+    -o-animation: swirls 2s linear infinite;
+    animation: swirls 2s linear infinite;
+}
+
+.img-404 {
+    height: 200px
+}
+
+@keyframes swirls {
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: 300;
+    }
 }
