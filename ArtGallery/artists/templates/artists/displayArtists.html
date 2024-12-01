@@ -11,7 +11,7 @@
         <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
         <div class="d-flex justify-content-center mb-4">
             {% if user.is_staff and perms.artists.add_artist %}
-            <a href="{% url 'artists:addArtistView' %}" class="btn-beige-400">New</a>
+            <a href="{% url 'artists:addArtistView' %}" class="btn-peach-dark">New</a>
             {% endif %}
         </div>
        

@@ -129,7 +129,7 @@ label {
 }
 
 /* buttons */
-.btn-beige-400 {
+.btn-peach-dark {
     display: block;
     padding: 0 .7rem;
     align-items: center;
@@ -147,16 +147,16 @@ label {
     width: auto;
 }
 
-.btn-beige-400:hover {
+.btn-peach-dark:hover {
     background-color: #8d5c4f;
     box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
 }
 
-.btn-beige-400:hover {
+.btn-peach-dark:hover {
     transform: translateY(-2px);
 }
 
-.btn-beige-400:active {
+.btn-peach-dark:active {
     background-color: #532f2c;
     box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
     transform: translateY(0);
@@ -426,7 +426,7 @@ label {
 }
 
 .profile:nth-child(2) {
-    background-color: rgba(247, 211, 198, 0.25);
+    background-color: rgba(247, 211, 198, 0.4);
     backdrop-filter: blur(15px);
     align-items: start;
     grid-area: two;
