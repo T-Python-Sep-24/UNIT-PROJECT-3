@@ -73,8 +73,36 @@ def movie_detail_view(request: HttpRequest, movie_id: int):
     return render(request, 'movies/movie_detail.html', context={'movie': movie, 'screenings_by_date': screenings_by_date})
 
 def movie_update_view(request:HttpRequest,movie_id:int):
-    pass
+    movie=Movie.objects.get(pk=movie_id)
+    if not request.user.is_staff:
+        messages.warning(request,'You do not have permission','alert-warning')
+        return redirect('movies:movie_detail_view',movie_id=movie.id)
+    
+   
+    directors=Director.objects.all()
+    genres=Genre.objects.all()
+    
+    if request.method == 'POST':
+        movie_form=MovieForm(instance=movie,data=request.POST,files=request.FILES)
+        if movie_form.is_valid():
+            movie_form.save()
+            messages.success(request,' movie updated successfully','alert-success')
+            return redirect('movies:movie_detail_view',movie_id=movie.id)
+        else:
+            messages.error(request,movie_form.errors,'alert-danger')
+    return render(request,'movies/update_movie.html',context={'movie':movie,'directors':directors,'genres':genres})
 
 def delete_movie_view(request:HttpRequest,movie_id:int):
-    pass
+    movie=Movie.objects.get(pk=movie_id)
+    if not request.user.is_staff:
+        messages.warning(request,'You do not have permission','alert-warning')
+        return redirect('movies:movie_detail_view',movie_id=movie.id)
+    try:
+            movie.delete()
+            messages.success(request, f"Deleted {movie.title} successfully", "alert-success")
+            return redirect ("movies:all_movies_view")
+    except Exception as e:
+            print(e)
+            messages.error(request, f"Couldn't Delete {movie.title} ", "alert-danger")
+            return redirect ("movies:all_movies_view")
 
