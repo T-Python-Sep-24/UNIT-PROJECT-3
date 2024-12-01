@@ -7,7 +7,7 @@ from django.contrib import messages
 from .forms import ProfileForm
 from django.contrib.auth.decorators import login_required
 
-from products.models import Product
+from products.models import Product,Review
 from .models import Cart, CartItem ,Profile
 # Create your views here.
 
@@ -65,12 +65,16 @@ def log_out(request: HttpRequest):
 
 def user_profile(request:HttpRequest, user_name):
     user = User.objects.get(username=user_name)
-    
+    product = Product.objects.first()
     profile = Profile.objects.filter(user=user).first()
+    reviews = Review.objects.filter(user=user)
+
 
     context = {
         "user": user,
         "profile": profile,
+        'product': product,
+        'reviews': reviews,
     }
 
     return render(request, "accounts/user_profile.html", context)

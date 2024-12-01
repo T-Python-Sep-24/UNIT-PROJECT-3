@@ -3,6 +3,8 @@ from django.http import Http404, HttpRequest,HttpResponse
 from .models import Product, Review, Category
 from products.forms import ProductForm
 from django.contrib import messages
+from django.contrib.auth.models import User
+
 
 # Create your views here.
 
@@ -11,9 +13,8 @@ def all_product(request:HttpRequest):
     return render(request, 'products/all_product.html', {'products': products})
 
 
-def detail_product(request:HttpRequest ,product_id:int):
+def detail_product(request, product_id):
     product = Product.objects.get(pk=product_id)
-
     return render(request, 'products/detail_product.html', {'product': product})
 
 
@@ -72,53 +73,41 @@ def delete_product(request: HttpRequest, product_id: int):
     return redirect('products:all_product') 
 
 
-def product_reviews_view(request, product_id):
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import Product, Review
+
+def add_review_view(request: HttpRequest, product_id):
+    if not request.user.is_authenticated:
+        messages.error(request, "Only registered users can add a review.", "alert-danger")
+        return redirect("accounts:sign_in")
+
+    if request.method == "POST":
+        product_object = get_object_or_404(Product, pk=product_id)
+
+        new_review = Review(
+            product=product_object,
+            user=request.user,
+            comment=request.POST["comment"],
+            rating=request.POST["rating"]
+        )
+        new_review.save()
+
+        messages.success(request, "Review added successfully!", "alert-success")
+
+    return redirect("products:detail_product", product_id=product_id)
+
+def delete_review_view(request: HttpRequest, review_id):
     try:
-        product = Product.objects.get(pk=product_id)
-    except Product.DoesNotExist:
-        raise Http404("Product not found")
-    
-    reviews = Review.objects.filter(product=product).order_by('-created_at')
+        review = Review.objects.get(pk=review_id)
+        product_id = review.product.id
 
-    return render(request, 'reviews/product_reviews.html', {'product': product, 'reviews': reviews})
-
-
-def add_review_view(request, product_id):
-    try:
-        product = Product.objects.get(pk=product_id)
-    except Product.DoesNotExist:
-        raise Http404("Product not found")
-    
-    if request.method == 'POST':
-        rating = request.POST.get('rating')
-        comment = request.POST.get('comment')
-
-        if rating and comment:
-            review = Review.objects.create(
-                product=product,
-                user=request.user,
-                rating=rating,
-                comment=comment
-            )
-            review.save()
-            messages.success(request, 'Review added successfully!')
+        if not (request.user.is_staff and request.user.has_perm("products.delete_review")) and review.user != request.user:
+            messages.warning(request, "You are not authorized to delete this review.", "alert-warning")
         else:
-            messages.error(request, 'All fields are required.')
-        
-        return redirect('product_reviews', product_id=product.id)
-
-    return render(request, 'reviews/add_review.html', {'product_id': product_id})
-
-
-def delete_review_view(request, review_id):
-    try:
-        review = Review.objects.get(pk=review_id, user=request.user)
+            review.delete()
+            messages.success(request, "Review deleted successfully!", "alert-success")
     except Review.DoesNotExist:
-        raise Http404("Review not found")
-    
-    if request.method == 'POST':
-        review.delete()
-        messages.success(request, 'Review deleted successfully!')
-        return redirect('product_reviews', product_id=review.product.id)
+        messages.error(request, "Review not found.", "alert-danger")
 
-    return render(request, 'reviews/delete_review.html', {'review': review})
+    return redirect("products:detail_product", product_id=product_id)
