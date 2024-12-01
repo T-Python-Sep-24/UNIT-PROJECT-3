@@ -12,4 +12,6 @@ urlpatterns = [
 
     path('comment/add/<int:pieceId>', views.addCommentView, name="addCommentView"),
     path('comment/delete/<int:commentId>', views.deleteCommentView, name="deleteCommentView"),
+    
+    path('favorite/<int:pieceId>', views.addFavoriteView, name="addFavoriteView"),
 ]

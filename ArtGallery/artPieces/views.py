@@ -117,8 +117,9 @@ def artPieceDetailsView(request: HttpRequest, pieceId:int):
     else:
 
         relatedPieces = ArtPiece.objects.exclude(pk=pieceId).filter(artist=piece.artist)[0:3]
+        isFavorite = Favorite.objects.filter(piece=piece, user=request.user).exists() if request.user.is_authenticated else False
 
-        response = render(request, 'artPieces/pieceDetails.html', {'piece': piece, 'relatedPieces': relatedPieces})
+        response = render(request, 'artPieces/pieceDetails.html', {'piece': piece, 'relatedPieces': relatedPieces, 'isFavorite': isFavorite})
     return response
 
 # Add comment View
@@ -163,4 +164,24 @@ def deleteCommentView(request: HttpRequest, commentId:int):
 
 
 # Add favorite View
+def addFavoriteView(request:HttpRequest, pieceId:id):
+    
+    if not request.user.is_authenticated:
+        messages.error(request, "Only registered users can add to favorite.", "alert-danger")
+    else:
+        try:
+            piece = ArtPiece.objects.get(pk=pieceId)
+            
+            favorite = Favorite.objects.filter(user=request.user, piece=piece).first()
+            if not favorite:
+                newFavorite = Favorite(user=request.user, piece=piece)
+                newFavorite.save()
+                messages.success(request, f"'{piece.name}' was added to favorites.", "alert-success")
+            else:
+                favorite.delete()
+                messages.warning(request, f"'{piece.name}' was removed from favorites.", "alert-warning")
 
+        except Exception as e:
+            messages.error(request, "Something went wrong. Couldn't add favorite.", "alert-danger")
+
+    return redirect('artPieces:artPieceDetailsView', pieceId)

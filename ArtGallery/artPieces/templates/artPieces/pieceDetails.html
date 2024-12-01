@@ -26,7 +26,14 @@
             <div class="col col-md-5 p-0">
                 <img src="{{piece.photo.url}}" alt="Art Piece Image" class="rounded-1 w-100 custom-img">
             </div>
-            <div class="col col-md-7 p-2 ps-5">
+            <div class="col col-md-7 p-2 ps-5 position-relative">
+                <a href="{% url 'artPieces:addFavoriteView' piece.id %}" class="position-absolute top-0 end-0">
+                    {% if isFavorite %}
+                    <i class="bi bi-star-fill h4"></i>
+                    {% else %}
+                    <i class="bi bi-star h4"></i>
+                    {% endif %}
+                </a>
                 <div class="d-flex flex-column justify-content-center">
                     <p class="display-6 m-0 text-burgundy-darker">{{piece.name}}</p>
                     <img src="{% static 'images/underlineDark.png' %}" class="mb-3 mx-auto" width="220" alt="">
