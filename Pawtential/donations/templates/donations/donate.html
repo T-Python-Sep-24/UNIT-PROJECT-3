@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+{% block title %}Donate{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Make a Donation</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="donor_name" class="form-label">Your Name (Optional)</label>
+            <input type="text" class="form-control" id="donor_name" name="donor_name">
+        </div>
+
+        <div class="mb-3">
+            <label for="donation_type" class="form-label">Donation Type</label>
+            <select class="form-control" id="donation_type" name="donation_type" required>
+                <option value="monetary">Monetary Donation</option>
+                <option value="supplies">Supplies Donation</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="monetary_donation_amount" style="display:block;">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+        </div>
+
+        <div class="mb-3" id="payment_method_section" style="display:none;">
+            <label for="payment_method" class="form-label">Choose Payment Method</label>
+            <select class="form-control" id="payment_method" name="payment_method" required>
+                <option value="bank_transfer">Bank Transfer</option>
+                <option value="apple_pay">Apple Pay</option>
+                <option value="paypal">PayPal</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="supplies_donation_details" style="display:none;">
+            <label for="shipping_company" class="form-label">Shipping Company</label>
+            <input type="text" class="form-control" id="shipping_company" name="shipping_company">
+
+            <label for="tracking_number" class="form-label">Tracking Number</label>
+            <input type="text" class="form-control" id="tracking_number" name="tracking_number">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Donation</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('donation_type').addEventListener('change', function() {
+        var donationType = this.value;
+        if (donationType === 'monetary') {
+            document.getElementById('monetary_donation_amount').style.display = 'block';
+            document.getElementById('payment_method_section').style.display = 'block';
+            document.getElementById('supplies_donation_details').style.display = 'none';
+        } else if (donationType === 'supplies') {
+            document.getElementById('supplies_donation_details').style.display = 'block';
+            document.getElementById('monetary_donation_amount').style.display = 'none';
+            document.getElementById('payment_method_section').style.display = 'none';
+        }
+    });
+</script>
+
+{% endblock %}

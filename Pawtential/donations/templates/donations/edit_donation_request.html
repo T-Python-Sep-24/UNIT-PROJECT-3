@@ -1,0 +1,62 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Edit Donation Request{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card custom-form-container">
+                <div class="card-header text-center">
+                    <h4>Edit Donation Request</h4>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="alert alert-info" role="alert">
+                            {% for message in messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="donation_type" class="form-label">Donation Type</label>
+                            <select class="form-control" id="donation_type" name="donation_type" required>
+                                <option value="food" {% if donation_request.donation_type == 'food' %}selected{% endif %}>Food</option>
+                                <option value="supplies" {% if donation_request.donation_type == 'supplies' %}selected{% endif %}>Supplies</option>
+                                <option value="medical" {% if donation_request.donation_type == 'medical' %}selected{% endif %}>Medical</option>
+                                <option value="other" {% if donation_request.donation_type == 'other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="amount_requested" class="form-label">Amount Requested</label>
+                            <input type="number" class="form-control" id="amount_requested" name="amount_requested" value="{{ donation_request.amount_requested }}" step="0.01">
+                            <small class="form-text text-muted">Leave empty if you do not want to request a specific amount (e.g. for food or supplies).</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description (Optional)</label>
+                            <textarea class="form-control" id="description" name="description" rows="3">{{ donation_request.description }}</textarea>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="fulfilled" name="fulfilled" {% if donation_request.fulfilled %}checked{% endif %}>
+                            <label class="form-check-label" for="fulfilled">Mark as Fulfilled</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4" style="border-top: 3px solid #FF8551;">
+    <a href="{% url 'donations:donation_request_list' %}" class="btn btn-secondary">Back to Donation Requests</a>
+  </div>
+{% endblock %}

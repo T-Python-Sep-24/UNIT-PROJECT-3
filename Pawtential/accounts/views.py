@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import ShelterProfileForm ,IndividualUserForm
 from pets.models import Pet
 from adoptions.models import AdoptionRequest
-
+from donations.models import DonationRequest
 
 def login_view(request):
     if request.method == 'POST':
@@ -170,11 +170,13 @@ def shelter_profile(request, shelter_id):
         
         pets = Pet.objects.filter(user=shelter_profile.user)
         adoption_requests = AdoptionRequest.objects.filter(pet__user=shelter_profile.user)
-
+        donation_requests = DonationRequest.objects.filter(shelter=shelter_profile).all()
+        
     else:
         pets = []
         adoption_requests = []
-    return render(request, 'profile/shelter_profile.html', {'profile': shelter_profile , 'pets': pets , 'adoption_requests': adoption_requests,})
+        donation_requests = []
+    return render(request, 'profile/shelter_profile.html', {'profile': shelter_profile , 'pets': pets , 'adoption_requests': adoption_requests,'donation_requests':donation_requests})
 
 
 def edit_shelter_profile(request, shelter_id):

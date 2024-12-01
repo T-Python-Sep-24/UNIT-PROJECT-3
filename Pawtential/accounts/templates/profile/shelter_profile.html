@@ -68,9 +68,9 @@
       <p>No pets added yet.</p>
     {% endif %}
 
-    <hr class="my-4" style="border-top: 3px solid #FF8551;">
 
     {% if profile.user == request.user %}
+    <hr class="my-4" style="border-top: 3px solid #FF8551;">
     <h4>Adoption Requests</h4>
       <ul class="list-group">
         {% for request in adoption_requests %}
@@ -104,5 +104,38 @@
         {% endfor %}
       </ul>
     {% endif %}
+    <hr class="my-4" style="border-top: 3px solid #FF8551;">
+
+    <h4>Donation Requests by {{ profile.name }}</h4>
+    {% if donation_requests %}
+      <ul class="list-group">
+        {% for request in donation_requests %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                  <strong>Donation Type:</strong> {{ request.get_donation_type_display }}<br>
+                  <strong>Amount Requested:</strong> {{ request.amount_requested }} SAR<br>
+                  <strong>Description:</strong> {{ request.description|truncatewords:10 }}<br>
+                  <strong>Status:</strong> 
+                  {% if request.fulfilled %}
+                      <span class="text-success">Fulfilled</span>
+                  {% else %}
+                      <span class="text-warning">Pending</span>
+                  {% endif %}
+              </div>
+
+              <div>
+                      <a href="{% url 'donations:edit_donation_request' request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                      <form action="{% url 'donations:delete_donation_request' request.id %}" method="POST" style="display:inline;">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this donation request?');">Delete</button>
+                      </form>
+              </div>
+          </li>
+      {% endfor %}
+
+      </ul>
+    {% else %}
+      <p>No donation requests added yet.</p>
+    {% endif %}    
   </div>
 {% endblock %}
