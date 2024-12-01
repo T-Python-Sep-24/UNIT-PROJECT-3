@@ -1,0 +1,38 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block content %}
+<div class="max-w-md mx-auto bg-orange-500 p-10 rounded-lg  mt-10 ">
+    <h2 class="text-2xl font-bold mb-4 text-white">Add Company</h2>
+    <form action="{% url 'events_companies_app:add_company_view' %}" method="post" enctype="multipart/form-data" class="space-y-4 bg-orange-500">
+        {% csrf_token %}
+        <div>
+            <label for="name" class="block text-lg font-medium text-white">Company Name</label>
+            <input type="text" name="name" id="name" required
+                   class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 w-full p-4">
+        </div>
+        <div>
+            <label for="description" class="block text-lg font-medium text-white">Description</label>
+            <textarea name="description" id="description" required
+                      class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 p-4"></textarea>
+        </div>
+        <div>
+            <label for="logo" class="block text-lg font-medium text-white">Logo</label>
+            <input type="file" name="logo" id="logo" accept="image/*"
+                   class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 p-2">
+        </div>
+        <div>
+            <label for="website" class="block text-lg font-medium text-white">Website</label>
+            <input type="url" name="website" id="website"
+                   class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200  p-2">
+        </div>
+        <div>
+            <label for="specialization" class="block text-lg font-medium text-white">Specialization</label>
+            <input type="text" name="specialization" id="specialization"
+                   class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        <button type="submit" class="bg-gradient-to-r from-orange-400 to-orange-200 text-white px-4 py-2 rounded">
+            Add Company
+        </button>
+    </form>
+</div>
+{% endblock %}

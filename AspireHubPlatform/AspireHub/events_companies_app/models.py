@@ -3,7 +3,7 @@ from django.db import models
 class Company(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
-    logo = models.ImageField(upload_to='companies/')
+    logo = models.ImageField(upload_to='images/' , default="images/default.png")
     date_added = models.DateField(auto_now_add=True)
     website = models.URLField(max_length=200, blank=True, null=True)
     specialization = models.CharField(max_length=200, blank=True, null=True)
@@ -14,7 +14,7 @@ class Company(models.Model):
 class Event(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    image = models.ImageField(upload_to='events/')
+    image = models.ImageField(upload_to='images/' , default="images/default.webp")
     date = models.DateField()
 
     def __str__(self):
@@ -23,6 +23,7 @@ class Event(models.Model):
 class Employee(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='employees')  
     name = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='images/' , default="images/default.jpeg")  
     specialty = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)  
     linkedin_link = models.URLField(max_length=200, blank=True, null=True)  

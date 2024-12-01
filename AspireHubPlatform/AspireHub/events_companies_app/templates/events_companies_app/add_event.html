@@ -1,5 +1,5 @@
 {% extends 'main_app/base.html' %}
-
+{% load static %}
 {% block content %}
     <h2 class="text-2xl font-bold mb-4">Add Event</h2>
     <form action="{% url 'events_companies_app:add_event_view' %}" method="post" enctype="multipart/form-data" class="space-y-4">

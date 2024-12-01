@@ -1,0 +1,11 @@
+.background-image {
+    background-image: url('../images/Untitled design.png')!important;
+    background-size: cover!important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    height: 100% !important;
+    width: 100% !important;
+    
+}
+
+
