@@ -11,7 +11,7 @@
         <img src="{% static 'images/underline.png' %}" class="mb-3" width="200">
         <!-- Add artist -->
         <div class="d-flex justify-content-center text-beige-100">
-            <form action="{% url 'artists:addArtistView' %}" method="post" enctype="multipart/form-data" class="text-start p-4 rounded-1 shadow-sm bg-blur needs-validation text-light" novalidate>
+            <form action="{% url 'artists:addArtistView' %}" method="post" enctype="multipart/form-data" class="text-start p-4 rounded-1 shadow-sm bg-blur needs-validation" novalidate>
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="fullName" class="form-label fw-medium fs-5">Full Name</label>

@@ -36,6 +36,7 @@
 
 
             {% url 'main:homeView' as homeUrl %}
+            {% url 'main:contactView' as contactUrl %}
             {% url 'artists:displayArtistsView' as artistsUrl %}
             {% url 'artPieces:displayArtPiecesView' as artPiecesUrl %}
 
@@ -58,10 +59,7 @@
                         <a class="hover-color {% if request.path == artistsUrl %}active{% endif %}" href="{{artistsUrl}}">Artists</a>
                     </li>
                     <li class="nav-item p-1">
-                        <a class="hover-color" href="">About</a>
-                    </li>
-                    <li class="nav-item p-1">
-                        <a class="hover-color" href="">Contact</a>
+                        <a class="hover-color {% if request.path == contactUrl %}active{% endif %}" href="{{contactUrl}}">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -126,10 +124,7 @@
                             <a class="" href="{{artistsUrl}}">Artists</a>
                         </li>
                         <li class="nav-item p-2">
-                            <a class="" href="">About</a>
-                        </li>
-                        <li class="nav-item p-2">
-                            <a class="" href="">Contact</a>
+                            <a class="" href="{{contactUrl}}">Contact</a>
                         </li>
                     </ul>
                 </nav>
