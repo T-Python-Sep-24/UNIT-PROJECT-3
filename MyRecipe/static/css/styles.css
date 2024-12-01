@@ -15,11 +15,11 @@ header {
 
 header .header-content {
     width: 80%;
-    margin: 0 auto;
+    margin: auto;
 }
 
 header h2 {
-    margin-top: 0;
+    margin: 0;
 }
 
 header .auth-links {
@@ -62,7 +62,6 @@ header .auth-links a:hover {
 
 .search-button {
     padding: 10px 15px;
-    font-size: 16px;
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -85,7 +84,6 @@ ul li {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
 }
 
 ul li:hover {
@@ -108,11 +106,9 @@ a:hover {
     color: white;
     padding: 12px 20px;
     text-align: center;
-    font-size: 16px;
     border-radius: 5px;
     text-decoration: none;
     margin-top: 20px;
-    transition: background-color 0.3s ease;
 }
 
 .add-recipe-btn:hover {
@@ -131,4 +127,30 @@ p a {
 
 p a:hover {
     color: #45a049;
+}
+
+.recipe-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+h3 {
+    margin-top: 20px;
+}
+
+form {
+    margin-top: 20px;
+}
+
+.review {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.review strong {
+    display: block;
+    margin-bottom: 5px;
 }

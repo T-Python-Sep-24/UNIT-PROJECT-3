@@ -5,15 +5,12 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile
 from .forms import UserProfileForm
 
-
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            Profile.objects.create(user=user)
-            return redirect('accounts:profile')
+            return redirect('accounts:login')
     else:
         form = UserCreationForm()
     return render(request, 'accounts/register.html', {'form': form})
