@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}New Fund{% endblock %}
+
+{% block main %}
+<main>
+    <form class="d-flex flex-column gap-4 shadow rounded p-5 m-5" action="{% url 'main:rate_us_view' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+        <label for="review" class="form-label">Name</label>
+        <input type="text" class="form-control" id="review" name="name" required placeholder="Hmzh dubh">
+        {% if not request.user.is_authenticated %}
+            <div class="mb-3">
+                <label for="avatar" class="form-label">Image</label>
+                <input id="avatar" type="file" class="form-image" name="image" accept="image/*">
+            </div>
+        {% endif %}
+        <label for="subject" class="form-label">Subject</label>
+        <input type="text" class="form-control" id="subject" name="subject" required placeholder="Services">
+
+        <label for="comment" class="form-label">Comment</label>
+        <input type="text" class="form-control" id="comment" name="comment" required placeholder="The Services Are amazingly structured and managed">
+    </div>
+
+        <div class="form-outline">
+
+            <p class="form-label">Rating: </p>
+            <div class="star-rating">
+                {% for rate, value in rates reversed %}
+                <input type="radio" id="star{{ rate }}" name="rating" value="{{ rate }}" required/>
+                <label for="star{{ rate }}" class="star">
+                    <i class="far fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+    <input class="btn btn-success" type="submit" name="Add">
+</form>
+</main>
+{% endblock %}

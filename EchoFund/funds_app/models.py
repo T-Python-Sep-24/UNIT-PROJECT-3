@@ -10,10 +10,14 @@ class Fund(models.Model):
     policies = models.TextField()
     monthly_stock = models.SmallIntegerField()
     hold_duration = models.SmallIntegerField()
+
     created_at = models.DateTimeField(auto_now_add=True)
-    is_available = models.BooleanField(default=True)
+
     fund_owner = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name='fund_owner')
     fund_members = models.ManyToManyField(User, related_name='fund_members', blank=True)
+
+    is_available = models.BooleanField(default=True)
+    fund_privacy = models.BooleanField(default=True)
 
 
 class Review(models.Model):

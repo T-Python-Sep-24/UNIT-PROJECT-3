@@ -16,6 +16,9 @@
                     <a class="btn btn-danger" href="{% url 'accounts:log_out' %}">Sign Out</a>
                     <a class="btn btn-warning " href="{% url 'accounts:update_profile_view' %}">Update Account</a>
                 </div>
+                <div class="container text-center p-5">
+                    <a class="btn btn-primary" href="{% url 'funds_app:user_funds_view' %}">My Owned Funds</a>
+                </div>
                 {% endif %}
             </div>
             <div class="col">
@@ -23,26 +26,7 @@
                     <h3>About: </h3>
                     <p>{{user.profile.about}}</p>
                 </div>
-                {% if request.user == user %}
-                {% if funds %}
-                <div class="container shadow rounded p-5 mb-4">
-                    <h2><span class="material-symbols-outlined">wallet</span>Funds</h2>
-
-                    {% for fund in funds %}
-                    <div class="row p-3 rounded shadow m-3">
-                        <div class="col ">
-                            <h4><a href="{% url 'funds_app:fund_details_view' fund.id %}">{{ fund.fund_name }}</a></h4>
-                            <h5>Name {{fund.fund_name}}</h5>
-                            <p>Description: {{fund.about}}</p>
-                            <h6>At: {{fund.created_at}}</h6>
-                        </div>
-
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-                {% endif %}
-
+                <!-- user reviews section -->
                 {% if user.review_set.all %}
                 <div class="container shadow rounded p-5 mb-4">
                     <h2><span class="material-symbols-outlined">reviews</span>Reviews</h2>
@@ -63,6 +47,7 @@
                 </div>
                 {% endif %}
 
+                <!-- user bookmarks section -->
                 {% if request.user == user %}
                 {% if bookmarks %}
                 <div class="container shadow rounded p-5 mb-4">
@@ -88,6 +73,59 @@
                 </div>
                 {% endif %}
                 {% endif %}
+
+                <!-- user messages section -->
+                {% if request.user == user %}
+                {% if request.user.receiver.all %}
+                <div class="container shadow rounded p-5 mb-4">
+
+                    <h3><span class="material-symbols-outlined">message</span>Messages</h3>
+                    {% for message in request.user.receiver.all %}
+                    <div class="row p-3 rounded shadow m-3">
+                        <div class="col ">
+
+                            <h4>From <a href="{% url 'accounts:profile_view' message.sender.username %}">@{{ message.sender }}</a></h4>
+                            <h5>Subject: {{ message.subject }}</h5>
+                            <p>Comment: {{ message.content }}</p>
+                            <p>At: {{message.sent_at}}</p>
+
+                        </div>
+                        <div class="col text-end">
+                            <img src="{{ bookmark.car.photo.url}}">
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+                {% endif %}
+                {% endif %}
+
+                <!-- user participated in funds section -->
+                {% if request.user == user %}
+                {% if participate_funds %}
+                <div class="container shadow rounded p-5 mb-4">
+
+                    <h3><span class="material-symbols-outlined">wallet</span>Funds I Participated in</h3>
+                    {% for fund in participate_funds %}
+                    <div class="row p-3 rounded shadow m-3">
+                        <div class="col ">
+
+                            <h4><a href="{% url 'funds_app:fund_details_view' fund.id %}">{{ fund.fund_name }}</a></h4>
+                            <h5>{{ fund.monthly_stock }} Per month</h5>
+                            <h5>{{ fund.hold_duration }} Year</h5>
+                            <p>{{ fund.about }}</p>
+                            <p>Since: {{fund.created_at}}</p>
+
+                        </div>
+                        <div class="col text-end">
+                            <img src="{{ bookmark.car.photo.url}}">
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+                {% endif %}
+                {% endif %}
+
+
             </div>
         </div>
     </div>

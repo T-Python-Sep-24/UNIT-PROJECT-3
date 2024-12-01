@@ -22,6 +22,7 @@ class Testimonial(models.Model):
         STAR5 = 5, 'Five Stars'
 
     name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='images/avatars', default='images/avatars/profileAvatar.jpg', blank=True)
     subject = models.CharField(max_length=100)
     comment = models.TextField()
     rating = models.SmallIntegerField(choices=Rates.choices)

@@ -72,6 +72,38 @@
           width: 100px;
           height: 100px;
         }
+        .star-rating {
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+            margin-left: 20px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star {
+            cursor: pointer;
+
+        }
+
+        .star .fas {
+            display: none;
+        }
+
+        .star:hover .fas,
+        .star:hover ~ label .fas,
+        .star-rating input:checked ~ label .fas {
+            display: inline;
+        }
+
+        .star:hover .far,
+        .star:hover ~ label .far,
+        .star-rating input:checked ~ label .far {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
@@ -107,6 +139,9 @@
                 <li class="dropdown">
                     <a data-bs-toggle="dropdown" class="nav-link dropdown-toggle" href="/"><span class="text-success">Help</span></a>
                     <ul class="dropdown-menu">
+                        <li>
+                            <a href="/#testimonial" class="dropdown-item">Testimonials</a>
+                        </li>
                         <li>
                             <a href="/#faq" class="dropdown-item">FAQs</a>
                         </li>
@@ -164,7 +199,8 @@
                     <ul class="dropdown-menu">
                         {% if request.user.is_authenticated %}
                         <li><a class="dropdown-item" href="{% url 'accounts:log_out' %}?next={{request.path}}">Log Out</a></li>
-                        <li> <a class="dropdown-item " href="{% url 'accounts:profile_view' request.user.username %}">Account Settings</a></li>
+                        <li><a class="dropdown-item " href="{% url 'accounts:profile_view' request.user.username %}">Account Settings</a></li>
+                        <li><a class="dropdown-item " href="{% url 'accounts:messages_view' request.user.username %}">My Messages</a></li>
                         {% else %}
                         <li><a class="dropdown-item" href="{% url 'accounts:sign_up' %}?next={{request.path}}">Sign Up</a></li>
                         <li><a class="dropdown-item" href="{% url 'accounts:sign_in' %}?next={{request.path}}">Sign In</a></li>
@@ -219,7 +255,7 @@
 
 {% block footer %}
 <!-- Footer -->
-<footer class="text-center text-lg-start bg-body-tertiary text-muted">
+<footer class="text-center text-lg-start bg-body-tertiary text-muted mt-5">
     <!-- Section: Social media -->
     <section class="d-flex justify-content-center justify-content-evenly p-4 border-bottom">
         <!-- Left -->

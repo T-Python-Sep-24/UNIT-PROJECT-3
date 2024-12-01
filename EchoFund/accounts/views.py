@@ -5,8 +5,9 @@ from django.shortcuts import render, redirect
 
 from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
-from .models import Profile, Bookmark
+from .models import Profile, Bookmark, UserMessage
 from funds_app.models import Fund
+
 
 # Create your views here.
 
@@ -69,6 +70,7 @@ def profile_view(request: HttpRequest, user_name):
 
     user = User.objects.get(username=user_name)
     funds = Fund.objects.filter(fund_owner=user)
+    participate_funds = Fund.objects.filter(fund_members = request.user)
     if not Profile.objects.filter(user = user).first():
         new_profile = Profile(user=user)
         new_profile.save()
@@ -76,7 +78,7 @@ def profile_view(request: HttpRequest, user_name):
     # profile = Profile.objects.get(user=user)
 
 
-    return render(request, 'profile.html', context={'user':user, 'funds':funds})
+    return render(request, 'profile.html', context={'user':user, 'participate_funds':participate_funds, 'funds':funds})
 
 
 def update_profile_view(request: HttpRequest):
@@ -110,3 +112,10 @@ def update_profile_view(request: HttpRequest):
             print(e)
             messages.error(request, 'error in updating your profile ', 'alert-danger')
     return render(request, 'update_profile.html')
+
+
+def messages_view(request: HttpRequest, user_name):
+    if request.user.is_authenticated:
+        user_messages = UserMessage.objects.all()
+
+        return render(request, 'user_messages.html', context={'user_messages': user_messages})

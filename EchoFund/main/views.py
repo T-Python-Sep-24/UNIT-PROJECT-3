@@ -53,12 +53,24 @@ def contact_view(request: HttpRequest):
 def rate_us_view(request: HttpRequest):
 
     if request.method == 'POST':
-        new_rate = Testimonial(
+        if request.user.is_authenticated:
+            new_rate = Testimonial(
 
-            name=request.POST['name'],
-            subject=request.POST['subject'],
-            comment=request.POST['comment'],
-            rating=request.POST['rating'])
+                name=request.POST['name'],
+                subject=request.POST['subject'],
+                comment=request.POST['comment'],
+                rating=request.POST['rating'],
+                image=request.user.profile.avatar
+            )
+        else:
+            new_rate = Testimonial(
+
+                name=request.POST['name'],
+                image=request.FILES['image'],
+                subject=request.POST['subject'],
+                comment=request.POST['comment'],
+                rating=request.POST['rating'])
+
         new_rate.save()
         messages.success(request, 'Thank You for rating us', 'alert-success')
         return redirect('main:home_view')

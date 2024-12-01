@@ -5,7 +5,7 @@
 {% block main %}
 
 <main>
-    <h1 class="display-6 text-center special-color pt-2">Add New Fund</h1>
+    <h1 class="display-6 text-center special-color pt-5 mt-5 mb-5">Add New Fund</h1>
     <hr class="special-color2" style="width:15%;margin: 0 auto;">
     <div class="container pt-5">
         <div class="row row-cols-1 row-cols-md-2 g-5 justify-content-center">
@@ -40,9 +40,22 @@
                         <input type="number" id="hold_duration" name="hold_duration" class="form-control" min="0" max="5" aria-describedby="HoldDurationHelp" required>
                         <div id="HoldDurationHelp" class="form-text">Hold Durations is the duration of saving before allowing fund requests to members</div>
                     </div>
+                    <div class="form-control mb-4 ">
+                        <div class="form-check form-switch">
+                            <label class="form-check-label me-5" for="flexSwitchCheckChecked1">Public</label>
+                            <input class="form-check-input me-5" type="checkbox" name="fund-privacy" role="switch" id="flexSwitchCheckChecked1" checked>
+                            <label class="form-check-label" for="flexSwitchCheckChecked1">Private</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                            <label class="form-check-label me-5" for="flexSwitchCheckChecked">Closed</label>
+                            <input class="form-check-input me-5" type="checkbox" name="fund-status" role="switch" id="flexSwitchCheckChecked" checked>
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Open</label>
+                        </div>
+                    </div>
 
                     <div class="form-outline mb-4">
-                        <h6>Members</h6>
+                        <h6>Add Members</h6>
                         <div class="form-check d-flex">
                             {% for member in members %}
                             <div class="m-3">

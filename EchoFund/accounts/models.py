@@ -21,6 +21,7 @@ class UserMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
     subject = models.CharField(max_length=1024, blank=True)
     content = models.TextField(default=None)
+    is_viewed = models.BooleanField(default=False)
     sent_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

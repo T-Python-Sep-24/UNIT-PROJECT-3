@@ -24,10 +24,17 @@
                         </select>
 
                         <select name="availability" class="rounded bg-success text-light p-2">
-                            <option> Availability </option>
-                            <option> All </option>
+                            <option value="all"> Availability </option>
+                            <option value="all"> All </option>
                             <option value="True" {% if request.GET.availability == True %}selected{% endif %}> Available </option>
-                            <option value="False" {% if request.GET.availability == False %}selected{% endif %}> Not Available </option>
+                            <option value="False" {% if request.GET.availability == False %}selected{% endif %}> Closed </option>
+                        </select>
+
+                        <select name="privacy" class="rounded bg-success text-light p-2">
+                            <option value="all"> Privacy </option>
+                            <option value="all"> All </option>
+                            <option value="True" {% if request.GET.privacy == True %}selected{% endif %}> Private </option>
+                            <option value="False" {% if request.GET.privacy == False %}selected{% endif %}> Public </option>
                         </select>
 
                         <input type="submit" class="btn btn-outline-primary" value="Apply">

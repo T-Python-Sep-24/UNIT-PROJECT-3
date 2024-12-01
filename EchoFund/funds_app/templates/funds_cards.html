@@ -13,6 +13,8 @@
             <p class="card-text">Hold Duration: {{ fund.hold_duration }}</p>
             <p class="card-text">Created By: {{ fund.fund_owner }}</p>
             <p class="card-text">Created At: {{ fund.created_at }}</p>
+            <h6>Type: {% if fund.fund_privacy %}Private {% else %}Public{% endif %}</h6>
+            <h6>Status: {% if fund.is_available %}Available{% else %}Closed{% endif %}</h6>
         </div>
         <div class="card-footer bg-transparent">
             <a href="{% url 'funds_app:fund_details_view' fund.id %}" class="btn btn-success">Details</a>

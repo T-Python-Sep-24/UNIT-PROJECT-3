@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}My Messages{% endblock %}
+
+{% block main %}
+    <div class="container pt-5 pb-5">
+        {% for message in user_messages %}
+        <div class="message shadow p-5 mt-3 mb-3">
+            <h1>Sender: <a class="h1" href="{% url 'accounts:profile_view' message.sender.username %}">@{{message.sender}}</a></h1>
+
+            <h4>Subject {{message.subject}}</h4>
+            <p>Content {{message.content}}</p>
+            <p>Content {{message.sent_at}}</p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

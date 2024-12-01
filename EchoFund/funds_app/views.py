@@ -27,10 +27,13 @@ def all_funds_view(request: HttpRequest):
             funds = funds.order_by('created_at')
 
     if 'availability' in request.GET:
+        if not request.GET['availability'] == 'all':
+            funds = funds.filter(is_available = request.GET['availability'])
+    if 'privacy' in request.GET:
+        if not request.GET['privacy'] == 'all':
+            funds = funds.filter(fund_privacy = request.GET['privacy'])
 
-        funds = funds.filter(is_available = request.GET['availability'])
-
-    paginator = Paginator(funds, 3)
+    paginator = Paginator(funds, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -67,14 +70,34 @@ def add_fund_view(request: HttpRequest):
                 hold_duration = request.POST['hold_duration'],
 
             )
+            if 'fund-privacy' in request.POST:
+                new_fund.fund_privacy = True
+            else:
+                new_fund.fund_privacy = False
+            if 'fund-availability' in request.POST:
+                new_fund.is_available = True
+            else:
+                new_fund.is_available = False
             new_fund.save()
             new_fund.fund_members.set(request.POST.getlist('members'))
+
+            for member_id in request.POST.getlist('members'):
+                member = User.objects.get(pk=member_id)
+            # Send message to user
+                new_user_message = UserMessage(
+                    sender = request.user,
+                    user = member,
+                    subject = 'Added to Fund',
+                    content = f'You Were Enrolled in a Fund by {request.user.username}',
+                )
+                new_user_message.save()
+
             messages.success(request, "fund was added successfully", "alert-success")
 
             # Send message to user
             new_user_message = UserMessage(
                 sender = User.objects.get(pk=1),
-                receiver = request.user,
+                user = request.user,
                 subject = 'Add Fund',
                 content = 'You Added New Fund',
             )
@@ -110,7 +133,36 @@ def update_fund_view(request: HttpRequest,fund_id):
             fund.save()
             fund.fund_members.set(request.POST.getlist('members'))
 
-            messages.success(request, "fund was added successfully", "alert-success")
+            for member_id in request.POST.getlist('members'):
+                member = User.objects.get(pk=member_id)
+                # Send message to user
+                new_user_message = UserMessage(
+                    sender = request.user,
+                    user = member,
+                    subject = 'Updating Fund',
+                    content = f'A fund you are Enrolled in were updated by the fund owner ({request.user.username})',
+                )
+                new_user_message.save()
+
+            if 'fund-privacy' in request.POST:
+                fund.fund_privacy = True
+            else:
+                fund.fund_privacy = False
+            if 'fund-availability' in request.POST:
+                fund.is_available = True
+            else:
+                fund.is_available = False
+
+            # Send message to user
+            new_user_message = UserMessage(
+                sender = User.objects.get(pk=1),
+                user = request.user,
+                subject = 'Update Fund',
+                content = 'You Updated a Fund',
+            )
+
+            new_user_message.save()
+            messages.success(request, "fund was Updated successfully", "alert-success")
             return redirect("funds_app:fund_details_view", fund_id = fund_id)
 
         return render(request, 'update_fund.html', context={'fund':fund, 'members': members})
@@ -127,6 +179,15 @@ def delete_fund_view(request: HttpRequest, fund_id):
     if request.user.is_superuser or request.user.is_authenticated:
         fund = Fund.objects.get(pk=fund_id)
         fund.delete()
+        # Send message to user
+        new_user_message = UserMessage(
+            sender = User.objects.get(pk=1),
+            user = request.user,
+            subject = 'Delete Fund',
+            content = 'You Deleted a Fund',
+        )
+
+        new_user_message.save()
         messages.success(request, 'Fund was deleted successfully', 'alert-success')
     return redirect('funds_app:all_funds_view')
 
@@ -144,6 +205,16 @@ def add_review_view(request: HttpRequest, fund_id):
                 comment=request.POST['comment'],
                 rating=request.POST['rating'])
             new_comment.save()
+
+            # Send message to user
+            new_user_message = UserMessage(
+                sender = User.objects.get(pk=1),
+                user = request.user,
+                subject = 'Review Fund',
+                content = 'You Reviewed a Fund',
+            )
+
+            new_user_message.save()
             messages.success(request, 'Comment was added successfully', 'alert-success')
         return redirect('funds_app:fund_details_view', fund_id = fund_id)
     except Exception as e:
@@ -157,6 +228,16 @@ def delete_review_view(request: HttpRequest, review_id):
     if request.user.is_superuser:
         review = Review.objects.get(pk=review_id)
         review.delete()
+
+        # Send message to user
+        new_user_message = UserMessage(
+            sender = User.objects.get(pk=1),
+            user = request.user,
+            subject = 'Delete Review',
+            content = 'You Deleted your review',
+        )
+
+        new_user_message.save()
         messages.success(request, 'Review Deleted Successfully', 'alert-success')
     return redirect('funds_app:fund_details_view', fund_id=review.fund.id)
 
@@ -201,6 +282,15 @@ def fund_participate_view(request: HttpRequest, fund_id):
         if fund.is_available:
             fund.fund_members.add(request.user.id)
             messages.success(request, "Your Participated in this Fund successfully", "alert-success")
+            # Send message to user
+            new_user_message = UserMessage(
+                sender = User.objects.get(pk=1),
+                user = request.user,
+                subject = 'Enroll Fund',
+                content = 'You Enrolled in a Fund',
+            )
+
+            new_user_message.save()
         else:
             messages.warning(request, "This Fund is Not available for participation", 'alert-warning')
         return redirect('funds_app:fund_details_view', fund_id=fund_id)
