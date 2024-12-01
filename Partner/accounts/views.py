@@ -5,8 +5,8 @@ from main.models import Language
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db import IntegrityError, transaction
-from partners.models import Request
-
+from partners.models import Request,Partner
+from django.core.paginator import Paginator
 from .models import Profile
 
 # Create your views here.
@@ -74,21 +74,37 @@ def log_out(request: HttpRequest):
 def user_profile_view(request,user_name):
     try:
         user=User.objects.get(username=user_name)
-        sent_requests = request.user.sent_requests.all()
-        received_requests=user.received_requests.all()
-        print(sent_requests)
-        #check the request users
-        is_requested=False
-        if sent_requests.exists() and received_requests.exists(): 
-           is_requested=True
+       
+        if  request.user.is_authenticated:
+            sent_requests = request.user.sent_requests.all()
+            received_requests=user.received_requests.all()
+            partners=request.user.partners.all()
+            partnered_users = user.partnered_users.all()
+            print( partners)
+            #check the request users
+            is_requested=False
+            accept_req=False
+            if sent_requests.exists() and received_requests.exists():     
+                    is_requested=True
+            
+        else:
+             sent_requests=[]
+             received_requests=[]
+             partners=[]
+             partnered_users=[]
+             is_requested=False
         #if dosent have profile
         #if not Profile.objects.filter(user=user).first():
          #   new_profile = Profile(user=user)
         #    new_profile.save()   
-    except:
+    except Exception as e:
+        print(e)
         return render(request,"404.html")
 
-    return render(request,"accounts/profile.html",{"user":user,"sent_requests":sent_requests,"is_requested":is_requested})
+    return render(request,"accounts/profile.html",{"user":user,"sent_requests":sent_requests,
+                                                   "is_requested":is_requested,"received_requests":received_requests,
+                                                   "partners":partners,
+                                                   "partnered_users":partnered_users})
 
 
 def update_profile_view(request):
@@ -132,3 +148,19 @@ def update_profile_view(request):
 
 
 
+def all_partners_profiles_view(request):
+    all_partners=Profile.objects.filter(role='partner')
+    languages=Language.objects.all()
+    if "search" in request.GET and len(request.GET["search"]) >= 1:
+        all_partners = all_partners.filter(user__username__icontains=request.GET["search"])
+
+    if "filter_by_native" in request.GET and request.GET["filter_by_native"]:
+        all_partners = all_partners.filter(native_language__id=request.GET["filter_by_native"])
+
+    if "filter_by_target" in request.GET and request.GET.get("filter_by_target"):
+        all_partners = all_partners.filter(target_language__id=request.GET["filter_by_target"])
+    
+    p=Paginator(all_partners,6)
+    page=request.GET.get('page',1)
+    all_partners_list=p.get_page(page)
+    return render(request,'accounts/all_profiles.html',{"all_partners":all_partners_list,"languages":languages})

@@ -11,9 +11,27 @@
 
 .bookmark-container{
     background-color: #f4d3ca ;
+    height: 8rem;
 }
 
 .bookmark-container img{
     border-radius: 8px 0px 0 8px;
+    object-fit: cover;
 }
 
+.avatar-img{
+    object-fit: cover;
+    height: 14rem;
+}
+
+.request-container{
+    height: 8rem;
+    background-color: #f4d3ca ;
+
+}
+.request-container img{
+    border-radius: 8px 0px 0 8px;
+    object-fit: cover;
+    width: 30%;
+
+}

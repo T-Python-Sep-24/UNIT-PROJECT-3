@@ -10,7 +10,7 @@
 
      {%block content%}
 <div class="row">
-    <div class="challenge-area col-md-4 d-flex flex-column justify-content-center align-items-center ">
+    <div class="challenge-area col-md-3 d-flex flex-column justify-content-center align-items-center ">
        
         <div >
             <h4 class="my-2 head-challenge">
@@ -60,7 +60,7 @@
             </div>
         </div>
     </div>
-    <div class="bolgs-area col-md-8 container-fluid ">
+    <div class="bolgs-area col-md-9 container-fluid ">
         
         <div class="border-bottom py-2">
             <h1 class="   text-center itim-regular  ">Blogs
@@ -83,7 +83,7 @@
                         <option value="date" {%if request.GET.order_by == date %} selected {%endif%}>Date</option>
                     </select>
                     <input type="submit" class="btn rounded-pill btn-orange text-white " value="Apply"/>
-                    <a href="" class="btn btn-secondary rounded-pill text-white " value="clear">Clear </a>
+                    <a href="{%url 'blogs:blogs_all_view'%}" class="btn btn-secondary rounded-pill text-white " value="clear">Clear </a>
                 </div>
             </form>
         </div>

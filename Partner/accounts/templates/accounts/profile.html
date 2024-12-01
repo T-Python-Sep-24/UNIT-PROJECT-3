@@ -8,11 +8,21 @@
 {%endblock%}
 {% block content %}
 
-
+{% if messages %}
+  <div class="messages">
+{% for message in messages %}
+   <div class="alert {{ message.tags }}">
+    
+       {{ message }}
+       
+          </div>
+      {% endfor %}
+  </div>
+{% endif %}
 <div class="row">
     <div class="col-md-4">
 
-        <img src="{{user.profile.avatar.url}}" class="w-100 h-50 rounded-3" style="object-fit: cover;" />
+        <img src="{{user.profile.avatar.url}}" class="w-100 rounded-3 avatar-img" />
         <div class="d-flex justify-content-between mt-3">
             <h5 class=""><i class="fa-solid fa-user text-orange"></i> Profile: {{user.username}} </h5>
             {% if request.user == user %}
@@ -23,9 +33,9 @@
         <div class="d-flex flex-column gap-2">
             <p><i class="fa-solid fa-venus-mars text-orange"></i> <span class="fw-bold">Gender: </span>
               {%if user.profile.gender == 'M'%} 
-                <span style="color: blue;">Male</span>
+                <span style="color: rgb(54, 85, 224);">Male</span>
               {%else%}
-                 <span style="color: pink;">Female</span>
+                 <span style="color: rgb(250, 168, 182);">Female</span>
                 {%endif%}
 
             </p>
@@ -40,13 +50,40 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h1>{{user.username}}</h1>  
                 {%if request.user.is_authenticated and request.user != user %}
-                    {%if is_requested%}
-                    <a href="{%url 'partners:new_request_view' request.user.id user.id%}" class="btn btn-success rounded-pill">
+                {% if accept_req%}  
+                <a href="" class="btn btn-success disabled rounded-pill">
+                    <i class="fa-solid fa-check"></i> Partner</a>  
+                {%elif is_requested%}
+                    <a href="{%url 'partners:new_request_view' request.user.id user.id%}" class="btn btn-secondary rounded-pill">
                         <i class="fa-solid fa-check"></i> Pending Request</a>  
+                        
                         {%else%}
-                    <a href="{%url 'partners:new_request_view' request.user.id user.id%}" class="btn btn-success rounded-pill">
-                        <i class="fa-solid fa-plus"></i> Partnership Request</a>  
-        
+                        <button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-plus"></i> Partnership Request</button>
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">New Request</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'partners:new_request_view' request.user.id user.id %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="scheduled_at" class="col-form-label">Choose Session Schedule:</label>
+                                        <input type="datetime-local" class="form-control" id="scheduled_at" name="scheduled_at" required>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-orange rounded-pill">Send Request</button>
+                                    </div>
+                                </form>
+                            </div>
+                           
+                            </div>
+                        </div>
+                        </div>
                     {% endif %}
                 {% endif %}
             </div>
@@ -55,35 +92,161 @@
             <hr class=""/>
             <nav class="nav nav-pills nav-fill">
                 <a class="nav-link profile-nav-link active" aria-current="page" href="#" onclick="changeContent('Saved Blogs')">Saved Blogs</a>
+                {%if request.user.is_authenticated and request.user == user %}
                 <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Requests')">Requests</a>
                 <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Partners')">Partners</a>
-                <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Messages')">Messages</a>
+                {%else%}
+                <a class="nav-link profile-nav-link disabled" href="#">Requests</a>
+                <a class="nav-link profile-nav-link disabled" href="#">Partners</a>
+
+                {% endif %}
             </nav>
         
                     <!-- Content -->
-            <div id="changableContent">
-                <div class="px-2 py-4 row-cols-3 gap-4" id="savedBlogsContent">
+            <div id="changableContent ">
+                <div class="px-2 py-4 row row-cols-3 gap-4 " id="savedBlogsContent">
                     <!--  Saved Blogs-->
-                    {% for bookmark in request.user.bookmark_set.all %}
-                        <div class="col d-flex rounded-3 gap-2 shadow align-items-center p-0 bookmark-container">
+                    {% if user.bookmark_set.all%}
+                    {% for bookmark in user.bookmark_set.all %}
+                        
+                        <div class="col-md-3 d-flex rounded-3 gap-2 shadow align-items-center p-0 bookmark-container">
                             <img src="{{ bookmark.blog.image.url }}" class="w-50 h-100" />
                             <a href="{% url 'blogs:blog_details_view' bookmark.blog.id %}" class="text-decoration-none p-1">
                                 <h6 class="orange-link">{{ bookmark.blog.title }}</h6>
                             </a>
                         </div>
+                        
                     {% endfor %}
+                    {%else%}
+                        <p>No saved blogs yet</p>
+                        {%endif%}
                 </div>
+              
+                <!-- Requests -->
+                <div class="px-2 py-4 row row-cols-3 gap-4 align-items-center" id="requestsContent" style="display: none;">
+                    {%if request.user.is_authenticated and request.user == user %}
+                      {% if received_requests %}
+                    {% for re_request in received_requests %}
+                         {% if re_request.status != 'accepted' %}
+                        <div class="col-md-8 col-sm-12 d-flex rounded-3 gap-2 shadow align-items-center p-0 request-container">
+                            <img src="{{re_request.sender.profile.avatar.url }}" class=" h-100 " />
+                            <div class="d-flex flex-column justify-content-end align-items-end px-2 py-2 w-100">
+                                <div class="d-flex justify-content-between w-100">
+                                    <a href="{% url 'accounts:user_profile_view' re_request.sender.username %}" class="text-decoration-none p-1 d-flex gap-2 justify-content-center align-items-center">
+                                        <i class="fa-brands fa-ello text-orange pb-2"></i>
+                                        <h6 class="orange-link"> {{ re_request.sender.username }}</h6>
+                                    </a>
+                                    <a href="{%url 'partners:delete_request_view' re_request.sender.id request.user.id %}" class="text-secondary pt-1 px-2 "><i class="fa-solid fa-xmark"></i></a>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center gap-4 w-100">
+                                    
+                                    <p><i class="fa-brands fa-creative-commons-by text-orange"></i>  
+                                        {{re_request.sender.profile.native_language.name}}</p>
+                            
+                                    
+                                    <p><i class="fa-solid fa-bullseye text-orange"></i>
+                                         {{re_request.sender.profile.target_language.name}}</p>
+                                
+                                   
+                                    <p><i class="fa-solid fa-calendar-day text-orange"></i> 
+                                        {{re_request.scheduled_at}}</p>
+                                </div>
 
-                <!-- Placeholder for other sections -->
-                <div class="row row-cols-3 gap-4" id="requestsContent" style="display: none;">
-                    <p>Content for Requests</p>
+                              
+                                <a class="btn-orange-white rounded-pill text-decoration-none px-3"  
+                                href="{% url 'partners:new_partner_view' request.user.id re_request.sender.id %}">Accept</a>   
+                                
+                            </div>
+                        </div>
+                        {%endif%}
+                    {% endfor %}
+                    {% else %}
+                    <p>No received requests yet</p>
+                    {% endif %}
+                    {% endif %}
                 </div>
+                <!-- Partners -->
+                {%if request.user.is_authenticated and request.user == user%}
                 <div class="row row-cols-3 gap-4" id="partnersContent" style="display: none;">
-                    <p>Content for Partners</p>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Partner</th>
+                                <th>Scheduled At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for partner in partners %}
+                            <tr>
+                                <td>{{ partner.partner.username }}</td>
+                                <td>{{ partner.scheduled_at }}</td>
+                                <td class="d-flex justify-content-start gap-2">
+                                    <!--button to session -->
+                                    <form id="form">
+                                        <div class="field-wrapper">
+                            
+                                            <div class="form-field" style="display: none;">
+                                              
+                                                <input name="room" placeholder="Enter a room name..." value="{{partner.partner.username}} & {{request.user.username}}"  style="text-transform:uppercase"/>
+                                            </div>
+                            
+                                            <div class="form-field" style="display: none;">
+                                             
+                                                <input name="name" placeholder="Enter your name..." value="{{request.user.username}}"  style="text-transform:uppercase"/>
+                                            </div>
+                            
+                                            <div class="form-field">
+                                                <input class="btn btn-success btn-sm rounded-pill" type="submit" value="Join Stream" />
+                                            </div>
+                                        </div>
+                                    </form> 
+                                    <!--button to delete partner -->
+                                        <a href="{%url 'partners:delete_partner_view' request.user.id partner.partner.id%}" class="btn btn-danger btn-sm rounded-pill"><i class="fa-solid fa-user-xmark"></i></a>
+                                  
+                    
+                            
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% for partner in partnered_users %}
+                            <tr>
+                                <td>{{ partner.user.username }}</td>
+                                <td>{{ partner.scheduled_at }}</td>
+                                <td class="d-flex justify-content-start gap-2">
+                                       <!--button to session -->
+                                       <form id="form">
+                                        <div class="field-wrapper">
+                            
+                                            <div class="form-field" style="display: none;">
+                                              
+                                                <input name="room" placeholder="Enter a room name..." value="{{partner.user.username}} & {{request.user.username}}"  style="text-transform:uppercase"/>
+                                            </div>
+                            
+                                            <div class="form-field" style="display: none;">
+                                                
+                                                <input name="name" placeholder="Enter your name..." value="{{request.user.username}}"  style="text-transform:uppercase"/>
+                                            </div>
+                            
+                                            <div class="form-field">
+                                                <input class="btn btn-success btn-sm rounded-pill" type="submit" value="Join Stream" />
+                                            </div>
+                                        </div>
+                                    </form>
+                    
+                                    <!-- Button to delete partner -->
+                                    <a href="{%url 'partners:delete_partner_view' request.user.id partner.user.id%}" class="btn btn-danger btn-sm rounded-pill"><i class="fa-solid fa-user-xmark"></i></a>
+
+                    
+                                   
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-                <div class="row row-cols-3 gap-4" id="messagesContent" style="display: none;">
-                    <p>Content for Messages</p>
-                </div>
+               
+                {%endif%}
             </div>
 
 
@@ -105,12 +268,39 @@
 
 {% endblock %}
 {% block script%}
-<script>
+<script type="text/javascript">
+    //session script
+    let form = document.getElementById('form')
+
+    let handleSubmit = async (e) => {
+        e.preventDefault()
+        let room = e.target.room.value.toUpperCase()
+        let name = e.target.name.value
+
+        let response = await fetch(`/partners/get_token/?channel=${room}`)
+        let data = await response.json()
+
+        let UID = data.uid
+        let token = data.token
+
+        sessionStorage.setItem('UID', UID)
+        sessionStorage.setItem('token', token)
+        sessionStorage.setItem('room', room)
+        sessionStorage.setItem('name', name)
+
+        window.open('/partners/start/chat/room/', '_self')
+    }
+
+
+
+    form.addEventListener('submit', handleSubmit)
+
+
+    //nav script
     function changeContent(content) {
         document.getElementById('savedBlogsContent').style.display = 'none';
         document.getElementById('requestsContent').style.display = 'none';
         document.getElementById('partnersContent').style.display = 'none';
-        document.getElementById('messagesContent').style.display = 'none';
 
         let links = document.querySelectorAll('.nav-link');
         links.forEach(link => {
@@ -118,13 +308,11 @@
         });
 
         if (content === 'Saved Blogs') {
-            document.getElementById('savedBlogsContent').style.display = 'block';
+            document.getElementById('savedBlogsContent').style.display = 'flex';
         } else if (content === 'Requests') {
-            document.getElementById('requestsContent').style.display = 'block';
+            document.getElementById('requestsContent').style.display = 'flex';
         } else if (content === 'Partners') {
             document.getElementById('partnersContent').style.display = 'block';
-        } else if (content === 'Messages') {
-            document.getElementById('messagesContent').style.display = 'block';
         }
 
         let activeLink = document.querySelector(`.nav-link[href='#'][onclick="changeContent('${content}')"]`);

@@ -15,6 +15,7 @@ class Profile(models.Model):
         FEMALE='F',"Female"
     
     gender=models.CharField(max_length=24, choices=GenderChoices.choices, default=GenderChoices.MALE)
+    role=models.CharField(max_length=60,default='partner')
     def __str__(self) -> str:
         return f"Profile {self.user.username}"
     

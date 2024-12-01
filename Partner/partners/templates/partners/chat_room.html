@@ -1,0 +1,41 @@
+{% extends 'main/base.html'%}
+{%load static%}
+
+   
+    {%block head%}
+    <link href="{% static 'css/partners.css' %}" rel="stylesheet" />
+
+    {%endblock%}
+    {%block title%}<title>Chat Room</title>{%endblock%}
+
+     {%block content%}
+     <section id="room-name-wrapper">
+        <p>Session Name: <span id="room-name"></span></p>
+    </section>
+
+    <section id="video-streams"></section>
+
+    <section id="controls-wrapper">
+        <div class="icon-wrapper">
+            <img class="control-icon" id="mic-btn" src="{% static 'images/microphone.svg' %}" />
+        </div>
+
+        <div class="icon-wrapper">
+            <img class="control-icon" id="camera-btn" src="{% static 'images/video.svg' %}" />
+        </div>
+
+        <div class="icon-wrapper">
+            <img class="control-icon" id="leave-btn" src="{% static 'images/exit.svg' %}" />
+        </div>
+    </section>
+      
+
+
+   
+     {%endblock%}
+     {%block footer%}
+     {%endblock%}
+     {%block script%}
+     <script type="text/javascript" src="{% static 'assets/AgoraRTC_N-4.22.2.js' %}"></script>
+     <script type="text/javascript" src="{% static 'js/streams.js' %}"></script>
+     {%endblock%}

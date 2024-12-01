@@ -1,0 +1,121 @@
+{% extends 'main/base.html'%}
+{%load static%}
+
+   
+    {%block head%}
+    {%endblock%}
+    {%block title%}<title>All Partners</title>{%endblock%}
+
+     {%block content%}
+      
+        <div class="container py-2">
+            <div class="border-bottom py-2">
+                <h1 class="   text-center itim-regular  ">Partners
+                </h1>
+            </div>
+            <div class="d-flex justify-content-end row"> 
+                <form class=" py-2" method="get" action="{%url 'accounts:all_partners_profiles_view'%}">
+                    {% csrf_token %}
+                    <div class="filtring-and-search   gap-1 d-flex justify-content-center ">
+                        <input type="search" class="form-control " placeholder="Search" value="{{request.GET.search}}" name="search" minlength="1"/>
+                        <select name="filter_by_native" class="form-select ">
+                            <option value="" selected disabled>Native Language</option> 
+                            {% for language in languages%}
+                            <option value="{{language.id}}" {%if request.GET.filter_by_lang == language.id %} selected {%endif%}>{{language.native_name}}</option>
+                            {%endfor%}
+                        </select>
+                        <select name="filter_by_target" class="form-select ">
+                            <option value="" selected disabled>Target Language</option> 
+                            {% for language in languages%}
+                            <option value="{{language.id}}" {%if request.GET.filter_by_lang == language.id %} selected {%endif%}>{{language.native_name}}</option>
+                            {%endfor%}
+                        </select>
+                        <input type="submit" class="btn rounded-pill btn-orange text-white " value="Apply"/>
+                        <a href="{%url 'accounts:all_partners_profiles_view'%}" class="btn btn-secondary rounded-pill text-white " value="clear">Clear </a>
+                    </div>
+                </form>
+            </div>
+            <div class="row my-4">
+                {% for profile in all_partners %}
+              <a href="{% url 'accounts:user_profile_view' profile.user.username%}" class="col-md-4 card-link mb-3">
+                <div class="card">
+                  <img src="{{profile.avatar.url}}" alt="Card image" style="height: 15rem;">
+                  <div class="card-info">
+                    <h5>{{profile.user.username}}</h5>
+                    <div class="d-flex justify-content-start align-items-center gap-4">
+                    <div class="d-flex gap-1 align-items-center">
+                        <i class="fa-brands fa-creative-commons-by mb-2"></i><h6>{{profile.native_language.name}}</h6>
+                    </div>
+                    <div class="d-flex gap-1 align-items-center">
+                        <i class="fa-solid fa-bullseye mb-2"></i><h6>{{profile.target_language.name}}</h6>
+                    </div>
+                </div>
+                    <p>{{profile.about|truncatechars:90}}</p>
+                  </div>
+                </div>
+              </a>
+              {%endfor%}
+            </div>
+          </div>
+
+    
+          <br/><br/>
+          <navbar aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+            
+                {% if blogs.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">
+                            <span aria-hidden="true"> First</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ blogs.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true"> First</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">&laquo;</span>
+                    </li>
+                {% endif %}
+    
+                {% for num in blogs.paginator.page_range %}
+                    {% if num == blogs.number %}
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+        
+                {% if blogs.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ blogs.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ blogs.paginator.num_pages }}" aria-label="Last">
+                            <span aria-hidden="true">Last </span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">&raquo;</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">Last</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </navbar>
+    </div>
+</div>
+     {%endblock%}
