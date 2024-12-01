@@ -4,6 +4,10 @@ from subjects.models import Subject
 from .models import Flashcard, Review
 from .forms import FlashcardForm
 from django.contrib import messages
+from PIL import Image
+import pytesseract
+import os
+from django.conf import settings
 
 
 # Create your views here.
@@ -63,3 +67,11 @@ def delete_flashcard_view(request: HttpRequest, flashcard_id: int):
     
     return redirect("flashcards:all_flashcards_view")
 
+def upload_pdf_view(request: HttpRequest):
+    img_path = os.path.join(settings.MEDIA_ROOT, 'images', 'simple.png')
+    img = Image.open(img_path)
+    text = pytesseract.image_to_string(img)
+
+    print(text)
+
+    return redirect("main:home_view")
