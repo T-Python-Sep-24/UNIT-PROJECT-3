@@ -44,22 +44,22 @@ def sign_up(request):
 
 
 
-def sign_in(request:HttpRequest):
-
+def sign_in(request: HttpRequest):
     if request.method == "POST":
-
-        #checking user credentials
+        # Checking user credentials
         user = authenticate(request, username=request.POST["username"], password=request.POST["password"])
         print(user)
         if user:
-            #login the user
+            # Log in the user
             login(request, user)
             messages.success(request, "Logged in successfully", "alert-success")
-            return redirect(request.GET.get("main:index_view", "/"))
+            # Redirect to the dashboard with the username
+            return redirect("Users:dashboard_view", username=user.username)
         else:
-            messages.error(request, "Please try again. You credentials are wrong", "alert-danger")
+            messages.error(request, "Please try again. Your credentials are wrong", "alert-danger")
 
     return render(request, "users/signin.html")
+
 
 def user_profile_view(request:HttpRequest, user_name):
     try:
