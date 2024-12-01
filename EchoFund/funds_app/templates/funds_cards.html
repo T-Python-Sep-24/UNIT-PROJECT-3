@@ -18,7 +18,9 @@
         </div>
         <div class="card-footer bg-transparent">
             <a href="{% url 'funds_app:fund_details_view' fund.id %}" class="btn btn-success">Details</a>
+            {% if not request.user == fund.fund_owner %}
             <a href="{% url 'funds_app:fund_participate_view' fund.id %}" class="btn btn-outline-primary">Participate</a>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -49,7 +49,6 @@ def fund_details_view(request: HttpRequest, fund_id):
 
     return render(request, 'fund_details.html', context={'is_bookmarked':is_bookmarked, 'fund':fund, 'reviews':reviews, 'rates':Review.Rates.choices})
 
-
 def add_fund_view(request: HttpRequest):
 
     members = User.objects.all()

@@ -2,15 +2,40 @@
 {% block title %}My Messages{% endblock %}
 
 {% block main %}
-    <div class="container pt-5 pb-5">
+    <div class="container pt-5 pb-5 d-flex">
+        <div class="col col-md-3">
+            <div class="nav-bar p-3 p-md-4 shadow rounded">
+                <form class="d-flex flex-md-column gap-2 justify-content-center flex-wrap" action="{% url 'accounts:messages_view' request.user.username %}" method="get">
+                    <button type="submit" name='msg' value="all" class="list-group-item btn {% if request.GET.msg == 'all' %} active {% endif %}">All</button>
+                    <button type="submit" name='msg' value="not_viewed" class="list-group-item btn  {% if request.GET.msg == 'not_viewed' %} active {% endif %}">Not Viewed</button>
+                    <button type="submit" name='msg' value="viewed" class="list-group-item btn  {% if request.GET.msg == 'viewed' %} active {% endif %}">Viewed</button>
+                    <button type="submit" name='msg' value="sent" class="list-group-item btn  {% if request.GET.msg == 'sent' %} active {% endif %}">Sent</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-10">
         {% for message in user_messages %}
         <div class="message shadow p-5 mt-3 mb-3">
-            <h1>Sender: <a class="h1" href="{% url 'accounts:profile_view' message.sender.username %}">@{{message.sender}}</a></h1>
+            <h4>Subject: {{message.subject}}</h4>
+            <div class="d-flex gap-3">
+                <h6>From: <a  href="{% url 'accounts:profile_view' message.sender.username %}">@{{message.sender}}</a></h6>
+                <h6><i class="fas fa-arrow-right"></i></h6>
+                <h6>to: <a  href="{% url 'accounts:profile_view' message.sender.username %}">@{{message.user}}</a></h6>
+            </div>
 
-            <h4>Subject {{message.subject}}</h4>
             <p>Content {{message.content}}</p>
             <p>Content {{message.sent_at}}</p>
+            <form action="{% url 'accounts:messages_view' message.sender.username %}" method="post">
+                {% csrf_token %}
+                {% if message.is_viewed %}
+                <a href="{% url 'accounts:unread_message' message.id %}" class="btn btn-success"><i class="fas fa-envelope p-1"></i>Mark as unread</a>
+                {% elif not message.is_viewed %}
+                <a href="{% url 'accounts:read_message' message.id %}" class="btn btn-warning"><i class="fas fa-envelope-open p-1"></i>Mark as Read</a>
+                {% endif %}
+                <a href="{% url 'accounts:delete_message' message.id %}" class="btn btn-danger"><i class="fas fa-trash p-1"></i>Delete</a>
+            </form>
         </div>
         {% endfor %}
+        </div>
     </div>
 {% endblock %}

@@ -116,6 +116,43 @@ def update_profile_view(request: HttpRequest):
 
 def messages_view(request: HttpRequest, user_name):
     if request.user.is_authenticated:
-        user_messages = UserMessage.objects.all()
+        user_messages = UserMessage.objects.filter(user = request.user)
+
+        if request.method == 'GET':
+            if 'msg' in request.GET:
+                if request.GET['msg'] == 'viewed':
+                    user_messages = user_messages.filter(is_viewed = True)
+                elif request.GET['msg'] == 'not_viewed':
+                    user_messages = user_messages.filter(is_viewed = False)
+
+                elif request.GET['msg'] == 'sent':
+                    user_messages = UserMessage.objects.filter(sender = request.user)
 
         return render(request, 'user_messages.html', context={'user_messages': user_messages})
+
+
+def read_message(request: HttpRequest, msg_id):
+
+    msg = UserMessage.objects.get(pk=msg_id)
+    msg.is_viewed = True
+    msg.save()
+    messages.success(request, 'Read Message', 'alert-success')
+    return redirect('accounts:messages_view', user_name = request.user.username)
+
+def unread_message(request: HttpRequest, msg_id):
+
+
+    msg = UserMessage.objects.get(pk=msg_id)
+    msg.is_viewed = False
+    msg.save()
+    messages.warning(request, 'Unread Message', 'alert-warning')
+    return redirect('accounts:messages_view', user_name = request.user.username)
+
+def delete_message(request: HttpRequest, msg_id):
+
+    msg = UserMessage.objects.get(pk = msg_id)
+
+    msg.delete()
+
+    messages.warning(request, 'message was deleted Successfully', 'alert-warning')
+    return redirect('accounts:messages_view', user_name = request.user.username)

@@ -5,15 +5,18 @@ from django.shortcuts import render, redirect
 from funds_app.models import Fund
 from .forms import ContactForm
 from .models import Contact, Testimonial
+from accounts.models import UserMessage
 
 
 # Create your views here.
 
 def home_view(request: HttpRequest):
 
+    msgs = UserMessage.objects.filter(user = request.user, is_viewed = False)
+
     funds = Fund.objects.all()[:3]
     testimonials = Testimonial.objects.all()
-    return render(request, 'index.html', context={'funds': funds, 'testimonials': testimonials})
+    return render(request, 'index.html', context={'user_msgs': msgs,'funds': funds, 'testimonials': testimonials})
 
 
 def search_view(request: HttpRequest):
