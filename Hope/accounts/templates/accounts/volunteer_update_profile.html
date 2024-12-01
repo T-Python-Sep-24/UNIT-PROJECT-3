@@ -3,9 +3,52 @@
 {% load static %}
 
 
-{% block body_class %}Volunteer Sign Up{% endblock %}
+{% block body_class %}Update Volunteer Profile{% endblock %}
 
 {% block content %}
+
+<div class="update-volunteer-profile-container">
+    <h1>Update Profile</h1>
+    <form action="{% url 'accounts:volunteer_update_profile' profile.volunteer_user.username %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" name="full_name" id="full_name" value="{{ profile.full_name }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea name="bio" id="bio" rows="5">{{ profile.bio }}</textarea>
+        </div>
+            
+        <div class="form-group">
+            <label for="skills">Skills</label>
+            <input type="text" name="skills" id="skills" value="{{ profile.skills }}">
+        </div>
+            
+        <div class="form-group">
+            <label for="experience">Experience</label>
+            <textarea name="experience" id="experience" rows="5">{{ profile.experience }}</textarea>
+        </div>
+            
+        <div class="form-group">
+            <label for="education_level">Education Level</label>
+            <select name="education_level" id="education_level">
+                <option value="">Select Education Level</option>
+                {% for value, display in profile.EducationLevel.choices %}
+                <option value="{{ value }}" {% if profile.education_level == value %}selected{% endif %}>{{ display }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="profile_picture">Profile Picture</label>
+            <input type="file" name="profile_picture" id="profile_picture">
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>    
+</div>
 
 
 

@@ -11,27 +11,33 @@
 
   <div class="profile-header">
     <div class="profile-left">
-      <div class="profile-logo"></div>
-      <div class="profile-info">
-        <h1 class="org-name">{{ profile.organization_name }}</h1>
-        <p>{{ profile.description }}</p>
-        {% if profile.website_url %}
-        <a
-          href="{{ profile.website_url }}"
-          target="_blank"
-          class="profile-website-link"
-          >Visit Website</a
-        >
+      <div class="profile-logo">
+        {% if profile.organization_logo %}
+        <img src="{{ profile.organization_logo.url }}" alt="{{ profile.organization_name }} Logo">
+        {% else %}
+        <img src="{% static 'images/default-logo.png' %}" alt="Default Logo">
         {% endif %}
       </div>
+      <div class="profile-info">
+        <h1 class="org-name">{{ profile.organization_name }}</h1>
+        {% if request.user == profile.organization_user %}
+        <a href="{% url 'accounts:organization_update_profile' profile.organization_user.username %}" class="update-icon">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </a>
+        {% endif %}
+      </div>
+
+      <p>{{ profile.description }}</p>
+      {% if profile.website_url %}
+      <a href="{{ profile.website_url }}" target="_blank" class="profile-website-link">Visit Website</a>
+      {% endif %}
     </div>
+
     <div class="profile-right">
       <!-- Tabs Navigation -->
       <nav class="tabs-navigation">
         <button class="tab-button active" data-tab="about">About</button>
-        <button class="tab-button" data-tab="opportunities">
-          Opportunities
-        </button>
+        <button class="tab-button" data-tab="opportunities">Opportunities</button>
       </nav>
 
       <!-- Tabs Content -->
@@ -39,37 +45,22 @@
         <!-- About Section -->
         <section id="about" class="tab-content active">
           <h2>About</h2>
-          <p>
-            <strong>Type of Organization:</strong> {{
-            profile.type_of_organization|default:"N/A" }}
-          </p>
-          <p>
-            <strong>Focus Area:</strong> {{ profile.focus_area|default:"N/A" }}
-          </p>
-          <p><strong>Contact:</strong> {{ profile.organization_user.email }}</p>
-          {% if profile.website_url %}
-          <p>
-            <strong>Website:</strong>
-            <a href="{{ profile.website_url }}" target="_blank"
-              >{{ profile.website_url }}</a
-            >
-          </p>
-          {% endif %}
+          <p><strong>Type of Organization:</strong> {{profile.organization_type|default:"N/A" }}</p>
+          <p><strong>Focus Area:</strong> {{ profile.industry_focus_area|default:"N/A" }}</p>
+          <p><strong>Contact:</strong> {{ profile.email }}</p>
         </section>
 
         <!-- Opportunities Section -->
         <section id="opportunities" class="tab-content">
-          <h2>Created Opportunities</h2>
+          <h2>Our Opportunities</h2>
           <div class="opportunities-grid">
             {% for opportunity in profile.opportunities.all %}
-            <div class="opportunity-card">
-              <h3>{{ opportunity.name }}</h3>
-              <p>{{ opportunity.description|truncatewords:15 }}</p>
-              <a
-                href="{% url 'opportunities:opportunity_detail_view' opportunity.id %}"
-                class="view-details"
-                >View Details</a
-              >
+            <div class="opportunity-card-2">
+              <img src="{{ opportunity.image.url }}" alt="{{ opportunity.name }}">
+              <div class="opportunity-card-info">
+                <h3>{{ opportunity.name }}</h3>
+                <a href="{% url 'opportunities:opportunity_detail_view' opportunity.id %}" class="view-details">View Details</a>
+              </div>
             </div>
             {% empty %}
             <p>No opportunities created yet.</p>

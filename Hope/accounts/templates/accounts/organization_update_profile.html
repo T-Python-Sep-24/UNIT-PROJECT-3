@@ -3,10 +3,59 @@
 {% load static %}
 
 
-{% block body_class %}Volunteer Sign Up{% endblock %}
+{% block body_class %}{{profile.organization_user.username }} Update Profile{% endblock %} 
 
 {% block content %}
 
+<div class="update-profile-container">
+    <h1 class="update-profile-header">Edit Profile</h1>
+    <form action="{% url 'accounts:volunteer_update_profile' profile.volunteer_user.username %}" method="post" enctype="multipart/form-data" class="update-profile-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" name="full_name" id="full_name" value="{{ profile.full_name }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea name="bio" id="bio" rows="5">{{ profile.bio }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" value="{{ profile.volunteer_user.email }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="education_level">Education Level</label>
+            <select name="education_level" id="education_level">
+                <option value="" {% if not profile.education_level %}selected{% endif %}>Select Education Level</option>
+                {% for value, display in profile.EducationLevel.choices %}
+                <option value="{{ value }}" {% if profile.education_level == value %}selected{% endif %}>{{ display }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="skills">Skills</label>
+            <textarea name="skills" id="skills" rows="3">{{ profile.skills }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="experience">Experience</label>
+            <textarea name="experience" id="experience" rows="5">{{ profile.experience }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="profile_picture">Profile Picture</label>
+            <input type="file" name="profile_picture" id="profile_picture">
+        </div>
+
+        <button type="submit" class="submit-button">Save Changes</button>
+    </form>
+</div>
+  
 
 
 

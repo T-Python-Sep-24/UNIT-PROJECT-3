@@ -8,6 +8,7 @@ from .models import OrganizationProfile
 from .models import VolunteerProfile
 from django.db import IntegrityError, transaction
 from django.urls import reverse
+from organizations.models import Opportunity
 
 
 
@@ -99,13 +100,17 @@ def login_view(request:HttpRequest):
                 user = authenticate(request, username=user_obj.username, password=password)
                 
         if user is not None:
-            login(request, user)  
+            login(request, user)
+            return redirect("main:main_view")  
+        
 
+            #I Don't need this testing code
             if hasattr(user, "organizationprofile"):
-                return redirect(reverse("accounts:organization_profile", kwargs={"username": user.username}))
+                return redirect(reverse("main:organization_profile", kwargs={"username": user.username}))
             
             elif hasattr(user, "volunteerprofile"):
                 return redirect(reverse("accounts:volunteer_profile", kwargs={"username": user.username}))
+            
             else:
                 messages.error(request, "Profile type not found.")
                 return redirect("accounts:login_view")
@@ -157,9 +162,27 @@ def organization_profile(request:HttpRequest, username):
 
 
 
-def organization_update_profile(request:HttpRequest):
+def organization_update_profile(request:HttpRequest, username):
 
-    return redirect(request,'accounts/organization_update_profile.html')
+    user = get_object_or_404(User, username=username)
+    profile = get_object_or_404(OrganizationProfile, organization_user=user)
+
+    if request.method == "POST":
+        profile.organization_name = request.POST.get("organization_name", profile.organization_name)
+        profile.description = request.POST.get("description", profile.description)
+        profile.website_url = request.POST.get("website_url", profile.website_url)
+        profile.organization_type = request.POST.get("organization_type", profile.organization_type)
+        profile.industry_focus_area = request.POST.get("industry_focus_area", profile.industry_focus_area)
+        profile.email = request.POST.get("email", profile.email) 
+
+        if request.FILES.get("organization_logo"):
+            profile.organization_logo = request.FILES.get("organization_logo")
+
+        profile.save()
+        messages.success(request, "Profile updated successfully!")
+        return redirect("accounts:organization_profile", username=username)
+
+    return render(request,'accounts/organization_update_profile.html', {'profile': profile})
 
 
 
@@ -172,24 +195,29 @@ def volunteer_profile(request:HttpRequest, username):
     if created:
         messages.info(request, "Welcome! Please complete your profile.")
 
+    applied_opportunities = profile.applied_opportunities.all()    
+    
+    return render(request, 'accounts/volunteer_profile.html', {'profile': profile, 'applied_opportunities': applied_opportunities})
+
+
+
+def volunteer_update_profile(request:HttpRequest, username):
+
+    user = get_object_or_404(User, username=username)
+    profile = get_object_or_404(VolunteerProfile, volunteer_user=user)
+
     if request.method == "POST":
         profile.full_name = request.POST.get("full_name", profile.full_name)
         profile.bio = request.POST.get("bio", profile.bio)
         profile.skills = request.POST.get("skills", profile.skills)
         profile.experience = request.POST.get("experience", profile.experience)
+        profile.education_level = request.POST.get("education_level", profile.education_level)
 
         if request.FILES.get("profile_picture"):
             profile.profile_picture = request.FILES.get("profile_picture")
 
         profile.save()
-
         messages.success(request, "Profile updated successfully!")
         return redirect("accounts:volunteer_profile", username=user.username)
-    
-    return render(request, 'accounts/volunteer_profile.html', {'profile': profile})
 
-
-
-def volunteer_update_profile(request:HttpRequest):
-
-    return redirect(request,'accounts/volunteer_update_profile.html')
+    return render(request,'accounts/volunteer_update_profile.html', {'profile': profile})

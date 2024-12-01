@@ -11,4 +11,8 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout_view"),
     path("org/<str:username>/profile/", views.organization_profile, name='organization_profile'),
     path("vol/<str:username>/profile/", views.volunteer_profile, name='volunteer_profile'),
+    path("org/<str:username>/update/", views.organization_update_profile, name='organization_update_profile'),
+    path("vol/<str:username>/update/", views.volunteer_update_profile, name='volunteer_update_profile'),
+
+
 ]
