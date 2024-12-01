@@ -17,11 +17,13 @@ def add_product_view(request: HttpRequest):
         about = request.POST.get("about")
         price = request.POST.get("price")
         city = request.POST.get("city")
+        image = request.FILES.get("image")
         new_product   = Product(
             name=name,
             about=(about),
             price=float(price),
             city =city,
+            image =image,
         )
         new_product  .save()
         return redirect("services:products_view")
@@ -38,6 +40,7 @@ def update_product_view(request: HttpRequest,product_id:int):
         product_detail.about = request.POST["about"]
         product_detail.city = request.POST["city"]
         product_detail.price = request.POST["price"]
+        product_detail.image = request.FILES["image"]
         product_detail.save()
         return redirect("dashboard:dashboard_view")
     return render(request, "services/update_product.html",{"product_detail": product_detail})

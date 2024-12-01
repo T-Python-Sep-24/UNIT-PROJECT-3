@@ -1,135 +1,198 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-{% block title %}Artist detail{% endblock %}
+{% block title %} Artist Detail {% endblock %}
 {% block style %}
 <style>
-    body{
-    background:#eee;
-}
+    body {
+        background-color: #f9f6f4; /* Off-white background */
+    }
 
-.card{
-    border:none;
+    .card {
+        border: none;
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        cursor: pointer;
+        background-color: #fff; /* White card background */
+        box-shadow: 0 5px 15px rgba(244, 198, 194, 0.2); /* Light pink shadow */
+    }
 
-    position:relative;
-    overflow:hidden;
-    border-radius:8px;
-    cursor:pointer;
-}
+    .card:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        background-color: #f4c6c2; /* Light pink */
+        transform: scaleY(1);
+        transition: all 0.5s;
+        transform-origin: bottom;
+    }
 
-.card:before{
-    
-    content:"";
-    position:absolute;
-    left:0;
-    top:0;
-    width:4px;
-    height:100%;
-    background-color:#E1BEE7;
-    transform:scaleY(1);
-    transition:all 0.5s;
-    transform-origin: bottom
-}
+    .card:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        background-color: #e8b3ad; /* Slightly darker pink */
+        transform: scaleY(0);
+        transition: all 0.5s;
+        transform-origin: bottom;
+    }
 
-.card:after{
-    
-    content:"";
-    position:absolute;
-    left:0;
-    top:0;
-    width:4px;
-    height:100%;
-    background-color:#8E24AA;
-    transform:scaleY(0);
-    transition:all 0.5s;
-    transform-origin: bottom
-}
+    .card:hover::after {
+        transform: scaleY(1);
+    }
 
-.card:hover::after{
-    transform:scaleY(1);
-}
+    .fonts {
+        font-size: 13px;
+        color: #4a4a4a; /* Neutral text */
+    }
 
+    .social-list {
+        display: flex;
+        list-style: none;
+        justify-content: center;
+        padding: 0;
+    }
 
-.fonts{
-    font-size:11px;
-}
+    .social-list li {
+        padding: 10px;
+        color: #f4c6c2; /* Light pink icons */
+        font-size: 19px;
+        transition: color 0.3s ease;
+    }
 
-.social-list{
-    display:flex;
-    list-style:none;
-    justify-content:center;
-    padding:0;
-}
+    .social-list li:hover {
+        color: #e8b3ad; /* Slightly darker pink hover */
+    }
 
-.social-list li{
-    padding:10px;
-    color:#8E24AA;
-    font-size:19px;
-}
+    .buttons button:nth-child(1) {
+        border: 1px solid #f4c6c2 !important;
+        color: #f4c6c2;
+        background-color: transparent;
+        height: 40px;
+        transition: all 0.3s ease;
+    }
 
+    .buttons button:nth-child(1):hover {
+        border: 1px solid #f4c6c2 !important;
+        color: #fff;
+        height: 40px;
+        background-color: #f4c6c2;
+    }
 
-.buttons button:nth-child(1){
-       border:1px solid #8E24AA !important;
-       color:#8E24AA;
-       height:40px;
-}
+    .buttons button:nth-child(2) {
+        border: 1px solid #f4c6c2 !important;
+        background-color: #f4c6c2;
+        color: #fff;
+        height: 40px;
+        transition: all 0.3s ease;
+    }
 
-.buttons button:nth-child(1):hover{
-       border:1px solid #8E24AA !important;
-       color:#fff;
-       height:40px;
-       background-color:#8E24AA;
-}
+    .buttons button:nth-child(2):hover {
+        background-color: #e8b3ad;
+    }
 
-.buttons button:nth-child(2){
-       border:1px solid #8E24AA !important;
-       background-color:#8E24AA;
-       color:#fff;
-        height:40px;
-}
+    .photos-section {
+        margin-top: 30px;
+    }
+
+    .photos-section h3 {
+        color: #4a4a4a;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .photos-section .photo-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .photos-section .photo-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .photos-section .photo-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .photos-section .photo-card img {
+        max-width: 100%;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    .photos-section .photo-card h5 {
+        font-size: 18px;
+        color: #4a4a4a;
+        margin-bottom: 10px;
+    }
+
+    .photos-section .photo-card p {
+        font-size: 14px;
+        color: #757575;
+        text-align: center;
+    }
+
+    .photos-section .photo-card .buttons {
+        margin-top: 10px;
+    }
 </style>
 {% endblock %}
+
 {% block content %} 
 <div class="container mt-5">
-    
     <div class="row d-flex justify-content-center">
-        
         <div class="col-md-7">
-            
             <div class="card p-3 py-4">
-                
                 <div class="text-center">
-                    <img src="https://i.imgur.com/bDLhJiP.jpg" width="100" class="rounded-circle">
+                    <img src="{{ artist.logo.url }}" width="100" class="rounded-circle">
                 </div>
-                
                 <div class="text-center mt-3">
                     <span class="bg-secondary p-1 px-4 rounded text-white">Pro</span>
-                    <h5 class="mt-2 mb-0">{{artist.name}}</h5>
-                    <span>{{artist.title}}</span>
-                    
+                    <h5 class="mt-2 mb-0">{{ artist.name }}</h5>
+                    <span>{{ artist.title }}</span>
                     <div class="px-4 mt-1">
-                        <p class="fonts">{{artist.about}} </p>
-                    
+                        <p class="fonts">{{ artist.about }}</p>
                     </div>
-                    
-                     <ul class="social-list">
+                    <ul class="social-list">
                         <li><i class="fa fa-facebook"></i></li>
                         <li><i class="fa fa-instagram"></i></li>
                         <li><i class="fa fa-google"></i></li>
                     </ul>
-                    
                     <div class="buttons">
-                        
                         <button class="btn btn-outline-primary px-4">Message</button>
                         <button class="btn btn-primary px-4 ms-3">Contact</button>
-                        {% for photo in photos %}
-                        <img src="{{photo.image.url}}" alt="">
-                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
+    <!-- Photos Section -->
+    <div class="photos-section">
+        <h3>Artist's Work</h3>
+        <div class="photo-cards">
+            {% for photo in photos %}
+                <div class="photo-card">
+                    <img src="{{ photo.image.url }}" alt="Artist's work">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,161 +1,230 @@
 {% extends 'main/base.html' %}
 {% block title %}Dashboard{% endblock %}
+
 {% block style %}
 <style>
-    /* Sidebar */
-    .sidebar {
-        min-width: 250px;
-        max-width: 250px;
-        background: linear-gradient(180deg, #969696, #FFFFFF);
-        color: #fff;
-        padding-top: 20px;
-        height: 100vh;
-        position: fixed;
-        border-radius: 0 15px 15px 0;
+    /* Navigation Bar */
+    .navbar {
+        width: 100%;
+        background-color: #f9f6f4; /* Off-white background */
+        border-bottom: 2px solid #f4c6c2; /* Light pink border */
+        padding: 10px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
-    .sidebar h2 {
-        color: #ffffff;
+
+    .navbar h2 {
+        color: #4a4a4a; /* Neutral dark gray */
         font-family: 'Poppins', sans-serif;
         font-weight: bold;
-        margin-bottom: 20px;
+        margin-right: auto;
     }
-    .sidebar a {
-        color: #ffffff;
+
+    .navbar a {
+        color: #4a4a4a; /* Neutral dark gray */
         text-decoration: none;
         font-weight: 500;
-        padding: 10px 20px;
-        display: block;
+        padding: 10px 15px;
         border-radius: 5px;
-        margin: 5px 10px;
+        margin: 0 5px;
         font-family: 'Poppins', sans-serif;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
-    .sidebar a:hover, .sidebar a.active {
-        background-color: #FFFFFF;
+
+    .navbar a:hover,
+    .navbar a.active {
+        background-color: #f4c6c2; /* Light pink hover and active */
         color: #fff;
+    }
+
+    .navbar form select {
+        border-radius: 5px;
+        border: 1px solid #f4c6c2; /* Light pink border */
+        padding: 5px;
     }
 
     /* Header */
     .header {
-        background: linear-gradient(180deg, #383434, #FFFFFF);
-        color: #fff;
+        background-color: #fff; /* White background */
+        color: #4a4a4a; /* Neutral dark gray */
         padding: 15px;
-        margin-left: 250px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 2px solid #FFDEE9;
+        border-bottom: 2px solid #f4c6c2; /* Light pink border */
         border-radius: 0 0 15px 15px;
-    }
-    .header h1 {
-        font-size: 24px;
-        margin: 0;
-        font-family: 'Poppins', sans-serif;
-        font-weight: bold;
-    }
-    .header form label {
-        font-weight: bold;
-        font-family: 'Poppins', sans-serif;
-    }
-    .header form select {
-        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .main-content {
-        margin-left: 250px;
-        padding: 20px;
+    .header .btn {
+        background-color: #f4c6c2; /* Light pink button */
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
     }
+
+    .header .btn:hover {
+        background-color: #e8b3ad; /* Slightly darker pink hover */
+    }
+
+    /* Main Content */
+    .main-content {
+        padding: 20px;
+        color: #4a4a4a; /* Neutral dark gray */
+    }
+
+    .main-content h2 {
+        color: #f4c6c2; /* Light pink heading */
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
     table {
-        background: #fff;
+        background-color: #fff; /* White table background */
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    th {
+        background-color: #f4c6c2; /* Light pink header */
+        color: #fff;
+        padding: 15px;
+        text-align: center;
+    }
+
+    td {
+        padding: 10px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .btn-dark,
+    .btn-secondary,
+    .btn-danger {
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+    .btn-dark {
+        background-color: #4a4a4a; /* Neutral dark gray button */
+        color: #fff;
+    }
+
+    .btn-dark:hover {
+        background-color: #333; /* Slightly darker gray hover */
+    }
+
+    .btn-secondary {
+        background-color: #e8b3ad; /* Slightly darker pink */
+        color: #fff;
+    }
+
+    .btn-secondary:hover {
+        background-color: #d99ea3; /* Slightly darker hover */
+    }
+
+    .btn-danger {
+        background-color: #ff5c5c; /* Red delete button */
+        color: #fff;
+    }
+
+    .btn-danger:hover {
+        background-color: #e64545; /* Darker red on hover */
     }
 </style>
 {% endblock %}
 
 {% block content %}
-    <div class="sidebar">
-        <h2 class="text-center">Dashboard</h2>
-        <a href="{% url 'dashboard:dashboard_view' %}" class="{% if data_filter == 'all' %}active{% endif %}">All</a>
-        <a href="{% url 'dashboard:dashboard_view' %}?data=products" class="{% if data_filter == 'products' %}active{% endif %}">Products</a>
-        <a href="{% url 'dashboard:dashboard_view' %}?data=artists" class="{% if data_filter == 'artists' %}active{% endif %}">Artists</a>
-    </div>
+<div class="navbar">
+    <h2>Dashboard</h2>
+    <a href="{% url 'dashboard:dashboard_view' %}" class="{% if data_filter == 'all' %}active{% endif %}">All</a>
+    <a href="{% url 'dashboard:dashboard_view' %}?data=products" class="{% if data_filter == 'products' %}active{% endif %}">Products</a>
+    <a href="{% url 'dashboard:dashboard_view' %}?data=artists" class="{% if data_filter == 'artists' %}active{% endif %}">Artists</a>
+</div>
 
-    <div class="header">
-        <form method="get" class="d-inline-flex ms-3 text-end">
-            <input type="hidden" name="data" value="{{ data_filter }}"> 
-            <label for="sort" class="me-2">Sort by:</label>
-            <select name="sort" id="sort" class="form-select form-select-sm" onchange="this.form.submit()">
-                <option value="newest" {% if sort_option == 'newest' %}selected{% endif %}>Newest</option>
-                <option value="oldest" {% if sort_option == 'oldest' %}selected{% endif %}>Oldest</option>
-            </select>
-        </form>
+<div class="header">
+    <form method="get" class="d-inline-flex ms-3 text-end">
+        <input type="hidden" name="data" value="{{ data_filter }}">
+        <label for="sort" class="me-2">Sort by:</label>
+        <select name="sort" id="sort" class="form-select form-select-sm" onchange="this.form.submit()">
+            <option value="newest" {% if sort_option == 'newest' %}selected{% endif %}>Newest</option>
+            <option value="oldest" {% if sort_option == 'oldest' %}selected{% endif %}>Oldest</option>
+        </select>
+    </form>
+    {% if data_filter == 'products' %}
+    <a class="btn btn-dark ms-auto" href="{% url 'services:add_product_view' %}">Add Product</a>
+    <a class="btn btn-dark ms-auto" href="{% url 'providers:add_artist_view' %}">Add Artist</a>
+    {% endif %}
+</div>
 
-        {% if data_filter == 'products' %}
-        <a class="btn btn-dark ms-auto" href="{% url 'services:add_product_view' %}">Add Product</a>
-        <a class="btn btn-dark ms-auto" href="{% url 'providers:add_artist_view' %}">Add Artist</a>
-        {% endif %}
-    </div>
-    <div class="main-content">
-        <h2 class="text-center text-pink mb-4">Products</h2>
-        <table class="table table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>About</th>
-                    <th>City</th>
-                    <th style="width: 20%;">Price</th>
-                    <th style="width: 20%;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for pro in product %}
-                <tr>    
-                    <td>{{ pro.name }}</td>
-                    <td>{{ pro.about }}</td>
-                    <td>{{ pro.city }}</td>
-                    <td>{{ pro.price }}</td>
-                    <td class="d-flex gap-2">
-                        <a href="{% url 'services:product_detail_view' pro.id %}" class="btn btn-dark">View</a>
-                        <a href="{% url 'services:update_product_view' pro.id %}" class="btn btn-secondary">Edit</a>
-                        <a href="{% url 'services:product_delete_view' pro.id %}" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %} 
-            </tbody>
-        </table>
-    </div>
-    <div class="main-content">
-        <h2 class="text-center text-pink mb-4">Artists</h2>
-        <table class="table table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>About</th>
-                    <th>email</th>
-                    <th style="width: 20%;">title</th>
-                    <th style="width: 20%;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for art in artist %}
-                <tr>    
-                    <td>{{ art.name }}</td>
-                    <td>{{ art.about }}</td>
-                    <td>{{ art.email }}</td>
-                    <td>{{ art.title }}</td>
-                    <td class="d-flex gap-2">
-                        <a href="{% url 'providers:artist_detail_view' art.id %}" class="btn btn-dark">View</a>
-                        <a href="{% url 'providers:update_artist_view' art.id %}" class="btn btn-secondary">Edit</a>
-                        <a href="{% url 'providers:artist_delete_view' art.id %}" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %} 
-            </tbody>
-        </table>
-    </div>
-{% block footer %}
-    {% endblock %}
+<div class="main-content">
+    <h2>Products</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>About</th>
+                <th>City</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pro in product %}
+            <tr>
+                <td>{{ pro.name }}</td>
+                <td>{{ pro.about }}</td>
+                <td>{{ pro.city }}</td>
+                <td>{{ pro.price }}</td>
+                <td>
+                    <a href="{% url 'services:product_detail_view' pro.id %}" class="btn btn-dark">View</a>
+                    <a href="{% url 'services:update_product_view' pro.id %}" class="btn btn-secondary">Edit</a>
+                    <a href="{% url 'services:product_delete_view' pro.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="main-content">
+    <h2>Artists</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>About</th>
+                <th>Email</th>
+                <th>Title</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for art in artist %}
+            <tr>
+                <td>{{ art.name }}</td>
+                <td>{{ art.about }}</td>
+                <td>{{ art.email }}</td>
+                <td>{{ art.title }}</td>
+                <td>
+                    <a href="{% url 'providers:artist_detail_view' art.id %}" class="btn btn-dark">View</a>
+                    <a href="{% url 'providers:update_artist_view' art.id %}" class="btn btn-secondary">Edit</a>
+                    <a href="{% url 'providers:artist_delete_view' art.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
-
-
