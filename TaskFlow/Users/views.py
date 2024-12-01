@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect , get_object_or_404
 from django.http import HttpRequest
+from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -61,6 +62,7 @@ def sign_in(request: HttpRequest):
     return render(request, "users/signin.html")
 
 
+
 def user_profile_view(request:HttpRequest, user_name):
     try:
         user = User.objects.get(username=user_name)
@@ -112,22 +114,23 @@ def update_user_profile(request: HttpRequest):
 
 @login_required
 def dashboard_view(request, username):
-    user = get_object_or_404(User, username=username)
-    if user.profile.roll in ["Manager", "Team Lead"]:
-        projects = Project.objects.filter(created_by=user) | Project.objects.filter(members=user)
-        tasks = Task.objects.filter(project__in=projects)
-        context = {
-            'user': user,
-            'projects': projects,
-            'tasks': tasks,
-        }
-        return render(request, 'users/dashboard.html', context)
+    user = request.user
+    if user.profile.roll == "Manager":
+        # Manager: Show projects and tasks they can manage
+        projects = Project.objects.filter(created_by=user)
+        tasks = Task.objects.filter(project__created_by=user)
+    elif user.profile.roll == "Team Member":
+        # Team Member: Show only tasks assigned to them
+        tasks = Task.objects.filter(assigned_to=user)
+        projects = None  # Team members don't manage projects
 
-
-
+    return render(request, "users/dashboard.html", {
+        "user": user,
+        "projects": projects,
+        "tasks": tasks,
+    })
     
-
 def log_out(request: HttpRequest):
     logout(request)
-    messages.success(request, "logged out successfully", "alert-warning")
-    return redirect(request.GET.get("next", "/"))
+    messages.success(request, "Logged out successfully", "alert-warning")
+    return redirect("Users:sign_in")  

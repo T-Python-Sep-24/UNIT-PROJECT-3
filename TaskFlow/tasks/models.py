@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from projects.models import Project  # Import the Project model if it's in another app
+from projects.models import Project  
+
 
 class Task(models.Model):
     STATUS_CHOICES = [
@@ -24,3 +25,17 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.status}"
+    
+
+
+class Comment(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="comments")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.created_by.username} on {self.task.title}"
+
+    
+    

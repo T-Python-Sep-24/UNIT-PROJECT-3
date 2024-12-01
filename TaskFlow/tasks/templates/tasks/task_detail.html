@@ -18,5 +18,24 @@
             <a href="{% url 'tasks:task_list' %}" class="btn btn-secondary btn-sm">Back to Task List</a>
         </div>
     </div>
+    <h4>Comments</h4>
+    <ul class="list-group mb-4">
+        {% for comment in comments %}
+        <li class="list-group-item">
+            <strong>{{ comment.created_by.username }}</strong>:
+            {{ comment.content }}
+            <small class="text-muted">{{ comment.created_at }}</small>
+        </li>
+        {% empty %}
+        <li class="list-group-item">No comments yet.</li>
+        {% endfor %}
+    </ul>
+
+    <h5>Add a Comment</h5>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 </div>
 {% endblock %}

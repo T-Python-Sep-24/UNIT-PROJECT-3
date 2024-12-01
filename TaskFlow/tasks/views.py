@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Task,Project
-from .forms import TaskForm
+from .forms import TaskForm , CommentForm
 from django.contrib.auth.models import User
 
 @login_required
@@ -26,7 +26,24 @@ def task_list(request):
 @login_required
 def task_detail(request, task_id):
     task = get_object_or_404(Task, id=task_id)
-    return render(request, "tasks/task_detail.html", {"task": task})
+    comments = task.comments.all()
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.task = task
+            comment.created_by = request.user
+            comment.save()
+            return redirect('tasks:task_detail', task_id=task.id)
+    else:
+        form = CommentForm()
+
+    return render(request, 'tasks/task_detail.html', {
+        'task': task,
+        'comments': comments,
+        'form': form,
+    })
+
 
 @login_required
 def update_task(request, task_id):
