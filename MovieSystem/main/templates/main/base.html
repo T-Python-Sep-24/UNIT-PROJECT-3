@@ -56,23 +56,23 @@
                         <!-- Login/Sign Up Buttons -->
                         {% if request.user.is_authenticated %}
                         <div class="d-flex  align-content-center align-items-center">
-                            <a class="nav-link " href="">{{request.user.username}}</a>
+                            <a class="nav-link " href="{% url 'accounts:profile_view' request.user.username %}">{{request.user.username}}</a>
                             <img src="{{request.user.profile.avatar.url}}" class="rounded-circle avatar" alt="">
                         </div>
                         {% endif %}
                         {% if request.user.is_authenticated %}
                             <li class="nav-item">
                                 <div class="d-flex gap-2 align-content-center align-items-center">
-                                <a class="nav-link " href="">Log Out</a>
+                                <a class="nav-link " href="{% url 'accounts:logout' %}">Log Out</a>
                                 </div>  
                             </li>
                         {% else %}
                             <div class="d-flex gap-2">
                                 <li class="nav-item">
-                                    <a class="btn btn-primary" href="" role="button">Login</a>
+                                    <a class="btn btn-primary" href="{% url 'accounts:signin_view' %}" role="button">Login</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="btn btn-secondary" href="" role="button">Sign Up</a>
+                                    <a class="btn btn-secondary" href="{% url 'accounts:signup_view' %}" role="button">Sign Up</a>
                                 </li>
                             </div>
                         
@@ -85,7 +85,16 @@
         
     </header>
     <main>
-        
+        {% if messages %}
+  
+        {% for message in messages %}
+        <div class="container alert {{message.tags}} alert-dismissible fade show mt-2" role="alert">
+          {{message}}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+  
+      {% endif %}
         <div class="content-wrapper">
             <div class="container mt-4">
                 {% block content %}
