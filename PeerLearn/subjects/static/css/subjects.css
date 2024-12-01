@@ -1,0 +1,32 @@
+/* brands cards */
+.card-image {
+    height: 250px !important;
+    padding-bottom: 1rem;
+}
+
+.card-image img {
+    object-fit: contain;
+}
+
+/* details cards */
+.details-card-image {
+    height: 300px !important;
+}
+
+.details-card-image img {
+    width: 100% !important;
+    height: 100%;
+    object-fit: contain !important;
+}
+
+/* forms */
+.update-image-thumb {
+    height: 80px;
+    margin-bottom: 0.5rem;
+}
+
+.update-image-thumb img {
+    width: 100% !important;
+    height: 100%;
+    object-fit: contain !important;
+}

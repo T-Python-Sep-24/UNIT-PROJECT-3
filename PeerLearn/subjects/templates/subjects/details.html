@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}Add Subject{% endblock %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'css/subjects.css' %}">{% endblock %}
+
+{% block content %}
+
+<section class="container">
+    <div class="row row-cols-1">
+        <div class="col">
+            <div class="d-flex flex-column shadow p-3 gap-2">
+                <div class="d-flex justify-content-between">
+                    <h1>{{ subject.name }}</h1>
+                    {% if request.user.is_superuser %}
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'subjects:update_subject_view' subject.id %}"><button class="btn btn-dark">Update</button></a>
+                        <!-- Button trigger modal -->
+                        <a href="#">
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Delete
+                            </button>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="details-card-image">
+                    <img src="{{ subject.logo.url }}" alt="{{ subject.name }} logo">
+                </div>
+                <div>
+                    <h5>Published: {{ subject.created_at }}</h5>
+                </div>
+                <p>{{ subject.about }}</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+<section>
+    <div class="container">
+        <h1>Subject Flashcards ({{ flashcards.count }})</h1>
+        {% include 'flashcards/components/flashcards_list.html' %}
+    </div>
+</section>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Deleting the Subject</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete the subject?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">No</button>
+          <a href="{% url 'brands:delete_brand_view' brand.id %}"><button type="button" class="btn btn-dark">Yes</button></a>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
