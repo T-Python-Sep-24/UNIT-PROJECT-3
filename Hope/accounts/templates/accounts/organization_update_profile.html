@@ -9,52 +9,60 @@
 
 <div class="update-profile-container">
     <h1 class="update-profile-header">Edit Profile</h1>
-    <form action="{% url 'accounts:volunteer_update_profile' profile.volunteer_user.username %}" method="post" enctype="multipart/form-data" class="update-profile-form">
-        {% csrf_token %}
+    <form action="{% url 'accounts:organization_update_profile' profile.organization_user.username %}" method="post" enctype="multipart/form-data" class="update-profile-form">
+      {% csrf_token %}
+  
+      <div class="form-group">
+        <label for="organization_name">Organization Name</label>
+        <input type="text" name="organization_name" id="organization_name" value="{{ profile.organization_name }}" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" id="description" rows="5">{{ profile.description }}</textarea>
+      </div>
+  
+      <div class="form-group">
+        <label for="website_url">Website URL</label>
+        <input type="url" name="website_url" id="website_url" value="{{ profile.website_url }}">
+      </div>
 
-        <div class="form-group">
-            <label for="full_name">Full Name</label>
-            <input type="text" name="full_name" id="full_name" value="{{ profile.full_name }}" required>
-        </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" value="{{ profile.email }}" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="organization_logo">Organization Logo</label>
+        <input type="file" name="organization_logo" id="organization_logo">
+      </div>
 
-        <div class="form-group">
-            <label for="bio">Bio</label>
-            <textarea name="bio" id="bio" rows="5">{{ profile.bio }}</textarea>
-        </div>
+      <div class="form-group">
+        <label for="organization_type">Organization Type:</label>
+        <select name="organization_type" id="organization_type">
+          <option value="" {% if not profile.organization_type %}selected{% endif %}>Select Organization Type</option>
+          {% for choice, display in profile.ORGANIZATION_TYPE_CHOICES %}
+          <option value="{{ choice }}" {% if profile.organization_type == choice %}selected{% endif %}>{{ display }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
 
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" value="{{ profile.volunteer_user.email }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="education_level">Education Level</label>
-            <select name="education_level" id="education_level">
-                <option value="" {% if not profile.education_level %}selected{% endif %}>Select Education Level</option>
-                {% for value, display in profile.EducationLevel.choices %}
-                <option value="{{ value }}" {% if profile.education_level == value %}selected{% endif %}>{{ display }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="skills">Skills</label>
-            <textarea name="skills" id="skills" rows="3">{{ profile.skills }}</textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="experience">Experience</label>
-            <textarea name="experience" id="experience" rows="5">{{ profile.experience }}</textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="profile_picture">Profile Picture</label>
-            <input type="file" name="profile_picture" id="profile_picture">
-        </div>
-
-        <button type="submit" class="submit-button">Save Changes</button>
+      <div class="form-group">
+        <label for="industry_focus_area">Industry Focus Area</label>
+        <select name="industry_focus_area" id="industry_focus_area">
+          <option value="" {% if not profile.industry_focus_area %}selected{% endif %}>Select Industry Focus Area</option>
+          {% for choice, display in profile.FOCUS_INDUSTRY_CHOICES %}
+          <option value="{{ choice }}" {% if profile.industry_focus_area == choice %}selected{% endif %}>{{ display }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      
+  
+      <button type="submit" class="submit-button">Update Profile</button>
     </form>
-</div>
+  </div>
   
 
 
