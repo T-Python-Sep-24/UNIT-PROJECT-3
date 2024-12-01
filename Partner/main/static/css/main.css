@@ -337,3 +337,18 @@ footer a:hover{
 .text-orange{
     color:#fe5532  ;
 }
+
+
+/* pageination */
+.page-item.active .page-link {
+    background-color: #fe5532;  
+    color: white; 
+    border-color: #fe5532; 
+    z-index: -100;
+}
+
+.page-item.active .page-link:hover {
+    background-color: #d24428; 
+    color: white;
+    z-index: -100;
+}

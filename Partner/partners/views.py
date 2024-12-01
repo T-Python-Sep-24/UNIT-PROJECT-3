@@ -65,12 +65,14 @@ def deleteMember(request):
 
 
 def new_request_view(request:HttpRequest,sender_id,recevier_id):
-    if not request.user.is_authenticated and request.user != request.user:
+    try: 
+        recevier=User.objects.get(pk=recevier_id)
+        if not request.user.is_authenticated and request.user != request.user and recevier.profile.role != 'editor':
             messages.warning(request,"only rigisted user can send requests","alert-warning")
             return redirect("accounts:sign_in") 
-    try:      
+     
         sender=User.objects.get(pk=sender_id)
-        recevier=User.objects.get(pk=recevier_id)
+        
         request_obj=Request.objects.filter(sender=sender,receiver=recevier)
         if not request_obj:
             if request.method == "POST":
@@ -85,12 +87,13 @@ def new_request_view(request:HttpRequest,sender_id,recevier_id):
             return redirect("main:home_view")
    
 def delete_request_view(request:HttpRequest,sender_id,recevier_id):
-    if not request.user.is_authenticated and request.user != request.user:
-            messages.warning(request,"only rigisted user can send requests","alert-warning")
-            return redirect("accounts:sign_in") 
     try:
-        sender=User.objects.get(pk=sender_id)
         recevier=User.objects.get(pk=recevier_id)
+
+        if not request.user.is_authenticated and request.user != request.user and recevier.profile.role != 'editor':
+            messages.warning(request,"only rigisted user can delete requests","alert-warning")
+            return redirect("accounts:sign_in") 
+        sender=User.objects.get(pk=sender_id)
         request=Request.objects.get(sender=sender,receiver=recevier)
         request.delete() 
         return redirect("accounts:user_profile_view",user_name=recevier.username)

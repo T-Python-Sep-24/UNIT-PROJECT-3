@@ -2,16 +2,23 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from .models import Language
 from django.contrib import messages
+from blogs.models import Blog
+from accounts.models import Profile
 from django.core.paginator import Paginator
 # Create your views here.
 
 
 def home_view(request:HttpRequest):
-    return render(request,"main/home.html")
+    three_partners=Profile.objects.filter(role='partner')[0:3]
+    all_partners=Profile.objects.filter(role='partner')
+    blogs=Blog.objects.all().order_by("-created_at")[0:3]
+    return render(request,"main/home.html",{"three_partners":three_partners,"blogs":blogs,"all_partners":all_partners})
 
 
 def add_language_view(request:HttpRequest):
-
+    if not (request.user.is_authenticated and request.user.is_superuser):
+        messages.warning(request,"only admin can add language","alert-warning")
+        return redirect("main:home_view")
     if request.method=="POST":
         language=Language(name=request.POST["name"],native_name=request.POST["native_name"])
         language.save()
@@ -22,9 +29,9 @@ def add_language_view(request:HttpRequest):
 
 
 def search_language(request):
-   # if not request.user.is_superuser and not request.user.has_perm("cars.view_color"):
-   #         messages.warning(request,"only staff can search color","alert-warning")
-    #        return redirect("main:home_view")
+    if not (request.user.is_authenticated and request.user.is_superuser):
+        messages.warning(request,"only admin can search in languages","alert-warning")
+        return redirect("main:home_view")
     lang_name = request.GET.get('search', '') 
 
     if lang_name:
@@ -40,6 +47,10 @@ def search_language(request):
     
 
 def update_language_view(request:HttpRequest,lang_id):
+    if not (request.user.is_authenticated and request.user.is_superuser):
+        messages.warning(request,"only admin can edit languages","alert-warning")
+        return redirect("main:home_view")
+
     try:
         lang = Language.objects.get(pk=lang_id)
 
@@ -63,9 +74,10 @@ def update_language_view(request:HttpRequest,lang_id):
 
 def delete_language_view(request,lang_id):
     try:
-#        if not request.user.is_superuser:
- #           messages.warning(request,"only staff can delete color","alert-warning")
-  #          return redirect("main:home_view")
+        if not (request.user.is_authenticated and request.user.is_superuser):
+            messages.warning(request,"only admin can delete language","alert-warning")
+            return redirect("main:home_view")
+
  
         lang=Language.objects.get(pk=lang_id)
         lang.delete()

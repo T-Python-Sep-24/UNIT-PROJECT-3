@@ -38,11 +38,15 @@
 
                 <div class="row align-items-center">
                     <div class="d-flex mt-2 justify-content-end gap-4">
+                        {% if request.user.is_authenticated and request.user.is_superuser %}
                         <input type="submit" value="Update Language" class="btn btn-success text-white"/>
+                        {%endif%}
                         <a href="{%url 'main:home_view'%}" class="btn btn-secondary text-white">Cancel</a>
+                        {% if request.user.is_authenticated and request.user.is_superuser %}
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Delete
                         </button> 
+                        {%endif%}
                         </div>
                 </div>    
                 </form>

@@ -8,6 +8,7 @@ from django.db import IntegrityError, transaction
 from partners.models import Request,Partner
 from django.core.paginator import Paginator
 from .models import Profile
+from django.db.models import Q
 
 # Create your views here.
 
@@ -83,20 +84,19 @@ def user_profile_view(request,user_name):
             print( partners)
             #check the request users
             is_requested=False
-            accept_req=False
             if sent_requests.exists() and received_requests.exists():     
                     is_requested=True
-            
+            is_partnered = Partner.objects.filter(
+                (Q(user=request.user) & Q(partner=user)) |
+                (Q(user=user) & Q(partner=request.user))
+            ).exists()
         else:
              sent_requests=[]
              received_requests=[]
              partners=[]
              partnered_users=[]
              is_requested=False
-        #if dosent have profile
-        #if not Profile.objects.filter(user=user).first():
-         #   new_profile = Profile(user=user)
-        #    new_profile.save()   
+             is_partnered=False
     except Exception as e:
         print(e)
         return render(request,"404.html")
@@ -104,7 +104,7 @@ def user_profile_view(request,user_name):
     return render(request,"accounts/profile.html",{"user":user,"sent_requests":sent_requests,
                                                    "is_requested":is_requested,"received_requests":received_requests,
                                                    "partners":partners,
-                                                   "partnered_users":partnered_users})
+                                                   "partnered_users":partnered_users,"is_partnered":is_partnered})
 
 
 def update_profile_view(request):
@@ -150,6 +150,8 @@ def update_profile_view(request):
 
 def all_partners_profiles_view(request):
     all_partners=Profile.objects.filter(role='partner')
+    count_partners=Profile.objects.filter(role='partner')
+
     languages=Language.objects.all()
     if "search" in request.GET and len(request.GET["search"]) >= 1:
         all_partners = all_partners.filter(user__username__icontains=request.GET["search"])
@@ -163,4 +165,4 @@ def all_partners_profiles_view(request):
     p=Paginator(all_partners,6)
     page=request.GET.get('page',1)
     all_partners_list=p.get_page(page)
-    return render(request,'accounts/all_profiles.html',{"all_partners":all_partners_list,"languages":languages})
+    return render(request,'accounts/all_profiles.html',{"all_partners":all_partners_list,"languages":languages,"count_partners":count_partners})

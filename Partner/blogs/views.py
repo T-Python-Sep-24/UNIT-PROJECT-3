@@ -44,16 +44,19 @@ def blog_details_view(request:HttpRequest,blog_id):
 
 
 def new_blog_view(request:HttpRequest):
-   # if not request.user.is_superuser and not request.user.has_perm("cars.add_car"):
-   #     messages.warning(request,"You don't have permission to add car","alert-warning")
-   #     return redirect("main:home_view")
+    if not request.user.is_superuser and not request.user.has_perm("blogs.add_blog"):
+       messages.warning(request,"You don't have permission to add blog","alert-warning")
+       return redirect("main:home_view")
     languages=Language.objects.all()
     if request.method=="POST":
         blog_form=BlogForm(request.POST,request.FILES)
         if blog_form.is_valid():
-              blog_form.save()
-              messages.success(request, 'The blog has been added successfully!','alert-success')
-              return redirect("blogs:new_blog_view")
+            blog = blog_form.save(commit=False)  #don't save yet
+            
+            blog.written_by = request.user  
+            blog.save()#now save it
+            messages.success(request, 'The blog has been added successfully!','alert-success')
+            return redirect("blogs:new_blog_view")
         else:
             print("form is not valid")
             print(blog_form.errors)
@@ -62,9 +65,9 @@ def new_blog_view(request:HttpRequest):
 
 def update_blog_view(request:HttpRequest,blog_id):
     try:   
-        #if not request.user.is_superuser:
-         #   messages.warning(request,"only staff can update car","alert-warning")
-          #  return redirect("main:home_view")
+        if not request.user.is_superuser and not request.user.has_perm("blogs.change_blog"):
+            messages.warning(request,"You don't have permission to edit blog","alert-warning")
+            return redirect("main:home_view")
  
         blog =Blog.objects.get(pk=blog_id)
         languages=Language.objects.all()
@@ -92,9 +95,9 @@ def update_blog_view(request:HttpRequest,blog_id):
 
 def delete_blog_view(request,blog_id):
     try:
-        #if not request.user.is_superuser:
-         #   messages.warning(request,"only staff can delete car","alert-warning")
-          #  return redirect("main:home_view")
+        if not request.user.is_superuser and not request.user.has_perm("blogs.delete_blog"):
+            messages.warning(request,"You don't have permission to edit blog","alert-warning")
+            return redirect("main:home_view")
 
         blog=Blog.objects.get(pk=blog_id)
         blog.delete()
@@ -123,17 +126,17 @@ def add_comment_view(request:HttpRequest,blog_id):
 
 
 def delete_comment_view(request:HttpRequest,comment_id):
-  
     try:
+            if not ((request.user.is_authenticated and  request.user == request.user) or request.user.is_superuser) :
+                    messages.error(request,"only user can delete comment",'alert-danger')
+                    return redirect("accounts:sign_in")
+
+
             comment = Comment.objects.get(pk=comment_id)
             blog_id=comment.blog.id
-            if request.user != comment.user :
-                messages.error(request,"you don't have permisstion to delete a comment",'alert-danger')
-                return redirect("blogs:blog_details_view",blog_id=blog_id)  
-            else:    
-                comment.delete()
-                messages.success(request, "comment deleted successfully",'alert-success')
-                return redirect("blogs:blog_details_view",blog_id=blog_id)  
+            comment.delete()
+            messages.success(request, "comment deleted successfully",'alert-success')
+            return redirect("blogs:blog_details_view",blog_id=blog_id)  
     except Comment.DoesNotExist:
         messages.error(request, "The comment does not exist", 'alert-danger')
         return redirect("blogs:blog_details_view",blog_id=blog_id)

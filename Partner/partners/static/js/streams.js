@@ -104,6 +104,11 @@ let toggleMic = async (e) => {
 }
 
 let createMember = async () => {
+    console.log({
+        'name': NAME,
+        'room_name': CHANNEL,
+        'UID': UID
+    });  // Log the data being sent
     let response = await fetch('/partners/create_member/', {
         method:'POST',
         headers: {
@@ -123,6 +128,11 @@ let getMember = async (user) => {
 }
 
 let deleteMember = async () => {
+    console.log({
+        'name': NAME,
+        'room_name': CHANNEL,
+        'UID': UID
+    });  // Log the data being sent
     let response = await fetch('/partners/delete_member/', {
         method:'POST',
         headers: {

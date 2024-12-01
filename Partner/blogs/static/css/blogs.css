@@ -1,7 +1,6 @@
 .challenge-area{
     background-color: #f4d3ca;
     border-radius: 10px; /* Optional: to add rounded corners */
-    min-height: 150vh !important;
    }
 
 .challenge-area-img{

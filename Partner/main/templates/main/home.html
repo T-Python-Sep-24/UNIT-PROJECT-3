@@ -22,17 +22,12 @@
         </div>
         <div class="row">
             <div class="intro-text col-md-3 d-flex flex-column gap-2 justify-content-center align-items-center">
-                <p class="text-start px-4">
+                <p class="text-start px-4 itim-regular">
                     We believe in the limitless potential of <span style="color:   #fe5532;">online education</span> to break down geographical barriers,
                      empowering individuals to learn at their own pace and providing opportunities for growth through 
                      <span style="color:   #fe5532;">collaboration </span>. 
                 </p>
-                <h5 class="itim-regular">
-                    Start for free<br/>
-                    join and find your partner 
-                </h5>
-                <a href="" class="btn btn-orange-white rounded-pill px-3">Join <i class="fa-solid fa-arrow-right-to-bracket"></i></a> 
-                
+               
             </div>
             <div class=" col-md-6 my-3 d-flex flex-column gap-2 justify-content-center align-items-center">
                
@@ -55,7 +50,7 @@
                     <div class="middle-middle img-part"></div>
                     <div class="right-middle img-part d-flex  justify-content-end align-items-center">
                         <p class="p-1 fw-bold">Do you have an account?
-                            <a href="" class="btn btn-orange rounded-pill px-3">Login</a> 
+                            <a href="{%url 'accounts:sign_in'%}?next={{request.path}}" class="btn btn-orange rounded-pill px-3">Login</a> 
 
                         </p>
 
@@ -67,111 +62,78 @@
 
                 </div>
             </div>
-           <!-- <div class="col-md-3 d-flex flex-column gap-2 justify-content-center ">
-                <h5 class="itim-regular text-center">Recent blogs</h5>
-                <div class="d-flex flex-column gap-2 ">
-                    <a href="" class="btn btn-posts rounded-pill">
-                        Title of blog
-                    </a>
-                    <a href="" class="btn btn-posts rounded-pill">
-                        Title of blog
-                    </a>
-                    <a href="" class="btn btn-posts rounded-pill">
-                        Title of blog
-                    </a>
-                    <div class="d-flex arrow-right-container justify-content-center align-items-center mt-2">
-                        <a href="" class="orange-link text-center ">
-                            See All 
-                        </a>
-                        <i class="fa-solid fa-arrow-right-long text-center px-1"></i>    
-                    </div>
-                    
-                </div>
-            </div>-->
-
+           
                   <div class="col-md-3 d-flex flex-column gap-2 justify-content-center">
-                    <h5 class="itim-regular text-center">Recent blogs</h5>
-                    <div class="d-flex flex-column gap-2 justify-content-center align-items-center">
-                        <a href="">
-                        <div class="dropdown">
-                            <p class="dropbtn btn-posts rounded-pill fs-6 py-2 px-5 fw-bold text-center">Title of blog</p>
-                            <div class="dropdown-content ">
-                            
-                                <div class="d-flex bg-light">
-                                    <img src="{% static 'images/soundon.jpg' %}" alt="Blog Image" class="w-50" style="object-fit: cover;">
-                                    <div class="text">
-                                        <h6 class="text-dark">Blog Heading</h6>
-                                        <p class="text-dark">Short description or teaser text about the blog post...</p>
-                                    </div> 
-                                </div>
-                            </div>
-                          </div>
-                        </a>
-                        
-                        <a href="">
-                            <div class="dropdown">
-                                <p class="dropbtn btn-posts rounded-pill fs-6 py-2 px-5 fw-bold text-center">Title of blog</p>
-                                <div class="dropdown-content ">
-                                
-                                    <div class="d-flex bg-light">
-                                        <img src="{% static 'images/soundon.jpg' %}" alt="Blog Image" class="w-50" style="object-fit: cover;">
-                                        <div class="text">
-                                            <h6 class="text-dark">Blog Heading</h6>
-                                            <p class="text-dark">Short description or teaser text about the blog post...</p>
-                                        </div> 
-                                    </div>
-                                </div>
-                              </div>
-                            </a>
-                       
-                  
-                        <!-- See All Link -->
-                        <div class="arrow-right-container justify-content-center align-items-center mt-2">
-                          <a href="{% url 'blogs:blogs_all_view'%}" class="orange-link text-center">
-                            See All 
-                          </a>
-                          <i class="fa-solid fa-arrow-right-long text-center px-1"></i>    
-                        </div>
-                      </div>
+                    <h5 class="itim-regular">
+                        Start for free<br/>
+                        join and find your partner 
+                    </h5>
+                    <a href="{%url 'accounts:sign_up'%}?next={{request.path}}" class="btn btn-orange-white col-md-6 col-sm-12 rounded-pill px-3">Join <i class="fa-solid fa-arrow-right-to-bracket"></i></a> 
+                    
                   </div>
 
 
         </div>
         <div class="container py-5">
-            <h3 class="itim-regular text-center">Best Partners</h3>
+                     
+            <h3 class="itim-regular text-center">Suggested Partners</h3>
             <div class="w-100 d-flex justify-content-end align-items-end">
-                <a href="" class="orange-link text-end mb-3 ">See More</a>
+                <a href="{% url 'accounts:all_partners_profiles_view'%}" class="orange-link text-end mb-3 ">See More</a>
             </div>
            
             <div class="row">
-              <a href="#" class="col-md-4 card-link">
-                <div class="card">
-                  <img src="{%static 'images/man-3373868_1280.jpg' %}" alt="Card image">
-                  <div class="card-info">
-                    <h5>Card Title</h5>
-                    <p>This is some information about the card. It appears on hover.</p>
+                {% for profile in three_partners %}
+                <a href="{% url 'accounts:user_profile_view' profile.user.username%}" class="col-md-4 card-link mb-3">
+                  <div class="card">
+                    <img src="{{profile.avatar.url}}" alt="Card image" style="height: 15rem;">
+                    <div class="card-info">
+                      <h5>{{profile.user.username}}</h5>
+                      <div class="d-flex justify-content-start align-items-center gap-4">
+                      <div class="d-flex gap-1 align-items-center">
+                          <i class="fa-brands fa-creative-commons-by mb-2 text-orange"></i><h6>{{profile.native_language.name}}</h6>
+                      </div>
+                      <div class="d-flex gap-1 align-items-center">
+                          <i class="fa-solid fa-bullseye mb-2 text-orange"></i><h6>{{profile.target_language.name}}</h6>
+                      </div>
                   </div>
-                </div>
-              </a>
-              <a href="#" class="col-md-4 card-link">
-                <div class="card">
-                  <img src="{%static 'images/man-3373868_1280.jpg' %}" alt="Card image">
-                  <div class="card-info">
-                    <h5>Card Title</h5>
-                    <p>This is some information about the card. It appears on hover.</p>
+                      <p>{{profile.about|truncatechars:90}}</p>
+                    </div>
                   </div>
-                </div>
-              </a>
-              <a href="#" class="col-md-4 card-link">
-                <div class="card">
-                  <img src="{%static 'images/man-3373868_1280.jpg' %}" alt="Card image">
-                  <div class="card-info">
-                    <h5>Card Title</h5>
-                    <p>This is some information about the card. It appears on hover.</p>
-                  </div>
-                </div>
-              </a>
+                </a>
+                {%endfor%}
             </div>
+
+
+            <h3 class="itim-regular text-center mt-5">Recent blogs</h3>
+            <div class="w-100 d-flex justify-content-end align-items-end mb-3">
+                <div class="arrow-right-container justify-content-center align-items-center mt-1">
+                    <a href="{% url 'blogs:blogs_all_view'%}" class="orange-link text-center">
+                      See All 
+                    </a>
+                    <i class="fa-solid fa-arrow-right-long text-center px-1"></i>    
+                  </div>           
+                 </div>
+                    <div class="d-flex  justify-content-center align-items-center text-center">
+                      
+                        {% for blog in blogs%}
+                        <a href="{%url 'blogs:blog_details_view' blog.id%}" class="col-md-4 mb-5">
+                            <div class="dropdown">
+                                <p class="dropbtn btn-posts rounded-pill fs-6 py-2 px-5 fw-bold text-center">{{blog.title|truncatechars:25}}</p>
+                                <div class="dropdown-content rounded-4 ">
+                                
+                                    <div class="d-flex bg-light  rounded-4">
+                                        <img src="{{blog.image.url}}" alt="Blog Image" class="w-50 dropdown-img" style="object-fit: cover;">
+                                        <div class="text p-3 w-100">
+                                            <h6 class="text-dark ">{{blog.title|truncatechars:45}}</h6>
+                                            <p class="text-dark ">{{blog.content|truncatechars:20}}</p>
+                                            <p class="text-dark fw-bold">{{blog.language.name|truncatechars:20}}</p>
+                                        </div> 
+                                    </div>
+                                </div>
+                              </div>
+                            </a>
+                        {%endfor%}
+                      </div>
           </div>
 
     

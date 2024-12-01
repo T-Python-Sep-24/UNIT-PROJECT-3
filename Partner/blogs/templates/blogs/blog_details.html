@@ -46,6 +46,7 @@
             </div>
             <div class="details-info col-md-2  mt-5 d-flex flex-column justify-content-between align-items-start">
                 <div class="d-flex flex-column gap-2">
+                    {% if request.user.is_authenticated %}
                     <div class="d-flex justify-content-start ">
                        
                         <a class="align-items-end text-end" href="{%url 'blogs:add_bookmark_view' blog.id%}">
@@ -56,15 +57,18 @@
         
                             {%endif%} 
                         </a> 
-                    </div>   
-                <h6 class="mt-2"><i class="fa-solid fa-user-pen text-orange"></i>Write by: Fulan ibn Fulan</h6>
+                    </div> 
+                    {%endif%}  
+                <a href="{% url 'accounts:user_profile_view' blog.written_by.username%}" class="orange-link"><h6 class="mt-2"><i class="fa-solid fa-user-pen text-orange"></i> <span class=" py-1">{{blog.written_by.username}}</span></h6></a>
                 <h6><i class="fa-solid fa-language text-orange"></i> {{blog.language.name}}</h6>
                 <small class="text-muted">created at: {{blog.created_at}}</small>
                 
              </div>
                  <div class="d-flex justify-content-end align-items-end text-end gap-3 border-top pt-2 mb-1">
+                    {% if request.user.is_superuser or perms.blogs.change_blog and perms.blogs.delete_blog  %}
                     <a href="{%url 'blogs:update_blog_view' blog.id%}"><i class="fa-solid fa-pen-to-square btn btn-success rounded-circle p-2"></i></a>
                     <a href="{%url 'blogs:delete_blog_view' blog.id%}"><i class="fa-solid fa-trash-can btn btn-danger rounded-circle p-2"></i></a>
+                    {%endif%}
                 </div>
             </div>
        </div> 
@@ -88,7 +92,7 @@
                         <img src="{{comment.user.profile.avatar.url}}" class="rounded-circle" style="height: 40px; width: 40px; object-fit: cover;"/>
                         <a href="{%url 'accounts:user_profile_view' comment.user.username%}" class="usernameLink  text-decoration-none"><h4>{{comment.user.username}}</h4></a>
                     </div>
-                    {% if comment.user == request.user %}
+                    {% if request.user.is_superuser or comment.user == request.user  %}
                     <a href="{% url 'blogs:delete_comment_view' comment.id%}" class="btn btn-danger rounded-circle ms-2"><i class="fa-solid fa-trash-can"></i></a>
                     {% endif %}
                 </div>

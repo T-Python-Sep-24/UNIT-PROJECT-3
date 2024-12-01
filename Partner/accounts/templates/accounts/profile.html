@@ -30,6 +30,8 @@
             {% endif %}
         </div>
         <hr/>
+        {% if user.profile.role != 'editor'%}
+
         <div class="d-flex flex-column gap-2">
             <p><i class="fa-solid fa-venus-mars text-orange"></i> <span class="fw-bold">Gender: </span>
               {%if user.profile.gender == 'M'%} 
@@ -42,6 +44,7 @@
             <p><i class="fa-brands fa-creative-commons-by text-orange"></i> <span class="fw-bold">Native Language: </span> {{user.profile.native_language.name}}</p>
             <p><i class="fa-solid fa-bullseye text-orange"></i> <span class="fw-bold">Target Language: </span>{{user.profile.target_language.name}}</p>
         </div>
+        {%endif%}
        
     </div>
     <div class="col-md-8">
@@ -49,8 +52,8 @@
         <div class="d-flex flex-column gap-3">
             <div class="d-flex justify-content-between align-items-center">
                 <h1>{{user.username}}</h1>  
-                {%if request.user.is_authenticated and request.user != user %}
-                {% if accept_req%}  
+                {%if request.user.is_authenticated and request.user != user and user.profile.role != 'editor'%}
+                {% if is_partnered%}  
                 <a href="" class="btn btn-success disabled rounded-pill">
                     <i class="fa-solid fa-check"></i> Partner</a>  
                 {%elif is_requested%}
@@ -91,7 +94,9 @@
             <p class="">{{user.profile.about}}</p>
             <hr class=""/>
             <nav class="nav nav-pills nav-fill">
+                {% if user.profile.role != 'editor'%}
                 <a class="nav-link profile-nav-link active" aria-current="page" href="#" onclick="changeContent('Saved Blogs')">Saved Blogs</a>
+
                 {%if request.user.is_authenticated and request.user == user %}
                 <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Requests')">Requests</a>
                 <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Partners')">Partners</a>
@@ -100,11 +105,18 @@
                 <a class="nav-link profile-nav-link disabled" href="#">Partners</a>
 
                 {% endif %}
+
+                {%else%}
+                <a class="nav-link profile-nav-link active" aria-current="page" href="#" onclick="changeContent('Saved Blogs')">Published Blogs</a>
+
+                {%endif%}
+                
             </nav>
         
                     <!-- Content -->
             <div id="changableContent ">
                 <div class="px-2 py-4 row row-cols-3 gap-4 " id="savedBlogsContent">
+                    {% if user.profile.role != 'editor'%}
                     <!--  Saved Blogs-->
                     {% if user.bookmark_set.all%}
                     {% for bookmark in user.bookmark_set.all %}
@@ -119,6 +131,19 @@
                     {% endfor %}
                     {%else%}
                         <p>No saved blogs yet</p>
+                        {%endif%}
+
+                        {%else%}
+                        {% for blog in user.blog_set.all %}
+                        
+                        <div class="col-md-3 d-flex rounded-3 gap-2 shadow align-items-center p-0 bookmark-container">
+                            <img src="{{ blog.image.url }}" class="w-50 h-100" />
+                            <a href="{% url 'blogs:blog_details_view' blog.id %}" class="text-decoration-none p-1">
+                                <h6 class="orange-link">{{ blog.title }}</h6>
+                            </a>
+                        </div>
+                        
+                    {% endfor %}
                         {%endif%}
                 </div>
               
@@ -201,6 +226,9 @@
                                             </div>
                                         </div>
                                     </form> 
+                                    <!--button to edit sceduel -->
+                                    <a href="{%url 'partners:delete_partner_view' request.user.id partner.partner.id%}" class="btn btn-warning btn-sm rounded-pill"><i class="fa-solid fa-calendar-day"></i></a>
+
                                     <!--button to delete partner -->
                                         <a href="{%url 'partners:delete_partner_view' request.user.id partner.partner.id%}" class="btn btn-danger btn-sm rounded-pill"><i class="fa-solid fa-user-xmark"></i></a>
                                   
@@ -246,6 +274,33 @@
                     </table>
                 </div>
                
+
+                <!--<button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-plus"></i> Partnership Request</button>
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">New Request</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{% url 'partners:new_request_view' request.user.id user.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="scheduled_at" class="col-form-label">Choose Session Schedule:</label>
+                                <input type="datetime-local" class="form-control" id="scheduled_at" name="scheduled_at" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-orange rounded-pill">Send Request</button>
+                            </div>
+                        </form>
+                    </div>
+                   
+                    </div>
+                </div>
+                </div>-->
                 {%endif%}
             </div>
 
