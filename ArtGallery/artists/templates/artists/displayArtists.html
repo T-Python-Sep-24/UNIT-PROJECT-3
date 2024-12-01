@@ -9,7 +9,7 @@
         Our Artists
         </h1>
         <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
-        <div class="d-flex justify-content-center mb-4">
+        <div class="d-flex justify-content-center mb-2">
             {% if user.is_staff and perms.artists.add_artist %}
             <a href="{% url 'artists:addArtistView' %}" class="btn-beige-300">New</a>
             {% endif %}
@@ -19,8 +19,7 @@
         novalidate>
             <div class="input-group justify-content-center">
                 <input class="form-control text-offwhite bg-blur-lighter focus-ring focus-ring-dark rounded-start-2 border-0" placeholder="Search.." style="max-width: 300px;"
-                    type="search" aria-label="Search" name="search"
-                    value="{{request.GET.search}}" minlength="2" required>
+                    type="search" aria-label="Search" name="search" value="{{request.GET.search}}" minlength="2">
                 <button class="btn-search rounded-end-2" type="submit">
                     <i class="bi bi-search"></i>
                 </button>

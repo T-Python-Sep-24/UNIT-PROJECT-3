@@ -24,7 +24,7 @@ def addArtistView(request: HttpRequest):
             else:
                 messages.error(request, f"Artist '{request.POST['fullName']}' wasn't added.", "alert-danger")
                 
-            response = redirect('artists:displayArtistsView', 'all')
+            response = redirect('artists:displayArtistsView')
     
     return response
 
@@ -49,7 +49,7 @@ def updateArtistView(request: HttpRequest, artistId:int):
                 else:
                     messages.error(request, f"Artist '{request.POST['fullName']}' wasn't updated.", "alert-danger")
                    
-                response =  redirect('artists:displayArtistsView', 'all')
+                response =  redirect('artists:displayArtistsView')
     
     return response
 
@@ -71,7 +71,7 @@ def deleteArtistView(request: HttpRequest, artistId:int):
                 messages.error(request, f"'{artist.fullName}' wasn't deleted.", "alert-danger")
             else: 
                 messages.success(request, f"'{artist.fullName}' deleted successfully.", "alert-success") 
-                response = redirect('artists:displayArtistsView', 'all')
+                response = redirect('artists:displayArtistsView')
 
     return response
 

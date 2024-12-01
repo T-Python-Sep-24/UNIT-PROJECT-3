@@ -28,7 +28,7 @@ def addArtPieceView(request: HttpRequest):
             else:
                 messages.error(request, f"'{request.POST['name']}' wasn't added.", "alert-danger")
                 
-            response = redirect('artPieces:displayArtPiecesView', 'all')
+            response = redirect('artPieces:displayArtPiecesView')
     
     return response
 
@@ -79,7 +79,7 @@ def deleteArtPieceView(request: HttpRequest, pieceId:int):
             else: 
                 messages.success(request, f"'{piece.name}' deleted successfully.", "alert-success")    
             
-            response = redirect('artPieces:displayArtPiecesView', 'all')
+            response = redirect('artPieces:displayArtPiecesView')
 
     return response
 
