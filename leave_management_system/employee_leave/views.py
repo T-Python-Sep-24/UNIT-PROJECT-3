@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 from django.core.mail import send_mail
+import matplotlib.pyplot as plt
+
 
 @login_required
 def request_leave(request):
@@ -52,13 +54,12 @@ def request_leave(request):
                 return render(request, 'employee_leave/request_leave.html', {'form': form})
 
             leave_request.save()
-
-            # if leave_request.manager:
-            #     subject = f"New Leave Request from {request.user.get_full_name()}"
-            #     message = f"Dear {leave_request.manager.get_full_name() if leave_request.manager else 'Manager'},\n\nYou have a new leave request from {request.user.get_full_name()}.\n\nLeave Type: {leave_request.leave_type}\nStart Date: {leave_request.start_date}\nEnd Date: {leave_request.end_date}\n\nPlease review and approve/reject the request."
-            #     from_email = leave_request.employee.email 
-            #     recipient_list = [leave_request.manager.email]  
-            #     send_mail(subject, message, from_email, recipient_list)
+            if leave_request.manager:
+                subject = f"New Leave Request from {request.user.get_full_name()}"
+                message = f"Dear {leave_request.manager.get_full_name() if leave_request.manager else 'Manager'},\n\nYou have a new leave request from {request.user.get_full_name()}.\n\nLeave Type: {leave_request.leave_type}\nStart Date: {leave_request.start_date}\nEnd Date: {leave_request.end_date}\n\nPlease review and approve/reject the request."
+                from_email = leave_request.employee.email 
+                recipient_list = [leave_request.manager.email]  
+                send_mail(subject, message, from_email, recipient_list)
 
             messages.success(request, "Your leave request has been successfully submitted and is awaiting approval from your manager.")
             return redirect('employee_leave:leave_requests')
@@ -88,18 +89,18 @@ def leave_requests(request):
 
     total_leave_taken = max(total_leave_taken, 0)
     remaining_leave = max(remaining_leave, 0)
-
+    
     fig, ax = plt.subplots(figsize=(6, 6)) 
     ax.pie([total_leave_taken, remaining_leave], 
            labels=['Leave Taken', 'Remaining Leave'], 
-           autopct='%1.1f%%',
+           autopct='%1.0f%%',
            colors=['#ff6347', '#32cd32'],    
            startangle=90, 
            pctdistance=0.85,
            explode=(0.1, 0))   
 
     ax.axis('equal') 
-    plt.title('Leave Status', fontsize=16, fontweight='bold')
+    plt.tight_layout()
 
     buffer = BytesIO()
     plt.savefig(buffer, format='png')

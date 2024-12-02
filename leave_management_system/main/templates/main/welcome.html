@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +15,7 @@
         }
 
         body {
-            background: #f0f8ff;
+            background-image: url("{% static 'images/Background-img.jpg' %}");
             font-family: 'Arial', sans-serif;
             height: 100vh;
             margin: 0;
@@ -65,7 +66,7 @@
         }
 
         .btn-employee {
-            background-color: #e6b8a2;
+            background-color: #a8dadc;
             color: #2a3d66;
         }
 
@@ -75,7 +76,7 @@
         }
 
         .btn-hr {
-            background-color: #ffdfba;
+            background-color: #a8dadc;
             color: #2a3d66;
         }
 
@@ -138,7 +139,7 @@
             <i class="fas fa-user"></i> Login as Employee
         </a>
         <a href="{% url 'main:login' role='manager' %}" class="btn btn-role btn-manager">
-            <i class="fas fa-user"></i> Login as Manager
+            <i class="fas fa-users"></i> Login as Manager
         </a>
         <a href="{% url 'main:login' role='hr' %}" class="btn btn-role btn-hr">
             <i class="fas fa-users"></i> Login as HR

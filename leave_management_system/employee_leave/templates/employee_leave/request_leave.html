@@ -5,26 +5,35 @@
 
 {% block content %}
     <div class="container mt-5">
+        <br>
         {% if messages %}
-        <div class="alert alert-warning">
-            {% for message in messages %}
+        {% for message in messages %}
+            <div class="alert 
+                {% if message.tags == 'success' %}
+                    alert-success
+                {% elif message.tags == 'warning' %}
+                    alert-warning
+                {% elif message.tags == 'error' %}
+                    alert-danger 
+                {% else %}
+                    alert-info
+                {% endif %}" role="alert">
                 <p>{{ message }}</p>
-            {% endfor %}
-        </div>
-        {% endif %}
-        <h2 class="mb-4 text-center">Leave Request Form</h2>
-
+            </div>
+        {% endfor %}
+    {% endif %}
+        <br><br>
         <form method="POST" enctype="multipart/form-data"class="shadow-lg p-4 rounded bg-light">
             {% csrf_token %}
-            <h3 class="mb-4 text-center">Fill Out Your Leave Request</h3>
+            <h2 class="mb-4 text-center"><strong>Leave Request Form</strong></h2>
 
             <div class="mb-4">
-                <label for="employee-name" class="form-label">Employee Name</label>
+                <label for="employee-name" class="form-label"><i class="fa-regular fa-user"></i> Employee Name</label>
                 <input type="text" class="form-control" id="employee-name" value="{{ request.user.first_name }} {{ request.user.last_name }}" readonly>
             </div>
 
             <div class="mb-4">
-                <label for="employee-number" class="form-label">Employee Number</label>
+                <label for="employee-number" class="form-label"><i class="fa-regular fa-user"></i> Employee Username</label>
                 <input type="text" class="form-control" id="employee-number" value="{{ request.user.username }}" readonly>
             </div>
 
@@ -34,12 +43,12 @@
             </div>
 
             <div class="mb-4">
-                <label for="start_date" class="form-label">Start Date</label>
+                <label for="start_date" class="form-label"><i class="fa-regular fa-calendar-days"></i> Start Date</label>
                 {{ form.start_date|add_class:"form-control" |attr:"id:start_date" }}
             </div>
 
             <div class="mb-4">
-                <label for="end_date" class="form-label">End Date</label>
+                <label for="end_date" class="form-label"><i class="fa-regular fa-calendar-days"></i> End Date</label>
                 {{ form.end_date|add_class:"form-control" |attr:"id:end_date" }}
             </div>
 
@@ -49,16 +58,16 @@
             </div>
 
             <div class="mb-4">
-                <label for="document" class="form-label">Upload Document (Optional)</label>
+                <label for="document" class="form-label"><i class="fa-solid fa-upload"></i> Upload Document (Optional)</label>
                 {{ form.document|add_class:"form-control" }}
             </div>
 
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary w-100" id="submit-btn">Submit Request</button>
+                <button type="submit" class="btn w-100" style=" background-color: #a8dadc;" id="submit-btn">Submit Request</button>
             </div>
 
             <div class="mt-3 text-center">
-                <a href="{% url 'employee_leave:leave_requests' %}" class="btn btn-secondary w-100">Back to Leave Requests</a>
+                <a href="{% url 'employee_leave:leave_requests' %}" class="btn btn-secondary w-100"><i class="fa-solid fa-arrow-left"></i> Back to Leave Requests</a>
             </div>
         </form>
     </div>

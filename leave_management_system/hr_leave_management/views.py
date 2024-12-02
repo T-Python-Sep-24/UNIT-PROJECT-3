@@ -16,18 +16,19 @@ from .forms import EditManagerForm
 @login_required
 def hr_dashboard(request):
     status_filter = request.GET.get('status', '')
+
     leave_requests = LeaveRequest.objects.all()
     if status_filter:
-        leave_requests = leave_requests.filter(status=status_filter).order_by('-updated_at')[:3].select_related('employee', 'employee__profile', 'employee__profile__manager')
+        leave_requests = leave_requests.filter(status=status_filter)
 
-    pending_leaves = leave_requests.filter(status='pending')
-    leave_requests = LeaveRequest.objects.filter(
+    leave_requests = leave_requests.select_related('employee', 'employee__profile', 'employee__profile__manager').order_by('-updated_at')
+
+    pending_leaves = leave_requests.filter(status='pending')[:3]
+
+    leave_requests_for_hr = LeaveRequest.objects.filter(
         sent_to_hr=True,
         status__in=['pending', 'manager_approved']
-    ).order_by('-updated_at')[:3].select_related('employee', 'employee__profile', 'employee__profile__manager')
-
-    for leave in leave_requests:
-        print(f"Employee: {leave.employee.get_full_name}, Manager: {leave.employee.profile.manager}")
+    ).order_by('-updated_at').select_related('employee', 'employee__profile', 'employee__profile__manager')[:3]
 
     last_approved_leaves = LeaveRequest.objects.filter(
         status='approved_by_hr'
@@ -38,8 +39,8 @@ def hr_dashboard(request):
     ).order_by('-updated_at')[:3]
 
     context = {
-        'pending_leaves':pending_leaves,
-        'leave_requests': leave_requests,
+        'pending_leaves': pending_leaves,
+        'leave_requests_for_hr': leave_requests_for_hr,
         'last_approved_leaves': last_approved_leaves,
         'rejected_leaves': rejected_leaves,
     }
@@ -59,14 +60,14 @@ def approve_reject_leave(request, request_id):
                 leave_request.status = 'approved_by_hr'
                 leave_request.hr_reason = reason
                 leave_request.save()
-                #if leave_request.employee.profile.email:  
-                    #subject = f"Your Leave Request has been Approved"
-                    #message = f"Dear {leave_request.employee.get_full_name()},\n\nYour leave request has been approved by HR.\n\nLeave Type: {leave_request.leave_type}\nStart Date: {leave_request.start_date}\nEnd Date: {leave_request.end_date}\n\nHR's Reason: {leave_request.hr_reason}\n\nEnjoy your leave!"
 
-                    #from_email = settings.DEFAULT_FROM_EMAIL  
-                    #recipient_list = [leave_request.employee.profile.email] 
-
-                    #send_mail(subject, message, from_email, recipient_list)
+                if leave_request.employee.email:
+                   subject = f"Your Leave Request has been Approved"
+                   message = f"Dear {leave_request.employee.get_full_name()},\n\nYour leave request has been approved by HR.\n\nLeave Type: {leave_request.leave_type}\nStart Date: {leave_request.start_date}\nEnd Date: {leave_request.end_date}\n\nHR's Reason: {leave_request.hr_reason}\n\nEnjoy your leave!"
+                   from_email = settings.DEFAULT_FROM_EMAIL
+                   recipient_list = [leave_request.employee.email]
+                   
+                send_mail(subject, message, from_email, recipient_list)
                 messages.success(request, "Leave request approved successfully.")
 
             elif action == 'reject':
@@ -101,7 +102,7 @@ def leave_requests(request):
     if status_filter:
         leave_requests = leave_requests.filter(status=status_filter)
 
-    pending_leaves = leave_requests.filter(status='pending')
+    pending_leaves = leave_requests.filter(status='manager_approved')
     approved_leaves = leave_requests.filter(status='approved_by_hr')
     rejected_leaves = leave_requests.filter(status='rejected_by_hr')
 

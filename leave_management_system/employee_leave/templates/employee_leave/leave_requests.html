@@ -30,36 +30,50 @@
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
+    
 </style>
 
 {% block content %}
 <br>
 <div class="container">
     {% if messages %}
-<div class="alert alert-warning">
     {% for message in messages %}
-        <p>{{ message }}</p>
+        <div class="alert 
+            {% if message.tags == 'success' %}
+                alert-success
+            {% elif message.tags == 'warning' %}
+                alert-warning
+            {% elif message.tags == 'error' %}
+                alert-danger 
+            {% else %}
+                alert-info
+            {% endif %}" role="alert">
+            <p>{{ message }}</p>
+        </div>
     {% endfor %}
-</div>
 {% endif %}
     <div class="form-container">
         <br>
-        <h2 class="display-4 text-center">Welcome, {{ request.user.get_full_name }}</h2>
+        <h2 class="display-4 text-center"><strong>Welcome , {{ request.user.get_full_name }}</strong></h2>
         <br>
-        <div class="alert alert-info">
-            <h4>{{ leave_status }}</h4>
-            <p>Total leave taken as approved by HR: {{ total_leave_taken }} days</p>
-        </div>
-
-        <div class="text-center">
-            <img src="data:image/png;base64,{{ leave_chart }}" alt="Leave Status Chart">
-        </div>
-
+        <div class="alert alert-warning text-center" role="alert" style="max-width: 1000px; margin: 0 auto; display: flex; justify-content: center; align-items: center; height: 60px;">
+    <h4><i class="fa-solid fa-triangle-exclamation"></i> {{ leave_status }} , Total leave taken as approved by HR: {{ total_leave_taken }} days</h4>
+</div>
+<br><br>
+<h2 class="text-center display-5"><strong>Leave Status Chart</strong></h2>
+<br>
+<div class="text-center">
+    <img src="data:image/png;base64,{{ leave_chart }}" alt="Leave Status Chart" 
+         style="width: 500px; height: auto; display: block; margin: 0 auto; border: 5px solid  #a8dadc; border-radius: 10px;">
+</div>
+<br><br><br>
+<h2 class="text-center display-5"><strong>Leave Request</strong></h2>
+<br>
         {% if pending_leaves %}
-        <h4>Pending Leaves</h4>
+        <h4><strong>Pending Leaves</strong></h4>
         <table class="table table-striped">
             <thead>
-                <tr class="bg-warning">
+                <tr style="background-color: rgb(255, 205, 112);">
                     <th>Leave Type</th>
                     <th>Start Date</th>
                     <th>End Date</th>
@@ -99,10 +113,10 @@
         {% endif %}
 
         {% if manager_approved_leaves %}
-        <h4>Manager Approved Leaves</h4>
+        <h4><strong>Manager Approved Leaves</strong></h4>
         <table class="table table-striped ">
             <thead>
-                <tr class="bg-success">
+                <tr style="background-color: rgba(130, 202, 130, 0.911);">
                     <th>Leave Type</th>
                     <th>Start Date</th>
                     <th>End Date</th>
@@ -120,12 +134,11 @@
                     <td>{{ leave.end_date }}</td>
                     <td class="text-success">Approved by Manager</td>
                     <td>{{ leave.manager_reason }}</td>
-                    <td>{% if leave.sent_to_hr %}{{ leave.comments }}{% else %}Not sent to HR yet{% endif %}</td>
+                    <td>Pending HR approval</td>
                     <td><button class="btn btn-outline-success btn-sm " data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
                         <div id="details-{{ leave.id }}" class="collapse mt-2">
                             <p><strong>Employee Reason:</strong>{% if leave.reason %} {{ leave.reason }} {% else %} No reason provided{% endif %}</p>
                             <p><strong>Manager Reason:</strong>{% if leave.manager_reason %} {{ leave.manager_reason }} {% else %}No reason provided{% endif %}</p>
-                            <p><strong>HR Reason: </strong>{% if leave.hr_reason %}{{ leave.hr_reason }}{% else %}No reason provided{% endif %}</p>
                             {% if leave.document %}
                             <p><strong>Attachment:</strong>
                             <a href="{{ leave.document.url }}" target="_blank">Download File</a></p>
@@ -144,10 +157,10 @@
         {% endif %}
 
         {% if approved_by_hr_leaves %}
-        <h4>HR Approved Leaves</h4>
+        <h4><strong>HR Approved Leaves</strong></h4>
         <table class="table table-striped ">
             <thead>
-                <tr class="bg-success">
+                <tr style="background-color: rgba(130, 202, 130, 0.911);">
                     <th>Leave Type</th>
                     <th>Start Date</th>
                     <th>End Date</th>
@@ -189,10 +202,10 @@
         {% endif %}
 
         {% if rejected_by_hr_leaves %}
-        <h4>Rejected Leaves</h4>
+        <h4><strong>Rejected Leaves</strong></h4>
         <table class="table table-striped">
             <thead>
-                <tr class="bg-danger">
+                <tr style="background-color: rgba(255, 100, 100, 0.911);">
                     <th>Leave Type</th>
                     <th>Start Date</th>
                     <th>End Date</th>
@@ -210,7 +223,7 @@
                     <td>{{ leave.end_date }}</td>
                     <td class="text-danger">Rejected by HR</td>
                     <td>{{ leave.manager_reason }}</td>
-                    <td>{{ leave.hr_reason }}</td>
+                    <td>{% if leave.hr_reason %}{{ leave.hr_reason }}{% else %}No reason provided{% endif %}</td>
                     <td><button class="btn btn-outline-danger btn-sm " data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
                         <div id="details-{{ leave.id }}" class="collapse mt-2">
                             <p><strong>Employee Reason:</strong>{% if leave.reason %} {{ leave.reason }} {% else %} No reason provided{% endif %}</p>
@@ -235,10 +248,10 @@
     </div>
 </div>
 {% if rejected_leaves_by_manager %}
-        <h4>Rejected Leaves Manager</h4>
+        <h4><strong>Rejected Leaves Manager</strong></h4>
         <table class="table table-striped">
             <thead>
-                <tr class="bg-danger">
+                <tr style="background-color: rgba(255, 100, 100, 0.911);">
                     <th>Leave Type</th>
                     <th>Start Date</th>
                     <th>End Date</th>
@@ -256,12 +269,12 @@
                     <td>{{ leave.end_date }}</td>
                     <td class="text-danger">Rejected by Manager</td>
                     <td>{{ leave.manager_reason }}</td>
-                    <td>{{ leave.hr_reason }}</td>
+                    <td>Not sent to HR </td>
                     <td><button class="btn btn-outline-danger btn-sm " data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
                         <div id="details-{{ leave.id }}" class="collapse mt-2">
                             <p><strong>Employee Reason:</strong>{% if leave.reason %} {{ leave.reason }} {% else %} No reason provided{% endif %}</p>
                             <p><strong>Manager Reason:</strong>{% if leave.manager_reason %} {{ leave.manager_reason }} {% else %}No reason provided{% endif %}</p>
-                            <p><strong>HR Reason: </strong>{% if leave.hr_reason %}{{ leave.hr_reason }}{% else %}No reason provided{% endif %}</p>
+                            <p><strong>HR Reason: </strong>Not sent to HR </p>
                             {% if leave.document %}
                             <p><strong>Attachment:</strong>
                             <a href="{{ leave.document.url }}" target="_blank">Download File</a></p>

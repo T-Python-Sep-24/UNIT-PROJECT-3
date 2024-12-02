@@ -3,21 +3,29 @@
 {% block title %}Manager Leave Requests{% endblock %}
 
 {% block content %}
-{% if messages %}
-<div class="alert alert-info">
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-</div>
-{% endif %}
-
 <div class="container mt-4">
-    <br>
+    <br><br>
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert 
+            {% if message.tags == 'success' %}
+                alert-success
+            {% elif message.tags == 'warning' %}
+                alert-warning
+            {% elif message.tags == 'error' %}
+                alert-danger  
+            {% else %}
+                alert-info
+            {% endif %}" role="alert">
+            <p>{{ message }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+<br>
     <div class="text-center mb-4">
         <h2 class="display-4">Welcome, {{ user.get_full_name }}</h2>
         <p class="lead">You can review and manage the leave requests below.</p>
     </div>
-
     <form method="get" action="{% url 'leave_manager:manager_leave_requests' %}" class="mb-4 d-flex justify-content-center">
         <div class="row w-100 justify-content-center">
             <div class="col-md-3">
@@ -34,15 +42,47 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <button type="submit" class="btn btn-secondary w-100">Search</button>
+                <button type="submit" class="btn w-100" style="background-color:  #a8dadc;"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
         </div>
     </form>
-
+    <div class="col-lg-12 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header text-white" style="background-color: rgba(255, 100, 100, 0.911);">
+                <h4>Conflicting Leave Requests</h4>
+            </div>
+            <div class="card-body">
+                {% if conflicting_leaves %}
+                    <ul class="list-group">
+                        {% for conflict in conflicting_leaves %}
+                            <li class="list-group-item">
+                                <strong>{{ conflict.leave.employee.get_full_name }}</strong> - 
+                                {{ conflict.leave.leave_type }} from {{ conflict.leave.start_date }} 
+                                to {{ conflict.leave.end_date }}
+                                <ul>
+                                    {% for conflicting_leave in conflict.conflicts %}
+                                        {% if conflicting_leave.employee != conflict.leave.employee %}
+                                            <li>
+                                                <strong>{{ conflicting_leave.employee.get_full_name }}</strong> - 
+                                                {{ conflicting_leave.leave_type }} from {{ conflicting_leave.start_date }} 
+                                                to {{ conflicting_leave.end_date }}
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">No conflicting leave requests.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-4 mb-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-warning text-white">
+                <div class="card-header text-white" style="background-color: rgb(255, 205, 112);">
                     <h4>Pending Requests</h4>
                 </div>
                 <div class="card-body">
@@ -51,7 +91,7 @@
                         {% for leave in pending_leaves %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
-                            <a href="{% url 'leave_manager:approve_or_reject_leave' leave.id %}" class="btn btn-warning btn-sm">Approve/Reject</a>
+                            <a href="{% url 'leave_manager:approve_or_reject_leave' leave.id %}" class="btn btn-outline-warning btn-sm">Approve/Reject</a>
                         </li>
                         {% endfor %}
                     </ul>
@@ -64,8 +104,8 @@
 
         <div class="col-lg-4 mb-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-success text-white">
-                    <h4>Approved Requests</h4>
+                <div class="card-header text-white" style="background-color: rgba(130, 202, 130, 0.911);">
+                    <h4>Manager Approved Requests</h4>
                 </div>
                 <div class="card-body">
                     {% if approved_leaves %}
@@ -73,12 +113,12 @@
                         {% for leave in approved_leaves %}
                         <li class="list-group-item">
                             {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
-                            <br>
-                            <button class="btn btn-success btn-sm mt-2" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
+                            <p><strong>Status:</strong>Approved by Manager</p>
+                            <button class="btn btn-outline-success btn-sm" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
                             <div id="details-{{ leave.id }}" class="collapse mt-2">
-                                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
-                                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
-                                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+                                <p><strong>Employee Reason:</strong>{% if leave.reason %}{{ leave.reason }}{% else %}No reason provided{% endif %}</p>
+                                <p><strong>Manager Reason:</strong>{% if leave.manager_reason %}{{ leave.manager_reason }}{% else %}No reason provided{% endif %}</p>
+                                {% if leave.document %} <p><strong>Attachment:</strong> <a href="{{ leave.document.url }}" target="_blank">Download File</a></p>{% else %}<p>No file attached.</p>{% endif %}
                             </div>
                         </li>
                         {% endfor %}
@@ -92,7 +132,7 @@
 
         <div class="col-lg-4 mb-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-info text-white">
+                <div class="card-header text-white" style="background-color: rgba(130, 202, 130, 0.911);">
                     <h4>HR Approved Requests</h4>
                 </div>
                 <div class="card-body">
@@ -102,11 +142,12 @@
                         <li class="list-group-item">
                             {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
                             <p><strong>Status:</strong> Approved by HR</p>
-                            <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
+                            <button class="btn btn-outline-success btn-sm" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
                             <div id="details-{{ leave.id }}" class="collapse  mt-2">
-                                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
-                                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
-                                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+                                <p><strong>Employee Reason:</strong>{% if leave.reason %}{{ leave.reason }}{% else %}No reason provided{% endif %}</p>
+                                <p><strong>Manager Reason:</strong>{% if leave.manager_reason %}{{ leave.manager_reason }}{% else %}No reason provided{% endif %}</p>
+                                <p><strong>HR Reason:</strong>{% if leave.hr_reason %}{{ leave.hr_reason }}{% else %}No reason provided{% endif %}</p>
+                                {% if leave.document %} <p><strong>Attachment:</strong> <a href="{{ leave.document.url }}" target="_blank">Download File</a></p>{% else %}<p>No file attached.</p>{% endif %}
                             </div>
                         </li>
                         {% endfor %}
@@ -122,7 +163,7 @@
     <div class="row">
         <div class="col-lg-4 mb-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-danger text-white">
+                <div class="card-header text-white" style="background-color: rgba(255, 100, 100, 0.911);">
                     <h4>Rejected by Manager</h4>
                 </div>
                 <div class="card-body">
@@ -131,12 +172,12 @@
                         {% for leave in rejected_leaves_by_manager %}
                         <li class="list-group-item">
                             {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
-                            <br>
-                            <button class="btn btn-danger btn-sm mt-2" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
+                            <p><strong>Status:</strong>Reject by Manager</p>
+                            <button class="btn btn-outline-danger btn-sm mt-2" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
                             <div id="details-{{ leave.id }}" class="collapse  mt-2">
-                                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
-                                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
-                                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+                                <p><strong>Employee Reason:</strong>{% if leave.reason %}{{ leave.reason }}{% else %}No reason provided{% endif %}</p>
+                                <p><strong>Manager Reason:</strong>{% if leave.manager_reason %}{{ leave.manager_reason }}{% else %}No reason provided{% endif %}</p>
+                                {% if leave.document %} <p><strong>Attachment:</strong> <a href="{{ leave.document.url }}" target="_blank">Download File</a></p>{% else %}<p>No file attached.</p>{% endif %}
                             </div>
                         </li>
                         {% endfor %}
@@ -150,7 +191,7 @@
 
         <div class="col-lg-4 mb-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-secondary text-white">
+                <div class="card-header text-white" style="background-color: rgba(255, 100, 100, 0.911);">
                     <h4>Rejected by HR</h4>
                 </div>
                 <div class="card-body">
@@ -159,12 +200,13 @@
                         {% for leave in rejected_leaves_by_hr %}
                         <li class="list-group-item">
                             {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
-                            <br>
-                            <button class="btn btn-secondary btn-sm mt-2" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
+                            <p><strong>Status:</strong>Rejected by HR</p>
+                            <button class="btn btn-outline-danger btn-sm mt-2" data-toggle="collapse" data-target="#details-{{ leave.id }}">View Details</button>
                             <div id="details-{{ leave.id }}" class="collapse  mt-2">
-                                <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
-                                <p><strong>Manager Reason:</strong> {{ leave.manager_reason }}</p>
-                                <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+                                <p><strong>Employee Reason:</strong>{% if leave.reason %}{{ leave.reason }}{% else %}No reason provided{% endif %}</p>
+                                <p><strong>Manager Reason:</strong>{% if leave.manager_reason %}{{ leave.manager_reason }}{% else %}No reason provided{% endif %}</p>
+                                <p><strong>HR Reason:</strong>{% if leave.hr_reason %}{{ leave.hr_reason }}{% else %}No reason provided{% endif %}</p>
+                                {% if leave.document %} <p><strong>Attachment:</strong> <a href="{{ leave.document.url }}" target="_blank">Download File</a></p>{% else %}<p>No file attached.</p>{% endif %}
                             </div>
                         </li>
                         {% endfor %}

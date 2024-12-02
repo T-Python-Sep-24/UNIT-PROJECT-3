@@ -3,34 +3,43 @@
 {% block title %}Leave Requests - HR{% endblock %}
 
 {% block content %}
-<br>
+<br><br>
 <div class="container mt-4">
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert 
+            {% if message.tags == 'success' %}
+                alert-success
+            {% elif message.tags == 'warning' %}
+                alert-warning
+            {% elif message.tags == 'error' %}
+                alert-danger 
+            {% else %}
+                alert-info
+            {% endif %}" role="alert">
+            <p>{{ message }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
     <div class="text-center mb-4">
-        <h2 class="display-4">Welcome, {{ request.user.get_full_name }}</h2>
+        <h2 class="display-4"><strong>Welcome, {{ request.user.get_full_name }}</strong></h2>
         <p class="lead">You are viewing the HR leave requests dashboard.</p>
     </div>
+    <br>
 
-    {% if messages %}
-    <div class="alert alert-info">
-        {% for message in messages %}
-        <p>{{ message }}</p>
-        {% endfor %}
-    </div>
-    {% endif %}
-<br>
-    <h2 class=" mb-4">Leave Requests Sent to HR</h2>
+    <h2 class=" mb-4">Last Leave Requests Sent to HR</h2>
     <div class="row">
         <div class="col-lg-12">
             <div class="card shadow-sm">
-                <div class="card-header bg-warning text-white">
-                    <h4>Pending Requests</h4>
-                    <a class="nav-link" href="{% url 'hr_leave_management:leave_requests' %}">View more panding request
+                <div class="card-header text-white" style="background-color: rgb(255, 205, 112);">
+                    <h4 class="text-dark">Pending Requests</h4>
+                    <a class="nav-link text-dark" href="{% url 'hr_leave_management:leave_requests' %}">View more pending requests
                     <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
                 <div class="card-body">
-                    {% if pending_leaves %}
+                    {% if leave_requests_for_hr %}
                     <ul class="list-group">
-                        {% for leave in pending_leaves %}
+                        {% for leave in leave_requests_for_hr %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             {{ leave.employee.get_full_name }} - {{ leave.leave_type }} from {{ leave.start_date }} to {{ leave.end_date }}
                             {% if leave.employee.profile.manager %}
@@ -43,20 +52,20 @@
                         {% endfor %}
                     </ul>
                     {% else %}
-                    <p class="text-muted">No pending or manager approved leave requests found.</p>
+                    <p class="text-muted">No leave requests sent to HR.</p>
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
-    <h3 class="mt-5">Last Approved Leave Requests</h3>
+    <h2 class="mt-5">Last Approved Leave Requests</h2>
     <div class="row">
         <div class="col-lg-12">
             <div class="card shadow-sm">
-                <div class="card-header bg-success text-white">
-                    <h4>Approved Requests</h4>
-                    <a class="nav-link" href="{% url 'hr_leave_management:leave_requests' %}">View more approved request
+                <div class="card-header text-white" style="background-color: rgba(130, 202, 130, 0.911);">
+                    <h4 class="text-dark">Approved Requests</h4>
+                    <a class="nav-link text-dark" href="{% url 'hr_leave_management:leave_requests' %}">View more approved requests
                         <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
                 <div class="card-body">
@@ -136,13 +145,13 @@
         </div>
     </div>
 
-    <h3 class="mt-5">Last Rejected Leave Requests</h3>
+    <h2 class="mt-5">Last Rejected Leave Requests</h2>
     <div class="row">
         <div class="col-lg-12">
             <div class="card shadow-sm">
-                <div class="card-header bg-danger text-white">
-                    <h4>Rejected Requests</h4>
-                    <a class="nav-link" href="{% url 'hr_leave_management:leave_requests' %}">View more rejected request
+                <div class="card-header text-white" style="background-color: rgba(255, 100, 100, 0.911);">
+                    <h4 class="text-dark">Rejected Requests</h4>
+                    <a class="nav-link text-dark" href="{% url 'hr_leave_management:leave_requests' %}">View more rejected requests
                         <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
                 <div class="card-body">
@@ -180,9 +189,9 @@
                                     </button>
                                     <div id="rejected-details-{{ leave.id }}" class="collapse">
                                         <br>
-                                        <p><strong>Employee Reason:</strong> {{ leave.reason }}</p>
-                                        <p><strong>Manager Reason:</strong> {% if leave.manager_reason %}{{ leave.manager_reason }}{% else %}No manager reason provided{% endif %}</p>
-                                        <p>Comments: {% if leave.comments %}{{ leave.comments }}{% else %}No comments provided{% endif %}</p>
+                                        <p><strong>Employee Reason:</strong>{% if leave.reason %}{{ leave.reason }}{% else %}No reason provided{% endif %}</p>
+                                        <p><strong>Manager Reason:</strong> {% if leave.manager_reason %}{{ leave.manager_reason }}{% else %}No reason provided{% endif %}</p>
+                                        <p><strong>HR Reason:</strong>{% if leave.hr_reason %}{{ leave.hr_reason }}{% else %}No reason provided{% endif %}</p>
                                         {% if leave.document %}
                                         <p><strong>Attachment:</strong>
                                             <a href="{{ leave.document.url }}" target="_blank">Download File</a>

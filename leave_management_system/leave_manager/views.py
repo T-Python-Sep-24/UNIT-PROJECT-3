@@ -5,10 +5,11 @@ from employee_leave.models import LeaveRequest
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.conf import settings
+from datetime import timedelta
 
 @login_required
 def manager_leave_requests(request):
-    employee_leaves = LeaveRequest.objects.filter(manager=request.user).order_by('-start_date')
+    employee_leaves = LeaveRequest.objects.filter(employee__profile__manager=request.user).order_by('-start_date')
 
     search_query = request.GET.get('search_query', '')
     status = request.GET.get('status', '')
@@ -30,12 +31,44 @@ def manager_leave_requests(request):
     rejected_leaves_by_hr = employee_leaves.filter(status='rejected_by_hr')
     hr_approved_leaves = employee_leaves.filter(status='approved_by_hr')
 
+    conflicting_leaves = []
+    conflicting_leave_ids = set() 
+
+    for leave in employee_leaves:
+        conflicting_leaves_query = LeaveRequest.objects.filter(
+            employee__profile__manager=request.user,       
+            start_date__lte=leave.end_date,
+            end_date__gte=leave.start_date
+        ).exclude(id=leave.id)  
+
+        if conflicting_leaves_query.exists():
+            conflicts = []
+            for conflicting_leave in conflicting_leaves_query:
+                if conflicting_leave.status in ['rejected', 'rejected_by_hr']:
+                    continue  
+
+                if conflicting_leave.id not in conflicting_leave_ids:
+                    conflicting_leave_ids.add(conflicting_leave.id)
+                    conflicts.append(conflicting_leave)
+
+            if conflicts:
+                if leave.id not in conflicting_leave_ids:
+                    conflicting_leave_ids.add(leave.id)
+                    conflicting_leaves.append({
+                        'leave': leave,
+                        'conflicts': conflicts
+                    })
+
+    if not conflicting_leaves:
+        conflicting_leaves = None
+
     context = {
         'pending_leaves': pending_leaves,
         'approved_leaves': approved_leaves,
         'rejected_leaves_by_manager': rejected_leaves_by_manager,
         'rejected_leaves_by_hr': rejected_leaves_by_hr,
         'hr_approved_leaves': hr_approved_leaves,
+        'conflicting_leaves': conflicting_leaves,  
     }
 
     return render(request, 'leave_manager/manager_leave_requests.html', context)
@@ -62,14 +95,15 @@ def approve_or_reject_leave(request, leave_id):
             leave_request.sent_to_hr = True
             leave_request.save()
 
-            #if leave_request.employee.profile.hr_email:  
-                #subject = f"Leave Request from {leave_request.employee.get_full_name()} Approved by Manager"
-                #message = f"Dear HR,\n\nThe leave request from {leave_request.employee.get_full_name()} has been approved by the manager.\n\nLeave Type: {leave_request.leave_type}\nStart Date: {leave_request.start_date}\nEnd Date: {leave_request.end_date}\n\nManager's Reason: {leave_request.manager_reason}\n\nPlease review and approve or reject the request."
+            if leave_request.hr:
+                 subject = f"Leave Request from {leave_request.employee.get_full_name()} Approved by Manager"
+                 message = f"Dear HR,\n\nThe leave request from {leave_request.employee.get_full_name()} has been approved by the manager.\n\nLeave Type: {leave_request.leave_type}\nStart Date: {leave_request.start_date}\nEnd Date: {leave_request.end_date}\n\nManager's Reason: {leave_request.manager_reason}\n\nPlease review and approve or reject the request."
+                 from_email = leave_request.manager.email
 
-                #from_email = settings.DEFAULT_FROM_EMAIL   
-                #recipient_list = [leave_request.employee.profile.hr_email] 
+                 hr_email = leave_request.hr.email  
+                 recipient_list = [hr_email]
 
-                #send_mail(subject, message, from_email, recipient_list)
+                 send_mail(subject, message, from_email, recipient_list)
 
             messages.success(request, f"Leave request from {leave_request.employee.get_full_name()} has been sent to HR for final approval.")
             return redirect('leave_manager:manager_leave_requests')

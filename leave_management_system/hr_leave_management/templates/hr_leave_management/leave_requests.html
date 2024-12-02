@@ -4,16 +4,25 @@
 
 {% block content %}
 {% if messages %}
-<div class="alert alert-info">
     {% for message in messages %}
-        <p>{{ message }}</p>
+        <div class="alert 
+            {% if message.tags == 'success' %}
+                alert-success
+            {% elif message.tags == 'warning' %}
+                alert-warning
+            {% elif message.tags == 'error' %}
+                alert-danger 
+            {% else %}
+                alert-info
+            {% endif %}" role="alert">
+            <p>{{ message }}</p>
+        </div>
     {% endfor %}
-</div>
 {% endif %}
 <div class="container mt-4">
-    <br>
+    <br><br>
     <div class="text-center mb-4">
-        <h2 class="display-4">Leave Requests</h2>
+        <h2 class="display-4"><strong>Leave Requests</strong></h2>
         <p class="lead">Search and manage leave requests across different statuses</p>
     </div>
 
@@ -31,14 +40,15 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <button type="submit" class="btn btn-outline-dark w-100 shadow-lg"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button type="submit" class="btn w-100 shadow-lg" style="background-color: #a8dadc;"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
         </div>
     </form>
-    <div class="row mt-4">
+    <br>
+    <div class="row mt-2">
         <div class="col-md-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-warning text-white">
+                <div class="card-header text-dark" style="background-color: rgb(255, 205, 112);">
                     <h4>Pending Requests</h4>
                 </div>
                 <div class="card-body">
@@ -48,7 +58,7 @@
                         <li class="list-group-item">
                             <strong>{{ request.employee.get_full_name }}</strong><br>
                             <small>{{ request.start_date }} to {{ request.end_date }}</small><br>
-                            <span class="badge bg-warning">Pending</span><br>
+                            <span class="badge text-dark" style="background-color: rgb(255, 205, 112);">Pending</span><br>
                             <a href="{% url 'hr_leave_management:approve_reject_leave' request.id %}" class="btn  btn-outline-warning btn-sm mt-2">View</a>
                         </li>
                         {% endfor %}
@@ -56,16 +66,16 @@
                     {% else %}
                     <p>No pending requests found.</p>
                     {% endif %}
-                    <div class="pagination mt-3">
+                    <div class="pagination mt-3 d-flex justify-content-center">
                         <span class="page-links">
                             {% if pending_leaves.has_previous %}
-                                <a href="?page_pending=1">First</a>
-                                <a href="?page_pending={{ pending_leaves.previous_page_number }}">Previous</a>
+                                <a href="?page_pending=1" class="mx-2" style="text-decoration: none;">First</a>
+                                <a href="?page_pending={{ pending_leaves.previous_page_number }}" class="mx-2" style="text-decoration: none;">Previous</a>
                             {% endif %}
                             <span class="current-page">Page {{ pending_leaves.number }} of {{ pending_leaves.paginator.num_pages }}</span>
                             {% if pending_leaves.has_next %}
-                                <a href="?page_pending={{ pending_leaves.next_page_number }}">Next</a>
-                                <a href="?page_pending={{ pending_leaves.paginator.num_pages }}">Last</a>
+                                <a href="?page_pending={{ pending_leaves.next_page_number }}" class="mx-2" style="text-decoration: none;">Next</a>
+                                <a href="?page_pending={{ pending_leaves.paginator.num_pages }}" class="mx-2" style="text-decoration: none;">Last</a>
                             {% endif %}
                         </span>
                     </div>
@@ -75,7 +85,7 @@
 
         <div class="col-md-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-success text-white">
+                <div class="card-header text-dark" style="background-color: rgba(130, 202, 130, 0.911);">
                     <h4>Approved Requests</h4>
                 </div>
                 <div class="card-body">
@@ -85,11 +95,12 @@
                         <li class="list-group-item">
                             <strong>{{ request.employee.get_full_name }}</strong><br>
                             <small>{{ request.start_date }} to {{ request.end_date }}</small><br>
-                            <span class="badge bg-success">Approved by HR</span><br>
+                            <span class="badge text-dark" style="background-color: rgba(130, 202, 130, 0.911);">Approved by HR</span><br>
                             <button type="button" class="btn btn-outline-success btn-sm mt-2" onclick="toggleReason('reason-{{ request.id }}')">View</button>
-                            <div id="reason-{{ request.id }}" style="display: none;">
-                                <strong>Manager's Reason:</strong> {{ request.manager_reason }}<br>
-                                <strong>HR's Reason:</strong> {{ request.hr_reason }}<br>
+                            <div id="reason-{{ request.id }}" class= "mt-2" style="display: none;">
+                                <strong>Employee Reason:</strong>{% if request.reason %}{{ request.reason }}{% else %}No reason provided{% endif %}</p>
+                                <strong>Manager Reason:</strong>{% if request.manager_reason %}{{ request.manager_reason }}{% else %}No reason provided{% endif %}</p>
+                                <strong>HR Reason:</strong>{% if request.hr_reason %}{{ request.hr_reason }}{% else %}No reason provided{% endif %}</p>
                                 {% if request.reason %}
                                     <strong>Additional Reason:</strong> {{ request.reason }}<br>
                                 {% endif %}
@@ -104,16 +115,16 @@
                     {% else %}
                     <p>No approved requests found.</p>
                     {% endif %}
-                    <div class="pagination mt-3">
+                    <div class="pagination mt-3 d-flex justify-content-center">
                         <span class="page-links">
                             {% if approved_leaves.has_previous %}
-                                <a href="?page_approved=1">First</a>
-                                <a href="?page_approved={{ approved_leaves.previous_page_number }}">Previous</a>
+                                <a href="?page_approved=1" class="mx-2" style="text-decoration: none;">First</a>
+                                <a href="?page_approved={{ approved_leaves.previous_page_number }}"class="mx-2" style="text-decoration: none;">Previous</a>
                             {% endif %}
                             <span class="current-page">Page {{ approved_leaves.number }} of {{ approved_leaves.paginator.num_pages }}</span>
                             {% if approved_leaves.has_next %}
-                                <a href="?page_approved={{ approved_leaves.next_page_number }}">Next</a>
-                                <a href="?page_approved={{ approved_leaves.paginator.num_pages }}">Last</a>
+                                <a href="?page_approved={{ approved_leaves.next_page_number }}"class="mx-2" style="text-decoration: none;">Next</a>
+                                <a href="?page_approved={{ approved_leaves.paginator.num_pages }}"class="mx-2" style="text-decoration: none;">Last</a>
                             {% endif %}
                         </span>
                     </div>
@@ -123,7 +134,7 @@
 
         <div class="col-md-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-danger text-white">
+                <div class="card-header text-dark" style="background-color: rgba(255, 100, 100, 0.911);">
                     <h4>Rejected Requests</h4>
                 </div>
                 <div class="card-body">
@@ -133,11 +144,12 @@
                         <li class="list-group-item">
                             <strong>{{ request.employee.get_full_name }}</strong><br>
                             <small>{{ request.start_date }} to {{ request.end_date }}</small><br>
-                            <span class="badge bg-danger">Rejected by HR</span><br>
+                            <span class="badge text-dark" style="background-color: rgba(255, 100, 100, 0.911);">Rejected by HR</span><br>
                             <button type="button" class="btn btn-outline-danger btn-sm mt-2" onclick="toggleReason('reason-{{ request.id }}')">View</button>
                             <div id="reason-{{ request.id }}" style="display: none;">
-                                <strong>Manager's Reason:</strong> {{ request.manager_reason }}<br>
-                                <strong>HR's Reason:</strong> {{ request.hr_reason }}<br>
+                                <strong>Employee Reason:</strong>{% if request.reason %}{{ request.reason }}{% else %}No reason provided{% endif %}</p>
+                                <strong>Manager Reason:</strong>{% if request.manager_reason %}{{ request.manager_reason }}{% else %}No reason provided{% endif %}</p>
+                                <strong>HR Reason:</strong>{% if request.hr_reason %}{{ request.hr_reason }}{% else %}No reason provided{% endif %}</p>
                                 {% if request.reason %}
                                     <strong>Additional Reason:</strong> {{ request.reason }}<br>
                                 {% endif %}
@@ -152,16 +164,16 @@
                     {% else %}
                     <p>No rejected requests found.</p>
                     {% endif %}
-                    <div class="pagination mt-3">
+                    <div class="pagination mt-3 d-flex justify-content-center">
                         <span class="page-links">
                             {% if rejected_leaves.has_previous %}
-                                <a href="?page_rejected=1">First</a>
-                                <a href="?page_rejected={{ rejected_leaves.previous_page_number }}">Previous</a>
+                                <a href="?page_rejected=1" class="mx-2" style="text-decoration: none;">First</a>
+                                <a href="?page_rejected={{ rejected_leaves.previous_page_number }}" class="mx-2" style="text-decoration: none;">Previous</a>
                             {% endif %}
                             <span class="current-page">Page {{ rejected_leaves.number }} of {{ rejected_leaves.paginator.num_pages }}</span>
                             {% if rejected_leaves.has_next %}
-                                <a href="?page_rejected={{ rejected_leaves.next_page_number }}">Next</a>
-                                <a href="?page_rejected={{ rejected_leaves.paginator.num_pages }}">Last</a>
+                                <a href="?page_rejected={{ rejected_leaves.next_page_number }}" class="mx-2" style="text-decoration: none;">Next</a>
+                                <a href="?page_rejected={{ rejected_leaves.paginator.num_pages }}" class="mx-2" style="text-decoration: none;">Last</a>
                             {% endif %}
                         </span>
                     </div>
