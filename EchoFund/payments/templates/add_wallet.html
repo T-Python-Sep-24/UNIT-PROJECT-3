@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %} Wallet Details {% endblock %}
+
+{% block main %}
+<main>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h4 class="mb-0">Add Credit Card</h4>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label">Card Number</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="1234 5678 9012 3456">
+                                    <span class="input-group-text">
+                 <i class="fab fa-cc-visa"></i>
+               </span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Expiration Date</label>
+                                    <input type="text" class="form-control" placeholder="MM/YY">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">CVV</label>
+                                    <input type="text" class="form-control" placeholder="123">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Card Holder Name</label>
+                                <input type="text" class="form-control" placeholder="John Doe">
+                            </div>
+
+                            <div class="d-grid">
+                                <button class="btn btn-primary">Pay Now</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <h1> Or Add Wallet</h1>
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h4 class="mb-0">Add Wallet</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="{% url 'payments:add_wallet' %}" method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="balance" class="form-label">Balance</label>
+                                <div class="input-group">
+                                    <input id="balance" type="number" min="3000" name="balance" class="form-control" placeholder="4000" required>
+                                    <span class="input-group-text"><i class="fas fa-wallet"></i></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="pin_number" class="form-label">Choose Wallet Pin Number</label>
+                                <input id="pin_number" type="number" min="0000" max="9999" name="pin_number" class="form-control" placeholder="1243" required>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Add wallet</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

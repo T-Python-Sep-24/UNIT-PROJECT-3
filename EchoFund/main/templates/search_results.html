@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %} Search Results {% endblock %}
+
+{% block main %}
+<main>
+
+    <div class="container pt-5">
+        {% if funds %}
+        <h1 class="">Search Results [{{ funds.count }}]</h1>
+        <h5>Results For {{ request.GET.keyword }}</h5>
+        {% else %}
+        <p class="bg-warning p-3 rounded">No results Found that matches Your Search</p>
+        {% endif %}
+        <div class="container pt-5">
+            <form action="{% url 'main:search_view' %}" method="get" class="container-fluid d-flex justify-content-center align-items-center" role="search">
+                <label class="pe-3">Search</label>
+                <input class="form-control pe-5 me-2 text-center" style="width:60rem" type="search" name="keyword" value="{{ request.GET.keyword }}" placeholder="Search ShowRoom" aria-label="Search">
+            </form>
+        </div>
+
+    </div>
+    <div class="container p-4 text-center">
+        <div class="row mt-2 row-cols-1 row-cols-3 gap-5 justify-content-center">
+
+            {% include 'funds_cards.html' %}
+
+
+        </div>
+    </div>
+
+</main>
+{% endblock %}

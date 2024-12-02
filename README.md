@@ -1,12 +1,59 @@
-# UNIT-PROJECT-3
 
-## Create a Project of your own choosing
+# EchoFund
+- Symbolizing repeated cycles of savings and funding.
+ 
+### Summary of EchoFund Web App
+- EchoFund is a collaborative funding platform designed to facilitate group-based financial opportunities. 
+- The app offers a transparent and interactive space where users can explore, create, and manage funding cycles.
 
-Base on what you’ve learned until now , create a project of your choosing. Impress us with your creativity and execution.
+### Features
+* Dashboard:
+  * Provides an overview of all active and past funding opportunities, member contributions, and repayment statuses.
 
+* Explore Funding Properties:
+  * Users can view funding opportunities, including details such as:
+    * Monthly contribution amount.
+    * Total funding pool.
+    * Eligibility criteria for members.
+    * Repayment terms and timelines.
+* Create Funding Opportunities:
 
-## Minimum Requirements
-- Use Django.
+  * Registered users can propose new funding opportunities:
+    * Set contribution and withdrawal limits.
+    * Define repayment schedules and terms.
+    * Invite members to join the funding pool.
+* Member Management:
+
+  * Admins can:
+    * Approve or remove members from specific opportunities.
+    * Track individual member contributions and repayments.
+    * Send notifications for payment reminders.
+* Payment Management:
+
+  * Secure payment processing to:
+    * Collect monthly contributions.
+    * Disburse funds to eligible members.
+    * Track repayments and automate reminders.
+
+* Transparency Tools:
+
+  * Visual analytics showing:
+    * Total funds contributed and disbursed.
+    * Repayment progress for each cycle.
+    * Community-wide impact metrics.
+* User Roles:
+
+  * Admin: Manages funding cycles, members, and payments.
+  * Member: Participates in cycles and monitors personal contributions.
+
+* Community Engagement:
+
+  * Public discussion boards for feedback and support.
+  * Notifications for new opportunities or changes in funding terms.
+
+  
+## Tasks
+- Use Django. (✔)
 - Use Templates & Template Inheritance.
 - Use static, media & dynamic urls as needed.
 - Organize your project in apps as needed.

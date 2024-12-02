@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %} {{ user.username}} Profile {% endblock %}
+
+{% block main %}
+<main>
+    <div class="container mt-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'main:home_view' %}" class="text-primary">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'accounts:profile_view' request.user.username %}" class="text-primary">User</a></li>
+                <li class="breadcrumb-item active">User Participate in funds</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4">
+
+
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+
+                        {% if request.user == user %}
+
+                            {% if funds %}
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><span class="material-symbols-outlined">wallet</span>Funds I Participated in</h6>
+                                    {% for fund in funds %}
+                                    <div class="border p-2 mb-3">
+                                        <div class="col pt-2">
+
+                                            <h6><a href="{% url 'funds_app:fund_details_view' fund.id %}">{{ fund.fund_name }}</a></h6>
+                                            <h5>{{ fund.monthly_stock }} Per month</h5>
+                                            <h5>{{ fund.hold_duration }} Year</h5>
+                                            <p>{{ fund.about }}</p>
+                                            <p>Since: {{fund.created_at}}</p>
+                                            <a href="{% url 'funds_app:payment_schedule' fund.id %}" class="btn btn-success">View Fund Payments Schedule</a>
+
+                                        </div>
+                                        <div class="col text-end">
+                                            <img src="{{ bookmark.car.photo.url}}">
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</main>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block title %} {{ user.username}} Profile {% endblock %}
+
+{% block main %}
+<main>
+    <div class="profile-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'main:home_view' %}" class="text-primary">Home</a></li>
+                <li class="breadcrumb-item"><a href="#" class="text-primary">User</a></li>
+                <li class="breadcrumb-item active">User Profile</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <img src="{{ user.profile.avatar.url }}" alt="Profile" class="profile-image mb-3">
+                        <h5 class="card-title">@{{ user.username }}</h5>
+                        <p class="text-muted">{{ user.first_name }} {{ user.last_name }}</p>
+                        <p class="text-muted">{{ user.about }}</p>
+                        <p class="text-muted">{{ user.location }}</p>
+                        <p class="text-muted">Since: {{user.profile.created_at}}</p>
+                        {% if request.user == user %}
+
+                        <div class="container text-center p-1">
+                            <a class="btn btn-success" href="{% url 'funds_app:user_funds_view' %}">Owned Funds</a>
+                            <a class="btn btn-outline-success" href="{% url 'funds_app:user_participated_in_funds_view' %}">participated Funds</a>
+
+                        </div>
+
+
+                        <div class="d-flex justify-content-evenly">
+                            <div>
+                                <a class="btn btn-warning" href="{% url 'accounts:update_profile_view' %}"><i class="fas fa-edit"></i></a>
+                                <a class="btn btn-outline-warning" href="{% url 'accounts:messages_view' request.user.username %}"><i class="fas fa-message"></i></a>
+
+                                    {% if request.user.wallet %}
+                                    <a class="btn btn-success" href="{% url 'payments:wallet_details' request.user.wallet.id %}"><i class="bi bi-wallet"></i></a>
+                                    {% else %}
+                                    <a class="btn btn-warning" href="{% url 'payments:add_wallet' %}"><i class="bi bi-folder-plus"></i></a>
+                                    {% endif %}
+
+                            </div>
+                            <a class="btn btn-danger" href="{% url 'accounts:log_out' %}">Sign Out</a>
+                        </div>
+
+                        {% endif %}
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <i class="fas fa-globe me-2"></i>
+                            <span class="text-muted">Website:</span>
+                            <a href="#" class="social-link">https://bootdey.com</a>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fab fa-github me-2"></i>
+                            <span class="text-muted">Github:</span>
+                            <a href="#" class="social-link">bootdey</a>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fab fa-twitter me-2"></i>
+                            <span class="text-muted">Twitter:</span>
+                            <a href="#" class="social-link">@bootdey</a>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fab fa-instagram me-2"></i>
+                            <span class="text-muted">Instagram:</span>
+                            <a href="#" class="social-link">bootdey</a>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fab fa-facebook me-2"></i>
+                            <span class="text-muted">Facebook:</span>
+                            <a href="#" class="social-link">bootdey</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Full Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.first_name}} {{user.last_name}}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.email}}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Phone</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.phone}}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Address</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{ user.location }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        {% if user.review_set.all %}
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="d-flex align-items-center mb-3">
+                                    <span class="material-symbols-outlined">reviews</span>Reviews
+                                </h6>
+                                {% for review in user.review_set.all %}
+                                <div class="mb-3">
+                                    <small><a href="{% url 'funds_app:fund_details_view' review.fund.id %}">{{ review.fund.fund_name }}</a></small>
+                                    <h5>Rating: {{review.rating}}</h5>
+                                    <p>Comment: {{review.comment}}</p>
+                                    <h6>At: {{review.reviewed_at}}</h6>
+                                </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if request.user == user %}
+                            <!-- user bookmarks section -->
+                            {% if request.user.bookmark_set.all %}
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="d-flex align-items-center mb-3">
+                                        <span class="material-symbols-outlined">bookmarks</span>Bookmarks
+                                    </h6>
+                                    {% for bookmark in request.user.bookmark_set.all %}
+                                    <div class="mb-3">
+                                        <div class="col ">
+                                            <h4><a href="{% url 'funds_app:fund_details_view' bookmark.fund.id %}">{{ bookmark.fund.fund_name }}</a></h4>
+
+                                            <h6>At: {{bookmark.created_at}}</h6>
+                                            <a href="{% url 'funds_app:add_bookmark_view' bookmark.fund.id %}?next={{request.path}}" class="text-end"> <span class="material-symbols-outlined">bookmark_check</span></a>
+
+                                        </div>
+                                        <div class="col text-end">
+                                            <img src="{{ bookmark.car.photo.url}}">
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</main>
+{% endblock %}

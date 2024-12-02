@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %} My Funds {% endblock %}
+
+{% block main %}
+<main>
+    <div class="container mt-5">
+
+        <div class="d-flex justify-content-between">
+
+            <h1 class="text-center text-primary">Owned Funds</h1>
+            <div class="dropdown">
+
+
+                    <form action="{% url 'funds_app:user_funds_view' %}" method="get">
+                        <select class="rounded bg-success text-light p-2" name="view_style" onchange="form.submit()">
+                            <option>View Style</option>
+                            <option value="list" >List</option>
+                            <option value="cards">Cards</option>
+                        </select>
+                    </form>
+                </ul>
+
+
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols justify-content-center gap-4 m-2 mt-5">
+            {% if request.GET.view_style == 'list' %}
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Stock/per-month</th>
+                        <th>hold duration</th>
+                        <th>Creation data</th>
+                        <th>Status</th>
+                        <th>Members</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for fund in funds %}
+                <tr>
+                    <th>{{fund.id}}</th>
+                    <td><a href="{% url 'funds_app:fund_details_view' fund.id %}" >{{fund.fund_name}}</a></td>
+                    <td>{{fund.monthly_stock}} $</td>
+                    <td>{{fund.hold_duration}}</td>
+                    <td>{{fund.created_at}}</td>
+                    <td>{% if fund.is_available %} Open {% else %} Closed {% endif %}</td>
+                    {% if fund.fund_members.all %}
+                    <td class="dropdown">
+                        <a data-bs-toggle="dropdown" class="nav-link dropdown-toggle" href="/"><span class="text-success">Members</span></a>
+                        <ul class="dropdown-menu">
+                            {% for member in fund.fund_members.all %}
+                            <li>
+                                <a href="{% url 'accounts:profile_view' member.username %}" class="dropdown-item">{{ member.first_name }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    {% else %}
+                    <td>None</td>
+                    {% endif %}
+                    <td>
+                        <a href="{% url 'funds_app:update_fund_view' fund.id %}"><i class="fas fa-edit text-warning"></i></a>
+                        <a href="{% url 'funds_app:delete_fund_view' fund.id %}"><i class="fas fa-trash text-danger"></i></a>
+                    </td>
+                </tr>
+                <tr>
+
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% elif request.GET.view_style == 'cards' %}
+                {% include 'funds_cards.html' %}
+            {% else %}
+                {% include 'funds_cards.html' %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container pt-5">
+
+        <div class="pagination justify-content-center">
+            <ul class="pagination justify-content-center">
+
+                {% if page_obj.has_previous %}
+                <a class="page-link text-dark" href="?page=1">first</a>
+                <a class="page-link text-dark" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <div class="text-center">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </div>
+                {% if page_obj.has_next %}
+                <a class="page-link text-dark" href="?page={{ page_obj.next_page_number }}">next</a>
+                <a class="page-link text-dark" href="?page={{ page_obj.paginator.num_pages }}">last</a>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
+</main>
+{% endblock %}
