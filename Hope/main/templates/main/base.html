@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hope</title>
+  
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+
+  {% if messages %}
+  <div class="notification-container">
+    {% for message in messages %}
+    <div class="notification {{ message.tags }}">
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <header class="base-header {% block header_class %}{% endblock %} {% if request.path != '/' and request.path != '/accounts/login/' %} header-dark {% endif %}">
+
+    <a class="navbar-brand" href="/">
+      <img src="{% static 'images/wheat-icon.png' %}" alt="Logo">
+    </a>
+    <button class="hamburger" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+    </button>
+    <nav class="nav-links">
+      <a href="{% url 'opportunities:all_opportunities_view' %}" class="{% if request.path == '/opportunities/all/'%}active{%endif%}">All Opportunities</a>
+      <a href="{% url 'organizations:all_organizations_view' %}" class="{% if request.path == '/organizations/all/'%}active{%endif%}">All Organizations</a>
+    </nav>
+
+    <nav class="nav-profile-links">
+      {% if user.is_authenticated and user.organizationprofile %}
+      <a href="{% url 'organizations:add_opportunity_view' %}" class="add-button">Add Opportunity</a>
+      {% endif %}
+
+      {% if request.user.is_authenticated %}
+      <div class="auth-logout">
+        <span class="welcome-message">
+          Welcome,
+          {% if request.user.volunteerprofile %}
+          <a href="{% url 'accounts:volunteer_profile' request.user.username %}" class="profile-link">
+            {{ request.user.username|truncatechars:10 }}
+          </a>
+          {% elif request.user.organizationprofile %}
+          <a href="{% url 'accounts:organization_profile' request.user.username %}" class="profile-link">
+            {{ request.user.username|truncatechars:10 }}
+          </a>
+          {% endif %}
+        </span>
+        <a href="{% url 'accounts:logout_view' %}?next={{ request.path }}" class="auth-button">Logout</a>
+      </div>
+      {% else %}
+      <div class="dropdown">
+        <button class="dropbtn">
+          <i class="fas fa-user"></i> 
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'accounts:organization_signup_view' %}">Sign Up as Organization</a>
+          <a href="{% url 'accounts:volunteer_signup_view' %}">Sign Up as Volunteer</a>
+          <a href="{% url 'accounts:login_view' %}?next={{ request.path }}">Login</a>
+        </div>
+      </div>
+      {% endif %}
+    </nav>
+  
+  </header>
+
+  <main>{% block content %} {% endblock %}</main>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const messageContainer = document.querySelector(".notification-container");
+    if (messageContainer) {
+        setTimeout(() => {
+            messageContainer.style.transition = "opacity 0.5s ease-out";
+            messageContainer.style.opacity = "0";
+            setTimeout(() => messageContainer.remove(), 500);
+        }, 5000);
+    }
+    });
+    </script>
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+        
+        hamburger.addEventListener("click", function() {
+            navLinks.classList.toggle("show");
+        });
+    });
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block body_class %}Home{% endblock %}
+{% block header_class %}home-header{% endblock %}
+
+
+{% block content %}
+
+<maic class="home-page">
+    <div class="video-container">
+        <video autoplay muted loop id="background-video">
+            <source src="{% static 'videos/wheat-background.mp4' %}" type="video/mp4">
+        </video>
+        <div class="overlay"></div> 
+    </div>
+    
+    <div class="home-text">
+        <h1 class="main-text">Your Time, Your Impact</h1>
+        <h2 class="second-text">Building a Better Tomorrow</h2>
+        <a href="{% url 'opportunities:all_opportunities_view' %}" class="cta-button">Volunteer Today</a>
+    </div>
+
+</main>
+
+<footer>
+    <a href="#" class="contact-footer">Contact Us</a>
+    <a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+    <a href="https://www.behance.net" target="_blank"><i class="fab fa-behance"></i></a>
+    <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+  </footer>
+  
+
+
+{% endblock %}

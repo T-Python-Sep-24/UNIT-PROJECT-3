@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}All Organizations{% endblock %}
+
+{% block content %}
+<main class="all-organizations-page">
+    <div class="container-2">
+        <div class="header-2">
+            <h1>Explore Organizations</h1>
+            <p>Find organizations that align with your values and interests.</p>
+        </div>
+        
+        <section class="search-and-filters-2">
+            <form method="GET" class="search-form-organizations-2">
+                <input type="text" name="search" placeholder="Search organizations..." value="{{ request.GET.search }}">
+                <button type="submit" class="search-button-2">Search</button>
+            </form>
+        </section>
+        
+        {% if organizations %}
+        <div class="grid-2">
+            {% for organization in organizations %}
+            <div class="card-2">
+                {% if organization.organization_logo %}
+                <img src="{{ organization.organization_logo.url }}" alt="{{ organization.organization_name }}">
+                {% else %}
+                <img src="{% static 'organization_logos/default_logo.png' %}" alt="Default Logo">
+                {% endif %}
+                <div class="card-content-2">
+                    <a href="{% url 'accounts:organization_profile' organization.organization_user.username %}" class="card-title-2">{{ organization.organization_name }}</a>
+                    <div class="card-subtitle-2">{{ organization.industry_focus_area }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="no-results-2">No organizations found. Try adjusting your search query.</p>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

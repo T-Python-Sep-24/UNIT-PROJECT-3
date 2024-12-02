@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+
+{% block body_class %}Volunteer Sign Up{% endblock %}
+
+{% block content %}
+<div class="volunteer-signup-container">
+
+    <div class="volunteer-signup-right">
+        <h1 class="volunteer-signup-right-header">Create an account</h1>
+        <p>Already have an account? <a href="{% url 'accounts:login_view' %}">Log in</a></p>
+        <form action="{% url 'accounts:volunteer_signup_view' %}" method="post" class="signup-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row">
+                <input type="text" name="volunteer_name" placeholder="Your Full Name" class="form-control" required>
+            </div>
+            <div class="form-row">
+                <input type="email" name="email" placeholder="Email" class="form-control" required>
+            </div>
+            <div class="form-row">
+                <input type="password" name="password" placeholder="Enter Password" class="form-control" required>
+            </div>
+
+            <div class="form-row">
+                <textarea name="description" placeholder="Bio/About Me" class="form-control" rows="3"></textarea>
+            </div>
+            
+
+            <div class="terms">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I agree to the <a href="#">Terms & Conditions</a></label>
+            </div>
+            <button type="submit" class="signup-submit-button">Create Account</button>
+        </form>
+    </div>
+
+    <div class="volunteer-signup-left">
+        <a href="{% url 'main:main_view'%}" class="back-to-site">Back to Home →</a>
+        <div class="volunteer-left-content">
+            <h1 class="volunteer-signup-header-text">Be Part of Something Greate</h1>
+        </div>
+    </div>
+</div>
+{% endblock %}
