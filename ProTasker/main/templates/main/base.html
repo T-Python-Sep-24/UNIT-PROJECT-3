@@ -23,71 +23,90 @@
 
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#dashboard">
-                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
-                        </a>
-                    </li>
+                          
+                    {% if user.is_authenticated%}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'project:project_view'%}">
                             <i class="bi bi-folder me-1"></i>Projects
                         </a>
                     </li>
+                   
                     <li class="nav-item">
-                        <a class="nav-link" href="#tasks">
+                        <a class="nav-link" href="{% url 'tasks:task_view' %}">
                             <i class="bi bi-list-task me-1"></i>Tasks
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#team">
-                            <i class="bi bi-people me-1"></i>Team
-                        </a>
-                    </li>
+                    {% endif %}
+                   
                 </li>
               
                 </ul>
 
+               
                 <div class="d-flex align-items-center">
                     <div class="search-box me-3">
                         
                         <input type="search" class="form-control" placeholder="Search tasks...">
                     </div>
 
-                    <div class="nav-icons d-flex align-items-center">
-                        <a href="#notifications" class="nav-icon" data-bs-toggle="tooltip" title="Notifications">
-                            <div class="position-relative">
-                                <i class="bi bi-bell"></i>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    3
-                                </span>
-                            </div>
-                        </a>
-  
-                        <a href="#messages" class="nav-icon" data-bs-toggle="tooltip" title="Messages">
-                            <i class="bi bi-chat-dots"></i>
-                        </a>
+                    
+                       
                         {% if user.is_authenticated%}
-                        <div class="dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=faces" alt="Profile" class="rounded-circle profile-img">
-                            </a>
-                            
+                       
+                            <div class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                    <img src="{{user.profile.avatar.url}}" alt="Profile" class="rounded-circle profile-img">
+                                </a>
+                    
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#profile"><i class="bi bi-person me-2"></i>Profile</a></li>
-                                <li><a class="dropdown-item" href="#settings"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                                <li><a class="dropdown-item" href="{% url 'account:user_profile_view' request.user.username %}"><i class="bi bi-person me-2"></i>Profile</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'account:log_out' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                             </ul>
                             
+                            
                         </div>
                         {% endif %}
-                        <div class="nav-icons d-flex align-items-center">
-                            <a href="{% url 'account:sign_up' %}" class="nav-icon" data-bs-toggle="tooltip" title="Notifications">
-                                <div class="position-relative">
-                                    <i> SIGN UP</i>
-                                    
-                                </div>
+                        {% if not user.is_authenticated%}
+                        <div class="dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                               creat account
                             </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'account:sign_up' %}"><i class="bi bi-person me-2"></i>sign up</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'account:sign_in' %}"><i class="bi bi-person me-2"></i>sign in</a></li>
+                        </ul>
+                        
+                    </div>
+                    {% endif %}
+                    <div id="notifications" class="dropdown">
+                        <button class="btn nav-link dropdown-toggle position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell"></i>
+                            {% if user.notifications.count > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ user.notifications.count }}
+                                </span>
+                            {% endif %}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            {% if user.notifications.exists %}
+                                {% for notification in user.notifications.all %}
+                                    <li class="dropdown-item {% if notification.is_read %}text-muted{% else %}fw-bold{% endif %}">
+                                        {{ notification.message }}
+                                        <small class="text-secondary d-block">{{ notification.created_at }}</small>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="dropdown-item text-muted">No notifications</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    
+                        </ul>
+                    </div>
+                    
+    
                     </div>
                 </div>
             </div>
@@ -118,15 +137,7 @@
                         Empowering teams to achieve more through efficient task management and collaboration.
                     </p>
                 </div>
-                <div class="col-lg-2 col-md-4 mb-4 mb-md-0 ">
-                    <h6 class="mb-3">Product</h6>
-                    <ul class="list-unstyled">
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#integrations">Integrations</a></li>
-                        <li><a href="#updates">Updates</a></li>
-                    </ul>
-                </div>
+              
                 <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
                     <h6 class="mb-3">Company</h6>
                     <ul class="list-unstyled">
@@ -136,15 +147,7 @@
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
-                    <h6 class="mb-3">Resources</h6>
-                    <ul class="list-unstyled">
-                        <li><a href="#docs">Documentation</a></li>
-                        <li><a href="#help">Help Center</a></li>
-                        <li><a href="#guides">Guides</a></li>
-                        <li><a href="#api">API</a></li>
-                    </ul>
-                </div>
+              
                 <div class="col-lg-2">
                     <h6 class="mb-3">Connect</h6>
                     <div class="social-links">
@@ -162,9 +165,9 @@
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <ul class="list-inline mb-0">
-                        <li class="list-inline-item"><a href="#terms">Terms</a></li>
-                        <li class="list-inline-item"><a href="#privacy">Privacy</a></li>
-                        <li class="list-inline-item"><a href="#security">Security</a></li>
+                        <li class="list-inline-item"><a href="#">Terms</a></li>
+                        <li class="list-inline-item"><a href="#">Privacy</a></li>
+                        <li class="list-inline-item"><a href="#">Security</a></li>
                     </ul>
                 </div>
             </div>

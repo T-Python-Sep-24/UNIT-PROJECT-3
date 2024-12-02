@@ -1,0 +1,171 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block content %}
+ 
+<div class="container py-4">
+    
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <div class="d-flex align-items-center gap-3">
+                <h1 class="mb-1">{{ project.name }}</h1>
+                <span class="badge bg-success">{{ project.status }}</span>
+            </div>
+            <p class="text-secondary mb-0">{{ project.description }}</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary">
+                <a href="{% url 'project:update_project_view' project.id %}" style="text-decoration: none; color: white;"><i class="bi bi-pencil me-2"></i>Edit Project</a>
+            </button>
+            <button class="btn btn-primary">
+               <a href="{% url 'tasks:create_task' %}" style="text-decoration: none; color: aliceblue;"> <i class="bi bi-plus-lg me-2"></i>Add Task</a>
+            </button>
+           <a href="{% url 'project:project_delete_view' project.id %}"><button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></a>
+
+        </div>
+    </div>
+
+    
+    <div class="row g-4 mb-4">
+        <div class="col-md-8">
+         
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="card-title mb-0">Project Tasks</h5>
+                       
+                    </div>
+
+                    <div class="task-list">
+                        {% for task in tasks %}
+                        <div class="task-card">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0">{{ task.title }}</h6>
+                                <span class="task-priority {{ task.priority|lower }}">{{ task.priority }} Priority</span>
+                            </div>
+                            <p class="text-secondary mb-2">{{ task.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  
+                                    {% if task.assignee and task.assignee.profile.avatar %}
+                                    <img src="{{ task.assignee.profile.avatar.url }}" alt="Assignee" class="rounded-circle me-2" width="24">
+                                    {% else %}
+                                        <img src="{% static 'default-avatar.png' %}" alt="Assignee" class="rounded-circle me-2" width="24">
+                                        {% endif %}
+                                        
+                                        <span>{{ task.assignee.username }}</span>
+                                        
+                                </div>
+                                <small class="text-secondary">Due in {{ task.due_date }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Project Details</h5>
+                    <div class="mb-3">
+                        <small class="text-secondary d-block mb-1">Project Manager</small>
+                        <div class="d-flex align-items-center">
+                            {% if project.manager.profile.avatar %}
+                                <img src="{{ project.manager.profile.avatar.url }}" alt="Manager" class="rounded-circle me-2" width="32">
+                            {% else %}
+                                <img src="{% static 'default-avatar.png' %}" alt="Manager" class="rounded-circle me-2" width="32">
+                            {% endif %}
+                            <span>{{ project.manager.username }}</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-secondary d-block mb-1">Team Members ({{ project.team_members.count }})</small>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-group">
+                                {% for member in project.members.all %}
+                                <img src="{{ member.avatar.url }}" alt="Member" class="rounded-circle me-1" width="32">
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                 
+                    <div class="mb-3">
+                        <small class="text-secondary d-block mb-1">Due Date</small>
+                        <span>{{ project.due_date }}</span>
+                    </div>
+                    <div>
+                        <small class="text-secondary d-block mb-1">Priority</small>
+                        <span class="badge bg-danger">{{ project.priority }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="card-title mb-0">Files & Documents</h5>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#uploadFileModal">
+                            <i class="bi bi-upload me-2"></i>Upload
+                        </button>
+                    </div>
+
+                    <div class="file-list">
+                        {% for file in project.files.all %}
+                        <div class="file-item d-flex align-items-center p-2 rounded mb-2">
+                            <i class="bi bi-file-earmark-text me-3 text-primary fs-4"></i>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-0">{{ file.title }}</h6>
+                                <small class="text-secondary">{{ file.file.size|filesizeformat }}</small>
+                            </div>
+                            <a href="{{ file.file.url }}" class="btn btn-sm btn-link" download>
+                                <i class="bi bi-download"></i> 
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="uploadFileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'project:upload_file' project.id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">File Title</label>
+                        <input type="text" name="title" class="form-control" placeholder="Enter file title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Enter file description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">File</label>
+                        <input type="file" name="file" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Upload File</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

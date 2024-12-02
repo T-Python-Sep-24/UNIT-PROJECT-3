@@ -1,0 +1,74 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <div class="container vh-50 d-flex justify-content-center align-items-center">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <form class="border p-4 rounded shadow" method="post" action="{% url 'project:create_project_view' %}">
+                {% csrf_token %}
+                
+               
+                <h4 class="mb-4">Project Details</h4>
+                <div class="mb-3">
+                    <label class="form-label">Project Name</label>
+                    {{ project_form.name }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    {{ project_form.description }}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Priority</label>
+                    {{ project_form.priority }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Project Manager</label>
+                    {{ project_form.manager }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    {{ project_form.status.errors }}
+                    {{ project_form.status }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Due Date</label>
+                    {{ project_form.due_date }}
+                </div>
+
+               
+                <h5 class="mt-4">Team Members</h5>
+                {{ team_formset.management_form }}
+                <div id="team-members-container">
+                    {% for form in team_formset %}
+                        <div class="row mb-3 team-member-form">
+                            <div class="col-md-6">
+                                <label class="form-label">Team Member</label>
+                                {{ form.user }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Role</label>
+                                {{ form.role }}
+                            </div>
+                            {% if form.instance.pk %}
+                                <button type="button" class="btn btn-danger btn-sm" name="delete" value="Delete">Delete</button>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="modal-footer gap-3">
+                    <a href="{% url 'project:project_view' %}" class="btn btn-outline-primary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
