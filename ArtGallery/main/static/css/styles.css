@@ -587,3 +587,15 @@ label {
         stroke-dashoffset: 300;
     }
 }
+
+.backward:hover {
+    transform: translateX(-2px);
+    opacity: .8;
+    transition: all 0.3s;
+}
+
+.forward:hover {
+    transform: translateX(2px);
+    opacity: .8;
+    transition: all 0.3s;
+}

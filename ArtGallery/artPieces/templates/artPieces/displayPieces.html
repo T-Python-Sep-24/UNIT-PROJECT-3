@@ -48,18 +48,45 @@
         {% include 'artPieces/components/piecesList.html' %}
         
         <!-- Pagination -->
-        <div class="container justify-content-center my-5">
-            <span>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center gap-2 mt-5">
+                {% if pieces.number != 1 %}
+                <li class="page-item">
+                    <a href="{% url 'artPieces:displayArtPiecesView' %}{% querystring page=1 %}" 
+                    class="page-link bg-blur border-0 rounded-1 text-offwhite hover-color focus-ring focus-ring-dark backward">
+                    <img src="{% static 'images/first.svg' %}" alt="" width="15">
+                    </a>
+                </li>
+                {% endif %}
                 {% if pieces.has_previous %}
-                <a href="{% url 'artPieces:displayArtPiecesView' %}{% querystring page=pieces.previous_page_number %}" class="p-2">Previous</a>
+                <li class="page-item">
+                    <a href="{% url 'artPieces:displayArtPiecesView' %}{% querystring page=pieces.previous_page_number %}" 
+                    class="page-link bg-blur border-0 rounded-1 text-offwhite hover-color focus-ring focus-ring-dark backward">
+                        <img src="{% static 'images/prev.svg' %}" alt="" width="15">
+                    </a>
+                </li>
                 {% endif %}
-                <span class="p-2 text-beige-100">
-                    Page {{ pieces.number }} of {{ pieces.paginator.num_pages }}
-                </span>
+                <li class="page-item">
+                    <p class="page-link bg-blur-lighter border-0 rounded-1 text-offwhite focus-ring focus-ring-dark">Page {{pieces.number}}</p>
+                </li>
                 {% if pieces.has_next %}
-                <a href="{% url 'artPieces:displayArtPiecesView' %}{% querystring page=pieces.next_page_number %}" class="p-2">Next</a>
+                <li class="page-item">    
+                    <a href="{% url 'artPieces:displayArtPiecesView' %}{% querystring page=pieces.next_page_number %}" 
+                    class="page-link bg-blur border-0 rounded-1 text-offwhite hover-color focus-ring focus-ring-dark forward">
+                        <img src="{% static 'images/next.svg' %}" alt="" width="18">
+                    </a>
+                </li>
                 {% endif %}
-            </span>
-        </div>
+                {% if pieces.number != pieces.paginator.num_pages %}
+                <li class="page-item">
+                    <a href="{% url 'artPieces:displayArtPiecesView' %}{% querystring page=pieces.paginator.num_pages %}" 
+                    class="page-link bg-blur border-0 rounded-1 text-offwhite hover-color focus-ring focus-ring-dark forward">
+                        <img src="{% static 'images/last.svg' %}" alt="" width="18">
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <!-- Pagination end -->
     </section>
 {% endblock %}
