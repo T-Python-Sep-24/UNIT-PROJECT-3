@@ -59,7 +59,7 @@
                 </div>
                 {% empty %}
                 <p class="my-0 text-offwhite">No favorites yet.</p>
-                <a href="{% url 'artPieces:displayArtPiecesView' 'all' %}" class="btn-beige-400 py-0 ms-2 fs-6" style="width: fit-content;">Browse art pieces</a>
+                <a href="{% url 'artPieces:displayArtPiecesView' %}" class="btn-beige-400 py-0 ms-2 fs-6" style="width: fit-content;">Browse art pieces</a>
                 {% endfor %}
             </div>
             {% endif %} 
