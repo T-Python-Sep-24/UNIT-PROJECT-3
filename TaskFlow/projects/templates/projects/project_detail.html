@@ -20,6 +20,7 @@
         <div class="card-footer text-end">
             <a href="{% url 'projects:project_update' project.pk %}" class="btn btn-warning">Edit</a>
             <a href="{% url 'projects:project_delete' project.pk %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'projects:project_list' %}" class="btn btn-secondary btn-sm">Back to Project List</a>
         </div>
     </div>
 </div>

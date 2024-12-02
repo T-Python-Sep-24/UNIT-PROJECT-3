@@ -5,13 +5,15 @@ from .models import Task,Project
 from .forms import TaskForm , CommentForm
 from django.contrib.auth.models import User
 
+@login_required
 def create_task(request):
     if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Task created successfully!")
-            return redirect("Users:dashboard_view")  
+            # Redirect with the username argument
+            return redirect("Users:dashboard_view", username=request.user.username)
     else:
         form = TaskForm()
     return render(request, "tasks/create_task.html", {"form": form})
@@ -21,31 +23,13 @@ def task_list(request):
     tasks = Task.objects.all()
     return render(request, "tasks/task_list.html", {"tasks": tasks})
 
-@login_required
-def task_detail(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
-    comments = task.comments.all()
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.task = task
-            comment.created_by = request.user
-            comment.save()
-            return redirect('tasks:task_detail', task_id=task.id)
-    else:
-        form = CommentForm()
-
-    return render(request, 'tasks/task_detail.html', {
-        'task': task,
-        'comments': comments,
-        'form': form,
-    })
+def task_detail(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    return render(request, 'tasks/task_detail.html', {'task': task})
 
 
-@login_required
-def update_task(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
+def update_task(request, pk):
+    task = get_object_or_404(Task, id=pk)
 
     if request.method == "POST":
         task.title = request.POST["title"]
@@ -58,7 +42,7 @@ def update_task(request, task_id):
         task.save()
 
         messages.success(request, "Task updated successfully.", "alert-success")
-        return redirect("tasks:task_detail", task_id=task.id)
+        return redirect("tasks:task_detail", pk=task.id)
 
     users = User.objects.all()
     projects = Project.objects.all()

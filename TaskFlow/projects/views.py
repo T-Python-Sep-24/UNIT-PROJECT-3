@@ -9,7 +9,8 @@ from .utils import send_invitation_email
 
 @login_required
 def project_list(request: HttpRequest):
-    projects = Project.objects.filter(created_by=request.user)
+    # Filter projects where the logged-in user is the manager
+    projects = Project.objects.filter(manager=request.user)
     return render(request, "projects/project_list.html", {"projects": projects})
 
 @login_required
@@ -72,7 +73,9 @@ def project_create(request):
 
 @login_required
 def project_update(request, pk):
-    project = get_object_or_404(Project, pk=pk, created_by=request.user)  # Ensure only the manager can edit
+    # Ensure only the manager can edit the project
+    project = get_object_or_404(Project, pk=pk, manager=request.user)
+    
     if request.method == "POST":
         project.name = request.POST["name"]
         project.description = request.POST["description"]
@@ -89,11 +92,12 @@ def project_update(request, pk):
 
 @login_required
 def project_delete(request: HttpRequest, pk):
-    project = get_object_or_404(Project, pk=pk, created_by=request.user)
+    # Ensure only the manager can delete the project
+    project = get_object_or_404(Project, pk=pk, manager=request.user)
+
     if request.method == "POST":
         project.delete()
         messages.success(request, "Project deleted successfully!")
         return redirect("projects:project_list")
 
     return render(request, "projects/project_delete.html", {"project": project})
-

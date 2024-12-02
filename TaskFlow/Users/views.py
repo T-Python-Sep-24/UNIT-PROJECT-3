@@ -110,13 +110,17 @@ def update_user_profile(request: HttpRequest):
 
 
 @login_required
-def dashboard_view(request,username):
+def dashboard_view(request, username):
+    # Fetch projects managed or assigned to the user
     projects = Project.objects.filter(members=request.user) | Project.objects.filter(manager=request.user)
-    tasks = Task.objects.filter(assigned_to=request.user)
+    
+    # Fetch tasks assigned to the user or belonging to their projects
+    tasks = Task.objects.filter(assigned_to=request.user) | Task.objects.filter(project__in=projects)
 
     return render(request, "users/dashboard.html", {
-        "projects": projects,
-        "tasks": tasks,
+        "projects": projects.distinct(),
+        "tasks": tasks.distinct(),
+        "is_manager": request.user == projects.first().manager if projects.exists() else False,
     })
     
 def log_out(request: HttpRequest):
