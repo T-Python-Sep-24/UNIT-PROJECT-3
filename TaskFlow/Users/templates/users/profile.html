@@ -7,7 +7,6 @@
         <div class="card-body">
             <h4 class="card-title">{{ user.username }}</h4>
             <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>Role:</strong> {{ user.profile.get_roll_display }}</p> <!-- Display human-readable role -->
             <p><strong>About:</strong> {{ user.profile.about }}</p>
 
             {% if user.profile.photo %}

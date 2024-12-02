@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import Project
 from django.http import HttpRequest
 from django.contrib.auth.models import User
+from .forms import ProjectForm
 
 @login_required
 def project_list(request: HttpRequest):
@@ -17,27 +18,24 @@ def project_detail(request: HttpRequest, pk):
 
 @login_required
 def project_create(request):
+    user_roles = request.user.roles.filter(name="Manager")
+    if not user_roles.exists():
+        messages.error(request, "You do not have permission to add a project.")
+        return redirect('Users:dashboard_view')
+
     if request.method == "POST":
-        name = request.POST["name"]
-        description = request.POST["description"]
-        start_date = request.POST["start_date"]
-        end_date = request.POST["end_date"]
-        members = request.POST.getlist("members")  # Fetch selected members
-        
-        project = Project.objects.create(
-            name=name,
-            description=description,
-            start_date=start_date,
-            end_date=end_date,
-            created_by=request.user,
-        )
-        project.members.set(members)  # Assign members
-        messages.success(request, "Project created successfully.")
-        return redirect("projects:project_list")
-    
-    user_list = User.objects.filter(profile__roll="Team Member").exclude(id=request.user.id)  # Exclude the current manager
-    print(user_list)
-    return render(request, "projects/project_create.html", {"user_list": user_list})
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.manager = user_roles.first()  # Assign the logged-in manager role
+            project.save()
+            form.save_m2m()  # Save the many-to-many relationships
+            messages.success(request, "Project added successfully!")
+            return redirect('Users:dashboard_view')
+    else:
+        form = ProjectForm()
+
+    return render(request, "projects/add_project.html", {"form": form})
 
 @login_required
 def project_update(request, pk):

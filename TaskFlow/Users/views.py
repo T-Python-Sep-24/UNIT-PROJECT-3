@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect , get_object_or_404
 from django.http import HttpRequest
-from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -44,7 +43,6 @@ def sign_up(request):
     return render(request, "users/signup.html", {"form": profile_form})
 
 
-
 def sign_in(request: HttpRequest):
     if request.method == "POST":
         # Checking user credentials
@@ -77,7 +75,6 @@ def user_profile_view(request:HttpRequest, user_name):
     return render(request, 'users/profile.html', {"user": user})
 
 
-
 @login_required
 def update_user_profile(request: HttpRequest):
     if request.method == "POST":
@@ -94,43 +91,44 @@ def update_user_profile(request: HttpRequest):
                 # Update profile fields
                 profile = user.profile
                 profile.about = request.POST.get("about", profile.about)
-                profile.roll = request.POST.get("roll", profile.roll)
                 if "photo" in request.FILES:
                     profile.photo = request.FILES["photo"]
                 profile.save()
 
             messages.success(request, "Profile updated successfully!", "alert-success")
+            return redirect("Users:user_profile_view", user.username)
         except Exception as e:
-            messages.error(request, "An error occurred while updating your profile.", "alert-danger")
-            print(e)
+            # Provide detailed error feedback
+            messages.error(request, f"An error occurred while updating your profile: {str(e)}", "alert-danger")
+            print(f"Update Profile Error: {e}")
 
-    user = request.user
-    profile = user.profile
-
+    # Render the update profile page with current user and profile details
     return render(request, "users/update_profile.html", {
-        "user": user,
-        "profile": profile,
+        "user": request.user,
+        "profile": request.user.profile,
     })
+
 
 @login_required
 def dashboard_view(request, username):
-    user = request.user
-    if user.profile.roll == "Manager":
-        # Manager: Show projects and tasks they can manage
-        projects = Project.objects.filter(created_by=user)
-        tasks = Task.objects.filter(project__created_by=user)
-    elif user.profile.roll == "Team Member":
-        # Team Member: Show only tasks assigned to them
-        tasks = Task.objects.filter(assigned_to=user)
-        projects = None  # Team members don't manage projects
+    user_roles = request.user.roles.all()
+    is_manager = user_roles.filter(name="Manager").exists()
+    
+    if is_manager:
+        # Managers: Show all projects and tasks they manage
+        projects = Project.objects.filter(manager=request.user)
+        tasks = Task.objects.filter(project__manager=request.user)
+    else:
+        # Team Members: Show only tasks assigned to them
+        projects = None
+        tasks = Task.objects.filter(assigned_to=request.user)
 
     return render(request, "users/dashboard.html", {
-        "user": user,
         "projects": projects,
         "tasks": tasks,
+        "is_manager": is_manager,
     })
 
-    
 def log_out(request: HttpRequest):
     logout(request)
     messages.success(request, "Logged out successfully", "alert-warning")

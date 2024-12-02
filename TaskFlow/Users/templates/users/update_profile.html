@@ -1,4 +1,5 @@
 {% extends "main/base.html" %}
+{% load static %}
 {% block content %}
 <div class="container mt-5">
     <div class="row">
@@ -7,7 +8,7 @@
                 <div class="card-body">
                     <h4 class="card-title text-primary">{{ profile.user.username }}</h4>
                     {% if profile.photo %}
-                        <img src="{{ profile.photo.url }}" class="rounded-circle img-fluid mt-3" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
+                        <img src="{{ profile.photo.url }}" class="rounded-circle img-fluid mt-3" alt="Profile Preview" style="width: 150px; height: 150px; object-fit: cover;">
                     {% else %}
                         <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; margin: 0 auto;">
                             <span>No Photo</span>
@@ -48,7 +49,6 @@
                     <p><strong>Username:</strong> {{ profile.user.username }}</p>
                     <p><strong>Email:</strong> {{ profile.user.email }}</p>
                     <p><strong>About:</strong> {{ profile.about }}</p>
-                    <p><strong>Role:</strong> {{ profile.get_roll_display }}</p>
                 </div>
             </div>
         </div>

@@ -7,21 +7,21 @@ from django.contrib.auth.models import User
 
 @login_required
 def create_task(request):
+    user_roles = request.user.roles.filter(name="Manager")
+    if not user_roles.exists():
+            messages.error(request, "You do not have permission to add a task.")
+            return redirect('Users:dashboard_view')
+
     if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
-            print("ddd")
-            task = form.save(commit=False)
-            task.assigned_to = request.user
-            task.save()
-            print("dddd22")
-            messages.success(request, "Task created successfully!")
-            return redirect("tasks:task_list")
+            task = form.save()
+            messages.success(request, "Task added successfully!")
+            return redirect('Users:dashboard_view')
         else:
-            print(form.errors)
-    else:
-        form = TaskForm()
-    return render(request, "tasks/create_task.html", {"form": form})
+            form = TaskForm()
+
+            return render(request, "tasks/add_task.html", {"form": form})
 
 @login_required
 def task_list(request):

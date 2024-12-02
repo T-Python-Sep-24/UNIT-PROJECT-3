@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from projects.models import Project  
+from projects.models import Project  , Roll
 
 
 class Task(models.Model):
@@ -20,8 +20,14 @@ class Task(models.Model):
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='Not Started')
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='Medium')
     due_date = models.DateField()
-    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="tasks")
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks")
+    assigned_to = models.ForeignKey(
+    User, on_delete=models.CASCADE, related_name="assigned_tasks", null=True, blank=True
+)
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name="tasks"
+    )
 
     def __str__(self):
         return f"{self.title} - {self.status}"
