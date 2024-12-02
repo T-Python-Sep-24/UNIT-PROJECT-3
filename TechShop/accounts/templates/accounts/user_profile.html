@@ -1,0 +1,25 @@
+{% extends "main/base.html" %}
+
+{% block title %}{{ user.username }}'s Profile{% endblock %}
+
+{% block content %}
+<div class="card my-4">
+    <div class="card-header ">
+        <h3>{{ user.username }}'s Profile</h3>
+        <div class=""><h3><a class="btn btn-primary" href="{% url 'accounts:update_user_profile' %}">update your profile</a></h3></div>
+
+    </div>
+    <div class="card-body">
+        <p><strong>First Name:</strong> {{ user.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        {% if profile %}
+            <p><strong>address:</strong> {{ profile.about }}</p>
+        {% else %}
+            <p><em>No profile details available.</em></p>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}
