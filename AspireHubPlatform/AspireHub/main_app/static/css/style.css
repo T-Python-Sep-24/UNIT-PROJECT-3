@@ -9,3 +9,12 @@
 }
 
 
+
+.company-card img 
+{
+transition: 0.3s;
+}
+.company-card:hover img 
+{
+transform: scale(1.5) rotate(10deg);
+}

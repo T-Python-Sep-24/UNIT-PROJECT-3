@@ -1,38 +1,40 @@
 {% extends 'main_app/base.html' %}
 {% load static %}
 {% block content %}
-<div class="max-w-md mx-auto bg-orange-500 p-10 rounded-lg  mt-10 ">
-    <h2 class="text-2xl font-bold mb-4 text-white">Add Company</h2>
-    <form action="{% url 'events_companies_app:add_company_view' %}" method="post" enctype="multipart/form-data" class="space-y-4 bg-orange-500">
+<div class="m-auto w-10/12 rounded-2xl bg-white  p-11 shadow-card md:w-8/12 mt-10 border-4">
+    <h2 class="text-2xl font-bold mb-4 text-white text-center">Add Company</h2>
+    <form action="{% url 'events_companies_app:add_company_view' %}" method="post" enctype="multipart/form-data" class="flex flex-col justify-center gap-5 md:grid md:grid-cols-2">
         {% csrf_token %}
-        <div>
-            <label for="name" class="block text-lg font-medium text-white">Company Name</label>
+        <div class="space-y-2">
+            <label for="name" class="text-md font-medium leading-none text-gray-900">Company Name</label>
             <input type="text" name="name" id="name" required
-                   class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 w-full p-4">
+                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
         </div>
-        <div>
-            <label for="description" class="block text-lg font-medium text-white">Description</label>
+        <div class="space-y-2">
+            <label for="description" class="text-md font-medium leading-none text-gray-900">Description</label>
             <textarea name="description" id="description" required
-                      class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 p-4"></textarea>
+                      class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2"></textarea>
         </div>
-        <div>
-            <label for="logo" class="block text-lg font-medium text-white">Logo</label>
+        <div class="space-y-2">
+            <label for="logo" class="text-md font-medium leading-none text-gray-900">Logo</label>
             <input type="file" name="logo" id="logo" accept="image/*"
-                   class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 p-2">
+                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
         </div>
-        <div>
-            <label for="website" class="block text-lg font-medium text-white">Website</label>
+        <div class="space-y-2">
+            <label for="website" class="text-md font-medium leading-none text-gray-900">Website</label>
             <input type="url" name="website" id="website"
-                   class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200  p-2">
+                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
         </div>
-        <div>
-            <label for="specialization" class="block text-lg font-medium text-white">Specialization</label>
+        <div class="space-y-2">
+            <label for="specialization" class="text-md font-medium leading-none text-gray-900">Specialization</label>
             <input type="text" name="specialization" id="specialization"
-                   class="mt-1 block w-full border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200">
+                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
         </div>
-        <button type="submit" class="bg-gradient-to-r from-orange-400 to-orange-200 text-white px-4 py-2 rounded">
-            Add Company
-        </button>
+        <div class="col-span-2 w-full">
+            <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-orange-500 text-white hover:bg-orange-300 h-10 px-8 py-4 rounded-lg">
+                Add Company
+            </button>
+        </div>
     </form>
 </div>
 {% endblock %}

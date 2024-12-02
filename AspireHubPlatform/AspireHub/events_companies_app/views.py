@@ -7,10 +7,10 @@ from django.http import HttpRequest , HttpResponse
 def add_company_view(request:HttpRequest):
     if request.method == "POST":
         new_company=Company(
-        name = request.POST[" name"],
+        name = request.POST["name"],
         description = request.POST["description"],
-        logo = request.POST["logo"],
-        website  = request.POST["website "],
+        logo=request.FILES["logo"],
+        website = request.POST["website"],
         specialization= request.POST["specialization"],
            
        )
@@ -22,13 +22,21 @@ def add_employee_view(request:HttpRequest):
     return render(request, "events_companies_app/add_employee.html")
 
 def add_event_view(request:HttpRequest):
-
+    if request.method == "POST":
+        new_event = Event(
+        title = request.POST["title"],
+        description = request.POST["description"],
+        image=request.FILES["image"],
+        date= request.POST["date"],   
+      )
+        new_event.save()
     return render(request, "events_companies_app/add_event.html")
 
 
-def details_company_employees_view(request:HttpRequest, company_id):
-    company = Company.objects.all()
-    return render(request, 'events_companies_app/details_company_employees.html' ,{'company': company})
+def details_companies_view(request:HttpRequest):
+    companies = Company.objects.all()
+    events = Event.objects.all()
+    return render(request, 'events_companies_app/details_companies.html' ,{'companies': companies},{'events':events})
 
 def events_list_view(request:HttpRequest):
     return render(request, "events_companies_app/events_list.html")
