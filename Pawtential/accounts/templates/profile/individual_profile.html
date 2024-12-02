@@ -22,8 +22,14 @@
                 alt="User Picture" class="img-fluid rounded-circle" 
                 style="width: 200px; height: 200px; object-fit: cover; border: 5px solid #FF8551;">
             </div>
-            <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
-            <p><strong>Email:</strong> {{ profile.email }}</p>
+            <p>
+              <strong><i class="bi bi-telephone-fill"></i></strong>
+              <a href="tel:{{ profile.phone_number }}">{{ profile.phone_number }}</a>
+            </p>
+            <p>
+              <strong><i class="bi bi-envelope-fill"></i></strong>
+              <a href="mailto:{{ profile.email }}">{{ profile.email }}</a>
+            </p>
             {% if profile.user == request.user %}
               <a href="{% url 'accounts:individual_edit_profile' individual_id=profile.id %}" class="btn btn-warning mt-3">Edit Profile</a>
             {% endif %}

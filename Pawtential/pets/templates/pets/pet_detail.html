@@ -5,8 +5,6 @@
 
 {% block content %}
 <div class="container-fluid p-0 mt-5">
-
-    <h2 class="text-center mb-5 display-3">{{ pet.name }} Details</h2>
     {% if messages %}
         {% for message in messages %}
             <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
@@ -52,7 +50,7 @@
                                 <a href="{% url 'adoptions:request_adoption' pet_id=pet.id %}" class="btn btn-primary mt-3 btn-lg">Request Adoption</a>
                                 {% endif %}
                             {% else %}
-                                <p>Please log in to request adoption.</p>
+                                <p style="color: #6b0101ab;">Please log in to request adoption.</p>
                             {% endif %}
 
                             {% if pet.user == request.user %}
