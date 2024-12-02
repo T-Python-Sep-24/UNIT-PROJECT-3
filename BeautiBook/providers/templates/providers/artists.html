@@ -1,0 +1,171 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %} Artists {% endblock %}
+{% block style %}
+<style>
+    .team-boxed {
+        color: #4a4a4a; /* Neutral text color */
+        background-color: #f9f6f4; /* Off-white background */
+    }
+
+    .team-boxed p {
+        color: #7d8285;
+    }
+
+    .team-boxed h2 {
+        font-weight: bold;
+        margin-bottom: 40px;
+        padding-top: 40px;
+        color: #f4c6c2; /* Light pink heading color */
+    }
+
+    @media (max-width: 767px) {
+        .team-boxed h2 {
+            margin-bottom: 25px;
+            padding-top: 25px;
+            font-size: 24px;
+        }
+    }
+
+    .team-boxed .intro {
+        font-size: 16px;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .team-boxed .intro p {
+        margin-bottom: 0;
+    }
+
+    .team-boxed .people {
+        padding: 50px 0;
+    }
+
+    .team-boxed .item {
+        text-align: center;
+    }
+
+    .team-boxed .item .box {
+        text-align: center;
+        padding: 20px; /* Reduced padding */
+        background-color: #fff; /* White card background */
+        border: 2px solid #f4c6c2; /* Light pink border */
+        border-radius: 10px;
+        margin-bottom: 20px; /* Reduced margin */
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .team-boxed .item .box:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(244, 198, 194, 0.3); /* Light pink shadow */
+    }
+
+    .team-boxed .item .name {
+        font-weight: bold;
+        margin-top: 20px; /* Adjusted margin */
+        margin-bottom: 8px;
+        color: #4a4a4a; /* Neutral text */
+    }
+
+    .team-boxed .item .title {
+        text-transform: uppercase;
+        font-weight: bold;
+        color: #d6a5a1; /* Muted pink */
+        letter-spacing: 2px;
+        font-size: 12px; /* Reduced font size */
+    }
+
+    .team-boxed .item .description {
+        font-size: 14px; /* Reduced font size */
+        margin-top: 10px; /* Reduced margin */
+        margin-bottom: 15px;
+        color: #7d8285; /* Neutral gray text */
+    }
+
+    .team-boxed .item img {
+        max-width: 140px; /* Reduced image size */
+        border: 3px solid #f4c6c2; /* Light pink border */
+        border-radius: 50%;
+    }
+
+    .team-boxed .social {
+        font-size: 18px;
+        color: #a2a8ae;
+    }
+
+    .team-boxed .social a {
+        color: #4a4a4a; /* Neutral text for icons */
+        margin: 0 10px;
+        display: inline-block;
+        opacity: 0.7;
+    }
+
+    .team-boxed .social a:hover {
+        color: #f4c6c2; /* Light pink hover effect */
+        opacity: 1;
+    }
+
+    .team-boxed .social .btn {
+        margin-top: 10px;
+        background-color: #f4c6c2; /* Light pink button */
+        color: #fff;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .team-boxed .social .btn:hover {
+        background-color: #e8b3ad; /* Darker pink hover */
+    }
+</style>
+
+{% endblock %}
+{% block content %}
+
+<div class="team-boxed">
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center">Successful Partners</h2>
+            <p class="text-center">
+                Our successful partners are 
+            </p>
+        </div>
+        <div class="row people d-flex flex-wrap">
+            {% for artist in artists %}
+                <div class="col-md-6 col-lg-4 item">
+                    <div class="box">
+                        <img class="rounded-circle" src="{{ artist.logo.url }}">
+                        <h3 class="name">{{ artist.name }}</h3>
+                        <p class="title">{{ artist.title }}</p>
+                        <p class="description">{{ artist.about }}</p>
+                        <p class="title">{{ artist.price_range }}</p>
+                        <div class="social">
+                            <a href="{{ artist.insta_url }}"><i class="fab fa-instagram"></i></a>
+                            <a href="{% url 'providers:artist_detail_view' artist.id %}" class="btn">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-4">
+        {% if artists.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ artists.previous_page_number }}">Previous</a>
+            </li>
+        {% endif %}
+        <li class="page-item disabled">
+            <span class="page-link">{{ artists.number }} of {{ artists.paginator.num_pages }}</span>
+        </li>
+        {% if artists.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ artists.next_page_number }}">Next</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock %}

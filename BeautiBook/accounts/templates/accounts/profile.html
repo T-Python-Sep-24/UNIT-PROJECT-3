@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Profile For {{user.username}}{% endblock %}
+{% block style %}{% endblock %}
+{% block content %}
+
+
+<div class="row">
+    <div class="col-2 align-items-center m-5">
+        <h4>Profile For {{user.username}}</h4>
+        <h4>About <p>{{user.profile.about}}</p></h4>
+    </div>
+</div>
+
+{% endblock %}

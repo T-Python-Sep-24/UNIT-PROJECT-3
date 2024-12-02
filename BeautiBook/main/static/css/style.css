@@ -1,0 +1,484 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #4a4a4a; /* Neutral dark gray for text */
+    background-color: #fff7f0; /* Soft beige background */
+    overflow-x: hidden;
+}
+
+.about-section .about-image img{
+    width: 400px;
+    height: auto;
+}
+
+.hero-section {
+    background: linear-gradient(to right, #fae2df, #f8d7d3);
+    padding: 20px 0;
+}
+
+.header {
+    padding: 15px 0;
+}
+
+.header-logo .logo {
+    font-size: 28px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #f4c6c2; /* Soft pink for emphasis */
+    letter-spacing: 1px;
+}
+
+.header-logo .logo span {
+    color: #4a4a4a; /* Neutral gray for part of the logo */
+}
+
+/* Navigation Menu */
+.header-menu .nav-list {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.header-menu .nav-list li {
+    display: inline;
+}
+
+.header-menu .nav-list li a {
+    font-size: 16px;
+    font-weight: 550;
+    text-decoration: none;
+    color: #4a4a4a;
+    padding: 5px 10px;
+    transition: color 0.3s, border-bottom 0.3s;
+}
+
+.header-menu .nav-list li a.active,
+.header-menu .nav-list li a:hover {
+    color: #f4c6c2; /* Highlight active link */
+    border-bottom: 2px solid #f4c6c2;
+}
+
+/* Sign-In/Register Buttons */
+.header-right {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.header-right .btn {
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.header-right .btn-signin {
+    background-color: #f4c6c2;
+    color: #fff;
+    border: none;
+}
+
+.header-right .btn-signin:hover {
+    background-color: #e8b3ad;
+}
+
+.header-right .btn-register {
+    background-color: #fff7f0;
+    color: #4a4a4a;
+    border: 1px solid #f4c6c2;
+}
+
+.header-right .btn-register:hover {
+    background-color: #f4c6c2;
+    color: #fff;
+}
+
+.custom-header {
+    background: linear-gradient(to right, #fae2df, #f8d7d3);
+    padding: 50px 0;
+    color: #4a4a4a;
+    font-family: 'Arial', sans-serif;
+}
+
+.custom-header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.custom-header .content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.custom-header .text-box {
+    max-width: 50%;
+}
+
+.custom-header .text-box h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #4a4a4a;
+}
+
+.custom-header .text-box p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    color: #757575;
+}
+
+.custom-header .buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.custom-header .buttons .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.custom-header .buttons .primary-btn {
+    background-color: #f4c6c2;
+    color: #fff;
+}
+
+.custom-header .buttons .primary-btn:hover {
+    background-color: #e8b3ad;
+}
+
+.custom-header .buttons .secondary-btn {
+    background-color: #fae2df;
+    color: #4a4a4a;
+}
+
+.custom-header .buttons .secondary-btn:hover {
+    background-color: #f8d7d3;
+    color: #fff;
+}
+
+.custom-header .image-box {
+    max-width: 45%;
+    text-align: center;
+}
+
+.custom-header .image-box img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+a, a:hover, a:focus {
+    text-decoration: none;
+}
+
+/* Button Styling */
+.btn, .btn:focus {
+    outline: none !important;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-section .header {
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(91, 91, 91, 0.1);
+}
+
+.header-logo {
+    padding: 20px 0;
+}
+
+.header-logo a {
+    display: inline-block;
+    color: #4a4a4a; /* Neutral gray */
+    font-size: 27px;
+    letter-spacing: 3px;
+}
+
+.header-logo a span {
+    color: #f4c6c2; /* Light pink for contrast */
+    font-size: 30px;
+    font-weight: 650;
+}
+
+/* Header Menu */
+.header-menu ul {
+    margin-top: 30px;
+    margin-bottom: 0;
+}
+
+.header-menu ul li {
+    position: relative;
+    display: inline-block;
+    margin-right: 40px;
+}
+
+.header-menu ul li a {
+    font-size: 17px;
+    color: #4a4a4a;
+    font-weight: 500;
+    display: block;
+    padding: 2px 0;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.header-menu ul li a:hover {
+    color: #f4c6c2; /* Light pink hover */
+}
+
+.header-menu ul li a:after {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #f4c6c2;
+    content: '';
+    transition: transform 0.5s;
+    transform: scale(0);
+}
+
+.header-menu ul li:hover a:after {
+    transform: scale(1);
+}
+
+/* Padding Layout */
+.padding-layout {
+    padding: 45px 0;
+}
+
+/* Heading Container */
+.heading-contanier h2 {
+    position: relative;
+    color: #4a4a4a;
+    margin-bottom: 0;
+    font-size: 3.5rem;
+    font-weight: bold;
+}
+
+.heading-contanier h2::after {
+    content: '';
+    display: block;
+    width: 70px;
+    height: 5px;
+    background-color: #f4c6c2;
+    margin: 10px auto 10px;
+}
+
+/* Feature Section */
+.feature-section .box {
+    text-align: center;
+    margin-top: 45px;
+    background-color: #f8d7d3; /* Soft pink */
+    padding: 65px 50px;
+    border-radius: 5px;
+    color: #4a4a4a;
+    width: 375px;
+}
+
+.feature-section .box:hover {
+    background-color: #fae2df; /* Lighter pink on hover */
+}
+
+.feature-section .box .detail-box h5 {
+    font-size: 21px;
+    font-weight: 700;
+    transition: color 0.3s;
+}
+
+.feature-section .box:hover .detail-box h5 {
+    color: #f4c6c2;
+}
+
+.feature-section .box .detail-box p {
+    margin-bottom: 0;
+    color: #757575; /* Neutral text gray */
+}
+
+/* Arrival Section */
+.arrival-section {
+    background-color: #fce4dc; /* Light beige-pink background */
+    padding: 50px 0;
+}
+
+.arrival-section .bg-img img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: top left;
+}
+
+.arrival-section .heading-contanier h2 {
+    color: #4a4a4a;
+    margin-bottom: 15px;
+}
+
+.arrival-section .heading-contanier p {
+    color: #757575;
+    margin-bottom: 20px;
+}
+
+.arrival-section .heading-contanier a {
+    color: #fff;
+    background-color: #f4c6c2; /* Light pink button */
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.arrival-section .heading-contanier a:hover {
+    background-color: #e8b3ad; /* Slightly darker pink */
+}
+
+/* Footer Styling */
+.custom-footer {
+    background-color: #f9f6f4; /* Off-white background */
+    color: #4a4a4a;
+    padding: 40px 0 20px;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    border-top: 2px solid #f4c6c2; /* Light pink border on top */
+}
+
+.custom-footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 0 15px;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.about-section,
+.social-section {
+    flex: 1;
+    min-width: 280px;
+}
+
+.about-section h5,
+.social-section h5 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #f4c6c2; /* Light pink text for headings */
+}
+
+.about-section p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.social-section .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-section .social-icons a {
+    color: #4a4a4a;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+.social-section .social-icons a:hover {
+    color: #f4c6c2; /* Light pink hover effect */
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    background-color: #f9f6f4; /* Off-white background for the footer bottom */
+    padding: 10px 0;
+    font-size: 14px;
+    border-top: 1px solid #f4c6c2; /* Light pink border for the bottom section */
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: #757575;
+}
+
+.footer-bottom a {
+    color: #f4c6c2; /* Light pink links */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-bottom a:hover {
+    color: #e8b3ad; /* Slightly darker pink for hover */
+}
+/* Join Us Section */
+.join-us-section {
+    background-color: #fff7f0; /* Soft beige background */
+    padding: 60px 0;
+}
+
+.join-us-section h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4a4a4a; /* Neutral dark gray */
+    margin-bottom: 20px;
+}
+
+.join-us-section p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #757575; /* Neutral gray */
+    margin-bottom: 20px;
+}
+
+.join-us-section .btn {
+    background-color: #f4c6c2; /* Light pink button */
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.join-us-section .btn:hover {
+    background-color: #e8b3ad; /* Slightly darker pink */
+}
+
+.join-us-section img {
+    width: 100%; /* Ensure the image is responsive */
+    max-width: 400px;
+    border-radius: 12px; /* Rounded corners for the image */
+}

@@ -1,0 +1,48 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Update Artist{% endblock %}
+{% block style %}
+{% endblock %}
+{% block content %} 
+<div class="container d-flex justify-content-center mt-5">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 600px; border-radius: 8px;">
+      <h2 class="text-center mb-4"> Update Artist</h2>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group mb-3">
+          <label for="title">Name</label>
+          <input type="text" id="title" name="name" class="form-control" value="{{artist_detail.name}}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="title">title</label>
+            <input type="text" id="title" name="title" class="form-control" value="{{artist_detail.title}}" required>
+          </div>
+        <div class="form-group mb-3">
+            <label for="about">About</label>
+            <input type="text" id="about" name="about" class="form-control" value="{{artist_detail.about}}" required>
+          </div>
+          <div class="form-group mb-3">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{artist_detail.email}}" required>
+          </div>
+          <div class="form-group mb-3">
+            <label for="insta_url">instagram URL</label>
+            <input type="url" id="insta_url" name="insta_url" class="form-control" value="{{artist_detail.insta_url}}" placeholder="https://example.com" required>
+          </div>
+          <div class="form-group mb-3">
+            <label for="image">Image</label>
+            <input type="file" id="image" name="image" class="form-control-file" multiple required>
+          </div>
+          <div class="form-group mb-3">
+            <label for="logo">logo</label>
+            <input type="file" id="logo" name="logo" class="form-control-file" value="{{artist_detail.logo}}" required>
+          </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-dark">Save Artist</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

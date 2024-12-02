@@ -1,0 +1,169 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}About Us{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        background-color: #f9f6f4; /* Off-white background */
+    }
+
+    .about-section {
+        padding: 60px 0;
+    }
+
+    .about-container {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .about-text {
+        flex: 1 1 50%;
+        padding: 20px;
+    }
+
+    .about-text h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #4a4a4a; /* Neutral dark gray */
+        margin-bottom: 20px;
+    }
+
+    .about-text p {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: #757575; /* Neutral gray */
+        margin-bottom: 20px;
+    }
+
+    .about-text .btn {
+        background-color: #f4c6c2; /* Light pink button */
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        transition: background-color 0.3s ease;
+        margin-right: 10px;
+    }
+
+    .about-text .btn:hover {
+        background-color: #e8b3ad; /* Slightly darker pink */
+    }
+
+    .about-image {
+        flex: 1 1 50%;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .about-image img {
+        max-width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(244, 198, 194, 0.2); /* Light pink shadow */
+    }
+
+    .features-section {
+        background-color: #fff;
+        padding: 40px 0;
+    }
+
+    .feature-card {
+        background: #fff;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(244, 198, 194, 0.2); /* Light pink shadow */
+        text-align: center;
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(244, 198, 194, 0.3); /* Stronger shadow */
+    }
+
+    .feature-card h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #4a4a4a; /* Neutral dark gray */
+    }
+
+    .feature-card p {
+        color: #757575; /* Neutral gray */
+        font-size: 1rem;
+    }
+
+    .feature-icon {
+        background-color: #f4c6c2; /* Light pink */
+        color: #fff;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 15px;
+        font-size: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="about-section">
+    <div class="container about-container">
+        <div class="about-image">
+            <img src="{% static 'images/BueatiBook.png' %}" alt="About Us Image">
+        </div>
+        <div class="about-text">
+            <p>
+                Discover who we are and why we are your trusted partner for connecting with talented artists. 
+                With years of experience and a passion for creativity, we aim to deliver exceptional service to every customer.
+            </p>
+            <div>
+                <a class="btn" href="{% url 'providers:artists_view' %}">See Artists</a>
+                <a class="btn" href="{% url 'main:contact_view' %}">Contact Us Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-section">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h2>Why Us?</h2>
+                    <p>We have more than 1,000,000 satisfied customers!</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-calendar"></i>
+                    </div>
+                    <h2>Since 1947</h2>
+                    <p>Connecting people to art and creativity since the post-war era.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-speedometer2"></i>
+                    </div>
+                    <h2>Speed Service</h2>
+                    <p>Get access to your favorite artists, right at your fingertips!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
