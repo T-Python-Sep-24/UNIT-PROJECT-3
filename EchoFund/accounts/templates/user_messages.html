@@ -27,10 +27,12 @@
             <p>Content {{message.sent_at}}</p>
             <form action="{% url 'accounts:messages_view' message.sender.username %}" method="post">
                 {% csrf_token %}
-                {% if message.is_viewed %}
-                <a href="{% url 'accounts:unread_message' message.id %}" class="btn btn-success"><i class="fas fa-envelope p-1"></i>Mark as unread</a>
-                {% elif not message.is_viewed %}
-                <a href="{% url 'accounts:read_message' message.id %}" class="btn btn-warning"><i class="fas fa-envelope-open p-1"></i>Mark as Read</a>
+                {% if not request.user == message.sender %}
+                    {% if message.is_viewed %}
+                    <a href="{% url 'accounts:unread_message' message.id %}" class="btn btn-success"><i class="fas fa-envelope p-1"></i>Mark as unread</a>
+                    {% elif not message.is_viewed %}
+                    <a href="{% url 'accounts:read_message' message.id %}" class="btn btn-warning"><i class="fas fa-envelope-open p-1"></i>Mark as Read</a>
+                    {% endif %}
                 {% endif %}
                 <a href="{% url 'accounts:delete_message' message.id %}" class="btn btn-danger"><i class="fas fa-trash p-1"></i>Delete</a>
             </form>

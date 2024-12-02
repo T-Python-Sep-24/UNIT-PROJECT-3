@@ -63,22 +63,23 @@ def log_out(request: HttpRequest):
 
     logout(request)
     messages.success(request, 'logged out successfully, See You later', 'alert-success')
-    return redirect(request.GET.get('next', '/'))
+    return redirect('main:home_view')
 
 
 def profile_view(request: HttpRequest, user_name):
-
+    if not request.user.is_authenticated:
+        messages.error(request, 'Please Sign in to View Your Profile', 'alert-danger')
+        return redirect('accounts:sign_in')
     user = User.objects.get(username=user_name)
     funds = Fund.objects.filter(fund_owner=user)
-    participate_funds = Fund.objects.filter(fund_members = request.user)
+
     if not Profile.objects.filter(user = user).first():
         new_profile = Profile(user=user)
         new_profile.save()
     profile: Profile = user.profile
     # profile = Profile.objects.get(user=user)
 
-
-    return render(request, 'profile.html', context={'user':user, 'participate_funds':participate_funds, 'funds':funds})
+    return render(request, 'profile.html', context={'user':user, 'funds':funds})
 
 
 def update_profile_view(request: HttpRequest):
