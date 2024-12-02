@@ -122,6 +122,7 @@ def dashboard_view(request, username):
         "tasks": tasks.distinct(),
         "is_manager": request.user == projects.first().manager if projects.exists() else False,
     })
+
     
 def log_out(request: HttpRequest):
     logout(request)

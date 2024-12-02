@@ -18,6 +18,8 @@ def create_task(request):
         form = TaskForm()
     return render(request, "tasks/create_task.html", {"form": form})
 
+
+
 @login_required
 def task_list(request):
     tasks = Task.objects.all()

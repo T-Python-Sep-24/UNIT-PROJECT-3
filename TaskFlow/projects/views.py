@@ -37,7 +37,7 @@ def project_create(request):
             description=description,
             start_date=start_date,
             end_date=end_date,
-            manager=request.user,  # Assign the logged-in user as the manager
+            manager=request.user  # Assign the logged-in user as the manager
         )
 
         # Process team members
@@ -45,31 +45,27 @@ def project_create(request):
         member_roles = request.POST.getlist('member_role[]')
         member_emails = request.POST.getlist('member_email[]')
 
+        # Collect user objects for the team members
+        member_objects = []
         for name, role, email in zip(member_names, member_roles, member_emails):
             # Create a User instance or retrieve an existing one
             user, created = User.objects.get_or_create(email=email, defaults={
                 'username': email.split('@')[0],  # Use email prefix as username
             })
+            member_objects.append(user)
 
-            if created:
-                user.set_unusable_password()  # Set the password to unusable
-                user.save()
-
-                # Send an invitation email
-                send_invitation_email(email, project.name, request.user.username)
-
-            # Assign the user to the project
-            project.members.add(user)
+        # Assign members to the project
+        project.members.set(member_objects)
 
         # Save the project with updated members
         project.save()
 
-        # Redirect to a success page or the dashboard
+        # Show success message and redirect to dashboard
+        messages.success(request, "Project created successfully!")
         return redirect('Users:dashboard_view', username=request.user.username)
 
     # Render the project creation form
     return render(request, 'projects/project_create.html')
-
 
 @login_required
 def project_update(request, pk):
