@@ -81,7 +81,13 @@ def user_profile_view(request,user_name):
             received_requests=user.received_requests.all()
             partners=request.user.partners.all()
             partnered_users = user.partnered_users.all()
-            print( partners)
+            received_messages= request.user.received_messages.all().order_by("-created_at")
+            unread_messages=[]
+            for message in received_messages:
+                if message.readstate==False:
+                    unread_messages.append(message.id)
+
+            print("unread masseges: ", unread_messages)
             #check the request users
             is_requested=False
             if sent_requests.exists() and received_requests.exists():     
@@ -97,6 +103,8 @@ def user_profile_view(request,user_name):
              partnered_users=[]
              is_requested=False
              is_partnered=False
+             received_messages=[]
+             unread_messages=[]
     except Exception as e:
         print(e)
         return render(request,"404.html")
@@ -104,7 +112,9 @@ def user_profile_view(request,user_name):
     return render(request,"accounts/profile.html",{"user":user,"sent_requests":sent_requests,
                                                    "is_requested":is_requested,"received_requests":received_requests,
                                                    "partners":partners,
-                                                   "partnered_users":partnered_users,"is_partnered":is_partnered})
+                                                   "partnered_users":partnered_users,"is_partnered":is_partnered,
+                                                   "received_messages":received_messages,
+                                                   "unread_messages":unread_messages})
 
 
 def update_profile_view(request):

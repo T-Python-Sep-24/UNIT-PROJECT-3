@@ -1,6 +1,5 @@
 {% extends 'main/base.html'%}
 {%load static%}
-
 {% block title %} <title> Profile for {{user.username}}</title>  {% endblock %}
 {% block head%}
 <link href="{% static 'css/accounts.css' %}" rel="stylesheet" />
@@ -56,7 +55,7 @@
                 {% if is_partnered%}  
                 <a href="" class="btn btn-success disabled rounded-pill">
                     <i class="fa-solid fa-check"></i> Partner</a>  
-                {%elif is_requested%}
+                {%elif is_requested and request.user.sent_requests.sender == request.user%}
                     <a href="{%url 'partners:new_request_view' request.user.id user.id%}" class="btn btn-secondary rounded-pill">
                         <i class="fa-solid fa-check"></i> Pending Request</a>  
                         
@@ -89,7 +88,58 @@
                         </div>
                     {% endif %}
                 {% endif %}
+
+                {% if request.user.is_authenticated and  user == request.user%}
+                 <!--see messages-->
+                 <div class="d-flex  align-items-end ">
+                    
+                    <button id="messagesButton" type="button" class="btn btn-secondary rounded-pill my-2" data-bs-toggle="modal" data-bs-target="#seeMassegesModal">
+                        <i class="fa-solid fa-envelope pr-1"></i>  Messages
+                        {% if unread_messages %}
+                            <span class="notification text-white bg-danger rounded-circle">{{ unread_messages|length }}</span>
+                       
+                        {% endif %}
+
+                    </button>
+               
+
+                </div>
+                 <!-- see masseges modal  -->
+
+                 <div class="modal fade" id="seeMassegesModal"  tabindex="-1" aria-labelledby="seeMassegesModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header d-flex justify-content-between">
+                                <h1  class="modal-title fs-5" id="seeMassegesModalLabel" >Messages</h1>
+                                <form action="{%url 'partners:mark_messages_as_read'%}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="unread_messages" value="{{ unread_messages }}" style="display: none;">
+                                    <input id="closeMessagesModalButton" type="submit" value="" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
+                                </form>
+                            </div>
+                            <div class="modal-body">
+                                {% for message in received_messages%}
+                                <div class="d-flex flex-column message" data-message-id="{{message.id}}" data-readstate="{{message.readstate}}">
+                                    <div class="border-bottom py-2">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <p class="text-orange p-0 m-0">{{message.sender.username}}: </p>
+                                                <div class="messageContent" >{{message.content}}</div>            
+                                            </div>
+                                            <a href="{%url 'partners:delete_message_view' message.id%}"><i class="fa-solid fa-xmark text-danger"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                    
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%endif%}
             </div>
+
+
             
             <p class="">{{user.profile.about}}</p>
             <hr class=""/>
@@ -97,14 +147,14 @@
                 {% if user.profile.role != 'editor'%}
                 <a class="nav-link profile-nav-link active" aria-current="page" href="#" onclick="changeContent('Saved Blogs')">Saved Blogs</a>
 
-                {%if request.user.is_authenticated and request.user == user %}
-                <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Requests')">Requests</a>
-                <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Partners')">Partners</a>
-                {%else%}
-                <a class="nav-link profile-nav-link disabled" href="#">Requests</a>
-                <a class="nav-link profile-nav-link disabled" href="#">Partners</a>
+                    {%if request.user.is_authenticated and request.user == user %}
+                    <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Requests')">Requests</a>
+                    <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Partners')">Partners</a>
+                    {%else%}
+                    <a class="nav-link profile-nav-link disabled" href="#">Requests</a>
+                    <a class="nav-link profile-nav-link disabled" href="#">Partners</a>
 
-                {% endif %}
+                    {% endif %}
 
                 {%else%}
                 <a class="nav-link profile-nav-link active" aria-current="page" href="#" onclick="changeContent('Saved Blogs')">Published Blogs</a>
@@ -193,6 +243,7 @@
                 <!-- Partners -->
                 {%if request.user.is_authenticated and request.user == user%}
                 <div class="row row-cols-3 gap-4 px-4" id="partnersContent" style="display: none;">
+                   
                     <table class="table align-items-center align-middle text-center">
                         <thead class="table-light">
                             <tr>
@@ -221,13 +272,17 @@
                                             </div> -->
                             
                                             <div class="form-field">
-                                                <input class="btn btn-success btn-sm rounded-pill" type="submit" value="Join Stream" />
+                                                <input disabled class="btn btn-success btn-sm rounded-pill JoinStreamButton" data-scheduled-at="{{ partner.scheduled_at|date:'c' }}" type="submit" value="Join Stream" />
                                             </div>
                                         </div>
                                     </form> 
                                     <!--button to edit sceduel -->
                                     <button type="button" class="btn btn-warning btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#editScheduleModal">
                                         <i class="fa-solid fa-calendar-day text-white "></i>
+                                    </button>
+                                    <!--send messages-->
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#sendMassegesModal">
+                                        <i class="fa-solid fa-paper-plane text-white"></i>
                                     </button>
                                     <!--button to delete partner -->
                                         <a href="{%url 'partners:delete_partner_view' request.user.id partner.partner.id%}" class="btn btn-danger btn-sm rounded-pill"><i class="fa-solid fa-user-xmark"></i></a>
@@ -237,7 +292,6 @@
                                 </td>
                             </tr>
                                 <!-- edit calender modal  -->
-
                                     <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-labelledby="editScheduleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -264,14 +318,40 @@
 
                               
 
+                                <!-- send masseges modal  -->
+
+                                <div class="modal fade" id="sendMassegesModal" tabindex="-1" aria-labelledby="sendMassegesModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="sendMassegesModalLabel">Send Massege to {{partner.partner.username}}</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{% url 'partners:new_message_view' request.user.id partner.partner.id %}" method="post">
+                                                {% csrf_token %}
+                                                <div class="mb-3">
+                                                    <label for="message_content" class="col-form-label">Write Your Message:</label>
+                                                    <textarea type="text" class="form-control" id="message_content" name="message_content" required></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-orange rounded-pill">Send</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             {% endfor %}
                             {% for partner in partnered_users %}
-                            <tr>
+                            <tr class="">
                                 <td>{{ partner.user.username }}</td>
-                                <td>{{ partner.scheduled_at }}</td>
-                                <td class="d-flex justify-content-start gap-2">
-                                       <!--button to session -->
-                                       <form id="form">
+                                <td>{{ partner.scheduled_at|date:"l, d F Y, h:i A" }}</td>
+                                <td class="d-flex justify-content-center gap-2">
+                                    <!--button to session -->
+                                    <form id="form">
                                         <div class="field-wrapper">
                             
                                             <div class="form-field" style="display: none;">
@@ -284,21 +364,82 @@
                                             </div> -->
                             
                                             <div class="form-field">
-                                                <input class="btn btn-success btn-sm rounded-pill" type="submit" value="Join Stream" />
+                                                <input disabled class="btn btn-success btn-sm rounded-pill JoinStreamButton" data-scheduled-at="{{ partner.scheduled_at|date:'c' }}" type="submit" value="Join Stream" />
                                             </div>
                                         </div>
-                                    </form>
+                                    </form> 
+                                    <!--button to edit sceduel -->
+                                    <button type="button" class="btn btn-warning btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#editScheduleModal">
+                                        <i class="fa-solid fa-calendar-day text-white "></i>
+                                    </button>
+                                    <!--send messages-->
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#sendMassegesModal">
+                                        <i class="fa-solid fa-paper-plane text-white"></i>
+                                    </button>
+                                    <!--button to delete partner -->
+                                        <a href="{%url 'partners:delete_partner_view' request.user.id partner.user.id%}" class="btn btn-danger btn-sm rounded-pill"><i class="fa-solid fa-user-xmark"></i></a>
+                                  
                     
-                                    <!-- Button to delete partner -->
-                                    <a href="{%url 'partners:delete_partner_view' request.user.id partner.user.id%}" class="btn btn-danger btn-sm rounded-pill"><i class="fa-solid fa-user-xmark"></i></a>
-
-                    
-                                   
+                            
                                 </td>
                             </tr>
+                                <!-- edit calender modal  -->
+                                    <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-labelledby="editScheduleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="editScheduleModalLabel">Edit Schedule</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{% url 'partners:edit_schedule_view' request.user.id partner.user.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <div class="mb-3">
+                                                            <label for="scheduled_at" class="col-form-label">Choose New Session Schedule:</label>
+                                                            <input type="datetime-local" class="form-control" id="scheduled_at" name="scheduled_at" required>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-orange rounded-pill">Save Schedule</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                              
+
+                                <!-- send masseges modal  -->
+
+                                <div class="modal fade" id="sendMassegesModal" tabindex="-1" aria-labelledby="sendMassegesModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="sendMassegesModalLabel">Send Massege to {{partner.user.username}}</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{% url 'partners:new_message_view' request.user.id partner.user.id %}" method="post">
+                                                {% csrf_token %}
+                                                <div class="mb-3">
+                                                    <label for="message_content" class="col-form-label">Write Your Message:</label>
+                                                    <textarea type="text" class="form-control" id="message_content" name="message_content" required></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-orange rounded-pill">Send</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             {% endfor %}
                         </tbody>
                     </table>
+
+                    
                 </div>
                
 
@@ -341,13 +482,38 @@
         window.open('/partners/start/chat/room/', '_self')
     }
 
-
-
     form.addEventListener('submit', handleSubmit)
 </script>
 
+
+<script type="text/javascript">
+    function convertToDate(dateStr) {
+        return new Date(dateStr);
+    }
+
+    function checkScheduledTime() {
+        let joinButtons = document.querySelectorAll('.JoinStreamButton');
+
+        joinButtons.forEach(button => {
+            let scheduledAt = button.getAttribute('data-scheduled-at');
+            
+            let scheduledDate = convertToDate(scheduledAt);
+            let currentDate = new Date();
+
+            if (currentDate >= scheduledDate) {
+                button.disabled = false;
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', checkScheduledTime);
+</script>
+
+
+
 <script type="text/javascript">
     //nav script
+
     function changeContent(content) {
         document.getElementById('savedBlogsContent').style.display = 'none';
         document.getElementById('requestsContent').style.display = 'none';
@@ -372,8 +538,7 @@
         }
     }
 
-    window.onload = function() {
-        changeContent('Saved Blogs');
-    }
+   
 </script>
 {%endblock%}
+

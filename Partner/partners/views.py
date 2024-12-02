@@ -134,7 +134,7 @@ def delete_partner_view(request:HttpRequest,user_id,partner_id):
             request_obj.delete()
             self_user=User.objects.get(pk=user_id)
             partner=User.objects.get(pk=partner_id)
-            partner_rel=Partner.objects.filter(user=self_user,partner=partner)
+            partner_rel=Partner.objects.get(user=self_user,partner=partner)
             partner_rel.delete()
          return redirect("accounts:user_profile_view",user_name=self_user.username)
 
@@ -166,5 +166,55 @@ def edit_schedule_view(request:HttpRequest,user_id,partner_id):
             return redirect("main:home_view")
 
 
+def new_message_view(request:HttpRequest,sender_id,recevier_id):
+      if not request.user.is_authenticated and request.user != request.user:
+            messages.warning(request,"only rigisted user can send messages","alert-warning")
+            return redirect("accounts:sign_in") 
+      
+      try:
+         if request.method == "POST":
+            sender=User.objects.get(pk=sender_id)
+            receiver=User.objects.get(pk=recevier_id)
+            new_message=Message(sender=sender,receiver=receiver,content=request.POST["message_content"],readstate=False)
+            new_message.save()
+         return redirect("accounts:user_profile_view",user_name=sender.username)
+
+      except Exception as e:
+            print(e)
+            return redirect("main:home_view")
+
             
       
+def delete_message_view(request:HttpRequest,message_id):
+      if not request.user.is_authenticated and request.user != request.user:
+            messages.warning(request,"only rigisted user can delete message","alert-warning")
+            return redirect("accounts:sign_in") 
+      
+      try:
+         with transaction.atomic():
+            message_obj=Message.objects.get(pk=message_id)
+            message_obj.delete()
+         return redirect("accounts:user_profile_view",user_name=request.user.username)
+
+      except Exception as e:
+            print(e)
+            return redirect("main:home_view")
+
+
+def mark_messages_as_read(request):
+    if request.method == 'POST':
+      with transaction.atomic():  
+        unread_messages = request.POST.get('unread_messages',None)
+        if unread_messages:
+           print(unread_messages)
+           unread_messages= list(unread_messages)
+           for messageID in unread_messages:
+                if messageID.isdigit():
+                    int(messageID)
+                    message=Message.objects.get(pk=messageID)
+                    message.readstate = True
+                    message.save()
+        
+        # Redirect or render a response
+        return redirect("accounts:user_profile_view",user_name=request.user.username)  
+    return render(request, 'main/home_view')

@@ -35,3 +35,11 @@
     width: 30%;
 
 }
+.messageContent{
+    padding-left: 4rem;
+}
+
+.notification{
+    padding-left:0.4rem  ;
+    padding-right: 0.4rem;
+}
