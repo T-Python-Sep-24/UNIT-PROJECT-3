@@ -30,9 +30,8 @@
                                 Movies
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMovies">
-                                <li><a class="dropdown-item" href="">All Movies</a></li>
-                                <li><a class="dropdown-item" href="">Genres</a></li>
-                                <li><a class="dropdown-item" href="">Directors</a></li>
+                                <li><a class="dropdown-item" href="{% url 'movies:all_genres_view' %}">Genres</a></li>
+                                <li><a class="dropdown-item" href="{% url 'directors:all_directors_view' %}">Directors</a></li>
                             </ul>
                         </li>
                         
@@ -52,7 +51,7 @@
                         {% if request.user.is_authenticated %}
                             <!-- Book Now -->
                         <li class="nav-item">
-                            <a class="nav-link" href="">Book Now</a>
+                            <a class="nav-link"  href="{% url 'movies:all_movies_view' %}">Book Now</a>
                         </li>
                         {% endif %}
                             

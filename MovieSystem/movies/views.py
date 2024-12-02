@@ -134,7 +134,7 @@ def delete_genre_view(request:HttpRequest,genre_id:int):
         messages.warning(request,'You do not have permission','alert-warning')
         return redirect ("movies:all_genres_view")
     try:
-            genre=Genre(pk=genre_id)
+            genre=Genre.objects.get(pk=genre_id)
             genre.delete()
             messages.success(request, f"Deleted {genre.name} successfully", "alert-success")
             return redirect ("movies:all_genres_view")
@@ -147,7 +147,7 @@ def update_genre_view(request:HttpRequest, genre_id:int):
     if not request.user.is_staff:
         messages.warning(request,'You do not have permission','alert-warning')
         return redirect ("movies:all_genres_view")
-    genre=Genre(pk=genre_id)
+    genre=Genre.objects.get(pk=genre_id)
     try:
             if request.method == 'POST':
                 genre.name=request.POST['name']

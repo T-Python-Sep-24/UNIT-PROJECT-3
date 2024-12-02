@@ -6,12 +6,12 @@
 
 {% block content %}
 <div class="container mt-5">
-    <!-- Filter and Add Movie Button Section -->
+    
     <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
-        <!-- Filter Form -->
+       
         <form action="{% url 'movies:all_movies_view' %}" method="GET" class="w-100">
             <div class="row g-2">
-                <!-- Search Input -->
+                
                 <div class="col-12 col-md">
                     <input 
                         type="search" 
@@ -22,7 +22,7 @@
                     />
                 </div>
 
-                <!-- Director Dropdown -->
+                
                 <div class="col-12 col-md">
                     <select name="director" class="form-select">
                         <option value="">All Directors</option>
@@ -37,7 +37,7 @@
                     </select>
                 </div>
 
-                <!-- Genre Dropdown -->
+                
                 <div class="col-12 col-md">
                     <select name="genre" class="form-select">
                         <option value="">All Genres</option>
@@ -52,19 +52,18 @@
                     </select>
                 </div>
 
-                <!-- Apply Button -->
+               
                 <div class="col-12 col-md-auto">
                     <input type="submit" value="Apply" class="btn btn-primary w-100" />
                 </div>
             </div>
         </form>
 
-        <!-- Add Movie Button -->
+      
         {% if request.user.is_superuser %}
         <a 
             href="{% url 'movies:add_movie_view' %}" 
-            class="btn btn-primary mt-2 mt-md-0 align-self-start align-self-md-center w-100 w-md-auto"
-        >
+            class="btn btn-primary mt-2 mt-md-0 align-self-start align-self-md-center w-100 w-md-auto">
             Add a New Movie +
         </a>
         {% endif %}

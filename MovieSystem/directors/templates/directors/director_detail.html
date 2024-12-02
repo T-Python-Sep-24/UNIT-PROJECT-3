@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{director.name}} - Director Detail
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>{{ director.name }}</h3>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Biography</h5>
+                    <p class="card-text">{{ director.biography }}</p>
+                </div>
+                
+                {% if request.user.is_staff %}
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{% url 'directors:director_update_view' director.id %}" class="btn btn-warning">Edit</a>
+                    <form action="{% url 'directors:delete_director_view' director.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this director?');">Delete</button>
+                    </form>
+                </div>
+                {% endif %}
+                    
+                
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h5>related movies</h5>
+    {% include 'movies/movies_list.html' %}
+</div>
+{% endblock content %}

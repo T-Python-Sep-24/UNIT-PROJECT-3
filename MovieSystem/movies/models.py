@@ -16,7 +16,7 @@ class Movie(models.Model):
     release_date = models.DateField()
     poster=models.ImageField(upload_to="images/movies_posters/")
     genre = models.ManyToManyField(Genre)
-    director = models.ForeignKey(Director, on_delete=models.CASCADE)
+    director = models.ForeignKey(Director, on_delete=models.PROTECT)
     
     def __str__(self):
         return self.title
