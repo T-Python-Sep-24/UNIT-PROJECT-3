@@ -1,51 +1,72 @@
 {% extends "main/base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
-                    <h4 class="mb-0"> Create Task</h4>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="id_title" class="form-label">Title</label>
-                            {{ form.title }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="id_description" class="form-label">Description</label>
-                            {{ form.description }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="id_status" class="form-label">Status</label>
-                            {{ form.status }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="id_priority" class="form-label">Priority</label>
-                            {{ form.priority }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="id_due_date" class="form-label">Due Date</label>
-                            {{ form.due_date }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="id_assigned_to" class="form-label">Assigned To</label>
-                            {{ form.assigned_to }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="id_project" class="form-label">Project</label>
-                            {{ form.project }}
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary w-50">Save Task </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    <h1 class="text-center mb-4">Create Task</h1>
+    <form method="post" class="bg-light p-4 rounded shadow-sm">
+        {% csrf_token %}
+        
+        <!-- Task Title -->
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="title" id="title" class="form-control" placeholder="Enter task title" required>
         </div>
-    </div>
+        
+        <!-- Task Description -->
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" id="description" class="form-control" placeholder="Enter task description" rows="4" required></textarea>
+        </div>
+        
+        <!-- Status -->
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select name="status" id="status" class="form-select" required>
+                <option value="Not Started">Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+        
+        <!-- Priority -->
+        <div class="mb-3">
+            <label for="priority" class="form-label">Priority</label>
+            <select name="priority" id="priority" class="form-select" required>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+        </div>
+        
+        <!-- Due Date -->
+        <div class="mb-3">
+            <label for="due_date" class="form-label">Due Date</label>
+            <input type="date" name="due_date" id="due_date" class="form-control" required>
+        </div>
+        
+        <!-- Assigned To -->
+        <div class="mb-3">
+            <label for="assigned_to" class="form-label">Assign To</label>
+            <select name="assigned_to" id="assigned_to" class="form-select" required>
+                {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Project -->
+        <div class="mb-3">
+            <label for="project" class="form-label">Project</label>
+            <select name="project" id="project" class="form-select" required>
+                {% for project in projects %}
+                <option value="{{ project.id }}">{{ project.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Create Task</button>
+        </div>
+    </form>
 </div>
 {% endblock %}
-
