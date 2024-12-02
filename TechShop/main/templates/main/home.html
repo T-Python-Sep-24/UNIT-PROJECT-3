@@ -3,8 +3,14 @@
 {% block title %}All Products{% endblock %}
 
 {% block content %}
+
+<form method="get" action="{% url 'products:search_product' %}" class="d-flex justify-content-center">
+    <input type="text" name="q" placeholder="Search for products" class="form-control" />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
 <div class="container mt-4">
-    <h2 class="text-center">Our Products</h2>
+    <h2 class="text-center">Products</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
         {% for product in products %}
         <div class="col">

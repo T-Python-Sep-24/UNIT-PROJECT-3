@@ -4,9 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError, transaction
 from django.contrib import messages
-from .forms import ProfileForm
 from django.contrib.auth.decorators import login_required
-
 from products.models import Product,Review
 from .models import Cart, CartItem ,Profile
 # Create your views here.
@@ -59,7 +57,7 @@ def log_out(request: HttpRequest):
     logout(request)
     messages.success(request, "logged out successfully", "alert-warning")
 
-    return redirect(request.GET.get("next", "/"))
+    return redirect("main:home")
 
 
 
@@ -109,3 +107,52 @@ def update_user_profile(request: HttpRequest):
     }
 
     return render(request, "accounts/update_profile.html", context)
+
+
+
+
+
+@login_required
+def add_to_cart(request:HttpRequest, product_id:int):
+    product = Product.objects.get(id=product_id)
+    
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+    
+    messages.success(request, f"Added {product.name} to your cart." , "alert-success")
+    
+    return redirect('accounts:view_cart')
+
+@login_required
+def remove_from_cart(request: HttpRequest, product_id: int):
+    product = Product.objects.get(id=product_id)
+    cart = Cart.objects.get(user=request.user)
+    cart_item = CartItem.objects.get(cart=cart, product=product)
+    cart_item.delete()
+    messages.success(request, f"Removed {product.name} from your cart." , "alert-success")
+    return redirect('accounts:view_cart')
+
+
+@login_required
+def view_cart(request: HttpRequest):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_items = CartItem.objects.filter(cart=cart)
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    total_items = sum(item.quantity for item in cart_items)
+
+    if created:
+        messages.success(request, "A new cart has been created for you.", "alert-success")
+
+    context = {
+        "cart": cart,
+        "cart_items": cart_items,
+        "total_price": total_price,
+        "total_items": total_items,
+    }
+
+    return render(request, "accounts/view_cart.html", context)

@@ -1,135 +1,35 @@
-# UNIT-PROJECT-3
+# TechShop
 
-## Create a Project of your own choosing
+## Project Description
 
-Base on what you’ve learned until now , create a project of your choosing. Impress us with your creativity and execution.
+TechShop is an e-commerce platform designed to sell electronic products. It provides an easy-to-use interface for customers to browse, search, and purchase products. Admins can manage the product catalog, view orders, and handle user requests. The platform is built with Django and is integrated with a user authentication system, shopping cart, and product management features.
 
+---
 
-## Minimum Requirements
-- Use Django.
-- Use Templates & Template Inheritance.
-- Use static, media & dynamic urls as needed.
-- Organize your project in apps as needed.
-- Use models to represent you data.
-- Use a CSS library to style your website.
-- User Authentication & Authorization (register, login, logout, Limit access to some pages using permissions , etc.)
-- Use naming conventions & best practices.
-- Strive to make the user journey intuitive and complete.
+## Features
 
+### 1. **User Authentication and Profile Management**
+- User registration, login, and password management.
+- User profile management with order history and personal information.
 
+### 2. **Product Catalog**
+- Display a variety of electronic products with detailed descriptions, images, and prices.
+- Ability to search and filter products by categories.
 
-## Example Projects :
+### 3. **Shopping Cart**
+- Users can add products to their cart.
+- Display cart contents, including product names, quantities, and prices.
+- Ability to update quantities or remove products from the cart.
 
+### 4. **Order Management**
+- Users can place orders, view order status, and track progress.
+- Admins can manage orders, update statuses, and process payments.
 
-1. **Task Management System:**
-- **Overview:** Create a platform for managing tasks and projects within a team or organization.
-- **Features:**
-- User authentication and role-based access control.
-- Task creation, assignment, and tracking.
-- Project management with milestones.
-- File uploads and comments on tasks.
-- Notification system for task updates.
+### 5. **Admin Dashboard**
+- Admin interface for managing products, categories, and orders.
+- Ability to add, update, and delete products and categories.
 
-## Use python-dotenv to save your sensitive data.
-- https://pypi.org/project/python-dotenv/
-
-
-## Use a CDN or cloud storage provider to sore your large static files (videos, images, etc.), such as:
-- https://firebase.google.com/docs/storage
-
-## Use Git & Github to manage and track changes in your project.
-- At lease commit and sync the changes once at the end of everyday.
-
-## Edit the README.md file to include (include the info at the top):
-- Project Name
-- Project Description
-- Features list.
+### 6. **Search and Filter**
+- Users can search for products by name or category.
 
 
-**Online Learning Platform:**
-
-- **Overview:** Develop a platform for online courses, quizzes, and educational resources.
-- **Features:**
-- User registration and profile management.
-- Course creation and enrollment.
-- Quiz and assessment functionalities.
-- Progress tracking and certificates.
-
-
-
-
-**Crowdfunding Platform:**
-
-- **Overview:** Build a crowdfunding website where users can create campaigns and seek financial support for their projects.
-- **Features:**
-    - User profiles with project history.
-    - Campaign creation and customization.
-    - Payment integration for contributions.
-    - Progress tracking and updates.
-
-**Job Board and Recruitment System:**
-
-- **Overview:** Develop a platform for job seekers and employers to connect.
-- **Features:**
-    - User profiles with resumes.
-    - Job posting and application functionalities.
-    - Search and filter options for jobs.
-    - Employer dashboards for managing postings.
-
-
-**Inventory Management System:**
-
-- **Overview:** Build a system for tracking and managing inventory for businesses.
-- **Features:**
-    - User authentication with roles (e.g., admin, staff).
-    - Product catalog with stock levels.
-    - Order processing and tracking.
-    - Reporting and analytics.
-
-
-**Recipe Sharing Platform:**
-
-- **Overview:** Create a platform where users can share and discover recipes.
-- **Features:**
-    - User accounts with saved recipes.
-    - Recipe creation and editing.
-    - Search and categorization of recipes.
-    - User ratings and reviews.
-      
-## Resources:
-
-**Free high quality images :**
-
-- https://www.pexels.com/
-- https://unsplash.com
-
-**Free sounds website:**
-
-- https://mixkit.co/
-
-**Free stock videos:**
-
-- https://pixabay.com/videos/
-
-**Free Fonts:**
-
-- https://fonts.google.com
-
-**Free Icons**
-
-- https://fonts.google.com/icons
-- https://icons.getbootstrap.com/
-
-**CSS Library:**
-
-- https://getbootstrap.com/
-- https://get.foundation/index.html
-
-**CSS Animation libraries:**
-
-- https://animate.style
-- https://www.minimamente.com/project/magic/
-
-
-
- 

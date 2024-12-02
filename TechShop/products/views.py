@@ -17,16 +17,30 @@ def detail_product(request, product_id):
     product = Product.objects.get(pk=product_id)
     return render(request, 'products/detail_product.html', {'product': product})
 
+from django.shortcuts import render
+from .models import Product
+
+def search_product(request: HttpRequest):
+    query = request.GET.get('q', '')  
+    products = Product.objects.filter(name__icontains=query)  
+    context = {
+        'products': products,
+        'query': query,
+    }
+    return render(request, 'main/home.html', context)
 
 
 def add_product(request: HttpRequest):
+    if not (request.user.is_staff and request.user.has_perm("products.add_product")):
+        messages.warning(request, "You are not authorized to add this product.", "alert-danger")
+        return redirect('main:home')
     categories = Category.objects.all()
     if request.method == "POST": 
         product_form = ProductForm(request.POST, request.FILES)
         if product_form.is_valid():
             product_form.save()
             messages.success(request, "Created product successfully", "alert-success")
-            return redirect('products:all_product')  
+            return redirect('main:home')  
         else:
             print("Not valid form:", product_form.errors)
     else:
@@ -36,6 +50,10 @@ def add_product(request: HttpRequest):
 
 
 def update_product(request: HttpRequest, product_id: int):
+
+    if not (request.user.is_staff and request.user.has_perm("update_product")):
+        messages.warning(request, "You are not authorized to update this product.", "alert-danger")
+        return redirect('main:home')
    
     product = Product.objects.get(pk=product_id)
 
@@ -47,7 +65,7 @@ def update_product(request: HttpRequest, product_id: int):
         if product_form.is_valid():
             product_form.save()
             messages.success(request, "The product has been updated successfully.", "alert-success")
-            return redirect('products:all_product')  
+            return redirect('main:home')  
         else:
             
             messages.error(request, "Product update failed. Check data.","alert-danger")
@@ -63,19 +81,20 @@ def update_product(request: HttpRequest, product_id: int):
     })
 
 def delete_product(request: HttpRequest, product_id: int):
-    try:
-        product = Product.objects.get(pk=product_id)
-        product.delete()
-        messages.success(request, "The product has been successfully deleted.", "alert-warning")
-    except Exception as e:
-        print(e)
-        
-    return redirect('products:all_product') 
+    if not (request.user.is_staff and request.user.has_perm("delete_product")):
+        messages.warning(request, "You are not authorized to delete this product.", "alert-danger")
+        return redirect('main:home')
+    else:
+        try:
+            product = Product.objects.get(pk=product_id)
+            product.delete()
+            messages.success(request, "The product has been successfully deleted.", "alert-warning")
+        except Exception as e:
+            print(e)
+            
+        return redirect('main:home') 
 
 
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
-from .models import Product, Review
 
 def add_review_view(request: HttpRequest, product_id):
     if not request.user.is_authenticated:
@@ -83,7 +102,7 @@ def add_review_view(request: HttpRequest, product_id):
         return redirect("accounts:sign_in")
 
     if request.method == "POST":
-        product_object = get_object_or_404(Product, pk=product_id)
+        product_object = Product.objects.get(pk=product_id)
 
         new_review = Review(
             product=product_object,
