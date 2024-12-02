@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'courses_certifications_app',
     'contact_app',
     'career_path_app',
+    'rest_framework',
 
 ]
 

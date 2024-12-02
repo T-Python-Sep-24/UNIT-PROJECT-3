@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Company, Employee, Event
 from django.http import HttpRequest , HttpResponse
-# from .form import CompanyForm, EmployeeForm, EventForm
-# from django.contrib import messages
+from django.contrib import messages
 
 def add_company_view(request:HttpRequest):
     if request.method == "POST":
@@ -15,11 +14,23 @@ def add_company_view(request:HttpRequest):
            
        )
         new_company.save()
+        return redirect('events_companies_app:lists_companies_events_view')
     return render(request, "events_companies_app/add_company.html")
 
 def add_employee_view(request:HttpRequest):
+    if request.method == "POST":
+        new_employee=Employee(
+        name = request.POST["name"],
+        specialty = request.POST["specialty"],
+        image=request.FILES["image"],
+        description = request.POST["description "],
+        linkedin_link= request.POST["linkedin_link"],
+           
+       )
+        new_employee.save()
+        return redirect('events_companies_app:details_companies_view')
+    return render(request, "events_companies_app/add_company.html")
  
-    return render(request, "events_companies_app/add_employee.html")
 
 def add_event_view(request:HttpRequest):
     if request.method == "POST":
@@ -30,6 +41,7 @@ def add_event_view(request:HttpRequest):
         date= request.POST["date"],   
       )
         new_event.save()
+        return redirect('events_companies_app:lists_companies_events_view')
     return render(request, "events_companies_app/add_event.html")
 
 
@@ -38,34 +50,57 @@ def lists_companies_events_view(request:HttpRequest):
     events = Event.objects.all()
     return render(request, 'events_companies_app/lists_companies_events.html' ,{'companies': companies, 'events':events})
 
-def details_companies_view(request:HttpRequest):
+def details_companies_view(request:HttpRequest , company_id:int ):
+    company= Company.objects.get(pk=company_id)
+    return render(request, "events_companies_app/details_compines.html", {'company':company})
 
-    return render(request, "events_companies_app/details_compines.html")
+def details_events_view(request:HttpRequest , event_id:int):
+    event= Event.objects.get(pk= event_id)
+    return render(request, "events_companies_app/details_events.html", {'event': event})
 
-def events_list_view(request:HttpRequest):
-    return render(request, "events_companies_app/events_list.html")
+def update_company_view(request:HttpRequest , company_id:int):
+    company= Company.objects.get(pk=company_id)
+    if request.method == "POST":
+     company.name = request.POST["name"]
+     company.description = request.POST["description"]
+     company.website = request.POST["website"]
+     company.specialization = request.POST["specialization"]
+     if "logo" in request.FILES:company.logo = request.FILES["logo"]
+     company.save()
+     return redirect('events_companies_app:details_companies_view',company_id=company.id)
+    return render(request, 'events_companies_app/update_company.html',{'company':company})
 
-def update_company_view(request:HttpRequest):
-
-    return render(request, 'events_companies_app/update_company.html')
-
-def update_employee_view(request:HttpRequest):
+def update_employee_view(request:HttpRequest,):
 
     return render(request, 'events_companies_app/update_employee.html')
 
-def update_event_view(request:HttpRequest):
+def update_event_view(request:HttpRequest,event_id:int):
+    event= Event.objects.get(pk=event_id)
+    if request.method == "POST":
+      event.title  = request.POST["title"]
+      event.description  = request.POST["description"]
+      event.date  = request.POST["date"]
+      if "image" in request.FILES: event.image = request.FILES["image"]
+      event.save()
+      return redirect('events_companies_app:details_events_view',event_id= event.id)
+    return render(request, 'events_companies_app/update_event.html',{'event':event})
 
-    return render(request, 'events_companies_app/update_event.html')
-
-def delete_company_view(request:HttpRequest):
-   
-   return redirect('events_companies_app:details_company_employees_view')
+def delete_company_view(request:HttpRequest,company_id:int):
+    company= Company.objects.get(pk=company_id)
+    messages.warning(request, f'Are you sure you want to delete the company: {company.name}? This action cannot be undone.')
+    company.delete()
+    messages.success(request, 'Company deleted successfully.')
+    return redirect('events_companies_app:lists_companies_events_view',{'company':company})
 
 def delete_employee_view(request:HttpRequest):
    
-
     return redirect('events_companies_app:details_company_employees_view')
 
-def delete_event_view(request:HttpRequest):
+def delete_event_view(request:HttpRequest,event_id:int):
+    event = Event.objects.get(pk=event_id)
+    messages.warning(request, f'Are you sure you want to delete the event: {event.title}? This action cannot be undone.')
+    event.delete()
+    messages.success(request, 'Event deleted successfully.')
+    return redirect('events_companies_app:lists_companies_events_view',{'event':event})
 
-    return redirect('events_companies_app:events_list_view')
+   
