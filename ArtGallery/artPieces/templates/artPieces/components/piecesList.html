@@ -1,0 +1,23 @@
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-4">
+    {% for piece in pieces %}
+    <div class="col">
+        <div class="card text-light border-0 custom-crd">
+            <img src="{{piece.photo.url}}" class="card-img shadow custom-img" alt="Art Piece">
+            <div class="card-img-overlay align-content-end text-start">
+                <a href="{% url 'artPieces:artPieceDetailsView' piece.id %}" class="my-0 fs-4 text-white-shadow hover-color">{{piece.name}}</a>
+                <a href="{% url 'artists:artistDetailsView' piece.artist.id %}" class="my-0 fs-5 d-block hover-color"><span class="text-beige-200">By:</span> {{piece.artist.fullName}}</a>
+                <p class="my-0 text-offwhite"><span class="text-beige-200">Price:</span> {{piece.price}}.00 SAR</p>
+                <div class="d-flex justify-content-end">
+                    <a href="{% url 'artPieces:artPieceDetailsView' piece.id %}" class="btn-beige-300 fw-bold"><small>More..</small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    {% if request.GET.search %}
+    <p class="fs-4 fw-medium text-beige-300 my-0">No results for <span class="text-beige-100">'{{request.GET.search}}'</span> ..</p>
+    {% else %}
+    <p class="fs-4 fw-medium text-beige-300 my-0">No pieces yet..</p>
+    {% endif %}
+    {% endfor %}
+</div>
