@@ -37,7 +37,7 @@
               {%if user.profile.gender == 'M'%} 
                 <span style="color: rgb(54, 85, 224);">Male</span>
               {%else%}
-                 <span style="color: rgb(250, 168, 182);">Female</span>
+                 <span style="color: rgb(255, 120, 143);">Female</span>
                 {%endif%}
 
             </p>
@@ -192,34 +192,33 @@
                 </div>
                 <!-- Partners -->
                 {%if request.user.is_authenticated and request.user == user%}
-                <div class="row row-cols-3 gap-4" id="partnersContent" style="display: none;">
-                    <table class="table table-bordered">
-                        <thead>
+                <div class="row row-cols-3 gap-4 px-4" id="partnersContent" style="display: none;">
+                    <table class="table align-items-center align-middle text-center">
+                        <thead class="table-light">
                             <tr>
                                 <th>Partner</th>
                                 <th>Scheduled At</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="table-group-divider">
                             {% for partner in partners %}
-                            <tr>
+                            <tr class="">
                                 <td>{{ partner.partner.username }}</td>
-                                <td>{{ partner.scheduled_at }}</td>
-                                <td class="d-flex justify-content-start gap-2">
+                                <td>{{ partner.scheduled_at|date:"l, d F Y, h:i A" }}</td>
+                                <td class="d-flex justify-content-center gap-2">
                                     <!--button to session -->
                                     <form id="form">
                                         <div class="field-wrapper">
                             
                                             <div class="form-field" style="display: none;">
                                               
-                                                <input name="room" placeholder="Enter a room name..." value="{{partner.partner.username}} & {{request.user.username}}"  style="text-transform:uppercase"/>
+                                                <input name="room" placeholder="Enter a room name..." value="{{partner.partner.username}}-{{request.user.username}}"  style="text-transform:uppercase"/>
                                             </div>
                             
-                                            <div class="form-field" style="display: none;">
-                                             
-                                                <input name="name" placeholder="Enter your name..." value="{{request.user.username}}"  style="text-transform:uppercase"/>
-                                            </div>
+                                            <!--<div class="form-field" style="display: none;">      
+                                                <input name="username" placeholder="Enter your name..." value="{{request.user.username}}"  style="text-transform:uppercase"/>
+                                            </div> -->
                             
                                             <div class="form-field">
                                                 <input class="btn btn-success btn-sm rounded-pill" type="submit" value="Join Stream" />
@@ -227,8 +226,9 @@
                                         </div>
                                     </form> 
                                     <!--button to edit sceduel -->
-                                    <a href="{%url 'partners:delete_partner_view' request.user.id partner.partner.id%}" class="btn btn-warning btn-sm rounded-pill"><i class="fa-solid fa-calendar-day"></i></a>
-
+                                    <button type="button" class="btn btn-warning btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#editScheduleModal">
+                                        <i class="fa-solid fa-calendar-day text-white "></i>
+                                    </button>
                                     <!--button to delete partner -->
                                         <a href="{%url 'partners:delete_partner_view' request.user.id partner.partner.id%}" class="btn btn-danger btn-sm rounded-pill"><i class="fa-solid fa-user-xmark"></i></a>
                                   
@@ -236,6 +236,34 @@
                             
                                 </td>
                             </tr>
+                                <!-- edit calender modal  -->
+
+                                    <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-labelledby="editScheduleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="editScheduleModalLabel">Edit Schedule</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{% url 'partners:edit_schedule_view' request.user.id partner.partner.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <div class="mb-3">
+                                                            <label for="scheduled_at" class="col-form-label">Choose New Session Schedule:</label>
+                                                            <input type="datetime-local" class="form-control" id="scheduled_at" name="scheduled_at" required>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-orange rounded-pill">Save Schedule</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                              
+
                             {% endfor %}
                             {% for partner in partnered_users %}
                             <tr>
@@ -248,13 +276,12 @@
                             
                                             <div class="form-field" style="display: none;">
                                               
-                                                <input name="room" placeholder="Enter a room name..." value="{{partner.user.username}} & {{request.user.username}}"  style="text-transform:uppercase"/>
+                                                <input name="room" placeholder="Enter a room name..." value="{{request.user.username}}-{{partner.user.username}}"  style="text-transform:uppercase"/>
                                             </div>
                             
-                                            <div class="form-field" style="display: none;">
-                                                
-                                                <input name="name" placeholder="Enter your name..." value="{{request.user.username}}"  style="text-transform:uppercase"/>
-                                            </div>
+                                            <!--<div class="form-field" style="display: none;">      
+                                                <input name="username" placeholder="Enter your name..." value="{{request.user.username}}"  style="text-transform:uppercase"/>
+                                            </div> -->
                             
                                             <div class="form-field">
                                                 <input class="btn btn-success btn-sm rounded-pill" type="submit" value="Join Stream" />
@@ -275,40 +302,9 @@
                 </div>
                
 
-                <!--<button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-plus"></i> Partnership Request</button>
-
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">New Request</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{% url 'partners:new_request_view' request.user.id user.id %}" method="post">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label for="scheduled_at" class="col-form-label">Choose Session Schedule:</label>
-                                <input type="datetime-local" class="form-control" id="scheduled_at" name="scheduled_at" required>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-orange rounded-pill">Send Request</button>
-                            </div>
-                        </form>
-                    </div>
-                   
-                    </div>
-                </div>
-                </div>-->
+                
                 {%endif%}
             </div>
-
-
-          
-
-
-
         </div>
         
     </div>
@@ -325,12 +321,12 @@
 {% block script%}
 <script type="text/javascript">
     //session script
+    window.userName = "{{ request.user.username }}";
     let form = document.getElementById('form')
 
     let handleSubmit = async (e) => {
         e.preventDefault()
         let room = e.target.room.value.toUpperCase()
-        let name = e.target.name.value
 
         let response = await fetch(`/partners/get_token/?channel=${room}`)
         let data = await response.json()
@@ -341,7 +337,6 @@
         sessionStorage.setItem('UID', UID)
         sessionStorage.setItem('token', token)
         sessionStorage.setItem('room', room)
-        sessionStorage.setItem('name', name)
 
         window.open('/partners/start/chat/room/', '_self')
     }
@@ -349,8 +344,9 @@
 
 
     form.addEventListener('submit', handleSubmit)
+</script>
 
-
+<script type="text/javascript">
     //nav script
     function changeContent(content) {
         document.getElementById('savedBlogsContent').style.display = 'none';

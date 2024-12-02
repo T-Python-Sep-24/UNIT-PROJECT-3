@@ -31,11 +31,16 @@
       
 
 
-   
+    <!-- Hidden div to store the username -->
+    <div id="user" data-username="{{ request.user.username }}" style="display:none;"></div>
+
      {%endblock%}
      {%block footer%}
      {%endblock%}
      {%block script%}
      <script type="text/javascript" src="{% static 'assets/AgoraRTC_N-4.22.2.js' %}"></script>
      <script type="text/javascript" src="{% static 'js/streams.js' %}"></script>
+     <script type="text/javascript">
+        window.userName = "{{ request.user.username }}";
+    </script>
      {%endblock%}

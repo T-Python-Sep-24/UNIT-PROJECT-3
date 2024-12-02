@@ -12,11 +12,9 @@ import time
 import json
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
-def start_chat_room(request):
-     return render(request,'partners/chat_room.html')     
 def getToken(request):
-    appId = "a0434689a62a469b9bbbad6898460ef6"
-    appCertificate = "21ada07cbb94421295618e16ed658198"
+    appId = "f8a1b7785f0746de927a0da04a0221be"
+    appCertificate = "b62eb8c1b772485e9b209704788bfd89"
     channelName = request.GET.get('channel')
     uid = random.randint(1, 230)
     expirationTimeInSeconds = 3600
@@ -62,6 +60,9 @@ def deleteMember(request):
     )
     member.delete()
     return JsonResponse('Member deleted', safe=False)
+
+def start_chat_room(request):
+     return render(request,'partners/chat_room.html')     
 
 
 def new_request_view(request:HttpRequest,sender_id,recevier_id):
@@ -142,3 +143,28 @@ def delete_partner_view(request:HttpRequest,user_id,partner_id):
             return redirect("main:home_view")
       
 
+def edit_schedule_view(request:HttpRequest,user_id,partner_id):
+      if not request.user.is_authenticated and request.user != request.user:
+            messages.warning(request,"only rigisted user can edit schedule","alert-warning")
+            return redirect("accounts:sign_in") 
+      if request.method == "POST":
+        try:
+            with transaction.atomic():
+                self_user = User.objects.get(pk=user_id)
+                partner = User.objects.get(pk=partner_id)
+                partner_rel = Partner.objects.get(user=self_user, partner=partner)
+                partner_rel.scheduled_at = request.POST["scheduled_at"]
+                partner_rel.save()
+            
+            return redirect("accounts:user_profile_view", user_name=self_user.username)
+        
+        except Partner.DoesNotExist:
+            messages.warning(request,"not found a partner","alert-warning")
+            return redirect("accounts:user_profile_view", user_name=self_user.username)
+        except Exception as e:
+            print(f"Error: {e}")
+            return redirect("main:home_view")
+
+
+            
+      
