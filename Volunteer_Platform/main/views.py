@@ -1,10 +1,10 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .models import Testimonial
-from volunteers.models import Volunteer
-from organization.models import Opportunity
-from django.contrib.auth.views import LogoutView
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 
 
 def homepage(request):
@@ -29,11 +29,10 @@ def dashboard(request):
     elif request.user.profile.role == 'volunteer':
         return render(request, 'volunteers/dashboard.html')
     else:
-        return render(request, 'main/dashboard.html')  # Default dashboard
+        return render(request, 'main/dashboard.html')  
 
 
 def register(request):
-    # Registration logic goes here
     pass
 
 
@@ -43,9 +42,6 @@ def CustomLogoutView(request):
 
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib import messages
 
 def register_organization(request):
     if request.method == 'POST':
@@ -61,10 +57,6 @@ def register_organization(request):
     return render(request, 'main/register_organization.html', {'form': form})
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib import messages
-
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -79,3 +71,4 @@ def register(request):
     
     # Render the form for both GET requests and invalid POST requests
     return render(request, 'main/register.html', {'form': form})
+
