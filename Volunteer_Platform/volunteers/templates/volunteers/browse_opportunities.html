@@ -1,0 +1,18 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Browse Opportunities{% endblock %}
+
+{% block content %}
+<h1>Opportunities</h1>
+<ul>
+    {% for opp in opportunities %}
+    <li>
+        <a href="{% url 'organization:opportunity_detail' opp.id %}">{{ opp.title }}</a>
+        <form action="{% url 'volunteers:apply_for_opportunity' opp.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Apply</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

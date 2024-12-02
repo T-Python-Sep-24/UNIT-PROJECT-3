@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Volunteer Management Platform</h1>
+<p>Find and apply for opportunities that match your skills.</p>
+<a href="{% url 'volunteers:opportunity_list' %}">Browse Opportunities</a>
+
+<h2>What Volunteers Say</h2>
+<ul>
+   
+</ul>
+{% endblock %}

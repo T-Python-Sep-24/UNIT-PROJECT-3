@@ -4,32 +4,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Volunteer Platform{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+    <title>{% block title %}Volunteer Management Platform{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
 </head>
 <body>
-    <!-- Header -->
+    <!-- Navigation Bar -->
     <header>
         <nav>
             <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
-                <li><a href="{% url 'contact' %}">Contact</a></li>
-                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'main:homepage' %}">Home</a></li>
+                <li><a href="{% url 'main:about' %}">About Us</a></li>
+                <li><a href="{% url 'main:contact' %}">Contact</a></li>
+                {% if user.is_authenticated %}
+                    <li>
+                        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="background:none; border:none; color:blue; cursor:pointer;">Logout</button>
+                        </form>
+                    </li>
+                    <li>Welcome, {{ user.username }} ({{ user.profile.role|default:"Role not assigned" }})</li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'volunteers:register_as_volunteer' %}">Register as Volunteer</a></li>
+                    <li><a href="{% url 'main:register_organization' %}">Register as Organization</a></li>
+
+                {% endif %}
+                {% if user.is_authenticated and user.profile.role == 'organization' %}
+                  <li><a href="{% url 'organization:add_opportunity' %}">Add Opportunity</a></li>
+                {% endif %}
+
             </ul>
         </nav>
     </header>
 
-    <!-- Main Content -->
     <main>
         {% block content %}
-        <!-- Content from child templates will go here -->
         {% endblock %}
     </main>
 
-    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Volunteer Platform. All rights reserved.</p>
+        <p>&copy; 2024 Volunteer Management Platform. All Rights Reserved.</p>
     </footer>
 </body>
 </html>

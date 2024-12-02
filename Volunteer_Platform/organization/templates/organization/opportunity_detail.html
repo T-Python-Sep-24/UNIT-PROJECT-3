@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Opportunity Details{% endblock %}
+
+{% block content %}
+<h1>{{ opportunity.title }}</h1>
+
+<p><strong>Organization:</strong> {{ opportunity.organization.username }}</p>
+<p><strong>Description:</strong> {{ opportunity.description }}</p>
+<p><strong>Location:</strong> {{ opportunity.location|default:"Not specified" }}</p>
+<p><strong>Skills Required:</strong> {{ opportunity.skills_required|default:"None" }}</p>
+<p><strong>Start Date:</strong> {{ opportunity.start_date|date:"F j, Y" }}</p>
+<p><strong>End Date:</strong> {{ opportunity.end_date|date:"F j, Y" }}</p>
+<p><strong>Date Posted:</strong> {{ opportunity.date_posted|date:"F j, Y" }}</p>
+
+<a href="{% url 'volunteers:opportunity_list' %}">Back to Opportunities</a>
+{% endblock %}

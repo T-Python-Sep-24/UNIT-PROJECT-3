@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Welcome to Your Dashboard</h1>
+
+{% if volunteer %}
+    <h2>Your Profile</h2>
+    {% if volunteer.profile_picture %}
+        <img src="{{ volunteer.profile_picture.url }}" alt="Profile Picture" style="width:150px; height:150px; border-radius:50%;">
+    {% else %}
+        <p>No profile picture uploaded.</p>
+    {% endif %}
+
+    <h2>Your Skills</h2>
+    {% if volunteer.skills.all %}
+        <ul>
+            {% for skill in volunteer.skills.all %}
+                <li>{{ skill.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have not added any skills yet.</p>
+    {% endif %}
+{% else %}
+    <p>Your profile is not set up as a volunteer. Please contact support.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Organizations{% endblock %}
+
+{% block content %}
+<h1>Organizations</h1>
+<ul>
+    {% for org in organizations %}
+    <li>{{ org.name }} - {{ org.location }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -39,12 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users',
-    'opportunities',
-    'messaging',
-    'reviews',
     'main',
+    'organization',
+    'messaging',
+    'volunteers',
+    
 
+  
 
 ]
 
@@ -126,16 +127,22 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # This should point to your static files directory
-]
+
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # For production use
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Redirect after login
+LOGIN_REDIRECT_URL = '/dashboard/'  # Replace with your desired page
+LOGOUT_REDIRECT_URL = '/'  # Redirect to the homepage
+
+LOGIN_URL = '/auth/login/'  # Adjust this to the correct login URL in your application
 
 
-LOGIN_URL = '/users/login/'
-LOGIN_REDIRECT_URL = '/users/dashboard/'  # After login, redirect to dashboard
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

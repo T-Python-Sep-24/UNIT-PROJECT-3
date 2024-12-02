@@ -1,6 +1,19 @@
 {% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Contact Us{% endblock %}
 
 {% block content %}
-<h1>Contact Us</h1>
-<p>Feel free to reach out for inquiries or support.</p>
+    <h1>Contact Us</h1>
+    <form action="#" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        
+        <label for="message">Message:</label>
+        <textarea id="message" name="message"></textarea>
+        
+        <button type="submit">Send</button>
+    </form>
 {% endblock %}

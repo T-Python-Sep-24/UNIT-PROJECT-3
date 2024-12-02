@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Volunteer Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to the Volunteer Dashboard, {{ request.user.username }}</h1>
+    <ul>
+        <li><a href="{% url 'volunteers:opportunity_list' %}">Browse Opportunities</a></li>
+        <li><a href="{% url 'volunteers:profile' %}">View Profile</a></li>
+    </ul>
+</body>
+</html>

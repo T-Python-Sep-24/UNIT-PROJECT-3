@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Sent Messages{% endblock %}
+
+{% block content %}
+<h1>Sent Messages</h1>
+<ul>
+    {% for message in messages %}
+    <li>
+        {{ message.subject }} - To: {{ message.receiver.username }}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
