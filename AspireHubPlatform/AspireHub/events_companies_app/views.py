@@ -33,10 +33,14 @@ def add_event_view(request:HttpRequest):
     return render(request, "events_companies_app/add_event.html")
 
 
-def details_companies_view(request:HttpRequest):
+def lists_companies_events_view(request:HttpRequest):
     companies = Company.objects.all()
     events = Event.objects.all()
-    return render(request, 'events_companies_app/details_companies.html' ,{'companies': companies},{'events':events})
+    return render(request, 'events_companies_app/lists_companies_events.html' ,{'companies': companies, 'events':events})
+
+def details_companies_view(request:HttpRequest):
+
+    return render(request, "events_companies_app/details_compines.html")
 
 def events_list_view(request:HttpRequest):
     return render(request, "events_companies_app/events_list.html")

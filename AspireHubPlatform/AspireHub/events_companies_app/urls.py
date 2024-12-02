@@ -7,6 +7,7 @@ urlpatterns = [
     path("add/company/", views.add_company_view , name="add_company_view"),
     path("add/employee/", views.add_employee_view , name="add_employee_view"),
     path("add/event/", views.add_event_view , name="add_event_view"),
+    path("lists/company/events/", views.lists_companies_events_view, name="lists_companies_events_view"),
     path("details/company/", views.details_companies_view, name="details_companies_view"),
     path("events/list/", views.events_list_view , name="events_list_view"),
     path("update/company/<int:company_id>", views.update_company_view , name="update_company_view"),
