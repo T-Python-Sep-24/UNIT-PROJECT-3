@@ -47,6 +47,7 @@
 
 
                             <div class="d-grid d-flex justify-content-center gap-2">
+                                <a href="{% url 'accounts:profile_view' request.user.username %}" class="btn btn-success">Exit Wallet</a>
                                 <a href="{% url 'payments:update_wallet' wallet.id %}" class="btn btn-primary">Edit Wallet</a>
                                 <a href="{% url 'payments:delete_wallet' wallet.id %}" class="btn btn-danger">Remove Wallet</a>
                             </div>
