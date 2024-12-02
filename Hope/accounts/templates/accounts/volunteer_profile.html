@@ -28,7 +28,6 @@
                 {% endif %}
             </div>
             <p>{{ profile.bio }}</p>
-            <p><strong>Education Level:</strong> {{ profile.get_education_level_display|default:"N/A" }}</p>
         </div>
         
         <div class="profile-right-2">
@@ -43,6 +42,7 @@
                 <!-- About Section -->
                 <section id="about" class="tab-content active">
                     <h2>About</h2>
+                    <p><strong>Education Level:</strong> {{ profile.get_education_level_display|default:"N/A" }}</p>
                     <p><strong>Skills:</strong> {{ profile.skills|default:"N/A" }}</p>
                     <p><strong>Experience:</strong> {{ profile.experience|default:"N/A" }}</p>
                 </section>

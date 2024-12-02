@@ -9,7 +9,7 @@
 <main class="update-opportunity-page">
     <div class="update-opportunity-container">
         <h1 class="update-form-header">Update Opportunity</h1>
-        <form action="{% url 'opportunities:update_opportunity_view' opportunity.id %}" method="post" enctype="multipart/form-data" class="add-opportunity-form">
+        <form action="{% url 'opportunities:update_opportunity_view' opportunity.id %}" method="post" enctype="multipart/form-data" class="update-opportunity-form">
             {% csrf_token %}
             <div class="form-group">
                 <label for="name">Opportunity Name</label>
@@ -79,11 +79,11 @@
                 <label for="image">Upload Image</label>
                 <input type="file" name="image" id="image" class="form-control">
                 {% if opportunity.image %}
-                    <p>Current Image: <img src="{{ opportunity.image.url }}" alt="{{ opportunity.name }}" style="max-height: 100px;"></p>
+                    <p class="update-image">Current Image<br><img src="{{ opportunity.image.url }}" alt="{{ opportunity.name }}" style="max-height: 100px; padding-top: 20px;"></p>
                 {% endif %}
             </div>
-
             <button type="submit" class="update-submit-button">Update Opportunity</button>
+
         </form>
     </div>
 </main>

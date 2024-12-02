@@ -8,28 +8,28 @@
 {% block content %}
 
 <div class="update-volunteer-profile-container">
-    <h1>Update Profile</h1>
-    <form action="{% url 'accounts:volunteer_update_profile' profile.volunteer_user.username %}" method="post" enctype="multipart/form-data">
+    <h1 class="update-volunteer-profile-header">Update Profile</h1>
+    <form action="{% url 'accounts:volunteer_update_profile' profile.volunteer_user.username %}" method="post" enctype="multipart/form-data" class="update-volunteer-profile-form">
         {% csrf_token %}
         
         <div class="form-group">
             <label for="full_name">Full Name</label>
-            <input type="text" name="full_name" id="full_name" value="{{ profile.full_name }}" required>
+            <input type="text" name="full_name" id="full_name" value="{{ profile.full_name }}" placeholder="Enter Your Full Name">
         </div>
         
         <div class="form-group">
             <label for="bio">Bio</label>
-            <textarea name="bio" id="bio" rows="5">{{ profile.bio }}</textarea>
+            <textarea name="bio" id="bio" placeholder="Enter a Description About Yourself" rows="5">{{ profile.bio }}</textarea>
         </div>
             
         <div class="form-group">
             <label for="skills">Skills</label>
-            <input type="text" name="skills" id="skills" value="{{ profile.skills }}">
+            <input type="text" name="skills" placeholder="Enter Your Skills" id="skills" value="{{ profile.skills }}">
         </div>
             
         <div class="form-group">
             <label for="experience">Experience</label>
-            <textarea name="experience" id="experience" rows="5">{{ profile.experience }}</textarea>
+            <textarea name="experience" id="experience" placeholder="Enter Your Experience" rows="5">{{ profile.experience }}</textarea>
         </div>
             
         <div class="form-group">
@@ -44,9 +44,13 @@
         
         <div class="form-group">
             <label for="profile_picture">Profile Picture</label>
-            <input type="file" name="profile_picture" id="profile_picture">
+            <input type="file" name="profile_picture" id="profile_picture" class="form-control">
+            {% if profile.profile_picture %}
+            <p class="update-image">Current Image<br><img src="{{ profile.profile_picture.url }}" alt="{{ profile.full_name }}" style="max-height: 100px; padding-top: 20px;"></p>
+            {% endif %}
         </div>
-        <button type="submit" class="btn btn-primary">Save Changes</button>
+
+        <button type="submit" class="submit-button">Update Profile</button>
     </form>    
 </div>
 

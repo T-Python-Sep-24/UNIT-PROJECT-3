@@ -753,7 +753,7 @@ main .organization-profile-container {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
+  padding-left: 80px;
 }
 
 .profile-logo img {
@@ -807,6 +807,7 @@ main .organization-profile-container {
 .profile-right {
   width: 45%;
   margin-right: 5%;
+  margin-top: 20px;
 }
 
 .tabs-navigation {
@@ -932,10 +933,10 @@ main .volunteer-profile-container {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
+  padding-left: 80px;
 }
 
-.profile-photo img {
+.profile-photo-2 img {
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -955,19 +956,13 @@ main .volunteer-profile-container {
   font-weight: bold;
 }
 
-.profile-info p {
+.profile-info-2 p {
   margin-bottom: 5px;
   font-size: 1rem;
   color: #606060;
   text-align: left;
 }
 
-.profile-left-2 p {
-  margin-bottom: 5px;
-  font-size: 1rem;
-  color: #606060;
-  text-align: left;
-}
 
 .update-icon-2 {
   font-size: 1rem;
@@ -986,6 +981,7 @@ main .volunteer-profile-container {
 .profile-right-2 {
   width: 45%;
   margin-right: 5%;
+  margin-top: 20px;
 }
 
 .tabs-navigation {
@@ -1260,6 +1256,11 @@ main .volunteer-profile-container {
   margin-bottom: 0.5rem;
 }
 
+.update-image {
+  font-size: 0.9rem;
+  color: #333;
+}
+
 .update-opportunity-form input[type="text"],
 .update-opportunity-form input[type="email"],
 .update-opportunity-form textarea,
@@ -1276,6 +1277,8 @@ main .volunteer-profile-container {
   font-size: 1rem;
   color: black;
   box-sizing: border-box;
+  font-family: Arial, sans-serif;
+
 }
 
 .update-opportunity-form .form-control::placeholder,
@@ -1336,7 +1339,6 @@ main .volunteer-profile-container {
   border-radius: 5px;
   font-size: 1rem;
   font-weight: bold;
-  border-radius: 5px;
   cursor: pointer;
   margin-top: 1rem;
   transition: background-color 0.3s ease;
@@ -1800,6 +1802,7 @@ main .all-opportunities-page{
   font-family: Arial, sans-serif;
   margin: 50px auto;
   margin-top: 100px;
+  position: relative;
 }
 
 .update-profile-header {
@@ -1812,6 +1815,7 @@ main .all-opportunities-page{
 .update-profile-form .form-group {
   margin-bottom: 1.5rem;
   text-align: left;
+  width: 100%;
 }
 
 .update-profile-form label {
@@ -1821,46 +1825,54 @@ main .all-opportunities-page{
   margin-bottom: 0.5rem;
 }
 
-.update-profile-form input,
+.update-profile-form input[type="text"],
+.update-profile-form input[type="email"],
 .update-profile-form textarea,
-.update-profile-form select {
+.update-profile-form select,
+.update-profile-form input[type="file"],
+.update-profile-form input[type="url"] {
   width: 100%;
   padding: 0.8rem;
+  border: 1px solid #cccccc;
   border: none;
   border-radius: 5px;
   background-color: #f2f2f2;
   font-size: 1rem;
   color: black;
   box-sizing: border-box;
+  font-family: Arial, sans-serif;
+
 }
 
-.update-profile-form input::placeholder,
-.update-profile-form textarea::placeholder {
+.update-profile-form input[type="text"]::placeholder,
+.update-profile-form input[type="email"]::placeholder,
+.update-profile-form textarea::placeholder::placeholder,
+.update-profile-form select::placeholder,
+.update-profile-form input[type="file"]::placeholder,
+.update-profile-form input[type="url"]::placeholder {
   color: rgb(154, 154, 154);
   font-size: 0.9rem;
+  font-family: Arial, sans-serif;
+
 }
 
-.update-profile-form input:focus,
+.update-profile-form input[type="text"]:focus,
+.update-profile-form input[type="email"]:focus,
 .update-profile-form textarea:focus,
-.update-profile-form select:focus {
+.update-profile-form select:focus,
+.update-profile-form input[type="file"]:focus,
+.update-profile-form input[type="url"]:focus {
   border: 1px solid #FABE28;
   outline: none;
+  font-family: Arial, sans-serif;
 }
 
-.update-profile-form select {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #cccccc;
-  border-radius: 5px;
+.update-opportunity-form input[type="file"] {
+  font-size: 0.9rem;
+  color: #333;
   background-color: #f2f2f2;
-  font-size: 1rem;
-  color: black;
-  box-sizing: border-box;
-}
-
-.update-profile-form select:focus {
-  border-color: #FABE28;
-  outline: none;
+  padding: 0.5rem;
+  border-radius: 5px;
 }
 
 
@@ -1896,6 +1908,7 @@ main .all-opportunities-page{
   font-family: Arial, sans-serif;
   margin: 50px auto;
   margin-top: 100px;
+  position: relative;
 }
 
 .update-volunteer-profile-header {
@@ -1908,6 +1921,7 @@ main .all-opportunities-page{
 .update-volunteer-profile-form .form-group {
   margin-bottom: 1.5rem;
   text-align: left;
+  width: 100%;
 }
 
 .update-volunteer-profile-form label {
@@ -1917,46 +1931,38 @@ main .all-opportunities-page{
   margin-bottom: 0.5rem;
 }
 
-.update-volunteer-profile-form input,
+.update-volunteer-profile-form input[type="text"],
+.update-volunteer-profile-form input[type="file"],
 .update-volunteer-profile-form textarea,
 .update-volunteer-profile-form select {
   width: 100%;
   padding: 0.8rem;
+  border: 1px solid #cccccc;
   border: none;
   border-radius: 5px;
   background-color: #f2f2f2;
   font-size: 1rem;
   color: black;
   box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
-.update-volunteer-profile-form input::placeholder,
-.update-volunteer-profile-form textarea::placeholder {
+.update-volunteer-profile-form input[type="text"]::placeholder,
+.update-volunteer-profile-form input[type="file"]::placeholder,
+.update-volunteer-profile-form textarea::placeholder,
+.update-volunteer-profile-form select::placeholder {
   color: rgb(154, 154, 154);
   font-size: 0.9rem;
+  font-family: Arial, sans-serif;
 }
 
-.update-volunteer-profile-form input:focus,
+.update-volunteer-profile-form input[type="text"]:focus,
+.update-volunteer-profile-form input[type="file"]:focus,
 .update-volunteer-profile-form textarea:focus,
-.update-volunteer-profile-form select:focus {
-  border: 1px solid #FABE28;
-  outline: none;
-}
-
-.update-volunteer-profile-form select {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #cccccc;
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  font-size: 1rem;
-  color: black;
-  box-sizing: border-box;
-}
-
-.update-volunteer-profile-form select:focus {
+.update-volunteer-profile-form select:focus  {
   border-color: #FABE28;
   outline: none;
+  font-family: Arial, sans-serif;
 }
 
 

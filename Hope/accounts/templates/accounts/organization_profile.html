@@ -28,9 +28,6 @@
       </div>
 
       <p>{{ profile.description }}</p>
-      {% if profile.website_url %}
-      <a href="{{ profile.website_url }}" target="_blank" class="profile-website-link">Visit Website</a>
-      {% endif %}
     </div>
 
     <div class="profile-right">
@@ -48,6 +45,9 @@
           <p><strong>Type of Organization:</strong> {{profile.organization_type|default:"N/A" }}</p>
           <p><strong>Focus Area:</strong> {{ profile.industry_focus_area|default:"N/A" }}</p>
           <p><strong>Contact:</strong> {{ profile.email }}</p>
+          {% if profile.website_url %}
+          <a href="{{ profile.website_url }}" target="_blank" class="profile-website-link">Visit Website</a>
+          {% endif %}
         </section>
 
         <!-- Opportunities Section -->

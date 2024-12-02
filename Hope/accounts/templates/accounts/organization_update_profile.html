@@ -14,27 +14,22 @@
   
       <div class="form-group">
         <label for="organization_name">Organization Name</label>
-        <input type="text" name="organization_name" id="organization_name" value="{{ profile.organization_name }}" required>
+        <input type="text" name="organization_name" id="organization_name" value="{{ profile.organization_name }}" placeholder="Enter Organization Name">
       </div>
   
       <div class="form-group">
         <label for="description">Description</label>
-        <textarea name="description" id="description" rows="5">{{ profile.description }}</textarea>
+        <textarea name="description" id="description"  placeholder="Enter Description About the Organization " rows="5">{{ profile.description }}</textarea>
       </div>
   
       <div class="form-group">
         <label for="website_url">Website URL</label>
-        <input type="url" name="website_url" id="website_url" value="{{ profile.website_url }}">
+        <input type="url" name="website_url"  placeholder="Enter Organization Website Link" id="website_url" value="{{ profile.website_url }}">
       </div>
 
       <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" name="email" id="email" value="{{ profile.email }}" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="organization_logo">Organization Logo</label>
-        <input type="file" name="organization_logo" id="organization_logo">
+        <input type="email" name="email" id="email"  placeholder="Enter Organization Contact Email" value="{{ profile.email }}" required>
       </div>
 
       <div class="form-group">
@@ -57,7 +52,14 @@
           {% endfor %}
         </select>
       </div>
-      
+
+      <div class="form-group">
+        <label for="organization_logo">Organization Logo</label>
+        <input type="file" name="organization_logo" id="organization_logo" class="form-control">
+        {% if profile.organization_logo %}
+        <p class="update-image">Current Image<br><img src="{{ profile.organization_logo.url }}" alt="{{ profile.organization_name }}" style="max-height: 100px; padding-top: 20px;"></p>
+        {% endif %}
+      </div>
       
   
       <button type="submit" class="submit-button">Update Profile</button>
