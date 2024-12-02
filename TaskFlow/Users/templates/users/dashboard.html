@@ -1,28 +1,36 @@
 {% extends "main/base.html" %}
 {% block content %}
-<h2>Welcome, {{ user.username }}</h2>
+<div class="container mt-4">
+    <h2>Welcome, {{ request.user.username }}</h2>
+    
+    <!-- Action Buttons -->
+    <div class="mb-3">
+        <a href="{% url 'projects:project_create' %}" class="btn btn-primary me-2">Add Project</a>
+        <a href="{% url 'tasks:create_task' %}" class="btn btn-secondary">Add Task</a>
+    </div>
 
-<div class="btn-group">
-    <a href="{% url 'projects:project_create' %}" class="btn btn-primary">Add Project</a>
-    <a href="{% url 'tasks:create_task' %}" class="btn btn-secondary">Add Task</a>
+    <!-- Display Projects -->
+    <h3>Projects</h3>
+    <ul>
+        {% for project in projects %}
+            <li>
+                <a href="{% url 'projects:project_detail' pk=project.id %}">
+                    {{ project.name }}
+                </a>
+            </li>
+        {% empty %}
+            <li>No projects found.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Display Tasks -->
+    <h3>Tasks</h3>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.title }}</li>
+        {% empty %}
+            <li>No tasks found.</li>
+        {% endfor %}
+    </ul>
 </div>
-
-<h3>Projects</h3>
-<ul>
-    {% for project in projects %}
-        <li>{{ project.name }}</li>
-    {% empty %}
-        <li>No projects found.</li>
-    {% endfor %}
-</ul>
-
-<h3>Tasks</h3>
-<ul>
-    {% for task in tasks %}
-        <li>{{ task.title }}</li>
-    {% empty %}
-        <li>No tasks found.</li>
-    {% endfor %}
-</ul>
-
 {% endblock %}

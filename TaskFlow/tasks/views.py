@@ -5,23 +5,16 @@ from .models import Task,Project
 from .forms import TaskForm , CommentForm
 from django.contrib.auth.models import User
 
-@login_required
 def create_task(request):
-    user_roles = request.user.roles.filter(name="Manager")
-    if not user_roles.exists():
-            messages.error(request, "You do not have permission to add a task.")
-            return redirect('Users:dashboard_view')
-
     if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
-            task = form.save()
-            messages.success(request, "Task added successfully!")
-            return redirect('Users:dashboard_view')
-        else:
-            form = TaskForm()
-
-            return render(request, "tasks/add_task.html", {"form": form})
+            form.save()
+            messages.success(request, "Task created successfully!")
+            return redirect("Users:dashboard_view")  
+    else:
+        form = TaskForm()
+    return render(request, "tasks/create_task.html", {"form": form})
 
 @login_required
 def task_list(request):

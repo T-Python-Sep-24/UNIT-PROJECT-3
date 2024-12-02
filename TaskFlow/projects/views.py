@@ -5,6 +5,7 @@ from .models import Project
 from django.http import HttpRequest
 from django.contrib.auth.models import User
 from .forms import ProjectForm
+from .utils import send_invitation_email
 
 @login_required
 def project_list(request: HttpRequest):
@@ -16,26 +17,58 @@ def project_detail(request: HttpRequest, pk):
     project = get_object_or_404(Project, pk=pk)
     return render(request, "projects/project_detail.html", {"project": project})
 
-@login_required
+
+
+from django.contrib.auth.models import User
+from .utils import send_invitation_email
+
 def project_create(request):
-    user_roles = request.user.roles.filter(name="Manager")
-    if not user_roles.exists():
-        messages.error(request, "You do not have permission to add a project.")
-        return redirect('Users:dashboard_view')
+    if request.method == 'POST':
+        # Capture project and team member details from the form
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
 
-    if request.method == "POST":
-        form = ProjectForm(request.POST)
-        if form.is_valid():
-            project = form.save(commit=False)
-            project.manager = user_roles.first()  # Assign the logged-in manager role
-            project.save()
-            form.save_m2m()  # Save the many-to-many relationships
-            messages.success(request, "Project added successfully!")
-            return redirect('Users:dashboard_view')
-    else:
-        form = ProjectForm()
+        # Create the project instance
+        project = Project.objects.create(
+            name=name,
+            description=description,
+            start_date=start_date,
+            end_date=end_date,
+            manager=request.user,  # Assign the logged-in user as the manager
+        )
 
-    return render(request, "projects/add_project.html", {"form": form})
+        # Process team members
+        member_names = request.POST.getlist('member_name[]')
+        member_roles = request.POST.getlist('member_role[]')
+        member_emails = request.POST.getlist('member_email[]')
+
+        for name, role, email in zip(member_names, member_roles, member_emails):
+            # Create a User instance or retrieve an existing one
+            user, created = User.objects.get_or_create(email=email, defaults={
+                'username': email.split('@')[0],  # Use email prefix as username
+            })
+
+            if created:
+                user.set_unusable_password()  # Set the password to unusable
+                user.save()
+
+                # Send an invitation email
+                send_invitation_email(email, project.name, request.user.username)
+
+            # Assign the user to the project
+            project.members.add(user)
+
+        # Save the project with updated members
+        project.save()
+
+        # Redirect to a success page or the dashboard
+        return redirect('Users:dashboard_view', username=request.user.username)
+
+    # Render the project creation form
+    return render(request, 'projects/project_create.html')
+
 
 @login_required
 def project_update(request, pk):
@@ -63,3 +96,4 @@ def project_delete(request: HttpRequest, pk):
         return redirect("projects:project_list")
 
     return render(request, "projects/project_delete.html", {"project": project})
+

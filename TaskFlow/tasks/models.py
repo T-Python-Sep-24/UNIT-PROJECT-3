@@ -1,7 +1,6 @@
 from django.db import models
+from projects.models import Project
 from django.contrib.auth.models import User
-from projects.models import Project  , Roll
-
 
 class Task(models.Model):
     STATUS_CHOICES = [
@@ -20,9 +19,8 @@ class Task(models.Model):
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='Not Started')
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='Medium')
     due_date = models.DateField()
-    assigned_to = models.ForeignKey(
-    User, on_delete=models.CASCADE, related_name="assigned_tasks", null=True, blank=True
-)
+    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks' , default=1)  # Assign directly to User
+
     project = models.ForeignKey(
         Project,
         on_delete=models.CASCADE,
@@ -31,7 +29,6 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.status}"
-    
 
 
 class Comment(models.Model):
@@ -42,6 +39,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.created_by.username} on {self.task.title}"
-
-    
-    

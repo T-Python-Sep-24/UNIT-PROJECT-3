@@ -1,28 +1,85 @@
 {% extends "main/base.html" %}
 {% block content %}
-<h1>Create Project</h1>
-<form method="post">
-    {% csrf_token %}
-    <input type="text" name="name" placeholder="Project Name" required>
-    <textarea name="description" placeholder="Description"></textarea>
-    <input type="date" name="start_date" required>
-    <input type="date" name="end_date" required>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Create Project</h1>
+    <form method="post" class="bg-light p-4 rounded shadow-sm">
+        {% csrf_token %}
+        
+        <!-- Project Name -->
+        <div class="mb-3">
+            <label for="name" class="form-label fw-bold">Project Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Enter project name" required>
+        </div>
 
-    <!-- Role Selection -->
-    <label for="role">Select Your Role</label>
-    <select name="role" id="role" required>
-        <option value="Manager">Manager</option>
-        <option value="Team Member">Team Member</option>
-    </select>
+        <!-- Description -->
+        <div class="mb-3">
+            <label for="description" class="form-label fw-bold">Description</label>
+            <textarea name="description" id="description" class="form-control" placeholder="Enter project description" rows="4"></textarea>
+        </div>
 
-    <!-- Assign Members -->
-    <label for="members">Assign Team Members</label>
-    <select name="members" id="members" multiple>
-        {% for user in team_members %}
-            <option value="{{ user.id }}">{{ user.username }}</option>
-        {% endfor %}
-    </select>
+        <!-- Start Date -->
+        <div class="mb-3">
+            <label for="start_date" class="form-label fw-bold">Start Date</label>
+            <input type="date" name="start_date" id="start_date" class="form-control" required>
+        </div>
 
-    <button type="submit">Add Project</button>
-</form>
+        <!-- End Date -->
+        <div class="mb-3">
+            <label for="end_date" class="form-label fw-bold">End Date</label>
+            <input type="date" name="end_date" id="end_date" class="form-control" required>
+        </div>
+
+        <!-- Role Selection -->
+        <div class="mb-3">
+            <label for="role" class="form-label fw-bold">Select Your Role</label>
+            <select name="role" id="role" class="form-select" required>
+                <option value="Project manager">Project manager</option>
+                <option value="Project leader">Project leader</option>
+                <option value="Project director ">Project director </option>
+                <option value="Project management office (PMO) director ">Project management office (PMO) director </option>
+                <option value="Project quality manager ">Project quality manager </option>
+            </select>
+        </div>
+
+        <!-- Assign Team Members -->
+        <div id="team-member-section" class="mb-3">
+            <label for="team-members" class="form-label fw-bold">Team Members</label>
+            <div id="team-members-container" class="mb-2">
+                <!-- Dynamically added members will appear here -->
+            </div>
+            <button type="button" class="btn btn-outline-primary mt-2" id="add-member">+ Add Member</button>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Add Project</button>
+        </div>
+    </form>
+</div>
+
+<!-- JavaScript for Dynamic Member Addition -->
+<script>
+    document.getElementById('add-member').addEventListener('click', function () {
+        const container = document.getElementById('team-members-container');
+    
+        const memberRow = document.createElement('div');
+        memberRow.classList.add('d-flex', 'align-items-center', 'mb-2');
+    
+        memberRow.innerHTML = `
+            <input type="text" name="member_name[]" class="form-control me-2" placeholder="Name" required>
+            <select name="member_role[]" class="form-select me-2" required>
+                <option value="Team Member">Team Member</option>
+            </select>
+            <input type="email" name="member_email[]" class="form-control me-2" placeholder="Email" required>
+            <button type="button" class="btn btn-danger btn-sm remove-member">&times;</button>
+        `;
+    
+        container.appendChild(memberRow);
+    
+        // Add event listener to remove button
+        memberRow.querySelector('.remove-member').addEventListener('click', function () {
+            container.removeChild(memberRow);
+        });
+    });
+</script>
 {% endblock %}

@@ -110,25 +110,15 @@ def update_user_profile(request: HttpRequest):
 
 
 @login_required
-def dashboard_view(request, username):
-    user_roles = request.user.roles.all()
-    is_manager = user_roles.filter(name="Manager").exists()
-    
-    if is_manager:
-        # Managers: Show all projects and tasks they manage
-        projects = Project.objects.filter(manager=request.user)
-        tasks = Task.objects.filter(project__manager=request.user)
-    else:
-        # Team Members: Show only tasks assigned to them
-        projects = None
-        tasks = Task.objects.filter(assigned_to=request.user)
+def dashboard_view(request,username):
+    projects = Project.objects.filter(members=request.user) | Project.objects.filter(manager=request.user)
+    tasks = Task.objects.filter(assigned_to=request.user)
 
     return render(request, "users/dashboard.html", {
         "projects": projects,
         "tasks": tasks,
-        "is_manager": is_manager,
     })
-
+    
 def log_out(request: HttpRequest):
     logout(request)
     messages.success(request, "Logged out successfully", "alert-warning")
