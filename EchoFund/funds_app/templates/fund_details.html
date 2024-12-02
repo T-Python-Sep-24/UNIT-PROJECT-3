@@ -11,18 +11,30 @@
                 <div class="d-flex justify-content-between mb-4">
                     <div class="">
                         <h1 class="">{{fund.fund_name}}</h1>
+                        <h6><i class="bi bi-calendar-date"></i> Start Date: {{ fund.start_date }}</h6>
+                        <p class="card-text"><i class="fas fa-search pe-2"></i>{{ fund.about|truncatechars:30 }}</p>
+                        <p class="card-text"><i class="fas fa-book pe-2"></i>Policies: {{ fund.policies|truncatechars:30 }}</p>
+                        <p class="card-text">Created By: {{ fund.fund_owner }}</p>
                     </div>
                     <div>
                         {% if is_bookmarked %}
-                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <i class="material-symbols-outlined">bookmark_check</i></a>
+                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}?next={{request.path}}" class="text-end"> <i class="material-symbols-outlined">bookmark_check</i></a>
                         {% else %}
-                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}" class="text-end"> <i class="material-symbols-outlined">bookmark_add</i></a>
+                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}?next={{request.path}}" class="text-end"> <i class="material-symbols-outlined">bookmark_add</i></a>
                         {% endif %}
 
                         {% if request.user.is_superuser or request.user == fund.fund_owner %}
-                            <a class="btn btn-primary" href="{% url 'funds_app:update_fund_view' fund.id %}"><span class="material-symbols-outlined">edit_square</span></a>
-                            <a class="btn btn-danger" href="{% url 'funds_app:delete_fund_view' fund.id %}"><span class="material-symbols-outlined">delete</span></a>
+                            <a class="btn btn-primary" href="{% url 'funds_app:update_fund_view' fund.id %}"><i class="fas fa-edit"></i></a>
+                            <a class="btn btn-danger" href="{% url 'funds_app:delete_fund_view' fund.id %}"><i class="fas fa-trash"></i></a>
+                            {% if request.user == fund.fund_owner %}
+                                <a class="btn btn-warning" href="{% url 'funds_app:start_fund' fund.id %}">Start Fund</a>
+                            {% endif %}
                         {% endif %}
+
+                        {% if not request.user == fund.fund_owner and not request.user in fund.fund_members.all %}
+                        <a href="{% url 'funds_app:fund_participate_view' fund.id %}" class="btn btn-outline-primary">Participate</a>
+                        {% endif %}
+
 
                     </div>
 
@@ -31,13 +43,16 @@
                 <h6>Description: </h6>
                 <p>{{fund.about}}</p>
 
-                <h6>Monthly Stock: {{fund.monthly_stock}}</h6>
+                <h6><i class="fa-solid fa-money-bill pe-2" ></i>Monthly Stock: {{fund.monthly_stock}}$</h6>
+                {% if request.user.is_superuser or request.user == fund.fund_owner %}
                 <div class="d-flex gap-2 align-items-center mt-3">
                     <h4>Members:</h4>
                     {% for member in fund.fund_members.all %}
                         <a href="{% url 'accounts:profile_view' member.username %}"><h5>@{{member}}</h5></a>
                     {% endfor %}
                 </div>
+                {% endif %}
+
             </div>
         </div>
     </div>

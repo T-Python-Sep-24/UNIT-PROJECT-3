@@ -6,22 +6,23 @@
             <img class="position-absolute" style="width: 100px; height: 100px; object-fit: cover; bottom: -50px; left: 50%; transform: translateX(-50%); border: 5px solid white; border-radius: 50%;" src="http://res.cloudinary.com/d3/image/upload/c_pad,g_center,h_200,q_auto:eco,w_200/bootstrap-logo_u3c8dx.jpg" alt="Avatar">
         </div>
         <div class="card-body pt-5 mt-4">
+            <h6 class="text-end">{% if fund.is_available %}<i class="fa-solid fa-unlock text-success"> Available</i> {% else %}<i class="fa-solid fa-lock text-danger"> Closed</i> {% endif %}</h6>
             <div class="d-flex justify-content-between">
 
                 <h4 class="card-title">{{ fund.fund_name|truncatechars:15 }}</h4>
                 {% if request.user in fund.fund_members.all%}
-                <p class="btn btn-success rounded-5">Enrolled</p>
+                <div>
+                    <p class="btn btn-warning rounded-5 ps-4 pe-4">Enrolled</p>
+
+                </div>
                 {% endif %}
             </div>
 
-            <p class="card-text"><i class="fas fa-search pe-2"></i>{{ fund.about|truncatechars:30 }}</p>
-            <p class="card-text"><i class="fas fa-book pe-2"></i>{{ fund.policies|truncatechars:30 }}</p>
             <p class="card-text"><i class="fa-solid fa-money-bill pe-2"></i>Stock: {{ fund.monthly_stock }} Per Month</p>
             <p class="card-text"><i class="fas fa-clock pe-2"></i>Hold Duration: {{ fund.hold_duration }}</p>
-            <p class="card-text">Created By: {{ fund.fund_owner }}</p>
+            <p class="card-text">Receiving At: {{ fund.receiving_month }}</p>
             <p class="card-text">Created At: {{ fund.created_at }}</p>
 
-            <h6>Status: {% if fund.is_available %}<i class="fa-solid fa-unlock"></i> Available{% else %}<i class="fa-solid fa-lock"></i> Closed{% endif %}</h6>
         </div>
         <div class="card-footer bg-transparent">
 
