@@ -1,0 +1,81 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container vh-30 d-flex justify-content-center align-items-center">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+        <form class="border p-4 rounded shadow" method="post" action="{% url 'tasks:update_task' task.id %}">
+            {% csrf_token %}
+
+          
+
+            
+            <div class="mb-3">
+                <label class="form-label">Task Title</label>
+                <input type="text" class="form-control" name="title" placeholder="Enter task title" >
+            </div>
+
+            
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" rows="3" name="description" placeholder="Enter task description"></textarea>
+            </div>
+
+           
+            <div class="mb-3">
+                <label class="form-label">Priority</label>
+                <select class="form-select" name="priority" required>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+            </div>
+            
+
+           
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select class="form-select" name="status" required>
+                    <option value="to_do" {% if form.status.value == 'to_do' %}selected{% endif %}>To Do</option>
+                    <option value="in_progress" {% if form.status.value == 'in_progress' %}selected{% endif %}>In Progress</option>
+                    <option value="completed" {% if form.status.value == 'completed' %}selected{% endif %}>Completed</option>
+                </select>
+            </div>
+
+         
+            <div class="mb-3">
+                <label class="form-label">Due Date</label>
+                <input type="date" class="form-control" name="due_date" required value="{{ form.due_date.value }}">
+            </div>
+
+       
+            <div class="mb-3">
+                <label class="form-label">Assignee</label>
+                <select class="form-select" name="assignee" required>
+                    {% for user in users %}
+                    <option value="{{ user.id }}" {% if form.assignee.value == user.id %}selected{% endif %}>{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+         
+            <div class="mb-3">
+                <label class="form-label">Project</label>
+                <select class="form-select" name="project" required>
+                    {% for project in projects %}
+                    <option value="{{ project.id }}" {% if form.project.value == project.id %}selected{% endif %}>{{ project.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="modal-footer gap-3">
+                <a href="{% url 'tasks:task_view' %}" class="btn btn-outline-primary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Update Task</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
