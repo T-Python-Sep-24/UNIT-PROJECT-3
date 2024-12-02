@@ -4,6 +4,13 @@
 {% block content %}
   <div class="container mt-5">
     <h2>Request Adoption for {{ pet.name }}</h2>
+    {% if messages %}
+      {% for message in messages %}
+          <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+              {{ message }}
+          </div>
+      {% endfor %}
+    {% endif %} 
     <div class="row">
       <div class="col-md-6">
         <img src="{{ pet.image.url }}" alt="{{ pet.name }}" class="img-fluid rounded" style="max-width: 100%;">

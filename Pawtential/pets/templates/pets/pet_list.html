@@ -6,11 +6,17 @@
 {% block content %}
 <div class="container-fluid mt-3">
     <h2 class="text-center mb-4">List of Pets</h2>
-
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %} 
     <form method="get" action="{% url 'pets:pet_list_view' %}" class="mb-4">
         <div class="row justify-content-center">
             <div class="col-md-4 mb-4">
-                <input type="text" name="pet_name" class="form-control" placeholder="Search by Pet Name" value="{{ request.GET.pet_name }}">
+                <input type="text" name="search" class="form-control" placeholder="Search by Pet Name" value="{{ request.GET.search }}">
             </div>
             <div class="col-md-4 mb-4">
                 <select name="adoption_status" class="form-control">
@@ -25,7 +31,6 @@
             </div>
         </div>
     </form>
-
     <div class="row">
         {% for pet in pets %}
         <div class="col-md-3 mb-4"> 

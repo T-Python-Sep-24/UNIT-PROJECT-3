@@ -1,11 +1,10 @@
 from django.shortcuts import render ,redirect , get_object_or_404
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Pet
 from django.core.paginator import Paginator
 from .forms import PetForm
 from adoptions.models import AdoptionRequest
-
+from django.contrib import messages
 
 # Create your views here.
 
@@ -25,7 +24,8 @@ def add_pet(request):
 
       
         if not name or not species or not age or not health_status or not adoption_status:
-            return HttpResponse("All required fields must be filled!", status=400)
+            messages.error(request, "All required fields must be filled!") 
+            return redirect('pets:add_pet') 
 
       
         pet = Pet(
@@ -42,6 +42,7 @@ def add_pet(request):
         )
         pet.save()
 
+        messages.success(request, f"{name} has been successfully added!")
         return redirect('pets:pet_list_view')  
 
     return render(request, 'pets/add_pet.html')
@@ -66,6 +67,7 @@ def pet_list_view(request):
 
     return render(request, 'pets/pet_list.html', {'pets': pets_page})
 
+
 def pet_detail_view(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
     
@@ -76,22 +78,27 @@ def pet_detail_view(request, pet_id):
 
     return render(request, 'pets/pet_detail.html', {'pet': pet, 'already_requested': already_requested})
 
+
 def edit_pet(request, pet_id):
     try:
         pet = Pet.objects.get(id=pet_id)
     except Pet.DoesNotExist:
-       
-        return redirect('pets:edit_pet')  
+        messages.error(request, "Pet not found.")
+        return redirect('pets:pet_list_view') 
 
     if request.method == 'POST':
         form = PetForm(request.POST, request.FILES, instance=pet)
         if form.is_valid():
             form.save()
+            messages.success(request, "Pet details have been successfully updated.") 
             return redirect('pets:pet_detail', pet_id=pet.id)
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
         form = PetForm(instance=pet)
     
     return render(request, 'pets/edit_pet.html', {'form': form, 'pet': pet})
+
 
 def delete_pet(request, pet_id):
     pet = Pet.objects.filter(id=pet_id).first()
@@ -99,8 +106,11 @@ def delete_pet(request, pet_id):
     if pet:  
         if request.user == pet.user: 
             pet.delete() 
-            return redirect('pets:pet_list_view') 
+            messages.success(request, "Pet has been successfully deleted.") 
+            return redirect('pets:pet_list_view')
         else:
+            messages.error(request, "You cannot delete this pet. It does not belong to you.") 
             return redirect('pets:pet_detail', pet.id) 
     else:
+        messages.error(request, "Pet not found.") 
         return redirect('pets:pet_list_view')

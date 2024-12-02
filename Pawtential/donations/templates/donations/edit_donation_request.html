@@ -1,8 +1,7 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-{% block title %}Edit Donation Request{% endblock %}
-
+{% block title %}Edit Donation Request{% endblock %} 
 {% block content %}
   <div class="container mt-5">
     <div class="row justify-content-center">
@@ -10,6 +9,13 @@
             <div class="card custom-form-container">
                 <div class="card-header text-center">
                     <h4>Edit Donation Request</h4>
+                    {% if messages %}
+                      {% for message in messages %}
+                          <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                              {{ message }}
+                          </div>
+                      {% endfor %}
+                    {% endif %} 
                 </div>
                 <div class="card-body">
                     {% if messages %}
@@ -34,10 +40,26 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="amount_requested" class="form-label">Amount Requested</label>
-                            <input type="number" class="form-control" id="amount_requested" name="amount_requested" value="{{ donation_request.amount_requested }}" step="0.01">
-                            <small class="form-text text-muted">Leave empty if you do not want to request a specific amount (e.g. for food or supplies).</small>
-                        </div>
+                          <label for="amount_requested" class="form-label">Amount Requested</label>
+                          <input type="number" class="form-control" id="amount_requested" name="amount_requested" value="{{ donation_request.amount_requested }}" step="0.01">
+                          <small class="form-text text-muted">Leave empty if you do not want to request a specific amount (e.g. for food or supplies).</small>
+                      </div>
+                      
+                      <div class="mb-3">
+                          <label for="amount_donated" class="form-label">Amount Donated</label>
+                          <input type="number" class="form-control" id="amount_donated" name="amount_donated" 
+                                 value="{{ total_donated|floatformat:2 }}" 
+                                 readonly>
+                          <small class="form-text text-muted">This is the total amount donated so far.</small>
+                      </div>
+                      
+                      <div class="mb-3">
+                          <label for="amount_remaining" class="form-label">Amount Remaining</label>
+                          <input type="number" class="form-control" id="amount_remaining" name="amount_remaining" 
+                                 value="{{ remaining_amount|floatformat:2 }}" 
+                                 readonly>
+                          <small class="form-text text-muted">This is the remaining amount to be donated.</small>
+                      </div>
 
                         <div class="mb-3">
                             <label for="description" class="form-label">Description (Optional)</label>

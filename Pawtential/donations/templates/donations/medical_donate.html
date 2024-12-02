@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+{% block title %}Medical Donation{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Make a Medical Donation</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    {% if remaining_amount %}
+        <div class="alert alert-info">
+            <strong>Remaining amount to be donated: </strong>{{ remaining_amount }}.
+        </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="donor_name" class="form-label">Your Name (Optional)</label>
+            <input type="text" class="form-control" id="donor_name" name="donor_name">
+        </div>
+
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="payment_method" class="form-label">Payment Method</label>
+            <select class="form-control" id="payment_method" name="payment_method" required>
+                <option value="bank_transfer">Bank Transfer</option>
+                <option value="apple_pay">Apple Pay</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="payment_proof" class="form-label">Upload Payment Proof (Optional)</label>
+            <input type="file" class="form-control" id="payment_proof" name="payment_proof">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Donation</button>
+    </form>
+</div>
+{% endblock %}

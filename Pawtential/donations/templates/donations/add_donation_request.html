@@ -1,7 +1,6 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block title %}Request Donation{% endblock %}
-
 {% block content %}
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -9,6 +8,13 @@
             <div class="card custom-form-container">
                 <div class="card-header text-center">
                     <h4>Request a Donation</h4>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
                 <div class="card-body">
                     <form method="POST">

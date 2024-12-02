@@ -9,6 +9,13 @@
             <div class="card custom-form-container">
                 <div class="card-header text-center">
                     <h4>Add New Pet</h4>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %} 
                 </div>
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data">
@@ -23,7 +30,7 @@
                         
                         <div class="mb-3">
                             <label for="image" class="form-label">Profile Picture</label>
-                            <input type="file" class="form-control" id="image" name="image">
+                            <input type="file" class="form-control" id="image" name="image" required>
                         </div>
 
                        

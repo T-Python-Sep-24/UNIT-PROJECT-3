@@ -2,11 +2,16 @@
 {% load static %}
 
 {% block title %}Donation Requests{% endblock %}
-
 {% block content %}
 <div class="container-fluid mt-3">
     <h2 class="text-center mb-4">List of Donation Requests</h2>
-
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     <form method="get" action="{% url 'donations:donation_request_list' %}" class="mb-4">
         <div class="row justify-content-center">
             <div class="col-md-4 mb-4">
@@ -28,11 +33,29 @@
     <div class="row">
         {% for request in donation_requests %}
         <div class="col-md-3 mb-4">
-            <div class="card donation-card">
-                <div class="card-body">
+            <div class="card donation-card h-100">
+                <div class="card-body flex-column">
                     <h5 class="card-title">{{ request.donation_type|capfirst }}</h5>
-                    <p class="card-text"><strong>Amount Requested:</strong>{{ request.amount_requested|floatformat:2 }}SAR</p>
-                    <p class="card-text"><strong>Description:</strong> {{ request.description|truncatewords:10 }}</p>
+                    <p class="card-text"><strong>Amount Requested:</strong>{{ request.amount_requested|floatformat:2 }} SAR</p>
+                    <p class="card-text"><strong>Amount Donated:</strong> 
+                        {% if request.total_donated %}
+                            {{ request.total_donated|floatformat:2 }} SAR
+                        {% else %}
+                            0 SAR
+                        {% endif %}
+                    </p>
+                    <p class="card-text"><strong>Amount Remaining:</strong>
+                        {% if request.amount_requested %}
+                            {% if request.remaining > 0 %}
+                                {{ request.remaining|floatformat:2 }} SAR
+                            {% else %}
+                                Fully Fulfilled
+                            {% endif %}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>                    
+                    <p class="card-text"><strong>Description:</strong> {{ request.description}}</p>
                     <p class="card-text"><strong>Status:</strong> 
                         {% if request.fulfilled %}
                             <span class="text-success">Fulfilled</span>
@@ -42,18 +65,25 @@
                     </p>
                     <p class="card-text"><strong>Shelter:</strong> 
                         <a href="{% url 'accounts:shelter_profile' request.shelter.id %}">{{ request.shelter.name }}</a>
-                        <a href="{% url 'donations:make_donation' donation_request_id=request.id %}" class="btn btn-primary">Donate Now</a>
-
                     </p>
+                    {% if request.fulfilled %}
+                        <button type="button" class="btn btn-secondary" disabled>Donation Fulfilled</button>
+                    {% else %}
+                        {% if request.donation_type == 'medical' %}
+                            <a href="{% url 'donations:make_medical_donation' donation_request_id=request.id %}" class="btn btn-primary">Donate Now</a>
+                        {% elif request.donation_type == 'supplies' %}
+                            <a href="{% url 'donations:make_supply_donation' donation_request_id=request.id %}" class="btn btn-primary">Donate Supplies</a>
+                        {% else %}
+                            <a href="{% url 'donations:make_supply_donation' donation_request_id=request.id %}" class="btn btn-primary">Donate Supplies</a>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </div>
         {% empty %}
         <p>No donation requests found.</p>
         {% endfor %}
-
     </div>
-
     <div class="d-flex justify-content-center mt-4">
         <nav aria-label="Page navigation">
             <ul class="pagination">
@@ -69,7 +99,7 @@
                         </a>
                     </li>
                 {% endif %}
-                
+
                 <li class="page-item disabled">
                     <span class="page-link">Page {{ donation_requests.number }} of {{ donation_requests.paginator.num_pages }}</span>
                 </li>

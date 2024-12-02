@@ -7,7 +7,13 @@
 <div class="container-fluid p-0 mt-5">
 
     <h2 class="text-center mb-5 display-3">{{ pet.name }} Details</h2>
-
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %} 
     <div class="row justify-content-center">
         <div class="col-12 col-md-12 col-lg-10">
             <div class="card border-light shadow-lg rounded-4 w-100 mb-4" style="max-width: 90%; height: auto;">
@@ -15,14 +21,16 @@
                     <div class="row mb-4">
                     
                         <div class="col-md-6 p-0">  
-                            <img src="{{ pet.image.url }}" class="img-fluid rounded-3" alt="{{ pet.name }}" style="object-fit: cover; width: 100%; height: 100%; max-height: 400px;">
-                        </div>
+                            <img src="{{ pet.image.url }}" class="img-fluid rounded-3" alt="{{ pet.name }}" style="object-fit: cover; width: 100%; height: 100%;">
+                        </div>                        
                         <div class="col-md-6">
                             <h5 class="card-title display-3 font-weight-bold" style="border-bottom: 3px solid #FFAAA7; font-size: 2.5em;">{{ pet.name }}</h5>
 
                             <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Species:</strong> <span class="text-info">{{ pet.species }}</span></p>
                             <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Breed:</strong> <span class="text-info">{{ pet.breed }}</span></p>
-                            <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Age:</strong> <span class="text-info">{{ pet.age }} years</span></p>
+                            <p class="card-text text-dark" style="font-size: 1.5em;">
+                                <strong>Age:</strong> <span class="text-info">{{ pet.age_in_years_and_months.0 }} years and {{ pet.age_in_years_and_months.1 }} months</span>
+                              </p>
                             <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Health Status:</strong> <span class="text-info">{{ pet.get_health_status_display }}</span></p>
                             <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Adoption Status:</strong> <span class="text-info">{{ pet.get_adoption_status_display }}</span></p>
                             <p class="card-text text-dark" style="font-size: 1.5em;"><strong>Medical History:</strong> <span class="text-info">{{ pet.medical_history|default:"No medical history" }}</span></p>

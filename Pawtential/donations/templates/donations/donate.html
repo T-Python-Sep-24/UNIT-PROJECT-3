@@ -1,65 +1,97 @@
 {% extends 'main/base.html' %}
+{% load static %}
+
 {% block title %}Donate{% endblock %}
+
 
 {% block content %}
 <div class="container mt-5">
     <h2>Make a Donation</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if remaining_amount %}
+        <div class="alert alert-info">
+            <strong>Remaining amount to be donated: </strong>{{ remaining_amount }}.
+        </div>
+    {% endif %}
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data" id="donationForm">
         {% csrf_token %}
         
         <div class="mb-3">
             <label for="donor_name" class="form-label">Your Name (Optional)</label>
-            <input type="text" class="form-control" id="donor_name" name="donor_name">
+            <input type="text" class="form-control" id="donor_name" name="donor_name" value="{{ form.donor_name.value }}">
         </div>
-
+    
         <div class="mb-3">
             <label for="donation_type" class="form-label">Donation Type</label>
             <select class="form-control" id="donation_type" name="donation_type" required>
-                <option value="monetary">Monetary Donation</option>
-                <option value="supplies">Supplies Donation</option>
+                <option value="monetary" {% if form.donation_type.value == 'monetary' %}selected{% endif %}>Monetary Donation</option>
+                <option value="supplies" {% if form.donation_type.value == 'supplies' %}selected{% endif %}>Supplies Donation</option>
             </select>
         </div>
-
-        <div class="mb-3" id="monetary_donation_amount" style="display:block;">
+    
+        <div id="monetary_donation_amount" class="mb-3" style="display: none;">
             <label for="amount" class="form-label">Amount</label>
-            <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+            <input type="number" class="form-control" id="amount" name="amount" step="0.01" value="{{ form.amount.value }}" required>
         </div>
-
-        <div class="mb-3" id="payment_method_section" style="display:none;">
+    
+        <div id="payment_method_section" class="mb-3" style="display: none;">
             <label for="payment_method" class="form-label">Choose Payment Method</label>
             <select class="form-control" id="payment_method" name="payment_method" required>
-                <option value="bank_transfer">Bank Transfer</option>
-                <option value="apple_pay">Apple Pay</option>
-                <option value="paypal">PayPal</option>
+                <option value="bank_transfer" {% if form.payment_method.value == 'bank_transfer' %}selected{% endif %}>Bank Transfer</option>
+                <option value="apple_pay" {% if form.payment_method.value == 'apple_pay' %}selected{% endif %}>Apple Pay</option>
             </select>
         </div>
-
-        <div class="mb-3" id="supplies_donation_details" style="display:none;">
-            <label for="shipping_company" class="form-label">Shipping Company</label>
-            <input type="text" class="form-control" id="shipping_company" name="shipping_company">
-
-            <label for="tracking_number" class="form-label">Tracking Number</label>
-            <input type="text" class="form-control" id="tracking_number" name="tracking_number">
+    
+        <div id="payment_proof_section" class="mb-3" style="display: none;">
+            <label for="payment_proof" class="form-label">Upload Payment Proof (Optional)</label>
+            <input type="file" class="form-control" id="payment_proof" name="payment_proof">
         </div>
-
+    
+        <div id="supplies_donation_details" class="mb-3" style="display: none;">
+            <label for="shipping_company" class="form-label">Shipping Company</label>
+            <input type="text" class="form-control" id="shipping_company" name="shipping_company" value="{{ form.shipping_company.value }}">
+    
+            <label for="tracking_number" class="form-label">Tracking Number</label>
+            <input type="text" class="form-control" id="tracking_number" name="tracking_number" value="{{ form.tracking_number.value }}">
+        </div>
+    
         <button type="submit" class="btn btn-primary">Submit Donation</button>
-    </form>
+    </form>    
 </div>
 
 <script>
-    document.getElementById('donation_type').addEventListener('change', function() {
-        var donationType = this.value;
+        document.addEventListener("DOMContentLoaded", function() {
+        var donationType = document.getElementById('donation_type').value;
+        toggleDonationFields(donationType);
+
+        document.getElementById('donation_type').addEventListener('change', function() {
+            var donationType = this.value;
+            toggleDonationFields(donationType);
+        });
+    });
+
+    function toggleDonationFields(donationType) {
+        document.getElementById('monetary_donation_amount').style.display = 'none';
+        document.getElementById('payment_method_section').style.display = 'none';
+        document.getElementById('payment_proof_section').style.display = 'none';
+        document.getElementById('supplies_donation_details').style.display = 'none';
+
         if (donationType === 'monetary') {
             document.getElementById('monetary_donation_amount').style.display = 'block';
             document.getElementById('payment_method_section').style.display = 'block';
-            document.getElementById('supplies_donation_details').style.display = 'none';
+            document.getElementById('payment_proof_section').style.display = 'block';
         } else if (donationType === 'supplies') {
             document.getElementById('supplies_donation_details').style.display = 'block';
-            document.getElementById('monetary_donation_amount').style.display = 'none';
-            document.getElementById('payment_method_section').style.display = 'none';
         }
-    });
+    }
+
 </script>
 
 {% endblock %}

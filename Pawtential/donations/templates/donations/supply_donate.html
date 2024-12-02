@@ -1,0 +1,34 @@
+{% extends 'main/base.html' %}
+{% block title %}Supplies Donation{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Make a Supplies Donation</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="donor_name" class="form-label">Your Name (Optional)</label>
+            <input type="text" class="form-control" id="donor_name" name="donor_name">
+        </div>
+
+        <div class="mb-3">
+            <label for="shipping_company" class="form-label">Shipping Company</label>
+            <input type="text" class="form-control" id="shipping_company" name="shipping_company" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="tracking_number" class="form-label">Tracking Number</label>
+            <input type="text" class="form-control" id="tracking_number" name="tracking_number" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Donation</button>
+    </form>
+</div>
+{% endblock %}

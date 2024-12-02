@@ -18,6 +18,7 @@ class AdoptionRequest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     comments = models.TextField(blank=True, null=True)
+    comment_by_approver = models.TextField(null=True, blank=True) 
 
     class Meta:
         unique_together = ['pet', 'user']

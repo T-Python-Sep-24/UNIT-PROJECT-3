@@ -82,7 +82,10 @@ def register_shelter_view(request):
             messages.error(request, "Username is already taken. Please choose a different one.")
             return render(request, 'accounts/shelter_registration.html')
 
-
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "This email is already registered. Please choose a different one.")
+            return render(request, 'accounts/shelter_registration.html')
+        
         if password != confirm_password:
             messages.error(request, "Passwords do not match.")
             return render(request, 'accounts/shelter_registration.html')
@@ -98,12 +101,14 @@ def register_shelter_view(request):
 
         shelter = Shelter(
             user=user,
+            username=username,
             name=shelter_name,
             phone_number=phone_number_shelter,
             address=address,
             license_number=license_number,
             bio=bio,
-            profile_picture=profile_picture
+            profile_picture=profile_picture,
+            email=email
         )
         shelter.save()
 
@@ -171,12 +176,16 @@ def shelter_profile(request, shelter_id):
         pets = Pet.objects.filter(user=shelter_profile.user)
         adoption_requests = AdoptionRequest.objects.filter(pet__user=shelter_profile.user)
         donation_requests = DonationRequest.objects.filter(shelter=shelter_profile).all()
-        
+
     else:
         pets = []
         adoption_requests = []
         donation_requests = []
-    return render(request, 'profile/shelter_profile.html', {'profile': shelter_profile , 'pets': pets , 'adoption_requests': adoption_requests,'donation_requests':donation_requests})
+    return render(request, 'profile/shelter_profile.html', 
+                  {'profile': shelter_profile ,
+                    'pets': pets , 
+                    'adoption_requests': adoption_requests,
+                    'donation_requests':donation_requests})
 
 
 def edit_shelter_profile(request, shelter_id):

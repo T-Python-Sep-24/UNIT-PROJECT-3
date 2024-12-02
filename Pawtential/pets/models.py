@@ -32,3 +32,9 @@ class Pet(models.Model):
 
     def __str__(self):
         return self.name
+    @property
+    def age_in_years_and_months(self):
+    
+        years = int(self.age)
+        months = round((self.age - years) * 12)
+        return years, months
