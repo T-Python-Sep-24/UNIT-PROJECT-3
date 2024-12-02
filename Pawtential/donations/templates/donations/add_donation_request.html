@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Request Donation{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card custom-form-container">
+                <div class="card-header text-center">
+                    <h4>Request a Donation</h4>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="donation_type" class="form-label">Donation Type</label>
+                            <select class="form-control" id="donation_type" name="donation_type" required>
+                                <option value="food">Food</option>
+                                <option value="supplies">Supplies</option>
+                                <option value="medical">Medical</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="amount_requested" class="form-label">Amount Requested</label>
+                            <input type="number" class="form-control" id="amount_requested" name="amount_requested" step="0.01" value="{{ request.POST.amount_requested }}">
+                            <small class="form-text text-muted">Leave empty if you do not want to request a specific amount (e.g. for food or supplies).</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description (Optional)</label>
+                            <textarea class="form-control" id="description" name="description" rows="3">{{ request.POST.description }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Submit Request</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

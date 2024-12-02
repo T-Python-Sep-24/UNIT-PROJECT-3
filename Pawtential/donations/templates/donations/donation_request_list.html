@@ -1,0 +1,132 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Donation Requests{% endblock %}
+{% block content %}
+<div class="container-fluid mt-3">
+    <h2 class="text-center mb-4">List of Donation Requests</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <form method="get" action="{% url 'donations:donation_request_list' %}" class="mb-4">
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-4">
+                <input type="text" name="donation_type" class="form-control" placeholder="Search by Donation Type" value="{{ request.GET.donation_type }}">
+            </div>
+            <div class="col-md-4 mb-4">
+                <select name="fulfilled_status" class="form-control">
+                    <option value="">-- Search by Fulfilled Status --</option>
+                    <option value="True" {% if request.GET.fulfilled_status == "True" %}selected{% endif %}>Fulfilled</option>
+                    <option value="False" {% if request.GET.fulfilled_status == "False" %}selected{% endif %}>Not Fulfilled</option>
+                </select>
+            </div>
+            <div class="col-md-2 mb-3">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        {% for request in donation_requests %}
+        <div class="col-md-3 mb-4"> 
+            <div class="card donation-card shadow-lg" style="background: rgba(255, 170, 167, 0.084); border-radius: 15px; display: flex; flex-direction: column; height: 100%;">
+    
+                <div class="card-body d-flex flex-column" style="flex-grow: 1;">
+                    <h5 class="card-title">{{ request.donation_type|capfirst }}</h5>
+                    <p class="card-text"><strong>Amount Requested:</strong> {{ request.amount_requested|floatformat:2 }} SAR</p>
+                    <p class="card-text"><strong>Amount Donated:</strong> 
+                        {% if request.total_donated %}
+                            {{ request.total_donated|floatformat:2 }} SAR
+                        {% else %}
+                            0 SAR
+                        {% endif %}
+                    </p>
+                    <p class="card-text"><strong>Amount Remaining:</strong>
+                        {% if request.amount_requested %}
+                            {% if request.remaining > 0 %}
+                                {{ request.remaining|floatformat:2 }} SAR
+                            {% else %}
+                                Fully Fulfilled
+                            {% endif %}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>                    
+                    <p class="card-text"><strong>Description:</strong> {{ request.description }}</p>
+                    <p class="card-text"><strong>Status:</strong> 
+                        {% if request.fulfilled %}
+                            <span class="text-success">Fulfilled</span>
+                        {% else %}
+                            <span class="text-warning">Pending</span>
+                        {% endif %}
+                    </p>
+                    <p class="card-text"><strong>Shelter:</strong> 
+                        <a href="{% url 'accounts:shelter_profile' request.shelter.id %}">{{ request.shelter.name }}</a>
+                    </p>
+    
+                    {% if request.fulfilled %}
+                        <button type="button" class="btn btn-secondary w-auto" style="align-self: flex-start;" disabled>Donation Fulfilled</button>
+                    {% else %}
+                        {% if request.donation_type == 'medical' %}
+                            <a href="{% url 'donations:make_medical_donation' donation_request_id=request.id %}" 
+                            class="btn btn-info btn-sm" 
+                            style="padding: 8px 15px; margin-top: auto; width: 150px;">Donate Now</a>
+                        {% elif request.donation_type == 'supplies' %}
+                            <a href="{% url 'donations:make_supply_donation' donation_request_id=request.id %}" 
+                            class="btn btn-info btn-sm" 
+                            style="padding: 8px 15px; margin-top: auto; width: 200px;">Donate Supplies</a>
+                        {% else %}
+                            <a href="{% url 'donations:make_supply_donation' donation_request_id=request.id %}" 
+                            class="btn btn-info btn-sm" 
+                            style="padding: 8px 15px; margin-top: auto; width: 150px;">Donate Supplies</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No donation requests found.</p>
+        {% endfor %}
+    </div>    
+
+    <div class="d-flex justify-content-center mt-4">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if donation_requests.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1&donation_type={{ request.GET.donation_type }}&fulfilled_status={{ request.GET.fulfilled_status }}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ donation_requests.previous_page_number }}&donation_type={{ request.GET.donation_type }}&fulfilled_status={{ request.GET.fulfilled_status }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ donation_requests.number }} of {{ donation_requests.paginator.num_pages }}</span>
+                </li>
+
+                {% if donation_requests.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ donation_requests.next_page_number }}&donation_type={{ request.GET.donation_type }}&fulfilled_status={{ request.GET.fulfilled_status }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ donation_requests.paginator.num_pages }}&donation_type={{ request.GET.donation_type }}&fulfilled_status={{ request.GET.fulfilled_status }}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}

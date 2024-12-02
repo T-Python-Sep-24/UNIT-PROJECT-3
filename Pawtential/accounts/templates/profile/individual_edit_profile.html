@@ -1,0 +1,98 @@
+{% extends 'main/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Edit Individual Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card custom-form-container shadow-sm">
+                <div class="card-header text-center">
+                    <h4>Edit Profile for {{ form.instance.user.username }}</h4>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for message in messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        
+                        <div class="mb-3">
+                            <label for="id_first_name" class="form-label">First Name</label>
+                            {{ form.first_name|add_class:"form-control" }}
+                        </div>
+
+                        
+                        <div class="mb-3">
+                            <label for="id_last_name" class="form-label">Last Name</label>
+                            {{ form.last_name|add_class:"form-control" }}
+                        </div>
+
+                        
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Username</label>
+                            {{ form.username|add_class:"form-control" }}
+                        </div>
+
+                        
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">Email</label>
+                            {{ form.email|add_class:"form-control" }}
+                        </div>
+
+                        
+                        <div class="mb-3">
+                            <label for="id_birth_date" class="form-label">Birth Date</label>
+                            {{ form.birth_date|add_class:"form-control" }}
+                        </div>
+
+                        
+                        <div class="mb-3">
+                            <label for="id_phone_number" class="form-label">Phone Number</label>
+                            {{ form.phone_number|add_class:"form-control" }}
+                        </div>
+
+                        
+                        <div class="mb-3">
+                            <label for="id_bio" class="form-label">Bio</label>
+                            {{ form.bio|add_class:"form-control" }}
+                        </div>
+
+                        
+                        <div class="mb-3">
+                            <label for="id_profile_picture" class="form-label">Profile Picture</label>
+                            {{ form.profile_picture|add_class:"form-control" }}
+                            {% if form.instance.profile_picture %}
+                                <div class="mt-3 text-center">
+                                    <img src="{{ form.instance.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                                </div>
+                            {% else %}
+                                <div class="mt-3 text-center">
+                                    <img src="/media/profile_pics/default_profile_pic.jpg" alt="Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Update Profile</button>
+                    </form>
+
+                    <div class="mt-3 text-center">
+                        {% if profile.id %}
+                            <a href="{% url 'accounts:individual_profile' individual_id=profile.id %}" class="btn btn-secondary w-100">Back to Profile</a>
+                        {% else %}
+                            <p>Profile ID is not available.</p>
+                        {% endif %}
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

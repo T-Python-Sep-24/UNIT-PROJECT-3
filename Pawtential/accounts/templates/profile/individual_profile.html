@@ -1,0 +1,163 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}{{ profile.username }}{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    
+    {% if messages %}
+      <div class="alert alert-success" role="alert">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="row">
+      <div class="col-md-4 text-center mb-4">
+        <div class="card shadow-lg" style="background: rgba(36, 161, 157, 0.234); border-radius: 15px;">
+          <div class="card-body">
+            <div class="profile-img-wrapper">
+              <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}/media/profile_pics/default_profile_pic.jpg{% endif %}" 
+                alt="User Picture" class="img-fluid rounded-circle" 
+                style="width: 200px; height: 200px; object-fit: cover; border: 5px solid #FF8551;">
+            </div>
+            <p>
+              <strong><i class="bi bi-telephone-fill"></i></strong>
+              <a href="tel:{{ profile.phone_number }}">{{ profile.phone_number }}</a>
+            </p>
+            <p>
+              <strong><i class="bi bi-envelope-fill"></i></strong>
+              <a href="mailto:{{ profile.email }}">{{ profile.email }}</a>
+            </p>
+            {% if profile.user == request.user %}
+              <a href="{% url 'accounts:individual_edit_profile' individual_id=profile.id %}" class="btn btn-warning mt-3">Edit Profile</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="card shadow-lg" style="background: rgba(36, 161, 157, 0.234); border-radius: 15px;">
+          <div class="card-body">
+            <h3 class="mb-4" style="color: #FF8551;">{{ profile.first_name }} {{ profile.last_name }}</h3>
+            <p><strong>Username:</strong> {{ profile.username }}</p>
+            <p><strong>Birth Date:</strong> {{ profile.birth_date }}</p>
+            <p><strong>Bio:</strong> {{ profile.bio }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-4" style="border-top: 3px solid #FF8551;">
+
+    <div class="section-container mb-5">
+      <h4 class="mb-3" style="color: #FF8551;">Pets Added</h4>
+      {% if pets %}
+        <div class="row">
+          {% for pet in pets %}
+          <div class="col-md-4 mb-4">
+            <div class="card shadow-lg" style="background: rgba(255, 170, 167, 0.153); border-radius: 15px; height: 400px; display: flex; flex-direction: column;">
+              <div class="card-body d-flex flex-column">
+                <img src="{{ pet.image.url }}" alt="{{ pet.name }}" class="img-fluid rounded" style="max-width: 100%; height: 150px; object-fit: cover;">
+                <h5 class="mt-3">{{ pet.name }}</h5>
+                <p><strong>Species:</strong> {{ pet.species }}</p>
+                <p><strong>Age:</strong> {{ pet.age_in_years_and_months.0 }} years and {{ pet.age_in_years_and_months.1 }} months</p>
+                <p><strong>Status:</strong> {{ pet.get_adoption_status_display }}</p>
+                <div class="d-flex justify-content-between mt-auto">
+                  <a href="{% url 'pets:pet_detail' pet_id=pet.id %}" class="btn btn-info btn-sm">Details</a>
+                  {% if pet.user == request.user %}
+                    <a href="{% url 'pets:edit_pet' pet_id=pet.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <form action="{% url 'pets:delete_pet' pet_id=pet.id %}" method="POST" style="display:inline;">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this pet?');">Delete Pet</button>
+                    </form>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No pets added yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="section-container mb-5">
+      {% if profile.user == request.user %}
+        <hr class="my-4" style="border-top: 3px solid #FF8551;">
+        <h4 class="mb-3" style="color: #FF8551;">Sent Adoption Requests</h4>
+        <div class="list-group">
+          {% for request in sent_requests %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <strong>Pet:</strong> {{ request.pet.name }} | 
+                <strong>Status:</strong> {{ request.get_status_display }}
+                {% if request.comments %}
+                  <br><strong>Comment:</strong> {{ request.comments }}
+                {% endif %}
+                {% if request.status == 'accepted' or request.status == 'rejected' %}
+                  <div class="alert alert-info mt-3">
+                    <strong>Approver's Comment:</strong> {{ request.comment_by_approver }}
+                  </div>
+                {% else %}
+                  <div class="alert alert-warning mt-3">
+                    <strong>No comment added yet by approver.</strong>
+                  </div>
+                {% endif %}
+              </div>
+              <div>
+                {% if request.status == 'pending' %}
+                  <a href="{% url 'adoptions:handle_adoption_request' request_id=request.id action='cancel' %}" class="btn btn-warning btn-sm">Cancel Request</a>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p></p>
+      {% endif %}
+    </div>
+
+    <div class="section-container mb-5">
+      {% if profile.user == request.user %}
+        <hr class="my-4" style="border-top: 3px solid #FF8551;">
+        <h4 class="mb-3" style="color: #FF8551;">Adoption Requests</h4>
+        <div class="list-group">
+          {% for request in adoption_requests %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <strong>Pet:</strong> {{ request.pet.name }} | 
+                <strong>User:</strong> 
+                {% if request.user %}
+                  {% if request.user.individual_user %}
+                    <a href="{% url 'accounts:individual_profile' individual_id=request.user.individual_user.id %}" class="btn btn-link">
+                      {{ request.user.username }}
+                    </a>
+                  {% elif request.user.shelter %}
+                    <a href="{% url 'accounts:shelter_profile' shelter_id=request.user.shelter.id %}" class="btn btn-link">
+                      {{ request.user.username }}
+                    </a>
+                  {% endif %}
+                {% else %}
+                  <span>No user linked with this request</span>
+                {% endif %}
+                | 
+                <strong>Status:</strong> {{ request.get_status_display }}
+              </div>
+              <div>
+                {% if request.status == 'pending' %}
+                  <a href="{% url 'adoptions:handle_adoption_request' request_id=request.id action='accept' %}" class="btn btn-success btn-sm me-2">Accept</a>
+                  <a href="{% url 'adoptions:handle_adoption_request' request_id=request.id action='reject' %}" class="btn btn-danger btn-sm">Reject</a>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p></p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

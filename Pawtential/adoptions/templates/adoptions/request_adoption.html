@@ -1,0 +1,48 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Request Adoption for {{ pet.name }}</h2>
+    {% if messages %}
+      {% for message in messages %}
+          <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+              {{ message }}
+          </div>
+      {% endfor %}
+    {% endif %} 
+    <div class="row">
+      <div class="col-md-6">
+        <img src="{{ pet.image.url }}" alt="{{ pet.name }}" class="img-fluid rounded" style="max-width: 100%;">
+      </div>
+      <div class="col-md-6">
+        <h4><strong>{{ pet.name }}</strong></h4>
+        <p><strong>Species:</strong> {{ pet.species }}</p>
+        <p><strong>Age:</strong> {{ pet.age }} years</p>
+        <p><strong>Description:</strong> {{ pet.description }}</p>
+        <p><strong>Status:</strong> {{ pet.get_adoption_status_display }}</p>
+        
+        {% if pet.adoption_status == 'available' %}
+          {% if existing_request %}
+            <div class="alert alert-warning mt-3">
+              <strong>You have already requested to adopt this pet!</strong>
+            </div>
+          {% else %}
+            <form action="{% url 'adoptions:request_adoption' pet.id %}" method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="comments" class="form-label ">Comments (Optional)</label>
+                <textarea class="form-control" id="comments" name="comments"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary mt-3">Request Adoption</button>
+            </form>
+          {% endif %}
+        {% else %}
+          <div class="alert alert-secondary mt-3">
+            <strong>This pet is not available for adoption at the moment.</strong>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

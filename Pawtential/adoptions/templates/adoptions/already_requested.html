@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="mb-4">Adoption Request Already Sent</h2>
+    {% if messages %}
+      {% for message in messages %}
+          <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+              {{ message }}
+          </div>
+      {% endfor %}
+    {% endif %} 
+    <a href="{% url 'pets:pet_detail' pet_id=pet.id %}" class="btn btn-primary">Go Back to Pet Details</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Home Page{% endblock %}</title>
+<div class="container">
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+  {% endif %}  
+    <div class="row text-center" style="--bs-gap: 1rem; margin-right: 30px;">
+      <div class="col-5">
+         <img src="{% static 'images/paw.png'%}" alt="home.png" class="img-fluid" id="home-img">
+          <form class="search-form">
+            <h2 id="slogan">we believe every pet has the potential to thrive in a loving home</h2>
+          </form>   
+        </div>
+        <div class="col-5">
+          <div class="d-flex justify-content-between" >
+              <div class="image-container" style="width: 30%; max-height: 350px; margin-left: 50px; margin-top: 280px;">
+                  <img src="{% static 'images/cat.jpeg' %}" alt="Before rescue" class="img-fluid" style="border-radius: 10px; object-fit: cover; width: 100%; height: 65%; position: absolute;">
+              </div>
+      
+              <div class="image-container" style="width: 30%; max-height: 350px;  margin-left: 10px; margin-top: 450px; margin-right: 100px;">
+                  <img src="{% static 'images/cat2.jpeg' %}" alt="After rescue" class="img-fluid" style="border-radius: 10px; object-fit: cover; width: 100%; height: 60%; position: absolute;">
+              </div>
+          </div>
+      </div>
+
+    </div>
+    <div class="container" style="margin-top: 200px;">
+      <button onclick="window.location.href='{% url 'pets:pet_list_view' %}'" class="btn btn-primary mt-1 shadow-lg">View All Pets</button>
+      <hr class="my-4" style="border-top: 3px solid #FF8551; margin-top: 40px;">
+      <div class="row d-flex flex-wrap justify-content-start">
+          {% for pet in pets %}
+          <div class="col-md-4 mb-4">
+              <div class="card shadow-lg" style="background: rgba(255, 133, 81, 0.056); border-radius: 15px; height: 400px; display: flex; flex-direction: column;">
+                  <div class="card-body d-flex flex-column">
+                      <img src="{{ pet.image.url }}" alt="{{ pet.name }}" class="img-fluid rounded" style="max-width: 100%; height: 150px; object-fit: cover;">
+                      <h5 class="mt-3">{{ pet.name }}</h5>
+                      <p><strong>Species:</strong> {{ pet.species }}</p>
+                      <p><strong>Age:</strong> {{ pet.age_in_years_and_months.0 }} years and {{ pet.age_in_years_and_months.1 }} months</p>
+                      <p><strong>Status:</strong> {{ pet.get_adoption_status_display }}</p>
+                      <div class="d-flex justify-content-between mt-auto">
+                          <a href="{% url 'pets:pet_detail' pet_id=pet.id %}" class="btn btn-info btn-sm">Details</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+  </div>          
+  </div>
+{% endblock %}
