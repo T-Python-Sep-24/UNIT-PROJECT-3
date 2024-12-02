@@ -1,6 +1,7 @@
 from django.shortcuts import render ,redirect , get_object_or_404 
 from django.http import HttpRequest,HttpResponse
 from .models import Product
+from providers.models import Artist
 from django.core.paginator import Paginator
 # Create your views here.
 def products_view(request:HttpRequest):
@@ -18,14 +19,17 @@ def add_product_view(request: HttpRequest):
         price = request.POST.get("price")
         city = request.POST.get("city")
         image = request.FILES.get("image")
+        artist_id = request.POST.get("artist")
+        artist = get_object_or_404(Artist, id=artist_id)
         new_product   = Product(
             name=name,
             about=(about),
             price=float(price),
             city =city,
             image =image,
+            artist=artist,  
         )
-        new_product  .save()
+        new_product.save()
         return redirect("services:products_view")
     return render(request, "services/add_product.html")
 

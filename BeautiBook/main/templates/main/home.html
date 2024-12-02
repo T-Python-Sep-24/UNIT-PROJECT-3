@@ -35,7 +35,7 @@
                     </div>
                     <div class="detail-box">
                         <h5>Talented Artists</h5>
-                        <p>We carefully select highly skilled artists who excel in various specialties to ensure top-notch service for every customer.</p>
+                        <p>We carefully select highly skilled artists to ensure top-notch service for every customer.</p>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
                 {% if request.user.is_authenticated %}
                 <a href="{% url 'providers:add_artist_view' %}" class="btn primary-btn mt-3">Click Here</a>
                 {% else %}
-                <a href="{% url 'accounts:signup_view' %}" class="btn primary-btn mt-3">Click Here</a>
+                <a href="{% url 'accounts:signup_view' %}" class="btn primary-btn mt-3">Register as Artist</a>
                 {% endif %}
             </div>
         </div>

@@ -137,6 +137,7 @@
                         <h3 class="name">{{ artist.name }}</h3>
                         <p class="title">{{ artist.title }}</p>
                         <p class="description">{{ artist.about }}</p>
+                        <p class="title">{{ artist.price_range }}</p>
                         <div class="social">
                             <a href="{{ artist.insta_url }}"><i class="fab fa-instagram"></i></a>
                             <a href="{% url 'providers:artist_detail_view' artist.id %}" class="btn">View Details</a>
