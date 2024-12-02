@@ -1,0 +1,197 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Leave Requests{% endblock %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert 
+            {% if message.tags == 'success' %}
+                alert-success
+            {% elif message.tags == 'warning' %}
+                alert-warning
+            {% elif message.tags == 'error' %}
+                alert-danger 
+            {% else %}
+                alert-info
+            {% endif %}" role="alert">
+            <p>{{ message }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="container mt-4">
+    <br><br>
+    <div class="text-center mb-4">
+        <h2 class="display-4"><strong>Leave Requests</strong></h2>
+        <p class="lead">Search and manage leave requests across different statuses</p>
+    </div>
+
+    <form method="get" action="{% url 'hr_leave_management:leave_requests' %}" class="mb-4 d-flex justify-content-center">
+        <div class="row w-100 justify-content-center">
+            <div class="col-md-3">
+                <input type="text" name="search_query" class="form-control" placeholder="Search" value="{{ request.GET.search_query }}">
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-control">
+                    <option value="">Status</option>
+                    <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="approved_by_hr" {% if request.GET.status == 'approved_by_hr' %}selected{% endif %}>Approved</option>
+                    <option value="rejected_by_hr" {% if request.GET.status == 'rejected_by_hr' %}selected{% endif %}>Rejected</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn w-100 shadow-lg" style="background-color: #a8dadc;"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+    </form>
+    <br>
+    <div class="row mt-2">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-dark" style="background-color: rgb(255, 205, 112);">
+                    <h4>Pending Requests</h4>
+                </div>
+                <div class="card-body">
+                    {% if pending_leaves %}
+                    <ul class="list-group">
+                        {% for request in pending_leaves %}
+                        <li class="list-group-item">
+                            <strong>{{ request.employee.get_full_name }}</strong><br>
+                            <small>{{ request.start_date }} to {{ request.end_date }}</small><br>
+                            <span class="badge text-dark" style="background-color: rgb(255, 205, 112);">Pending</span><br>
+                            <a href="{% url 'hr_leave_management:approve_reject_leave' request.id %}" class="btn  btn-outline-warning btn-sm mt-2">View</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No pending requests found.</p>
+                    {% endif %}
+                    <div class="pagination mt-3 d-flex justify-content-center">
+                        <span class="page-links">
+                            {% if pending_leaves.has_previous %}
+                                <a href="?page_pending=1" class="mx-2" style="text-decoration: none;">First</a>
+                                <a href="?page_pending={{ pending_leaves.previous_page_number }}" class="mx-2" style="text-decoration: none;">Previous</a>
+                            {% endif %}
+                            <span class="current-page">Page {{ pending_leaves.number }} of {{ pending_leaves.paginator.num_pages }}</span>
+                            {% if pending_leaves.has_next %}
+                                <a href="?page_pending={{ pending_leaves.next_page_number }}" class="mx-2" style="text-decoration: none;">Next</a>
+                                <a href="?page_pending={{ pending_leaves.paginator.num_pages }}" class="mx-2" style="text-decoration: none;">Last</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-dark" style="background-color: rgba(130, 202, 130, 0.911);">
+                    <h4>Approved Requests</h4>
+                </div>
+                <div class="card-body">
+                    {% if approved_leaves %}
+                    <ul class="list-group">
+                        {% for request in approved_leaves %}
+                        <li class="list-group-item">
+                            <strong>{{ request.employee.get_full_name }}</strong><br>
+                            <small>{{ request.start_date }} to {{ request.end_date }}</small><br>
+                            <span class="badge text-dark" style="background-color: rgba(130, 202, 130, 0.911);">Approved by HR</span><br>
+                            <button type="button" class="btn btn-outline-success btn-sm mt-2" onclick="toggleReason('reason-{{ request.id }}')">View</button>
+                            <div id="reason-{{ request.id }}" class= "mt-2" style="display: none;">
+                                <strong>Employee Reason:</strong>{% if request.reason %}{{ request.reason }}{% else %}No reason provided{% endif %}</p>
+                                <strong>Manager Reason:</strong>{% if request.manager_reason %}{{ request.manager_reason }}{% else %}No reason provided{% endif %}</p>
+                                <strong>HR Reason:</strong>{% if request.hr_reason %}{{ request.hr_reason }}{% else %}No reason provided{% endif %}</p>
+                                {% if request.reason %}
+                                    <strong>Additional Reason:</strong> {{ request.reason }}<br>
+                                {% endif %}
+                                {% if request.document %}
+                                    <strong>Document:</strong> 
+                                    <a href="{{ request.document.url }}" target="_blank">Download Document</a><br>
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No approved requests found.</p>
+                    {% endif %}
+                    <div class="pagination mt-3 d-flex justify-content-center">
+                        <span class="page-links">
+                            {% if approved_leaves.has_previous %}
+                                <a href="?page_approved=1" class="mx-2" style="text-decoration: none;">First</a>
+                                <a href="?page_approved={{ approved_leaves.previous_page_number }}"class="mx-2" style="text-decoration: none;">Previous</a>
+                            {% endif %}
+                            <span class="current-page">Page {{ approved_leaves.number }} of {{ approved_leaves.paginator.num_pages }}</span>
+                            {% if approved_leaves.has_next %}
+                                <a href="?page_approved={{ approved_leaves.next_page_number }}"class="mx-2" style="text-decoration: none;">Next</a>
+                                <a href="?page_approved={{ approved_leaves.paginator.num_pages }}"class="mx-2" style="text-decoration: none;">Last</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-dark" style="background-color: rgba(255, 100, 100, 0.911);">
+                    <h4>Rejected Requests</h4>
+                </div>
+                <div class="card-body">
+                    {% if rejected_leaves %}
+                    <ul class="list-group">
+                        {% for request in rejected_leaves %}
+                        <li class="list-group-item">
+                            <strong>{{ request.employee.get_full_name }}</strong><br>
+                            <small>{{ request.start_date }} to {{ request.end_date }}</small><br>
+                            <span class="badge text-dark" style="background-color: rgba(255, 100, 100, 0.911);">Rejected by HR</span><br>
+                            <button type="button" class="btn btn-outline-danger btn-sm mt-2" onclick="toggleReason('reason-{{ request.id }}')">View</button>
+                            <div id="reason-{{ request.id }}" style="display: none;">
+                                <strong>Employee Reason:</strong>{% if request.reason %}{{ request.reason }}{% else %}No reason provided{% endif %}</p>
+                                <strong>Manager Reason:</strong>{% if request.manager_reason %}{{ request.manager_reason }}{% else %}No reason provided{% endif %}</p>
+                                <strong>HR Reason:</strong>{% if request.hr_reason %}{{ request.hr_reason }}{% else %}No reason provided{% endif %}</p>
+                                {% if request.reason %}
+                                    <strong>Additional Reason:</strong> {{ request.reason }}<br>
+                                {% endif %}
+                                {% if request.document %}
+                                    <strong>Document:</strong> 
+                                    <a href="{{ request.document.url }}" target="_blank">Download Document</a><br>
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No rejected requests found.</p>
+                    {% endif %}
+                    <div class="pagination mt-3 d-flex justify-content-center">
+                        <span class="page-links">
+                            {% if rejected_leaves.has_previous %}
+                                <a href="?page_rejected=1" class="mx-2" style="text-decoration: none;">First</a>
+                                <a href="?page_rejected={{ rejected_leaves.previous_page_number }}" class="mx-2" style="text-decoration: none;">Previous</a>
+                            {% endif %}
+                            <span class="current-page">Page {{ rejected_leaves.number }} of {{ rejected_leaves.paginator.num_pages }}</span>
+                            {% if rejected_leaves.has_next %}
+                                <a href="?page_rejected={{ rejected_leaves.next_page_number }}" class="mx-2" style="text-decoration: none;">Next</a>
+                                <a href="?page_rejected={{ rejected_leaves.paginator.num_pages }}" class="mx-2" style="text-decoration: none;">Last</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleReason(reasonId) {
+        var reasonDiv = document.getElementById(reasonId);
+        if (reasonDiv.style.display === "none") {
+            reasonDiv.style.display = "block";
+        } else {
+            reasonDiv.style.display = "none";
+        }
+    }
+</script>
+
+{% endblock %}

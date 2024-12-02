@@ -1,0 +1,143 @@
+{% extends 'main/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Leave Request Form{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <br>
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert 
+                {% if message.tags == 'success' %}
+                    alert-success
+                {% elif message.tags == 'warning' %}
+                    alert-warning
+                {% elif message.tags == 'error' %}
+                    alert-danger 
+                {% else %}
+                    alert-info
+                {% endif %}" role="alert">
+                <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+        <br><br>
+        <form method="POST" enctype="multipart/form-data"class="shadow-lg p-4 rounded bg-light">
+            {% csrf_token %}
+            <h2 class="mb-4 text-center"><strong>Leave Request Form</strong></h2>
+
+            <div class="mb-4">
+                <label for="employee-name" class="form-label"><i class="fa-regular fa-user"></i> Employee Name</label>
+                <input type="text" class="form-control" id="employee-name" value="{{ request.user.first_name }} {{ request.user.last_name }}" readonly>
+            </div>
+
+            <div class="mb-4">
+                <label for="employee-number" class="form-label"><i class="fa-regular fa-user"></i> Employee Username</label>
+                <input type="text" class="form-control" id="employee-number" value="{{ request.user.username }}" readonly>
+            </div>
+
+            <div class="mb-4">
+                <label for="leave_type" class="form-label">Leave Type</label>
+                {{ form.leave_type|add_class:"form-select" }}
+            </div>
+
+            <div class="mb-4">
+                <label for="start_date" class="form-label"><i class="fa-regular fa-calendar-days"></i> Start Date</label>
+                {{ form.start_date|add_class:"form-control" |attr:"id:start_date" }}
+            </div>
+
+            <div class="mb-4">
+                <label for="end_date" class="form-label"><i class="fa-regular fa-calendar-days"></i> End Date</label>
+                {{ form.end_date|add_class:"form-control" |attr:"id:end_date" }}
+            </div>
+
+            <div class="mb-4" id="reason-container" style="display: none;">
+                <label for="reason" class="form-label">Reason for Leave</label>
+                {{ form.reason|add_class:"form-control" }}
+            </div>
+
+            <div class="mb-4">
+                <label for="document" class="form-label"><i class="fa-solid fa-upload"></i> Upload Document (Optional)</label>
+                {{ form.document|add_class:"form-control" }}
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn w-100" style=" background-color: #a8dadc;" id="submit-btn">Submit Request</button>
+            </div>
+
+            <div class="mt-3 text-center">
+                <a href="{% url 'employee_leave:leave_requests' %}" class="btn btn-secondary w-100"><i class="fa-solid fa-arrow-left"></i> Back to Leave Requests</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function getTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        document.getElementById('start_date').setAttribute('min', getTodayDate());
+        document.getElementById('end_date').setAttribute('min', getTodayDate());
+
+        function isLeaveDateTaken(startDate, endDate) {
+            const existingLeaves = JSON.parse('{{ existing_leaves_json|escapejs }}');
+            return existingLeaves.some(leave => {
+                const leaveStartDate = new Date(leave.start_date);
+                const leaveEndDate = new Date(leave.end_date);
+                return (startDate <= leaveEndDate && endDate >= leaveStartDate);
+            });
+        }
+
+        document.getElementById('start_date').addEventListener('change', function() {
+            const startDate = new Date(this.value);
+            startDate.setDate(startDate.getDate() + 1);
+            const day = String(startDate.getDate()).padStart(2, '0');
+            const month = String(startDate.getMonth() + 1).padStart(2, '0');
+            const year = startDate.getFullYear();
+            const endDate = `${year}-${month}-${day}`;
+            document.getElementById('end_date').value = endDate;
+            document.getElementById('end_date').setAttribute('min', endDate);
+
+            if (isLeaveDateTaken(new Date(this.value), new Date(endDate))) {
+                alert("There is already a pending or approved leave request for the selected date range.");
+                document.getElementById('submit-btn').disabled = true;
+            } else {
+                document.getElementById('submit-btn').disabled = false;
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+
+            if (isLeaveDateTaken(new Date(startDate), new Date(endDate))) {
+                alert("There is already a pending or approved leave request for the selected date range.");
+                document.getElementById('submit-btn').disabled = true;
+            }
+        });
+
+        const leaveTypeSelect = document.querySelector('select[name="leave_type"]');
+        const reasonField = document.querySelector('textarea[name="reason"]');
+        const reasonContainer = document.getElementById('reason-container');
+
+        leaveTypeSelect.addEventListener('change', function() {
+            if (leaveTypeSelect.value === 'other') {
+                reasonContainer.style.display = 'block';
+                reasonField.required = true;
+            } else {
+                reasonContainer.style.display = 'none';
+                reasonField.required = false;
+            }
+        });
+
+        if (leaveTypeSelect.value === 'other') {
+            reasonContainer.style.display = 'block';
+            reasonField.required = true;
+        }
+    </script>
+{% endblock %}

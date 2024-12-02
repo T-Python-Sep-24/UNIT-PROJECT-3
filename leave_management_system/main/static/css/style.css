@@ -1,0 +1,72 @@
+.navbar {
+    background-color: #bee1e2;
+    padding: 20px 20px;
+}
+
+.navbar-brand {
+    font-size: 1.8rem;
+    color: white;
+}
+
+.navbar a {
+    color: black;
+    font-size: 1rem;
+}
+
+.navbar a:hover {
+    color: rgba(0, 0, 0, 0.422);
+}
+
+.navbar-nav {
+    margin-left: auto;
+}
+
+.navbar-text {
+    color: black;
+    font-size: 1rem;
+    margin-right: 15px;
+}
+
+.logout-btn {
+    color: white;
+    font-size: 1rem;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: rgba(255, 100, 100, 0.911);
+}
+
+.navbar .container-fluid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-img {
+    height: 40px;
+    margin-right: 15px;
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-item {
+    margin-left: 15px;
+}
+
+footer {
+    background-color: #bee1e2;
+    color: black;
+    text-align: center;
+    padding: 15px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}   

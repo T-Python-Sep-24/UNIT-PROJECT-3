@@ -1,0 +1,102 @@
+{% extends 'main/base.html' %}
+
+{% block title %}User List{% endblock %}
+
+{% block content %}
+<br>
+<br>
+    <div class="container mt-2">
+        {% if messages %}
+    {% for message in messages %}
+        <div class="alert 
+            {% if message.tags == 'success' %}
+                alert-success
+            {% elif message.tags == 'warning' %}
+                alert-warning
+            {% elif message.tags == 'error' %}
+                alert-danger 
+            {% else %}
+                alert-info
+            {% endif %}" role="alert">
+            <p>{{ message }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+        <br>
+        <h2 class="display-4 text-center"><strong>All Users</strong></h2>
+<br>
+        <form method="GET" class="mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="search" class="form-label">Search</label>
+                    <input type="text" name="search" id="search" class="form-control" value="{{ request.GET.search }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="role" class="form-label">Filter by Role</label>
+                    <select name="role" id="role" class="form-control">
+                        <option value="">All Roles</option>
+                        {% for group in groups %}
+                            <option value="{{ group.name }}" {% if group.name == request.GET.role %}selected{% endif %}>
+                                {{ group.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn  w-100 shadow-lg" style="background-color: #a8dadc;"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </div>
+        </form>
+<br>
+        <table class="table table-bordered">
+            <thead>
+                <tr style="background-color: #a8dadc;">
+                    <th><i class="fa-solid fa-hashtag"></i></th>
+                    <th><i class="fa-solid fa-user"></i> Username</th>
+                    <th><i class="fa-solid fa-user"></i> First Name</th>
+                    <th><i class="fa-solid fa-user"></i> Last Name</th>
+                    <th><i class="fa-regular fa-envelope"></i> Email</th>
+                    <th><i class="fa-regular fa-star"></i> Role</th>
+                    <th><i class="fa-solid fa-user"></i> Manager</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in user_data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ data.user.username }}</td>
+                    <td>{{ data.user.first_name }}</td>
+                    <td>{{ data.user.last_name }}</td>
+                    <td>{{ data.user.email }}</td>
+                    <td>
+                        {% for group in data.user.groups.all %}
+                            {{ group.name }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% if data.manager %}
+                            {{ data.manager.username }}
+                        {% else %}
+                            No manager assigned
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if data.user.is_staff %}
+                            <a href="{% url 'hr_leave_management:edit_manager' data.user.id %}" class="btn btn-sm" style="background-color: rgb(255, 205, 112);"><i class="fa-solid fa-pen-to-square"></i></a>
+                        {% else %}
+                            <a href="{% url 'hr_leave_management:edit_user' data.user.id %}" class="btn btn-sm" style="background-color: rgb(255, 205, 112);"><i class="fa-solid fa-pen-to-square"></i></a>
+                        {% endif %}
+                        <a href="{% url 'hr_leave_management:delete_user' data.user.id %}" class="btn btn-sm" style="background-color: rgba(255, 100, 100, 0.911);" onclick="return confirm('Are you sure you want to delete this user?');"><i class="fa-regular fa-trash-can"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="mt-4 d-flex justify-content-center">
+            <a href="{% url 'hr_leave_management:hr_dashboard' %}" class="back-link mt-2" style="text-decoration: none;"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+    </div>
+    <br> <br> <br> <br> <br> <br>
+{% endblock %}
