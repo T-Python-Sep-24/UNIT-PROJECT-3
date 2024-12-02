@@ -48,9 +48,28 @@
             </div>
             {% endfor %}
         </div>
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if opportunities.has_previous %}
+                <a href="?search={{ request.GET.search }}&city={{ request.GET.city }}&focus_industry={{ request.GET.focus_industry }}&page=1">&laquo; First</a>
+                <a href="?search={{ request.GET.search }}&city={{ request.GET.city }}&focus_industry={{ request.GET.focus_industry }}&page={{ opportunities.previous_page_number }}">&lsaquo; Previous</a>
+                {% endif %}
+        
+                <span class="current">
+                    Page {{ opportunities.number }} of {{ opportunities.paginator.num_pages }}
+                </span>
+        
+                {% if opportunities.has_next %}
+                <a href="?search={{ request.GET.search }}&city={{ request.GET.city }}&focus_industry={{ request.GET.focus_industry }}&page={{ opportunities.next_page_number }}">Next &rsaquo;</a>
+                <a href="?search={{ request.GET.search }}&city={{ request.GET.city }}&focus_industry={{ request.GET.focus_industry }}&page={{ opportunities.paginator.num_pages }}">Last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
         {% else %}
         <p class="no-results">No opportunities found. Try adjusting your filters or search query.</p>
         {% endif %}
+
     </div>
 </main>
 {% endblock %}

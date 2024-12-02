@@ -49,11 +49,11 @@
           Welcome,
           {% if request.user.volunteerprofile %}
           <a href="{% url 'accounts:volunteer_profile' request.user.username %}" class="profile-link">
-            {{ request.user.username }}
+            {{ request.user.username|truncatechars:10 }}
           </a>
           {% elif request.user.organizationprofile %}
           <a href="{% url 'accounts:organization_profile' request.user.username %}" class="profile-link">
-            {{ request.user.username }}
+            {{ request.user.username|truncatechars:10 }}
           </a>
           {% endif %}
         </span>

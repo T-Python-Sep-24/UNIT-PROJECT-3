@@ -17,6 +17,9 @@ class Opportunity(models.Model):
         ('Education', 'Education'),
         ('Environment', 'Environment'),
         ('Technology', 'Technology'),
+        ('Religious', 'Religious'),
+        ('Logistics', 'Logistics')
+        
         
     ]
 

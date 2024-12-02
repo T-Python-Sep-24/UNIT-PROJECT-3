@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import Application
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 
 
@@ -18,7 +20,7 @@ def all_opportunities_view(request:HttpRequest):
     city_filter = request.GET.get('city', '').strip()
     focus_industry_city_filter= request.GET.get('focus_industry', '').strip()
 
-    cities = Opportunity.objects.values_list('city', flat=True).distinct()
+    cities = Opportunity.objects.values_list('city', flat=True).distinct().order_by('city')
 
     opportunities = Opportunity.objects.all()
 
@@ -34,7 +36,20 @@ def all_opportunities_view(request:HttpRequest):
     if focus_industry_city_filter:
         opportunities = opportunities.filter(focus_industry__iexact=focus_industry_city_filter)
 
-    context = {'opportunities': opportunities, 'cities': cities, 'focus_industries': Opportunity.FOCUS_INDUSTRY_CHOICES,}
+
+    paginator = Paginator(opportunities, 6)  
+    page = request.GET.get('page')
+
+    try:
+        paginated_opportunities = paginator.page(page)
+
+    except PageNotAnInteger:
+        paginated_opportunities = paginator.page(1)
+
+    except EmptyPage:
+        paginated_opportunities = paginator.page(paginator.num_pages)    
+
+    context = {'opportunities': paginated_opportunities, 'cities': cities, 'focus_industries': Opportunity.FOCUS_INDUSTRY_CHOICES,}
 
     
     return render(request, 'opportunities/all_opportunities.html', context)
