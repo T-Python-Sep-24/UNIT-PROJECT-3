@@ -35,7 +35,7 @@
                     </div>
                     <div class="detail-box">
                         <h5>Talented Artists</h5>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Praesentium, reiciendis.</p>
+                        <p>We carefully select highly skilled artists who excel in various specialties to ensure top-notch service for every customer.</p>
                     </div>
                 </div>
             </div>
@@ -45,8 +45,8 @@
                         <i class="fa-solid fa-house"></i>
                     </div>
                     <div class="detail-box">
-                        <h5>Your Reserved in less 6h</h5>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Praesentium, reiciendis.</p>
+                        <h5>Quick Reservations</h5>
+                        <p>Book your preferred artist in less than 6 hours, ensuring timely service for all your special occasions.</p>
                     </div>
                 </div>
             </div>
@@ -56,8 +56,8 @@
                         <i class="fa-solid fa-house"></i>
                     </div>
                     <div class="detail-box">
-                        <h5> +26k satisfied customer</h5>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Praesentium, reiciendis.</p>
+                        <h5>26K+ Satisfied Customers</h5>
+                        <p>Our happy customers are the heart of BeautiBook. Join them and experience unparalleled services today.</p>
                     </div>
                 </div>
             </div>
@@ -77,10 +77,33 @@
             <!-- Right Side: Text -->
             <div class="col-md-6">
                 <div class="heading-contanier remove-sep">
-                    <h2>#NewArrivals</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est consectetur nulla ipsam omnis pariatur, corporis debitis libero.</p>
+                    <h2>#NewServices</h2>
+                    <p>Explore our latest services, including personalized makeup sessions, on-demand artists, and exclusive bridal packages designed to make your event unforgettable.</p>
                     <a href="">Explore Services</a>
                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Join Us Section -->
+<section class="join-us-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Left Side: Image -->
+            <div class="col-md-6">
+                <img src="{% static 'images/BueatiBook (1).png' %}" class="img-fluid rounded" alt="Join Us">
+            </div>
+            <!-- Right Side: Content -->
+            <div class="col-md-6">
+                <p>
+                    Are you a talented artist looking to showcase your skills and reach new clients? Join BeautiBook today and become part of our growing family. Connect with thousands of customers and grow your business effortlessly.
+                </p>
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'providers:add_artist_view' %}" class="btn primary-btn mt-3">Click Here</a>
+                {% else %}
+                <a href="{% url 'accounts:signup_view' %}" class="btn primary-btn mt-3">Click Here</a>
+                {% endif %}
             </div>
         </div>
     </div>

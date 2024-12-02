@@ -166,9 +166,9 @@
     </form>
     {% if data_filter == 'products' %}
     <a class="btn btn-dark ms-auto" href="{% url 'services:add_product_view' %}">Add Product</a>
+    {% endif %}
     {% if request.user.is_superuser  %}
     <a class="btn btn-dark ms-auto" href="{% url 'providers:add_artist_view' %}">Add Artist</a>
-    {% endif %}
     {% endif %}
 </div>
 {% if product  %}

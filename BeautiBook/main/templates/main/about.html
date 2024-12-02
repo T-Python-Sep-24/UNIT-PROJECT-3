@@ -2,62 +2,168 @@
 {% load static %}
 
 {% block title %}About Us{% endblock %}
-{% block style %}{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        background-color: #f9f6f4; /* Off-white background */
+    }
+
+    .about-section {
+        padding: 60px 0;
+    }
+
+    .about-container {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .about-text {
+        flex: 1 1 50%;
+        padding: 20px;
+    }
+
+    .about-text h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #4a4a4a; /* Neutral dark gray */
+        margin-bottom: 20px;
+    }
+
+    .about-text p {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: #757575; /* Neutral gray */
+        margin-bottom: 20px;
+    }
+
+    .about-text .btn {
+        background-color: #f4c6c2; /* Light pink button */
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        transition: background-color 0.3s ease;
+        margin-right: 10px;
+    }
+
+    .about-text .btn:hover {
+        background-color: #e8b3ad; /* Slightly darker pink */
+    }
+
+    .about-image {
+        flex: 1 1 50%;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .about-image img {
+        max-width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(244, 198, 194, 0.2); /* Light pink shadow */
+    }
+
+    .features-section {
+        background-color: #fff;
+        padding: 40px 0;
+    }
+
+    .feature-card {
+        background: #fff;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(244, 198, 194, 0.2); /* Light pink shadow */
+        text-align: center;
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(244, 198, 194, 0.3); /* Stronger shadow */
+    }
+
+    .feature-card h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #4a4a4a; /* Neutral dark gray */
+    }
+
+    .feature-card p {
+        color: #757575; /* Neutral gray */
+        font-size: 1rem;
+    }
+
+    .feature-icon {
+        background-color: #f4c6c2; /* Light pink */
+        color: #fff;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 15px;
+        font-size: 1.5rem;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<header class="bg-dark py-5">
-    <div class="container px-5">
-        <div class="row gx-5 align-items-center justify-content-center">
-            <div class="col-lg-8 col-xl-7 col-xxl-6">
-                <div class="my-5 text-center text-xl-start">
-                    <h1 class="display-5 fw-bolder text-white mb-2">About Us</h1>
-                    <p class="lead fw-normal text-white-50 mb-4">
-                        Discover who we are and why we are your trusted partner for booking your dream car. 
-                        With years of experience and a passion for excellence, we aim to deliver exceptional service to every customer.
-                    </p>
-                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                        <a class="btn btn-outline-light btn-lg px-4 me-sm-3" href="#why-us">See artists</a>
-                        <a class="btn btn-outline-light btn-lg px-4" href="#history">Contact Us Right Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
-                <img class="img-fluid rounded-3 my-5" 
-                     src="" 
-                     alt="About Us - Luxury Car Booking" />
+<section class="about-section">
+    <div class="container about-container">
+        <div class="about-image">
+            <img src="{% static 'images/BueatiBook.png' %}" alt="About Us Image">
+        </div>
+        <div class="about-text">
+            <p>
+                Discover who we are and why we are your trusted partner for connecting with talented artists. 
+                With years of experience and a passion for creativity, we aim to deliver exceptional service to every customer.
+            </p>
+            <div>
+                <a class="btn" href="{% url 'providers:artists_view' %}">See Artists</a>
+                <a class="btn" href="{% url 'main:contact_view' %}">Contact Us Now</a>
             </div>
         </div>
     </div>
-</header>
+</section>
 
-<section class="pt-4">
-    <div class="container px-lg-5">
-        <div class="row gx-lg-5">
-            <div class="col-lg-6 col-xxl-4 mb-5">
-                <div class="card bg-light border-0 h-100">
-                    <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
-                        <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><i class="bi bi-collection"></i></div>
-                        <h2 class="fs-4 fw-bold">Why Us ?</h2>
-                        <p class="mb-0">We have more than 1000000+ satisfied Customers!</p>
+<section class="features-section">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-people"></i>
                     </div>
+                    <h2>Why Us?</h2>
+                    <p>We have more than 1,000,000 satisfied customers!</p>
                 </div>
             </div>
-                <div class="col-lg-6 col-xxl-4 mb-5">
-                    <div class="card bg-light border-0 h-100">
-                        <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><i class="bi bi-card-heading"></i></div>
-                            <h2 class="fs-4 fw-bold">Since 1947</h2>
-                            <p class="mb-0">After the World War 2</p>
-                        </div>
+            <div class="col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-calendar"></i>
                     </div>
+                    <h2>Since 1947</h2>
+                    <p>Connecting people to art and creativity since the post-war era.</p>
                 </div>
-                <div class="col-lg-6 col-xxl-4 mb-5">
-                    <div class="card bg-light border-0 h-100">
-                        <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><i class="bi bi-card-heading"></i></div>
-                            <h2 class="fs-4 fw-bold">Speed service </h2>
-                            <p class="mb-0">Get your artist right to your doorstep!</p>
-                        </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-speedometer2"></i>
                     </div>
+                    <h2>Speed Service</h2>
+                    <p>Get access to your favorite artists, right at your fingertips!</p>
                 </div>
-        </section>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

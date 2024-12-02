@@ -98,7 +98,7 @@
 {% block content %}
 <div class="container d-flex justify-content-center mt-5">
     <div class="card">
-        <h2 class="text-center mb-4">Add New Artist</h2>
+        <h2 class="text-center mb-4">New Artist</h2>
         <form method="POST" enctype="multipart/form-data" action="{% url 'providers:add_artist_view' %}">
             {% csrf_token %}
             
@@ -138,7 +138,7 @@
             </div>
 
             <div class="text-center">
-                <button type="submit" class="btn btn-dark">Save Artist</button>
+                <button type="submit" class="btn btn-dark">Save</button>
             </div>
         </form>
     </div>

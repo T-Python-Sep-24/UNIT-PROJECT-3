@@ -12,6 +12,11 @@ body {
     overflow-x: hidden;
 }
 
+.about-section .about-image img{
+    width: 400px;
+    height: auto;
+}
+
 .hero-section {
     background: linear-gradient(to right, #fae2df, #f8d7d3);
     padding: 20px 0;
@@ -436,4 +441,44 @@ a, a:hover, a:focus {
 
 .footer-bottom a:hover {
     color: #e8b3ad; /* Slightly darker pink for hover */
+}
+/* Join Us Section */
+.join-us-section {
+    background-color: #fff7f0; /* Soft beige background */
+    padding: 60px 0;
+}
+
+.join-us-section h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4a4a4a; /* Neutral dark gray */
+    margin-bottom: 20px;
+}
+
+.join-us-section p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #757575; /* Neutral gray */
+    margin-bottom: 20px;
+}
+
+.join-us-section .btn {
+    background-color: #f4c6c2; /* Light pink button */
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.join-us-section .btn:hover {
+    background-color: #e8b3ad; /* Slightly darker pink */
+}
+
+.join-us-section img {
+    width: 100%; /* Ensure the image is responsive */
+    max-width: 400px;
+    border-radius: 12px; /* Rounded corners for the image */
 }
