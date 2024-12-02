@@ -11,7 +11,12 @@
     <!-- Navigation Bar -->
     <header>
         <nav>
-            <ul>
+            <div class="logo">
+                <a href="{% url 'main:homepage' %}">
+                    <img src="{% static 'main/images/logo.png' %}" alt="Platform Logo" class="logo-image">
+                </a>
+            </div>
+            <ul class="navbar">
                 <li><a href="{% url 'main:homepage' %}">Home</a></li>
                 <li><a href="{% url 'main:about' %}">About Us</a></li>
                 <li><a href="{% url 'main:contact' %}">Contact</a></li>
@@ -19,7 +24,7 @@
                     <li>
                         <form method="post" action="{% url 'logout' %}" style="display:inline;">
                             {% csrf_token %}
-                            <button type="submit" style="background:none; border:none; color:blue; cursor:pointer;">Logout</button>
+                            <button type="submit" class="btn2"><span class="spn2">Logout</span></button>
                         </form>
                     </li>
                     <li>Welcome, {{ user.username }} ({{ user.profile.role|default:"Role not assigned" }})</li>
@@ -27,19 +32,19 @@
                     <li><a href="{% url 'login' %}">Login</a></li>
                     <li><a href="{% url 'volunteers:register_as_volunteer' %}">Register as Volunteer</a></li>
                     <li><a href="{% url 'main:register_organization' %}">Register as Organization</a></li>
-
                 {% endif %}
                 {% if user.is_authenticated and user.profile.role == 'organization' %}
-                  <li><a href="{% url 'organization:add_opportunity' %}">Add Opportunity</a></li>
+                    <li><a href="{% url 'organization:add_opportunity' %}">Add Opportunity</a></li>
                 {% endif %}
-
             </ul>
         </nav>
     </header>
 
     <main>
-        {% block content %}
-        {% endblock %}
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
     </main>
 
     <footer>

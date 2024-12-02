@@ -2,13 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from main.models import Location
 
-
 class Organization(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='organization')
     name = models.CharField(max_length=255)
     description = models.TextField()
     website = models.URLField(blank=True, null=True)
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, related_name='organizations')
+    image = models.ImageField(upload_to='organizations/images/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -23,6 +23,7 @@ class Opportunity(models.Model):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     date_posted = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='opportunities/images/', blank=True, null=True)  # Ensure this is here
 
     def __str__(self):
         return self.title

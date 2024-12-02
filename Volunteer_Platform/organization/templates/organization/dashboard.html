@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Organization Dashboard{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Organization Dashboard</h1>
+<p>Manage your opportunities and view volunteer applications here.</p>
+
+<h2>Your Opportunities</h2>
+<ul>
+    {% for opportunity in opportunities %}
+        <li>
+            <a href="{% url 'opportunities:opportunity_detail' opportunity.id %}">{{ opportunity.title }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

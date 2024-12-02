@@ -1,8 +1,47 @@
 {% extends 'main/base.html' %}
 
+{% load static %}
+
 {% block title %}About Us{% endblock %}
 
 {% block content %}
-    <h1>About Us</h1>
-    <p>We connect skilled volunteers with organizations in need.</p>
+    <div class="about-card">
+        <div class="card-content">
+            <h1>🌟 About Us 🌟</h1>
+            <p>Welcome to our platform! We connect skilled volunteers with organizations in need, fostering a community of support and growth. 🤝</p>
+
+            <h2>Our Mission 🎯</h2>
+            <p>To empower communities by facilitating meaningful volunteer opportunities and creating lasting impacts. 🌍</p>
+
+            <h2>What We Do 🛠️</h2>
+            <ul>
+                <li>🔍 Match volunteers with organizations based on skills and needs.</li>
+                <li>📈 Provide resources and training for volunteers.</li>
+                <li>💬 Facilitate communication between volunteers and organizations.</li>
+                <li>🌱 Promote sustainability through community projects.</li>
+                <li>🤗 Foster inclusivity and diversity in volunteer opportunities.</li>
+            </ul>
+
+            <h2>Our Values 💖</h2>
+            <p>We believe in:</p>
+            <ul>
+                <li>🤝 **Community**: Building strong, supportive networks.</li>
+                <li>🌟 **Integrity**: Upholding honesty and accountability.</li>
+                <li>📚 **Growth**: Encouraging personal and professional development.</li>
+                <li>🌍 **Impact**: Making a difference in local and global communities.</li>
+            </ul>
+
+            <h2>Success Stories 📖</h2>
+            <p>Hear from those who have made a difference:</p>
+            <blockquote>
+                <p>"Volunteering with this organization has changed my life. I've met incredible people and contributed to meaningful projects!" – <strong>Jane D.</strong></p>
+            </blockquote>
+            <blockquote>
+                <p>"Thanks to the volunteers, our community garden has flourished, providing fresh produce for everyone!" – <strong>Mark T.</strong></p>
+            </blockquote>
+
+            <h2>Join Us! 🚀</h2>
+            <p>If you're a skilled volunteer or an organization in need, <a href="{% url 'volunteers:register_as_volunteer' %}">register as a volunteer today</a> and make a difference! 🌈</p>
+        </div>
+    </div>
 {% endblock %}

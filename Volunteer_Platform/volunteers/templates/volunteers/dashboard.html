@@ -1,13 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Volunteer Dashboard</title>
-</head>
-<body>
-    <h1>Welcome to the Volunteer Dashboard, {{ request.user.username }}</h1>
-    <ul>
-        <li><a href="{% url 'volunteers:opportunity_list' %}">Browse Opportunities</a></li>
-        <li><a href="{% url 'volunteers:profile' %}">View Profile</a></li>
-    </ul>
-</body>
-</html>
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Volunteer Dashboard{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{ user.username }}</h1>
+
+<div class="profile-info">
+    {% if user.profile.photo %}
+        <img src="{{ user.profile.photo.url }}" alt="Profile Picture" class="profile-picture">
+    {% else %}
+        <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Picture" class="profile-picture">
+    {% endif %}
+    <h2>{{ user.profile.name }}</h2>
+    <p><strong>Bio:</strong> {{ user.profile.bio }}</p>
+    <p><strong>Location:</strong> {{ user.profile.location }}</p>
+</div>
+
+<!-- Edit Profile Button -->
+<a href="{% url 'volunteers:edit_profile' %}" class="button btn2">
+    <span class="spn2">Edit Profile</span>
+</a>
+
+<hr>
+
+<h2>Your Applications</h2>
+<ul>
+    <!-- Loop through the user's applications (if implemented) -->
+</ul>
+
+{% endblock %}

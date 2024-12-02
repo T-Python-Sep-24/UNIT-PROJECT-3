@@ -12,5 +12,5 @@ urlpatterns = [
     path('auth/', include('django.contrib.auth.urls')),  # Authentication views
 ]
 
-if settings.DEBUG:  # For serving media files during development
+if settings.DEBUG:  
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

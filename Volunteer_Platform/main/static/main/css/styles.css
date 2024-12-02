@@ -9,7 +9,7 @@ body, h1, h2, h3, p, ul, ol, li, a {
 /* Body Styling */
 body {
     font-family: Arial, sans-serif;
-    background: url('/static/images/backg.png') no-repeat center center fixed;
+    background: url('../images/backg.png') no-repeat center center fixed; /* Adjust path as necessary */
     background-size: cover;
     color: #71322c;
     line-height: 1.6;
@@ -17,25 +17,39 @@ body {
 
 /* Header */
 header {
-    background-color: rgba(67, 63, 63, 0.805);
-    padding: 15px 20px;
+    background-color: #2e5a52; /* Dark teal background */
+    padding: 12px 20px; /* Increased padding for more space */
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Added shadow for depth */
+}
+
+header .logo {
+    margin-right: 20px; /* Space between logo and nav links */
+}
+
+header nav {
+    display: flex; /* Ensure nav items are in a row */
 }
 
 header nav a {
-    color: #312f2f;
-    margin-right: 20px;
-    font-size: 18px;
-    font-weight: bold;
-    transition: color 0.3s;
+    color: #ffffff; /* Changed link color to white for better contrast */
+    margin-right: 20px; /* Space between nav items */
+    font-size: 18px; /* Font size for nav items */
+    font-weight: bold; /* Bold text */
+    text-decoration: none; /* Remove underline from links */
+    transition: color 0.3s, transform 0.3s; /* Smooth color transition and scale */
 }
 
 header nav a:hover {
-    color: #73e6d2;
+    color: #d0a71e; /* Hover color for links */
+    transform: scale(1.1); /* Slightly increase size on hover */
 }
 
+header nav a:last-child {
+    margin-right: 0; /* Remove margin for the last link */
+}
 /* Main Content */
 main {
     padding: 20px;
@@ -46,8 +60,10 @@ main {
 /* Titles */
 h1, h2 {
     text-align: center;
+    font-size: 2em;
     margin-bottom: 20px;
-    color: #f0f0ef;
+    color: #06745f;
+    ;
 }
 
 /* Horizontal Scroll Container */
@@ -75,68 +91,31 @@ h1, h2 {
     background-color: #151414;
 }
 
-/* Card Styling */
+/* From Uiverse.io by Tiagoadag */ 
 .card {
-    position: relative;
-    width: 770px;
-    height: 340px;
-    background-color: #243137bd; /* Changed to original color */
-    border-radius: 71px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    perspective: 548px;
-    box-shadow: 0 0 0 5px #ffffff56; /* Added from the second snippet */
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.card:hover {
-    transform: scale(1.05); /* Modified scaling */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Slightly adjusted shadow */
-}
-
-/* Card Content */
-.card__content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #243137c0; /* Maintain background */
-    transform: rotateX(-90deg);
-    transform-origin: bottom;
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.card:hover .card__content {
-    transform: rotateX(0deg);
-}
-
-/* Card Image */
-.card img {
-    width: 38%;
-    height: 160px;
-    object-fit: cover;
-}
-
-/* Card Title */
-.card__title {
-    margin: 0;
-    font-size: 20px; /* Adjusted font size */
-    color: #bd9f67; /* Maintained original color */
-    font-weight: 700;
-}
-
-/* Card Description */
-.card__description {
-    margin: 10px 0 0;
-    font-size: 14px;
-    color: #ffffff; /* Changed to match original text color */
-    line-height: 1.4;
-}
+    width: 190px;
+    height: 254px;
+    background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+    border-radius: 20px;
+    transition: all .3s;
+   }
+   
+   .card2 {
+    width: 190px;
+    height: 254px;
+    background-color: #1a1a1a;
+    border: radius 20px;
+    transition: all .2s;
+   }
+   
+   .card2:hover {
+    transform: scale(0.98);
+    border-radius: 20px;
+   }
+   
+   .card:hover {
+    box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.30);
+   }
 
 /* Logo and Animation */
 #logo-main, #logo-second {
@@ -184,61 +163,6 @@ h1, h2 {
     opacity: 0;
     letter-spacing: 7px;
     transition: all 0.5s ease-in-out;
-}
-
-.card:hover .bottom-text {
-    letter-spacing: 3px;
-    opacity: 1;
-    transform: translateX(-50%);
-}
-
-/* Button Styling */
-.card .button {
-    display: inline-block;
-    background: linear-gradient(45deg, #0ce39a, #7f4a00, #ffbd17); /* Same gradient as background */
-    color: #ffffff;
-    padding: 6px 40px;
-    margin: 31px 0;
-    border-radius: 9px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.card .button span {
-    position: relative;
-    z-index: 1;
-}
-
-.card .button::before {
-    content: "";
-    position: absolute;
-    inset: 1px;
-    background: #272727;
-    border-radius: 9px;
-    transition: opacity 0.3s;
-}
-
-.card .button:hover::before {
-    opacity: 0.7;
-}
-
-.card .button::after {
-    content: "";
-    color: #ffffff;
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(45deg, #0ce39a, #7f4a00, #ffbd17); /* Same gradient as background */
-    border-radius: 9px;
-    filter: blur(20px);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-
-.card .button:hover::after {
-    opacity: 1;
 }
 
 /* Brand List Styling */
@@ -337,53 +261,68 @@ footer {
     color: #000;
     pointer-events: none;
 }
-
-/* From Uiverse.io by nima-mollazadeh */
-.button {
+/* From Uiverse.io by TISEPSE */ 
+.btn2 {
     position: relative;
-    text-decoration: none; /* Remove underline */
-    color: #ffff; /* Text color */
-    background: linear-gradient(45deg, #0ce39a, #7f4a00, #ffbd17); /* Same gradient as background */
-    padding: 14px 25px; /* Padding around the text */
-    border-radius: 10px; /* Rounded corners */
-    font-size: 1.25em; /* Font size */
-    cursor: pointer; /* Pointer cursor on hover */
-}
-
-.button span {
+    display: inline-block;
+    padding: 13px 18px;
+    border: 2px solid #fefefe;
+    text-transform: uppercase;
+    color: #fefefe;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+  
+  .btn2::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% - -2px);
+    background-color: #21212184;
+    transition: 0.3s ease-out;
+    transform: scaleY(1);
+  }
+  
+  .btn2::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% - 50px);
+    background-color: #212121;
+    transition: 0.3s ease-out;
+    transform: scaleY(1);
+  }
+  
+  .btn2:hover::before {
+    transform: translateY(-25px);
+    height: 0;
+  }
+  
+  .btn2:hover::after {
+    transform: scaleX(0);
+    transition-delay: 0.15s;
+  }
+  
+  .btn2:hover {
+    border: 2px solid #fefefe;
+  }
+  
+  .btn2 span {
     position: relative;
-    z-index: 1; /* Ensures text is above other layers */
-}
-
-.button::before {
-    content: "";
-    position: absolute;
-    inset: 1px; /* Creates an inset effect */
-    background: #272727; /* Dark background for the inset */
-    border-radius: 9px; /* Rounded corners */
-    transition: 0.5s; /* Transition for hover effect */
-}
-
-.button:hover::before {
-    opacity: 0.7; /* Change opacity on hover */
-}
-
-.button::after {
-    content: "";
-    position: absolute;
-    inset: 0; /* Full size overlay */
-    background: linear-gradient(45deg, #0ce39a, #7f4a00, #ffbd17); /* Same gradient as background */
-    border-radius: 9px; /* Rounded corners */
-    transition: 0.5s; /* Transition for hover effect */
-    opacity: 0; /* Initially hidden */
-    filter: blur(20px); /* Blur effect */
-}
-
-.button:hover::after {
-    opacity: 1; /* Show on hover */
-}
-
-
+    z-index: 3;
+  }
+  
+  button {
+    text-decoration: none;
+    border: none;
+    background-color: transparent;
+  }
 
 .flip-card {
     background-color: transparent;
@@ -435,12 +374,12 @@ footer {
 }
 
 .about-card {
-    background-color: #ffffff3a; /* Card background color */
+    background-color: #dddada97; /* Card background color */
     border: 1px solid #ddd; /* Border for the card */
     border-radius: 8px; /* Rounded corners */
     padding: 20px; /* Inner padding */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
-    max-width: 600px; /* Maximum width of the card */
+    max-width: 900px; /* Maximum width of the card */
     margin: 0 auto; /* Center the card */
 }
 
@@ -448,13 +387,7 @@ footer {
     display: flex;
     flex-direction: column; /* Stack the content vertically */
 }
-/* Basic Reset */
-body, ul, li, a {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    text-decoration: none;
-}
+
 
 /* Header Styling */
 header {
@@ -520,7 +453,7 @@ footer {
     padding: 10px 20px;
     margin: 5px;
     color: #fff;
-    background-color: #007bff;
+    background-color: #f3f5f7;
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
@@ -528,4 +461,106 @@ footer {
 
 .logout-message .button:hover {
     background-color: #0056b3;
+}
+
+/* Opportunity List Styles */
+.opportunity-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center cards */
+    margin: 20px 0; /* Space around the list */
+}
+
+/* Opportunity Card Styles */
+.opportunity-card {
+    background-color: #ffffff; /* White background */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    padding: 15px; /* Padding inside the card */
+    margin: 10px; /* Margin between cards */
+    width: 250px; /* Fixed width for cards */
+    text-align: center; /* Center text */
+    transition: transform 0.2s; /* Smooth transition for hover */
+}
+
+.opportunity-card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+/* Opportunity Title Styles */
+.opportunity-title {
+    font-size: 18px; /* Title font size */
+    color: #243137; /* Title color */
+    text-decoration: none; /* Remove underline */
+    font-weight: bold; /* Bold title */
+    margin-bottom: 10px; /* Space below the title */
+}
+
+/* Button Styling */
+.btn2 {
+    background-color: #7b776f; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px; /* Space above button */
+}
+
+.btn2:hover {
+    background-color: #c08c33; /* Darker green on hover */
+}
+
+/* No Opportunities Message */
+.no-opportunities {
+    text-align: center; /* Center text */
+    color: #666; /* Gray color */
+    font-size: 16px; /* Font size */
+    margin: 20px 0; /* Space around the message */
+}
+
+/* From Uiverse.io by Spacious74 */ 
+.bgblue {
+    background: linear-gradient(135deg, #fffffff5, #3a4b8a, #ffffff98);
+    padding: 1px;
+    border-radius: 1.2rem;
+    box-shadow: 0px 1rem 1.5rem -0.9rem #000000e1;
+    max-width: 800px;
+  }
+  
+  .carddd {
+    font-size: 1rem;
+    color: #e7e7e7;
+    background: linear-gradient(135deg, #0d1120 0%, #585858 43%, #0d1120 100%);
+    padding: 1.5rem;
+    border-radius: 1.2rem;
+  }
+ 
+.navbar {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+}
+
+.navbar li {
+    margin-left: 10px; /* Adjust spacing between nav items */
+}
+
+
+
+
+.logo {
+    display: inline-block;
+    margin-right: 10px; /* Adjust spacing */
+}
+
+.logo-image {
+    height: 50px; /* Set a specific height */
+    width: auto; /* Maintain aspect ratio */
 }

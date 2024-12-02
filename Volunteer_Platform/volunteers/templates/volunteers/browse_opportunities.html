@@ -1,18 +1,20 @@
 {% extends 'main/base.html' %}
-
+{% load static %}
 {% block title %}Browse Opportunities{% endblock %}
 
 {% block content %}
 <h1>Opportunities</h1>
-<ul>
+<div class="opportunity-list">
     {% for opp in opportunities %}
-    <li>
-        <a href="{% url 'organization:opportunity_detail' opp.id %}">{{ opp.title }}</a>
-        <form action="{% url 'volunteers:apply_for_opportunity' opp.id %}" method="post">
+    <div class="opportunity-card">
+        <a href="{% url 'organization:opportunity_detail' opp.id %}" class="opportunity-title">{{ opp.title }}</a>
+        <form action="{% url 'volunteers:apply_for_opportunity' opp.id %}" method="post" class="apply-form">
             {% csrf_token %}
-            <button type="submit">Apply</button>
+            <button type="submit" class="btn2"><span class="spn2">Apply</span></button>
         </form>
-    </li>
+    </div>
+    {% empty %}
+    <div class="no-opportunities">No opportunities available at the moment.</div>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}

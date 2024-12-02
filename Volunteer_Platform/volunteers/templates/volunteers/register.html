@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register as Volunteer</title>
-</head>
-<body>
-    <h1>Register as a Volunteer</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-</body>
-</html>
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Register Volunteer{% endblock %}
+
+{% block content %}
+<h1>Register as an Volunteer</h1>
+<form method="post" class="registration-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn2"><span class="spn2">Register</span></button>
+</form>
+{% endblock %}
