@@ -11,7 +11,6 @@
           </div>
       {% endfor %}
     {% endif %} 
-    <p>You have already sent an adoption request for this pet.</p>
     <a href="{% url 'pets:pet_detail' pet_id=pet.id %}" class="btn btn-primary">Go Back to Pet Details</a>
   </div>
 {% endblock %}

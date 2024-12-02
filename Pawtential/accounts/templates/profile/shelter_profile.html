@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %}
 {% load static %}
-
+{% block title %}{{ profile.username }}{% endblock %}
 {% block content %}
   <div class="container mt-5">
     {% if messages %}
