@@ -1,0 +1,35 @@
+{% extends "main/base.html" %}
+{% block title %}Update Project - {{ project.name }}{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h1>Update Project</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" name="name" id="name" value="{{ project.name }}" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" id="description" rows="4" class="form-control" required>{{ project.description }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="start_date" class="form-label">Start Date</label>
+            <input type="date" name="start_date" id="start_date" value="{{ project.start_date }}" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="end_date" class="form-label">End Date</label>
+            <input type="date" name="end_date" id="end_date" value="{{ project.end_date }}" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="members" class="form-label">Assign Members</label>
+            <select name="members" id="members" class="form-select" multiple>
+                {% for user in user_list %}
+                <option value="{{ user.id }}" {% if user in project.members.all %}selected{% endif %}>{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Project</button>
+    </form>
+</div>
+{% endblock %}

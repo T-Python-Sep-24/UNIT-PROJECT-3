@@ -1,0 +1,89 @@
+{% extends "main/base.html" %}
+{% block title %}Update Task - {{ task.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-primary">Update Task</h2>
+    <div class="card shadow-sm mt-3">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="title" class="form-label">Task Title</label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        value="{{ task.title }}"
+                        class="form-control"
+                        placeholder="Enter task title"
+                        required
+                    >
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        class="form-control"
+                        rows="4"
+                        placeholder="Enter task description"
+                        required
+                    >{{ task.description }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select id="status" name="status" class="form-select" required>
+                        <option value="Not Started" {% if task.status == 'Not Started' %}selected{% endif %}>Not Started</option>
+                        <option value="In Progress" {% if task.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                        <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="priority" class="form-label">Priority</label>
+                    <select id="priority" name="priority" class="form-select" required>
+                        <option value="Low" {% if task.priority == 'Low' %}selected{% endif %}>Low</option>
+                        <option value="Medium" {% if task.priority == 'Medium' %}selected{% endif %}>Medium</option>
+                        <option value="High" {% if task.priority == 'High' %}selected{% endif %}>High</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="due_date" class="form-label">Due Date</label>
+                    <input
+                        type="date"
+                        id="due_date"
+                        name="due_date"
+                        value="{{ task.due_date|date:'Y-m-d' }}"
+                        class="form-control"
+                        required
+                    >
+                </div>
+                <div class="mb-3">
+                    <label for="assigned_to" class="form-label">Assigned To</label>
+                    <select id="assigned_to" name="assigned_to" class="form-select" required>
+                        {% for user in users %}
+                        <option value="{{ user.id }}" {% if task.assigned_to.id == user.id %}selected{% endif %}>
+                            {{ user.username }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="project" class="form-label">Project</label>
+                    <select id="project" name="project" class="form-select" required>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}" {% if task.project.id == project.id %}selected{% endif %}>
+                            {{ project.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Update Task</button>
+            </form>
+        </div>
+        <div class="card-footer text-end">
+            <a href="{% url 'tasks:task_detail' task.id %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
