@@ -7,11 +7,10 @@ import os
 from .models import Flashcard, Review
 from .forms import FlashcardForm
 from utils.pdf_utils import extract_text_with_pymupdf, extract_text_with_ocr, has_meaningful_text
-# from PIL import Image
-# import pytesseract
-# from pdf2image import convert_from_path
-# from PyPDF2 import PdfReader
-# import fitz # PyMuPDF lib
+from utils.api_utils import generate_flashcards_and_test_from_text
+
+import openai
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -94,3 +93,90 @@ def upload_pdf_view(request, start_page=0, end_page=10):
 
     return redirect("main:home_view")
 
+
+def generate_view(request):
+    print(f"\n####### Inside generate view ########\n")    
+    # Example extracted text (this will be dynamic in a real app)
+    extracted_text = """
+     Django Admin
+ﻋﻦ Model ب اﻟﺨﺎﺻﺔ اﻟﺒﻴﺎﻧﺎت وﺗﻌﺪﻳﻞ إﻧﺸﺎء ﻓﻲ ﻳﺴﺎﻋﺪ Admin ب ﺧﺎﺻﺔ واﺟﻬﺔ Django وﻓﺮ
+Superuser إﻧﺸﺎء ﻃﺮﻳﻖ
+ﻟﺪﻳﻨﺎ اﻟﺘﻄﺒﻴﻘﺎت أﺣﺪ أن ﻻﺣﻆ ،settings.py ﻣﻠﻒ ﻋﲆ ﺑﺎﻟﺪﺧﻮل ﻗﻢ ،Superuser ﺑﺈﻧﺸﺎء اﻟﺒﺪء ﻗﺒﻞ
+Admin ﺗﻄﺒﻴﻖ ﻫﻮ
+Admin path وﺟﻮد ﻧﻼﺣﻆ urls.py ﻣﻠﻒ ﻓﺘﺢ ﻋﻨﺪ وأﻳﻀﺎ
+ 
+ 
+1
+2
+3
+4
+5
+اﻷواﻣﺮ ﺑﻜﺘﺎﺑﺔ وﻧﻘﻮم  Admin اﻟـ ﻓﻲ اﺿﺎﻓﺘﻪ ﻧﺮﻳﺪ اﻟﺬي ﺑﺎﻟﺘﻄﺒﻴﻖ اﻟﺨﺎص admin.py ﻣﻠﻒ ﺑﻔﺘﺢ ﻧﻘﻮم
+:اﻟﺘﺎﻟﻴﺔ
+from django.contrib import admin
+from .models import Movies_Info
+admin.site.register(Movies_Info)
+:ﺑﺎﻟﺘﺎﻟﻲ ﻗﻤﻨﺎ اﻟﺴﺎﺑﻘﺔ اﻷﺳﻄﺮ ﻓﻲ
+ .Movies_Info, Publisher, Contributor, MovieContributor, Review ل import ﻋﻤﻞ
+.Admin ﻟﺘﻄﺒﻴﻖ ﻣﺘﺎﺣﺔ models ﺑﺠﻌﻞ ﺗﺴﺎﻋﺪ وﻫﻲ register method اﺳﺘﺨﺪام
+:اﻷواﻣﺮ ﺑﺘﻨﻔﻴﺬ ﻧﻘﻮم
+python manage.py createsuperuser
+.اﻷﻣﺮ ﻛﺘﺎﺑﺔ ﺛﻢ ،ﻧﺮﻳﺪ اﻟﺬي password و email و username ﺑﺈدﺧﺎل  ﻧﻘﻮم ﺛﻢ
+python manage.py runserver
+(http://127.0.0.1:8000/admin) اﻟﺘﺎﻟﻲ اﻟﺮاﺑﻂ ﻋﲆ ﺑﺎﻟﺪﺧﻮل ﻧﻘﻮم
+أو إﺿﺎﻓﺔ وﻳﻤﻜﻦ أﺿﻔﻨﺎ اﻟﺘﻲ Models ﺟﻤﻴﻊ ﻇﻬﻮر ﻧﻼﺣﻆ ﺳﻮف admin ﺻﻔﺤﺔ ﻋﲆ اﻟﺪﺧﻮل ﺑﻌﺪ اﻵن
+.اﻟﺒﻴﺎﻧﺎت ﺗﻌﺪﻳﻞ
+1
+2
+3
+4
+ﻣﻌﻠﻮﻣﺎت ﻋﺮض ﻧﺴﺘﻄﻴﻊ ﺑﺤﻴﺚ Admin ﻟﻤﻮﻗﻊ (customization) ﺗﺨﺼﻴﺺ ﻋﻤﻞ ﻧﺴﺘﻄﻴﻊ ﺣﺘﻰ
+ﺑﺤﻴﺚ ،list_display attribute ﻃﺮﻳﻖ ﻋﻦ ذﻟﻚ ﺗﻨﻔﻴﺬ ﻳﻤﻜﻦ ﻣﻌﻠﻮﻣﺎﺗﻪ ﻳﺤﺘﻮي ﻛﺠﺪول Publisher
+:اﻟﺘﺎﻟﻲ ﺗﻌﺪﻳﻞ ﺛﻢ admin.py ﻣﻠﻒ ﻋﲆ ﺑﺎﻟﺪﺧﻮل ﻧﻘﻮم
+class PublisherAdmin(admin.ModelAdmin):
+    list_display = ('name', 'website', 'email')
+admin.site.register(Publisher, PublisherAdmin)
+class PublisherAdmin ﻛﺘﺎﺑﺔ
+ 
+Admin واﺟﻬﺎت ﺗﺨﺼﻴﺺ
+list_display ﺑﺎﺳﺘﺨﺪام Admin واﺟﻬﺎت ﺗﺨﺼﻴﺺ
+    """  # Placeholder for your actual OCR extracted text
+
+    # Call the utility function to get flashcards and test data
+    result = generate_flashcards_and_test_from_text(extracted_text)
+
+    if isinstance(result, dict) and 'error' in result:
+        # If there is an error, log the error and show the message to the user
+        print(f"\n####### error from view ########\n")
+        print(f"Error Details: {result['error']}")
+        messages.error(request, f"Error: {result['error']}")
+        return redirect('main:home_view')
+
+    # If everything went well, you can store the flashcards/test data or further process it
+    print("######### result #########\n")
+    print(f"type: {result}\n")
+    print(result)
+
+    # Success message and redirect to flashcards home view
+    messages.success(request, "Flashcards and test data have been successfully generated!")
+
+    return redirect('main:home_view')
+
+
+# Ensure the API key is set
+openai.api_key = settings.OPENAI_API_KEY  # or use your key directly here
+
+def chatgpt_test(request):
+    try:
+        # Request format for the latest API
+        response = openai.completions.create(
+            model="gpt-3.5-turbo",  # you can use "gpt-4" or another model if needed
+            prompt="Say hello, world!",
+            max_tokens=10
+        )
+
+        # Return the response to the client
+        return JsonResponse({"message": response['choices'][0]['text'].strip()})
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
