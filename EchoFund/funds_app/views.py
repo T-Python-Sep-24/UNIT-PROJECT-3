@@ -9,6 +9,10 @@ from django.contrib.auth.models import User
 from .models import Fund, Review
 from accounts.models import Bookmark, UserMessage
 from payments.models import Wallet
+
+from datetime import datetime, timedelta, date
+
+
 # Create your views here.
 
 
@@ -52,6 +56,26 @@ def fund_details_view(request: HttpRequest, fund_id):
     return render(request, 'fund_details.html', context={'is_bookmarked':is_bookmarked, 'fund':fund, 'reviews':reviews, 'rates':Review.Rates.choices})
 
 
+def user_funds_view(request: HttpRequest):
+
+    if not request.user.is_authenticated:
+        messages.error(request, "Register to create new Fund", 'alert-danger')
+        return redirect('accounts:sign_in')
+
+    funds = Fund.objects.filter(fund_owner = request.user)
+    return render(request, 'user_funds.html', context={'funds':funds})
+
+
+def user_participated_in_funds_view(request: HttpRequest):
+
+    if not request.user.is_authenticated:
+        messages.error(request, "Register to create new Fund", 'alert-danger')
+        return redirect('accounts:sign_in')
+
+    funds = Fund.objects.filter(fund_members = request.user)
+    return render(request, 'user_participated_in_funds.html', context={'funds':funds})
+
+
 def add_fund_view(request: HttpRequest):
 
     members = User.objects.all()
@@ -76,15 +100,18 @@ def add_fund_view(request: HttpRequest):
                 new_fund.fund_privacy = True
             else:
                 new_fund.fund_privacy = False
-            if 'fund-availability' in request.POST:
+            if 'fund-status' in request.POST:
                 new_fund.is_available = True
             else:
                 new_fund.is_available = False
+
+            new_fund.receiving_month = len(request.POST.getlist('members'))
             new_fund.save()
             new_fund.fund_members.set(request.POST.getlist('members'))
 
             for member_id in request.POST.getlist('members'):
                 member = User.objects.get(pk=member_id)
+
             # Send message to user
                 new_user_message = UserMessage(
                     sender = request.user,
@@ -126,46 +153,50 @@ def update_fund_view(request: HttpRequest,fund_id):
         members = User.objects.all()
 
         if request.method == "POST":
+            with transaction.atomic():
+                fund.fund_name = request.POST['fund_name']
+                fund.about = request.POST['about']
+                fund.policies = request.POST['policies']
+                fund.monthly_stock = request.POST['monthly_stock']
+                fund.hold_duration = request.POST['hold_duration']
+                fund.receiving_month = len(request.POST.getlist('members'))
+                fund.save()
 
-            fund.fund_name = request.POST['fund_name']
-            fund.about = request.POST['about']
-            fund.policies = request.POST['policies']
-            fund.monthly_stock = request.POST['monthly_stock']
-            fund.hold_duration = request.POST['hold_duration']
-            fund.save()
-            fund.fund_members.set(request.POST.getlist('members'))
+                fund.fund_members.set(request.POST.getlist('members'))
 
-            for member_id in request.POST.getlist('members'):
-                member = User.objects.get(pk=member_id)
+                for member_id in request.POST.getlist('members'):
+                    member = User.objects.get(pk=member_id)
+                    # Send message to user
+                    new_user_message = UserMessage(
+                        sender = request.user,
+                        user = member,
+                        subject = 'Updating Fund',
+                        content = f'A fund you are Enrolled in were updated by the fund owner ({request.user.username})',
+                    )
+                    new_user_message.save()
+
+                if 'fund-privacy' in request.POST and request.POST['fund-privacy'] == 'on':
+                    print(request.POST['fund-privacy'])
+                    fund.fund_privacy = False
+                else:
+                    fund.fund_privacy = True
+                if 'fund-status' in request.POST and request.POST['fund-status'] == 'on':
+                    print(request.POST['fund-status'])
+                    fund.is_available = True
+                else:
+                    fund.is_available = False
+
                 # Send message to user
                 new_user_message = UserMessage(
-                    sender = request.user,
-                    user = member,
-                    subject = 'Updating Fund',
-                    content = f'A fund you are Enrolled in were updated by the fund owner ({request.user.username})',
+                    sender = User.objects.get(pk=1),
+                    user = request.user,
+                    subject = 'Update Fund',
+                    content = 'You Updated a Fund',
                 )
+                fund.save()
                 new_user_message.save()
-
-            if 'fund-privacy' in request.POST:
-                fund.fund_privacy = True
-            else:
-                fund.fund_privacy = False
-            if 'fund-availability' in request.POST:
-                fund.is_available = True
-            else:
-                fund.is_available = False
-
-            # Send message to user
-            new_user_message = UserMessage(
-                sender = User.objects.get(pk=1),
-                user = request.user,
-                subject = 'Update Fund',
-                content = 'You Updated a Fund',
-            )
-
-            new_user_message.save()
-            messages.success(request, "fund was Updated successfully", "alert-success")
-            return redirect("funds_app:fund_details_view", fund_id = fund_id)
+                messages.success(request, "fund was Updated successfully", "alert-success")
+                return redirect("funds_app:fund_details_view", fund_id = fund_id)
 
         return render(request, 'update_fund.html', context={'fund':fund, 'members': members})
 
@@ -267,17 +298,7 @@ def add_bookmark_view(request: HttpRequest, fund_id):
     except Exception as e:
         print(e)
 
-    return redirect('funds_app:fund_details_view', fund_id = fund_id)
-
-
-def user_funds_view(request: HttpRequest):
-
-    if not request.user.is_authenticated:
-        messages.error(request, "Register to create new Fund", 'alert-danger')
-        return redirect('accounts:sign_in')
-
-    funds = Fund.objects.filter(fund_owner = request.user)
-    return render(request, 'user_funds.html', context={'funds':funds})
+    return redirect(request.GET.get('next', '/'))
 
 
 def fund_participate_view(request: HttpRequest, fund_id):
@@ -286,13 +307,20 @@ def fund_participate_view(request: HttpRequest, fund_id):
         messages.error(request, "Register to Participate in Funds", 'alert-danger')
         return redirect('accounts:sign_in')
 
+    if not request.user.wallet:
+        messages.error(request, "Add Wallet to Participate in Funds", 'alert-danger')
+        return redirect('payments:add_wallet')
+
     fund = Fund.objects.get(pk=fund_id)
     wallet = request.user.wallet
 
     try:
         if fund.is_available and wallet.balance >= 3000:
             with transaction.atomic():
+
                 fund.fund_members.add(request.user.id)
+                fund.receiving_month += 1
+                fund.save()
 
                 # Send message to user
                 wallet.balance -= fund.monthly_stock
@@ -318,3 +346,80 @@ def fund_participate_view(request: HttpRequest, fund_id):
         print(e)
         messages.error(request, "couldn't Participate in this Fund", "alert-danger")
 
+
+def start_fund(request: HttpRequest, fund_id):
+
+    fund = Fund.objects.get(pk=fund_id)
+
+    if not request.user.is_authenticated:
+        messages.error(request, "Register to start in Funds", 'alert-danger')
+        return redirect('accounts:sign_in')
+
+    if not request.user == fund.fund_owner:
+        messages.error(request, "Fund Owners only cat start their", 'alert-danger')
+        return redirect('funds_app:fund_details_view', fund_id = fund_id)
+
+    try:
+
+        if request.user.is_authenticated and request.user == fund.fund_owner:
+            with transaction.atomic():
+                fund.start_date = datetime.now()
+                fund.is_available = False
+                fund.save()
+
+            for member_id in request.POST.getlist('members'):
+                member = User.objects.get(pk=member_id)
+                # Send message to user
+                new_user_message = UserMessage(
+                    sender = fund.fund_owner,
+                    user = member,
+                    subject = 'Start Funding',
+                    content = f'the fund {fund.fund_name} you are Enrolled started, Date:({fund.start_date})',
+                )
+                new_user_message.save()
+                # Send message to fund members
+                new_user_message = UserMessage(
+                    sender = User.objects.get(pk=1),
+                    user = request.user,
+                    subject = 'Update Fund',
+                    content = 'You Updated a Fund',
+                )
+
+                new_user_message.save()
+                messages.success(request, "fund was Updated successfully", "alert-success")
+            return redirect('funds_app:fund_details_view', fund_id=fund_id)
+    except Exception as e:
+        print(e.__cause__)
+        return render(request, 'index.html')
+
+def payment_schedule(request, fund_id):
+
+    fund = Fund.objects.get(pk=fund_id, fund_members=request.user)
+
+    total_members = fund.fund_members.count()
+    monthly_stock = fund.monthly_stock
+    user_receive_month = fund.receiving_month
+
+    schedule = []
+    start_date = fund.start_date
+
+    for month in range(total_members):
+        payment_date = start_date + timedelta(days=30*month)
+        amount = monthly_stock
+        is_receiving = month + 1 == user_receive_month
+
+        schedule.append({
+            'month': month + 1,
+            'date': payment_date,
+            'amount': amount,
+            'is_receiving': is_receiving
+        })
+
+    context = {
+        'schedule': schedule,
+        'fund': fund,
+        'total_amount': monthly_stock * total_members,
+        'current_date': datetime.now()
+    }
+
+    return render(request, 'fund_payments_schedule.html', context)

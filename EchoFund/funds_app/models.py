@@ -1,5 +1,8 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 # Create your models here.
 
 
@@ -18,6 +21,9 @@ class Fund(models.Model):
 
     is_available = models.BooleanField(default=True)
     fund_privacy = models.BooleanField(default=True)
+
+    receiving_month = models.SmallIntegerField(default=1)
+    start_date = models.DateField(default=timezone.now, null=True)
 
 
 class Review(models.Model):
