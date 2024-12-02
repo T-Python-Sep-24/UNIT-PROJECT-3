@@ -5,7 +5,9 @@ from places.models import Place, Bookmark
 from django.contrib import messages
 from django.http import HttpRequest, Http404
 from django.contrib.auth import authenticate, login, logout
-from .forms import CustomUserCreationForm 
+from .forms import CustomUserCreationForm
+from .models import Profile
+from django.db import transaction
 
 
 
@@ -29,11 +31,7 @@ def sign_up(request):
                 form.save()
                 messages.success(request, "Registration successful!")
                 return redirect('users:signin')  # After registration, redirect to login page
-            # else:
-            #     messages.error(request, "Please correct the errors below.")
-            #     for field in form:
-            #         for error in field.errors:
-            #             print(error)  # Debugging purpose, remove after you're done debugging
+           
         else:
             form = CustomUserCreationForm()
     except Exception as e:
@@ -43,28 +41,6 @@ def sign_up(request):
     return render(request, 'users/register.html', {'form': form})
 
 
-# def sign_up(request):
-#     """
-#     Handle user registration using CustomUserCreationForm.
-    
-#     Args:
-#         request: HttpRequest object.
-    
-#     Returns:
-#         HttpResponse: Render 'users/register.html' with the form.
-#     """
-#     form = CustomUserCreationForm()  # Initialize an empty form on GET request
-
-#     if request.method == "POST":
-#         form = CustomUserCreationForm(request.POST)  # Populate form with POST data
-#         if form.is_valid():
-#             form.save()  # Create the user
-#             messages.success(request, "You have successfully registered!", "alert-success")
-#             return redirect("users:signin")  # Redirect to sign-in page after successful registration
-#         else:
-#             messages.error(request, "Please correct the errors below.", "alert-danger")
-
-#     return render(request, "users/register.html", {"form": form})
 
 
 def user_profile_view(request, username):
@@ -79,12 +55,18 @@ def user_profile_view(request, username):
         HttpResponse: Render 'users/profile.html' with user details and places.
     """
     try:
-        profile_user = get_object_or_404(User, username=username)
-        places = Place.objects.filter(author=profile_user)
-        can_add_place = request.user.is_authenticated and request.user == profile_user
-    except User.DoesNotExist:
-        raise Http404("User not found.")
+        # Fetch the user by username
+        profile_user = User.objects.filter(username=username).first()  # Returns None if user doesn't exist
+
+        if not profile_user:
+            # Handle case where the user doesn't exist
+            messages.error(request, f"User with username '{username}' not found.")
+            profile_user, places, can_add_place = None, [], False
+        else:
+            places = Place.objects.filter(author=profile_user)
+            can_add_place = request.user.is_authenticated and request.user == profile_user
     except Exception as e:
+        # Handle any other exceptions
         messages.error(request, f"An error occurred while fetching the profile: {e}")
         profile_user, places, can_add_place = None, [], False
 
@@ -96,19 +78,7 @@ def user_profile_view(request, username):
     return render(request, 'users/profile.html', context)
 
 
-# class CustomLoginView(LoginView):
-#     """
-#     Custom login view to redirect to the user's profile after successful login.
 
-#     Returns:
-#         str: URL of the user's profile page.
-#     """
-#     def get_success_url(self):
-#         try:
-#             return f'/users/profile/{self.request.user.username}/'
-#         except Exception as e:
-#             messages.error(self.request, f"An error occurred: {e}")
-#             return '/'
 
 @login_required
 def user_bookmarks_view(request):
@@ -170,3 +140,5 @@ def log_out(request: HttpRequest):
     messages.success(request, "Logged out successfully!", "alert-warning")
     
     return redirect(request.GET.get("next", "/"))
+
+

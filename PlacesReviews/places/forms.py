@@ -12,3 +12,4 @@ class PlaceForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-control'}),
             'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+        

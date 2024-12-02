@@ -1,37 +1,50 @@
 {% extends "main/base.html" %}
 
 {% block content %}
-<h2>Register</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.non_field_errors }} <!-- Display general errors -->
+<!-- Link to Bootstrap CSS (ensure it's included in your base template) -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Register</h2>
+    <form method="post" enctype="multipart/form-data" class="border p-4 rounded shadow-sm">
+        {% csrf_token %}
+        {{ form.non_field_errors }} <!-- Display general errors -->
 
-    <div>
-        {{ form.username.label_tag }}
-        {{ form.username }}
-        {{ form.username.errors }}
-    </div>
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+            {{ form.username }}
+            <div class="text-danger">{{ form.username.errors }}</div>
+        </div>
 
-    <div>
-        {{ form.email.label_tag }} <!-- Render email label -->
-        {{ form.email }} <!-- Render email input field -->
-        {{ form.email.errors }} <!-- Display email errors -->
-    </div>
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+            {{ form.email }}
+            <div class="text-danger">{{ form.email.errors }}</div>
+        </div>
 
-    <div>
-        {{ form.password1.label_tag }}
-        {{ form.password1 }}
-        {{ form.password1.errors }}
-    </div>
+        <div class="form-group">
+            <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+            {{ form.password1 }}
+            <div class="text-danger">{{ form.password1.errors }}</div>
+        </div>
 
-    <div>
-        {{ form.password2.label_tag }}
-        {{ form.password2 }}
-        {{ form.password2.errors }}
-    </div>
+        <div class="form-group">
+            <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+            {{ form.password2 }}
+            <div class="text-danger">{{ form.password2.errors }}</div>
+        </div>
 
-    <button type="submit">Register</button>
-</form>
+        <div class="form-group">
+            <label for="{{ form.bio.id_for_label }}">{{ form.bio.label }}</label>
+            {{ form.bio }}
+            <div class="text-danger">{{ form.bio.errors }}</div>
+        </div>
 
-<p>Already have an account? <a href="{% url 'users:signin' %}">Login now</a></p>
+        <div class="form-group">
+            <label for="{{ form.profile_image.id_for_label }}">{{ form.profile_image.label }}</label>
+            {{ form.profile_image }}
+            <div class="text-danger">{{ form.profile_image.errors }}</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
+    </form>
+</div>
 {% endblock %}
