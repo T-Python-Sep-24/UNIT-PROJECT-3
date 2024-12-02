@@ -17,7 +17,7 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow">
+    <nav class="navbar navbar-expand-lg navbar-light shadow" style="background-color: transparent;" >
         <div class="container">
             <a class="navbar-brand" href="{% url 'main:home_view' %}">Places Reviews</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -44,10 +44,10 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'users:login' %}">Login</a>
+                            <a class="nav-link" href="{% url 'users:signin' %}">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'users:register' %}">Register</a>
+                            <a class="nav-link" href="{% url 'users:signup' %}">Register</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -57,7 +57,6 @@
 
     <!-- Header -->
     <header>
-        <h1>Welcome to Places Reviews</h1>
         <p>Discover and share reviews of amazing places.</p>
     </header>
 

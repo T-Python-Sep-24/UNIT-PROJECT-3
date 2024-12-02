@@ -42,7 +42,7 @@ main {
 
 .navbar-brand {
     font-weight: bold;
-    color: #007bff;
+    color: #035bb9;
     font-size: 1.25rem; /* Smaller font size */
 }
 
@@ -53,16 +53,17 @@ main {
 }
 
 .navbar-nav .nav-link.active {
-    color: #007bff;
+    color: #035bb9;
 }
 
 /* Header Section (Blue Bar) */
 header {
-    background-color: #007bff; /* Blue color */
+    background-color: #035bb9; /* Blue color */
     color: white;
     text-align: center;
     padding: 1rem; /* Adjust padding to reduce height */
     font-size: 1.5rem; /* Smaller font size for header text */
+    
 }
 
 header h1 {
@@ -86,7 +87,7 @@ footer p {
 
 /* Custom Button Styles */
 button.btn {
-    background-color: #007bff;
+    background-color: #035bb9;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -96,7 +97,7 @@ button.btn {
 }
 
 button.btn:hover {
-    background-color: #0056b3;
+    background-color: #035bb9;
 }
 
 /* Spacing Helpers */
