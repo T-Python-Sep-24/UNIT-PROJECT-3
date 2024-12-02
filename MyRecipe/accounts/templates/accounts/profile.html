@@ -2,17 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ user.username }}'s Profile</title>
 </head>
 <body>
-<h2>{{ user.username }}'s Profile</h2>
-<p>Bio: {{ user.profile.bio }}</p>
+    <h2>{{ user.username }}'s Profile</h2>
+    <p>Bio: {{ user.profile.bio }}</p>
 
-{% if user.profile.profile_picture %}
-    <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
-{% else %}
-    <p>No profile picture uploaded.</p>
-{% endif %}
+    {% if user.profile.profile_picture %}
+        <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+    {% else %}
+        <p>No profile picture uploaded.</p>
+    {% endif %}
 
+    <h3>Recipes by {{ user.username }}</h3>
+
+    {% if recipes %}
+        <ul>
+            {% for recipe in recipes %}
+                <li>
+                    <h4>{{ recipe.title }}</h4>
+                    {% if recipe.image %}
+                        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }} Image" width="100">
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recipes added yet.</p>
+    {% endif %}
 </body>
 </html>

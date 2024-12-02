@@ -17,7 +17,8 @@ def register(request):
 
 @login_required
 def profile(request):
-    return render(request, 'accounts/profile.html')
+    recipes = request.user.recipes.all()
+    return render(request, 'accounts/profile.html', {'recipes': recipes})
 
 @login_required
 def create_profile(request):
