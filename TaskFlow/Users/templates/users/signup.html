@@ -30,12 +30,7 @@
              <div class="mb-3">
                 <label for="photo" class="form-label">Photo</label>
                 <input type="file" name="photo" id="photo" class="form-control" accept="image/*" onchange="profile_image(event)">
-                <div class="mt-3 text-center">
-                    <img id="photoPreview" src="{% if user.profile.photo %}{{ user.profile.photo.url }}{% endif %}" 
-                    alt="Profile Preview" 
-                    class="img-fluid rounded-circle" 
-                    style="width: 100px; height: 100px; object-fit: cover;">
-                </div>
+                
             </div>
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary w-100">Sign Up</button>
