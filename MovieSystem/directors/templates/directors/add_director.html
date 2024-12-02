@@ -9,7 +9,7 @@
     <h1 class="mb-4 text-center">Add a New Director</h1>
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
-            <form action="{% url 'movies:add_director' %}" method="post">
+            <form action="{% url 'directors:add_director_view' %}" method="post">
                 {% csrf_token %}
                 
                 

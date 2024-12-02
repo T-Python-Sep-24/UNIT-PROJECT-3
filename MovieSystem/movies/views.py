@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Movie, Genre, Director, Screening
+from .models import Movie, Genre, Director
+from screens.models import Screening
 from .forms import MovieForm
 from django.http import HttpRequest,HttpResponse
 from django.contrib.auth.models import User
@@ -10,6 +11,9 @@ from django.contrib import messages
 
 
 def add_movie_view(request:HttpRequest):
+    if not request.user.is_staff:
+        messages.warning(request,'You do not have permission','alert-warning')
+        return redirect('movies:all_movies_view')
     movie_form=MovieForm()
     directors=Director.objects.all()
     genres=Genre.objects.all()
@@ -20,12 +24,14 @@ def add_movie_view(request:HttpRequest):
             if movie_form.is_valid():
                 movie_form.save()
                 messages.success(request, "Created Movie Successfuly", "alert-success")
-                return redirect('main:home_view')
+                return redirect('movies:all_movies_view')
             else:
                 messages.error(request,movie_form.errors,'alert-danger')
 
         except Exception as e:
             print(e)
+            messages.error(request,"something went wrong",'alert-danger')
+            return redirect('main:home_view')
     return render(request,'movies/add_movie.html',context={'genres': genres, 'directors': directors})
 
 
@@ -52,11 +58,9 @@ def all_movies_view(request:HttpRequest):
 def movie_detail_view(request: HttpRequest, movie_id: int):
     movie = Movie.objects.get(pk=movie_id)
     
-    
-    screenings = movie.screening_set.all().order_by('showtime')
+    screenings:Screening = movie.screening_set.all().order_by('showtime')
     
     screenings_by_date = {}
-    
     
     for screening in screenings:
         screening_date = screening.showtime.date()
@@ -65,10 +69,6 @@ def movie_detail_view(request: HttpRequest, movie_id: int):
             screenings_by_date[screening_date] = []
         
         screenings_by_date[screening_date].append(screening)
-    
-    for screening in screenings:
-        available_seat = any(available for seat, available in screening.get_seats().items() if available)
-        screening.is_available = available_seat
     
     return render(request, 'movies/movie_detail.html', context={'movie': movie, 'screenings_by_date': screenings_by_date})
 

@@ -24,16 +24,8 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         
-                        <!-- Movies Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMovies" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Movies
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMovies">
-                                <li><a class="dropdown-item" href="{% url 'movies:all_genres_view' %}">Genres</a></li>
-                                <li><a class="dropdown-item" href="{% url 'directors:all_directors_view' %}">Directors</a></li>
-                            </ul>
-                        </li>
+                       
+                        
                         
                         {% if request.user.is_staff %}
                         <li class="nav-item dropdown">
@@ -47,13 +39,22 @@
                             </ul>
                         </li>
                         {% endif %}
-                            
-                        {% if request.user.is_authenticated %}
-                            <!-- Book Now -->
+                        {% if request.user.is_staff %}
+                        <li class="nav-item ">
+                            <a class="nav-link"  href="{% url 'screens:all_screens_view' %}">Screens Dashboard</a>
+                           
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'directors:all_directors_view' %}">Directors</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'movies:all_genres_view' %}">Genres</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link"  href="{% url 'movies:all_movies_view' %}">Book Now</a>
                         </li>
-                        {% endif %}
+                        
                             
                         <!-- Login/Sign Up Buttons -->
                         {% if request.user.is_authenticated %}

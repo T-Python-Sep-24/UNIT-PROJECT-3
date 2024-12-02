@@ -17,3 +17,9 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+.poster .poster-poster img{
+    width: 100%;
+    max-width: 400px;
+    height: 400px;
+}

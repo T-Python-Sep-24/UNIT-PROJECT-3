@@ -1,10 +1,10 @@
 <!-- movie_details.html -->
-<div class="container mt-5">
+<div class="container mt-5 poster">
     <div class="row">
         <!-- Movie Poster and Information -->
         {% for movie in movies %}
             <div class="col-md-4 mb-4">
-                <div class="card">
+                <div class="card poster-poster">
                     <!-- Movie Poster -->
                     <img src="{{ movie.poster.url }}" alt="{{ movie.title }} Poster" class="card-img-top img-fluid" />
                     
