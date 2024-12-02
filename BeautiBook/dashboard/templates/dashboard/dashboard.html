@@ -179,7 +179,6 @@
             <tr>
                 <th>Name</th>
                 <th>user</th>
-                <th>About</th>
                 <th>City</th>
                 <th>Price</th>
                 <th>Actions</th>
@@ -190,7 +189,6 @@
             <tr>
                 <td>{{ pro.name }}</td>
                 <td>{{ pro.artist.name }}</td>
-                <td>{{ pro.about }}</td>
                 <td>{{ pro.city }}</td>
                 <td>{{ pro.price }}</td>
                 
@@ -205,7 +203,6 @@
     </table>
 </div>
 {% endif %}
-{% if request.user.is_superuser  %}
 
 <div class="main-content">
     <h2>Artists</h2>
@@ -213,7 +210,6 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>About</th>
                 <th>Email</th>
                 <th>Title</th>
                 <th>Actions</th>
@@ -223,7 +219,6 @@
             {% for art in artist %}
             <tr>
                 <td>{{ art.name }}</td>
-                <td>{{ art.about }}</td>
                 <td>{{ art.email }}</td>
                 <td>{{ art.title }}</td>
                 <td>
@@ -236,5 +231,4 @@
         </tbody>
     </table>
 </div>
-{% endif %}
 {% endblock %}

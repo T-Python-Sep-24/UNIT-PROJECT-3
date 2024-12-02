@@ -2,12 +2,17 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpRequest,HttpResponse
 from .models import Photo,Artist,Review
 from django.contrib import messages
+from django.core.paginator import Paginator
+
 
 # Create your views here.
 
 def artists_view(request:HttpRequest):
     artists = Artist.objects.all()
-    return render(request,"providers/artists.html",{"artists":artists})
+    paginator = Paginator(artists, 6)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request,"providers/artists.html",{"artists":page_obj})
 
 def add_artist_view(request:HttpRequest):
     artists = Artist.objects.all()  

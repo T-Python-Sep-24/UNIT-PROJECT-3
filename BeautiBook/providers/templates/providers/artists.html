@@ -48,11 +48,11 @@
 
     .team-boxed .item .box {
         text-align: center;
-        padding: 30px;
+        padding: 20px; /* Reduced padding */
         background-color: #fff; /* White card background */
         border: 2px solid #f4c6c2; /* Light pink border */
         border-radius: 10px;
-        margin-bottom: 30px;
+        margin-bottom: 20px; /* Reduced margin */
         transition: transform 0.3s, box-shadow 0.3s;
     }
 
@@ -63,7 +63,7 @@
 
     .team-boxed .item .name {
         font-weight: bold;
-        margin-top: 28px;
+        margin-top: 20px; /* Adjusted margin */
         margin-bottom: 8px;
         color: #4a4a4a; /* Neutral text */
     }
@@ -73,18 +73,18 @@
         font-weight: bold;
         color: #d6a5a1; /* Muted pink */
         letter-spacing: 2px;
-        font-size: 13px;
+        font-size: 12px; /* Reduced font size */
     }
 
     .team-boxed .item .description {
-        font-size: 15px;
-        margin-top: 15px;
-        margin-bottom: 20px;
+        font-size: 14px; /* Reduced font size */
+        margin-top: 10px; /* Reduced margin */
+        margin-bottom: 15px;
         color: #7d8285; /* Neutral gray text */
     }
 
     .team-boxed .item img {
-        max-width: 160px;
+        max-width: 140px; /* Reduced image size */
         border: 3px solid #f4c6c2; /* Light pink border */
         border-radius: 50%;
     }
@@ -118,6 +118,7 @@
         background-color: #e8b3ad; /* Darker pink hover */
     }
 </style>
+
 {% endblock %}
 {% block content %}
 
@@ -148,7 +149,23 @@
         </div>
     </div>
 </div>
-
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-4">
+        {% if artists.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ artists.previous_page_number }}">Previous</a>
+            </li>
+        {% endif %}
+        <li class="page-item disabled">
+            <span class="page-link">{{ artists.number }} of {{ artists.paginator.num_pages }}</span>
+        </li>
+        {% if artists.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ artists.next_page_number }}">Next</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 {% endblock %}

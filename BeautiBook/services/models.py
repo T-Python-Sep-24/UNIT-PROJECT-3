@@ -7,7 +7,6 @@ class Product(models.Model):
     about= models.ImageField(upload_to='images/')  
     price = models.DecimalField(max_digits=10, decimal_places=2) 
     city = models.CharField(max_length=255,choices=category_options,default='Jeddah')
-    artist = models.ForeignKey(Artist,on_delete=models.CASCADE)
     image = models.ImageField(upload_to="images/",default="static/images/joinus.png")
     def __str__(self) -> str:
       return self.name

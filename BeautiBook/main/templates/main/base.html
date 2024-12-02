@@ -36,7 +36,9 @@
                                 <li><a href="{% url 'main:home_view' %}" class="active">Home</a></li>
                                 <li><a href="{% url 'providers:artists_view' %}">Artists</a></li>
                                 <li><a href="{% url 'services:products_view' %}">Products</a></li>
+                                {% if request.user.is_superuser  %}
                                 <li><a href="{% url 'dashboard:dashboard_view' %}">Dashboard</a></li>
+                                {% endif %}
                                 <li><a href="{% url 'main:about_view' %}">About</a></li>
                                 <li><a href="{% url 'main:contact_view' %}">Contact Us</a></li>
                             </ul>
