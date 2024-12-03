@@ -9,5 +9,7 @@ A platform that displays recent art pieces submitted by artists. And provides in
 - User authentication and role-based access control.
 - Viewing art pieces and all needed information about them.
 - Viewing artists, their informationand and what pieces they have.
-- Comments on art pieces.
-- Add art pieces to favorite for authenticated users
+- Comments on art pieces for authenticated users.
+- Add art pieces to favorite for authenticated users.
+- Contact the website owner and get a confirmation email.
+- View all sent messages as the website owner.
