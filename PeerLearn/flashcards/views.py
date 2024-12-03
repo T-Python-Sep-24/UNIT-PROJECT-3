@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.db import transaction
 from django.core.files.storage import default_storage
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Flashcard, TestAttempt
 from subjects.models import Subject
 import os
 import requests
@@ -38,11 +40,66 @@ def details_flashcard_view(request: HttpRequest, flashcard_id: int):
 
     return render(request, "flashcards/details.html", context)
 
-def test_flashcard_view(request: HttpRequest, flashcard_id: int):
-    flashcard = Flashcard.objects.get(pk=flashcard_id)
-    context = {"flashcard": flashcard}    
 
-    return render(request, "flashcards/test.html", context)
+def tests_details_view(request: HttpRequest):
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in to view your tests", "alert-danger")
+        return redirect("accounts:sign_in")
+    
+    # Get all test attempts for the current user, ordered by latest first
+    test_attempts = TestAttempt.objects.filter(user=request.user).select_related('flashcard')
+    
+    context = {
+        "test_attempts": test_attempts
+    }
+    
+    return render(request, "flashcards/tests_details.html", context)
+
+
+def test_flashcard_view(request: HttpRequest, flashcard_id: int):
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in to take tests", "alert-danger")
+        return redirect("accounts:sign_in")
+        
+    flashcard = get_object_or_404(Flashcard, pk=flashcard_id)
+    
+    if request.method == "POST":
+        # Calculate score
+        score = 0
+        questions = flashcard.test_json.get('questions', [])
+        total_questions = len(questions)
+        
+        # Check each answer
+        for i, question in enumerate(questions):
+            user_answer = request.POST.get(f'question_{i}')
+            if user_answer:
+                # Check if the selected answer is correct
+                is_correct = any(
+                    opt['is_correct'] 
+                    for opt in question['options'] 
+                    if str(opt['option']) == str(user_answer)
+                )
+                if is_correct:
+                    score += 1
+        
+        # Save the attempt
+        TestAttempt.objects.create(
+            user=request.user,
+            flashcard=flashcard,
+            score=score,
+            max_score=total_questions
+        )
+        
+        # Show success message
+        messages.success(
+            request, 
+            f"Test completed! Your score: {score}/{total_questions}",
+            "alert-success"
+        )
+        
+        return redirect('flashcards:details_flashcard_view', flashcard_id=flashcard_id)
+    
+    return render(request, "flashcards/test.html", {"flashcard": flashcard})
 
 
 def new_flashcard_view(request: HttpRequest):
@@ -166,76 +223,6 @@ def upload_pdf_view(request, start_page=0, end_page=10):
         print("[ERROR] No text could be extracted from the specified PDF pages.")
 
     return redirect("main:home_view")
-
-
-def generate_view(request):
-    print(f"\n####### Inside generate view ########\n")    
-    # Example extracted text (this will be dynamic in a real app)
-    extracted_text = """
-     Django Admin
-ﻋﻦ Model ب اﻟﺨﺎﺻﺔ اﻟﺒﻴﺎﻧﺎت وﺗﻌﺪﻳﻞ إﻧﺸﺎء ﻓﻲ ﻳﺴﺎﻋﺪ Admin ب ﺧﺎﺻﺔ واﺟﻬﺔ Django وﻓﺮ
-Superuser إﻧﺸﺎء ﻃﺮﻳﻖ
-ﻟﺪﻳﻨﺎ اﻟﺘﻄﺒﻴﻘﺎت أﺣﺪ أن ﻻﺣﻆ ،settings.py ﻣﻠﻒ ﻋﲆ ﺑﺎﻟﺪﺧﻮل ﻗﻢ ،Superuser ﺑﺈﻧﺸﺎء اﻟﺒﺪء ﻗﺒﻞ
-Admin ﺗﻄﺒﻴﻖ ﻫﻮ
-Admin path وﺟﻮد ﻧﻼﺣﻆ urls.py ﻣﻠﻒ ﻓﺘﺢ ﻋﻨﺪ وأﻳﻀﺎ
- 
- 
-1
-2
-3
-4
-5
-اﻷواﻣﺮ ﺑﻜﺘﺎﺑﺔ وﻧﻘﻮم  Admin اﻟـ ﻓﻲ اﺿﺎﻓﺘﻪ ﻧﺮﻳﺪ اﻟﺬي ﺑﺎﻟﺘﻄﺒﻴﻖ اﻟﺨﺎص admin.py ﻣﻠﻒ ﺑﻔﺘﺢ ﻧﻘﻮم
-:اﻟﺘﺎﻟﻴﺔ
-from django.contrib import admin
-from .models import Movies_Info
-admin.site.register(Movies_Info)
-:ﺑﺎﻟﺘﺎﻟﻲ ﻗﻤﻨﺎ اﻟﺴﺎﺑﻘﺔ اﻷﺳﻄﺮ ﻓﻲ
- .Movies_Info, Publisher, Contributor, MovieContributor, Review ل import ﻋﻤﻞ
-.Admin ﻟﺘﻄﺒﻴﻖ ﻣﺘﺎﺣﺔ models ﺑﺠﻌﻞ ﺗﺴﺎﻋﺪ وﻫﻲ register method اﺳﺘﺨﺪام
-:اﻷواﻣﺮ ﺑﺘﻨﻔﻴﺬ ﻧﻘﻮم
-python manage.py createsuperuser
-.اﻷﻣﺮ ﻛﺘﺎﺑﺔ ﺛﻢ ،ﻧﺮﻳﺪ اﻟﺬي password و email و username ﺑﺈدﺧﺎل  ﻧﻘﻮم ﺛﻢ
-python manage.py runserver
-(http://127.0.0.1:8000/admin) اﻟﺘﺎﻟﻲ اﻟﺮاﺑﻂ ﻋﲆ ﺑﺎﻟﺪﺧﻮل ﻧﻘﻮم
-أو إﺿﺎﻓﺔ وﻳﻤﻜﻦ أﺿﻔﻨﺎ اﻟﺘﻲ Models ﺟﻤﻴﻊ ﻇﻬﻮر ﻧﻼﺣﻆ ﺳﻮف admin ﺻﻔﺤﺔ ﻋﲆ اﻟﺪﺧﻮل ﺑﻌﺪ اﻵن
-.اﻟﺒﻴﺎﻧﺎت ﺗﻌﺪﻳﻞ
-1
-2
-3
-4
-ﻣﻌﻠﻮﻣﺎت ﻋﺮض ﻧﺴﺘﻄﻴﻊ ﺑﺤﻴﺚ Admin ﻟﻤﻮﻗﻊ (customization) ﺗﺨﺼﻴﺺ ﻋﻤﻞ ﻧﺴﺘﻄﻴﻊ ﺣﺘﻰ
-ﺑﺤﻴﺚ ،list_display attribute ﻃﺮﻳﻖ ﻋﻦ ذﻟﻚ ﺗﻨﻔﻴﺬ ﻳﻤﻜﻦ ﻣﻌﻠﻮﻣﺎﺗﻪ ﻳﺤﺘﻮي ﻛﺠﺪول Publisher
-:اﻟﺘﺎﻟﻲ ﺗﻌﺪﻳﻞ ﺛﻢ admin.py ﻣﻠﻒ ﻋﲆ ﺑﺎﻟﺪﺧﻮل ﻧﻘﻮم
-class PublisherAdmin(admin.ModelAdmin):
-    list_display = ('name', 'website', 'email')
-admin.site.register(Publisher, PublisherAdmin)
-class PublisherAdmin ﻛﺘﺎﺑﺔ
- 
-Admin واﺟﻬﺎت ﺗﺨﺼﻴﺺ
-list_display ﺑﺎﺳﺘﺨﺪام Admin واﺟﻬﺎت ﺗﺨﺼﻴﺺ
-    """  # Placeholder for your actual OCR extracted text
-
-    # Call the utility function to get flashcards and test data
-    result = generate_flashcards_and_test_from_text(extracted_text)
-
-    if isinstance(result, dict) and 'error' in result:
-        # If there is an error, log the error and show the message to the user
-        print(f"\n####### error from view ########\n")
-        print(f"Error Details: {result['error']}")
-        messages.error(request, f"Error: {result['error']}")
-        return redirect('main:home_view')
-
-    # If everything went well, you can store the flashcards/test data or further process it
-    print("######### result #########\n")
-    print(f"type: {result}\n")
-    print(result)
-
-    # Success message and redirect to flashcards home view
-    messages.success(request, "Flashcards and test data have been successfully generated!")
-
-    return redirect('main:home_view')
-
 
 
 def claude_test(request):

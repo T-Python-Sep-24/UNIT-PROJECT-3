@@ -8,5 +8,29 @@
 
 {% block content %}
 <!-- hero section -->
- <section class="container">Hero section</section>
+<section class="hero container">
+    <div class="row row-cols-md-2 m-0">
+        <div class="col">
+            <img src="{% static 'images/pexels-fuzzy.jpg' %}" alt="car decoration image">
+        </div>
+        <div class="col">
+            <div class="hero-text d-flex flex-column text-center">
+                <h1>Welcom to PeerLearn</h1>
+                <p>At PeerLearn, we help you master tech subjects,</p>
+                <p>Start creating your first flashcard today with just few clicks</p>
+                <a href="{% url 'flashcards:new_flashcard_view' %}" class="btn btn-light">Create Flashcard</a>
+            </div>
+        </div>
+    </div>
+ </section>
+ <!-- latest cars section -->
+<section class="container">
+    <div class="d-flex align-items-center">
+        <h1>Latest Flashcards</h1>
+        <h3 class="ms-auto"><a href="{% url 'flashcards:all_flashcards_view' %}" class="main-link">All Flashcards <i class="bi bi-arrow-right"></i></a></h3>
+    </div>
+    <div>
+        {% include 'flashcards/components/flashcards_list.html' %}
+    </div>
+</section>
 {% endblock %}

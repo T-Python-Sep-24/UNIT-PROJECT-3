@@ -27,3 +27,18 @@ class Review(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.username} on {self.game.title}"
+    
+
+
+class TestAttempt(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    flashcard = models.ForeignKey('Flashcard', on_delete=models.CASCADE)
+    score = models.IntegerField()
+    max_score = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.flashcard.name} - {self.score}/{self.max_score}"
+
+    class Meta:
+        ordering = ['-created_at']

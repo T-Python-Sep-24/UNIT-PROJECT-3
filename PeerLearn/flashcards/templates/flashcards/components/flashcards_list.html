@@ -3,7 +3,7 @@
     <div class="col p-0">
         <div class="flashcard-card d-flex flex-column shadow mx-2 my-2 p-2 gap-2">
             <div class="d-flex justify-content-between">
-                <a href="{% url 'flashcards:test_flashcard_view' flashcard.id %}" class="main-link"><h5>{{ flashcard.name }}</h5></a>
+                <a href="{% url 'flashcards:details_flashcard_view' flashcard.id %}" class="main-link"><h5>{{ flashcard.name }}</h5></a>
                 <div class="card-logo"><img src="{{ flashcard.subject.logo.url }}" alt="{{flashcard.subject.name}} logo"></div>
             </div>
             <div class="card-image">

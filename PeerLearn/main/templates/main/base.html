@@ -27,7 +27,7 @@
                       <li class="nav-item">
                         <a class="nav-link" href="{% url 'flashcards:all_flashcards_view' %}">All Flashcards</a>
                       </li>
-                      <!-- {% if request.user.is_superuser %} -->
+                      <!-- {% if request.user.is_authenticated %} -->
                       <li class="nav-item">
                         <a class="nav-link" href="{% url 'flashcards:new_flashcard_view' %}">New Flashcard</a>
                       </li>
@@ -35,14 +35,19 @@
                       <li class="nav-item">
                         <a class="nav-link" href="{% url 'subjects:all_subjects_view' %}">Subjects</a>
                       </li>
-                      <!-- {% if request.user.is_superuser %} -->
+                      <!-- {% if request.user.is_authenticated %} -->
                       <li class="nav-item">
                         <a class="nav-link" href="{% url 'subjects:new_subject_view' %}">New Subject</a>
+                      </li>
+                      <!-- {% endif %} -->                  
+                      <!-- {% if request.user.is_authenticated %} -->
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'flashcards:tests_details_view' %}">Tests Results</a>
                       </li>
                       <!-- {% endif %} -->
                       <!-- {% if request.user.is_authenticated %} -->
                       <li class="nav-item d-flex">
-                        <!-- <p class="text-white my-auto">| Welcome {{ request.user.username }}</p> -->
+                        <p class="text-white my-auto">| Welcome {{ request.user.username }}</p>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link" href="{% url 'accounts:log_out' %}">Logout</a>

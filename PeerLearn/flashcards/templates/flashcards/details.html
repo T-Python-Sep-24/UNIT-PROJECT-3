@@ -10,9 +10,9 @@
 <!-- Delete the flashcard -->
 <section class="container d-flex justify-content-between">
     <h1>{{ flashcard.name }}</h1>
-    <div>
+    <div class="d-flex gap-2">
         <div>
-            <a href="{% url 'flashcards:test_flashcard_view' flashcard.id %}"></a>
+            <a href="{% url 'flashcards:test_flashcard_view' flashcard.id %}" class="btn btn-dark">Test Yourself</a>
         </div>
         {% if request.user.is_superuser %}
         <div class="d-flex gap-2">
