@@ -38,6 +38,12 @@ def details_flashcard_view(request: HttpRequest, flashcard_id: int):
 
     return render(request, "flashcards/details.html", context)
 
+def test_flashcard_view(request: HttpRequest, flashcard_id: int):
+    flashcard = Flashcard.objects.get(pk=flashcard_id)
+    context = {"flashcard": flashcard}    
+
+    return render(request, "flashcards/test.html", context)
+
 
 def new_flashcard_view(request: HttpRequest):
     if not request.user.is_authenticated:

@@ -10,16 +10,21 @@
 <!-- Delete the flashcard -->
 <section class="container d-flex justify-content-between">
     <h1>{{ flashcard.name }}</h1>
-    {% if request.user.is_superuser %}
-    <div class="d-flex gap-2">
-        <!-- Button trigger modal -->
-        <a href="#">
-            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Delete the Flashcard
-            </button>
-        </a>
+    <div>
+        <div>
+            <a href="{% url 'flashcards:test_flashcard_view' flashcard.id %}"></a>
+        </div>
+        {% if request.user.is_superuser %}
+        <div class="d-flex gap-2">
+            <!-- Button trigger modal -->
+            <a href="#">
+                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Delete the Flashcard
+                </button>
+            </a>
+        </div>
+        {% endif %}    
     </div>
-    {% endif %}    
 </section>
 <!-- Flashcard Section -->
 <section class="container">
@@ -40,7 +45,14 @@
                         <!-- Back of Card -->
                         <div class="flashcard-back">
                             <div class="card-content">
-                                <h3>Answer</h3>
+                                <div class="d-flex justify-content-between">
+                                    <h3>Answer</h3>
+                                    <!-- Back Card Controls -->
+                                    <div class="flashcard-controls my-auto pb-2 text-center">
+                                        <button class="btn btn-info hint-btn">Show Hint</button>
+                                        <button class="btn btn-info explain-btn">Show Explanation</button>
+                                    </div>                                    
+                                </div>
                                 <p class="answer-text">{{ card.answer }}</p>
                                 
                                 <div class="hint-content">
@@ -60,8 +72,6 @@
                 <!-- Card Controls -->
                 <div class="flashcard-controls text-center">
                     <button class="btn btn-primary flip-btn">Flip Card</button>
-                    <button class="btn btn-info hint-btn">Show Hint</button>
-                    <button class="btn btn-info explain-btn">Show Explanation</button>
                 </div>
             </div>
             {% endfor %}
