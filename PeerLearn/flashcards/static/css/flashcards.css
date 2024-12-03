@@ -27,7 +27,6 @@
     object-fit: contain !important;
 }
 
-
 .flashcard {
     perspective: 1000px;
     height: 400px;  /* Increased height to accommodate content */
