@@ -23,21 +23,13 @@ class Screening(models.Model):
         seats = self.get_seats()
         return any(value for value in seats.values())
     
-    def update_seat_availability(self, seat_numbers, availability):
-        seats = self.get_seats()
-        for seat_number in seat_numbers:
-            if seat_number in seats:
-                seats[seat_number] = availability
-        self.seats = json.dumps(seats)
-        self.save()
-
     def __str__(self):
         return f"{self.movie.title} at {self.showtime}"
 
 class Ticket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     screening = models.ForeignKey(Screening, on_delete=models.CASCADE)
-    seat_numbers = models.JSONField()  # Stores a list of seat numbers (e.g., ["A1", "A2", "B3"])
+    seat_numbers = models.JSONField()  
     total_price = models.DecimalField(max_digits=8, decimal_places=2)
     
     def __str__(self):

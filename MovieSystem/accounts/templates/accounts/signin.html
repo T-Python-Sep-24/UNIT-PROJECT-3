@@ -16,7 +16,7 @@
                     <h4>Sign In</h4>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{% url 'accounts:signin_view' %}">
+                    <form method="POST" action="{% url 'accounts:signin_view' %}{% if 'next' in request.GET %}?next={{request.GET.next}}{% endif %}">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="username">Username</label>

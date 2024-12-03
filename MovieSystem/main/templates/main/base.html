@@ -27,19 +27,26 @@
                        
                         
                         
-                        {% if request.user.is_staff %}
+                        {% if request.user.is_staff and perms.movies.add_movie and perms.directors.add_director and perms.movies.add_genre %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdd" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Add
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdd">
+                             
                                 <li><a class="dropdown-item" href="{% url 'movies:add_movie_view' %}">New Movie</a></li>
+                               
+                                <li><a class="dropdown-item" href="{% url 'directors:add_director_view' %}">New Director</a></li>
                                 
-                                <li><a class="dropdown-item" href="">New Director</a></li>
+                                
+                               
+                                <li><a class="dropdown-item" href="{% url 'movies:add_genre_view' %}">New Genre</a></li>
+                               
                             </ul>
                         </li>
                         {% endif %}
-                        {% if request.user.is_staff %}
+                        
+                        {% if request.user.is_staff and perms.screens.add_screening %}
                         <li class="nav-item ">
                             <a class="nav-link"  href="{% url 'screens:all_screens_view' %}">Screens Dashboard</a>
                            
@@ -56,7 +63,7 @@
                         </li>
                         
                             
-                        <!-- Login/Sign Up Buttons -->
+                        
                         {% if request.user.is_authenticated %}
                         <div class="d-flex  align-content-center align-items-center">
                             <a class="nav-link " href="{% url 'accounts:profile_view' request.user.username %}">{{request.user.username}}</a>
@@ -72,10 +79,10 @@
                         {% else %}
                             <div class="d-flex gap-2">
                                 <li class="nav-item">
-                                    <a class="btn btn-primary" href="{% url 'accounts:signin_view' %}" role="button">Login</a>
+                                    <a class="btn btn-primary" href="{% url 'accounts:signin_view'%}?next={{request.path}}" role="button">Login</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="btn btn-secondary" href="{% url 'accounts:signup_view' %}" role="button">Sign Up</a>
+                                    <a class="btn btn-secondary" href="{% url 'accounts:signup_view'%}?next={{request.path}}" role="button">Sign Up</a>
                                 </li>
                             </div>
                         
@@ -87,7 +94,7 @@
         </nav>
         
     </header>
-    <main>
+    <main >
         {% if messages %}
   
         {% for message in messages %}

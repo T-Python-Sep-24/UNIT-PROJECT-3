@@ -8,8 +8,8 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Directors</h1>
-        {% if request.user.is_superuser %}
-        <a href="{% url 'movies:add_genre_view' %}" class="btn btn-primary">Add Director +</a>
+        {% if request.user.is_staff and perms.directors.add_director  %}
+        <a href="{% url 'directors:add_director_view' %}" class="btn btn-primary">Add Director +</a>
         {% endif %}
     </div>
    

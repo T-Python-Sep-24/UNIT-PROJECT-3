@@ -11,7 +11,7 @@ from django.contrib import messages
 
 
 def add_movie_view(request:HttpRequest):
-    if not request.user.is_staff:
+    if not (request.user.is_staff and request.user.has_perm('movies.add_movie')):
         messages.warning(request,'You do not have permission','alert-warning')
         return redirect('movies:all_movies_view')
     movie_form=MovieForm()
@@ -74,7 +74,7 @@ def movie_detail_view(request: HttpRequest, movie_id: int):
 
 def movie_update_view(request:HttpRequest,movie_id:int):
     movie=Movie.objects.get(pk=movie_id)
-    if not request.user.is_staff:
+    if not (request.user.is_staff and request.user.has_perm('movies.change_movie')):
         messages.warning(request,'You do not have permission','alert-warning')
         return redirect('movies:movie_detail_view',movie_id=movie.id)
     
@@ -94,7 +94,7 @@ def movie_update_view(request:HttpRequest,movie_id:int):
 
 def delete_movie_view(request:HttpRequest,movie_id:int):
     movie=Movie.objects.get(pk=movie_id)
-    if not request.user.is_staff:
+    if not (request.user.is_staff and request.user.has_perm('movies.delete_movie')):
         messages.warning(request,'You do not have permission','alert-warning')
         return redirect('movies:movie_detail_view',movie_id=movie.id)
     try:
@@ -112,7 +112,7 @@ def all_genres_view(request:HttpRequest):
     return render(request,'genres/all_genres.html',context={'genres':genres})
 
 def add_genre_view(request:HttpRequest):
-    if not request.user.is_staff:
+    if not (request.user.is_staff and request.user.has_perm('movies.add_genre')):
         messages.warning(request,'You do not have permission','alert-warning')
         return redirect ("movies:all_genres_view")
     if request.method == 'POST':
@@ -130,7 +130,7 @@ def add_genre_view(request:HttpRequest):
         
 
 def delete_genre_view(request:HttpRequest,genre_id:int):
-    if not request.user.is_staff:
+    if not (request.user.is_staff and request.user.has_perm('movies.delete_genre')):
         messages.warning(request,'You do not have permission','alert-warning')
         return redirect ("movies:all_genres_view")
     try:
@@ -144,7 +144,7 @@ def delete_genre_view(request:HttpRequest,genre_id:int):
             return redirect ("movies:all_genres_view")
     
 def update_genre_view(request:HttpRequest, genre_id:int):
-    if not request.user.is_staff:
+    if not (request.user.is_staff and request.user.has_perm('movies.change_genre')):
         messages.warning(request,'You do not have permission','alert-warning')
         return redirect ("movies:all_genres_view")
     genre=Genre.objects.get(pk=genre_id)

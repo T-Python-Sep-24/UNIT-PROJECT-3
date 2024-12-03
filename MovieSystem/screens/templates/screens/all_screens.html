@@ -50,7 +50,7 @@
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>
-                    <a href="" class="text-decoration-underline">
+                    <a href="{% url 'movies:movie_detail_view' screening.movie.id %}" class="text-decoration-underline">
                         {{ screening.movie.title }}
                     </a>
                 </td>
@@ -66,15 +66,18 @@
                 </td>
                 <td>
                     <div class="d-flex gap-2">
-                        {% if request.user.is_superuser %}
+                        {% if request.user.is_staff and perms.screens.change_screening %}
                         <a href="{% url 'screens:update_screen_view' screening.id %}" class="btn btn-warning btn-sm">Update</a>
-                        <form action="{% url 'screens:delete_screen_view' screening.id  %}" method="post" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this Screen ?');">
-                                Delete
-                            </button>
-                        </form>
                         {% endif %}
+                        {% if request.user.is_staff and perms.screens.delete_screening %}
+                            <form action="{% url 'screens:delete_screen_view' screening.id  %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this Screen ?');">
+                                    Delete
+                                </button>
+                            </form>
+                        {% endif %}
+                        
                     </div>
                 </td>
             </tr>

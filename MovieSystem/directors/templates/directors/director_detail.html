@@ -17,15 +17,19 @@
                     <p class="card-text">{{ director.biography }}</p>
                 </div>
                 
-                {% if request.user.is_staff %}
+                
                 <div class="card-footer d-flex justify-content-between">
+                    {% if request.user.is_staff and perms.directors.change_director %}
                     <a href="{% url 'directors:director_update_view' director.id %}" class="btn btn-warning">Edit</a>
+                    {% endif %}
+                    {% if request.user.is_staff and perms.directors.delete_director %}
                     <form action="{% url 'directors:delete_director_view' director.id %}" method="post" style="display: inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this director?');">Delete</button>
                     </form>
+                    {% endif %}
                 </div>
-                {% endif %}
+               
                     
                 
             </div>

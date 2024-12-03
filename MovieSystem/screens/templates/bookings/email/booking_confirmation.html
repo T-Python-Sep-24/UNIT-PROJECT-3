@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            color: #333;
+        }
+        .details {
+            margin-top: 20px;
+        }
+        .details th, .details td {
+            text-align: left;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">Booking Confirmation</h1>
+        <p>Dear {{ user.username }},</p>
+        <p>Thank you for booking with Movies! Here are the details of your booking:</p>
+        
+        <table class="details" width="100%">
+            <tr>
+                <th>Movie:</th>
+                <td>{{ screening.movie.title }}</td>
+            </tr>
+            <tr>
+                <th>Showtime:</th>
+                <td>{{ screening.showtime }}</td>
+            </tr>
+            <tr>
+                <th>Seats:</th>
+                <td>{{ selected_seats|join:", " }}</td>
+            </tr>
+            <tr>
+                <th>Total Price:</th>
+                <td>{{ ticket.total_price }} SAR</td>
+            </tr>
+        </table>
+
+        <p>Enjoy your movie!</p>
+        <p>Best regards,<br>Movies Team</p>
+    </div>
+</body>
+</html>

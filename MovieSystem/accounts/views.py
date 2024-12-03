@@ -3,6 +3,7 @@ from django.http import HttpRequest,HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError, transaction
+from django.core.paginator import Paginator
 from django.contrib import messages
 from .models import Profile
 # Create your views here.
@@ -38,8 +39,8 @@ def signin_view(request:HttpRequest):
         user=authenticate(request,username=request.POST['username'],password=request.POST['password'])
         if user:
             login(request,user)
-            messages.success(request,f"welcome {user.first_name}","alert-success")
-            return redirect('main:home_view')
+            messages.success(request,f"welcome {user.username}","alert-success")
+            return redirect(request.GET.get("next", "/"))
         else:
             messages.error(request,"field to login to your account","alert-danger")
     return render(request,"accounts/signin.html")
@@ -56,6 +57,7 @@ def profile_view(request:HttpRequest,user_name):
     
     try:
         user=User.objects.get(username=user_name)
+        tickets=user.ticket_set.all()
         if not Profile.objects.filter(user=user).first():
             user_profile=Profile(user=user)
             user_profile.save()
@@ -64,7 +66,12 @@ def profile_view(request:HttpRequest,user_name):
         messages.error(request,f"What are you doing {e}",'alert-warning')
         return redirect('main:home_view')
     
-    return render(request,"accounts/profile.html",context={'user':user})
+    
+    page_number = request.GET.get("page", 1)
+    paginator = Paginator(tickets, 2)
+    tickets_page = paginator.get_page(page_number)
+
+    return render(request,"accounts/profile.html",context={'user':user,'tickets':tickets_page})
 
 
 def update_profile_view(request:HttpRequest):
