@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container mx-auto py-8">
+
+    <section id="glass-section" class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-xl shadow-2xl p-6 sm:p-8 text-center animate-floating mx-auto mb-10 sm:mb-16 w-full max-w-md sm:max-w-lg md:max-w-2xl flex items-center justify-center">
+        <div>
+            <h1 class="text-3xl font-bold mb-6 text-center">Welcome to the FlashCards App</h1>
+            <p class="text-base sm:text-lg text-white mb-4 sm:mb-6">
+            This page contains info about Saleh Alrashidi. I hope you will enjoy the trip you will take.
+          </p>
+          <a href="{% url 'accounts:sign_in' %}" class="inline-block cta-button py-2 px-6 sm:py-3 sm:px-8 rounded-full bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold shadow-lg transform transition duration-300 hover:scale-105">
+            Get Started
+          </a>
+        </div>
+      </section>
+
+    <div >
+        <h2 class="text-2xl font-semibold mb-6 text-center">Top Flashcard Creators</h2>
+        <div class="flex flex-wrap justify-center space-x-4">
+            {% for user in top_users %}
+                <div class="card w-80 bg-base-100 shadow-xl m-2">
+                    <div class="card-body items-center text-center">
+                        {% if user.profile.avatar.url %}
+                            <div class="avatar">
+                                <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}'s avatar">
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="avatar placeholder">
+                                <div class="bg-neutral-focus text-neutral-content rounded-full w-24">
+                                    <span class="text-3xl">{{ user.username|first|upper }}</span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <h2 class="card-title mt-4">@{{ user.username }}</h2>
+                        <p class="text-gray-600">{{ user.flashcard_count }} Flashcards Created</p>
+                        <div class="card-actions mt-4">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<div class="max-w-lg mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Create a New Folder</h1>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div class="form-control">
+            <label class="label" for="name">
+                <span class="label-text">Folder Name</span>
+            </label>
+            <input type="text" name="name" id="name" class="input input-bordered" placeholder="Enter folder name" required>
+        </div>
+        <div class="form-control">
+            <label class="label" for="description">
+                <span class="label-text">Description</span>
+            </label>
+            <textarea name="description" id="description" class="textarea textarea-bordered" placeholder="Enter description"></textarea>
+        </div>
+        <div class="form-control">
+            <label class="label" for="category">
+                <span class="label-text">Category</span>
+            </label>
+            <select name="category" id="category" class="select select-bordered">
+                <option value="EN">English</option>
+                <option value="MA">Math</option>
+                <option value="PR">Programming</option>
+                <option value="SC">Science</option>
+                <option value="OT">Other</option>
+            </select>
+        </div>
+        <div class="form-control mt-6">
+            <button type="submit" class="btninline-block cta-button py-2 px-6 sm:py-3 sm:px-8 rounded-full bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold shadow-lg transform transition duration-300">Create Folder</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

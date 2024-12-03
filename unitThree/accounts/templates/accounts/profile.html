@@ -1,0 +1,103 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Profile for {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto py-8 px-4 justify-center items-center">
+    <div class="flex flex-col lg:flex-row lg:space-x-8 ">
+        <aside class="lg:w-1/2 rounded-lg p-6 mb-8 lg:mb-0 ">
+            <div class="text-center">
+                <div class="avatar">
+                    <div class="w-32 h-32 rounded-full mx-auto ring ring-primary ring-offset-2 ring-offset-base-100 overflow-hidden">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}'s avatar" class="object-cover w-full h-full" />
+                        {% else %}
+                            <img src="{% static 'images/default_avatar.png' %}" alt="Default avatar" class="object-cover w-full h-full" />
+                        {% endif %}
+                    </div>
+                </div>
+               <h2 class="text-3xl font-bold mt-4">@{{ user.username }}</h2>
+                <p class="text-gray-600">{{ user.email }}</p>
+              <div class="mt-6 space-y-4">
+                    {% if request.user == user %}
+                        <a href="{% url 'accounts:update_user_profile' %}" class="w-full inline-block px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary-dark transition duration-300">Update Profile</a>
+                    {% endif %}
+                    {% if request.user == user and user.profile.user_type == 'parent' %}
+                        <a href="{% url 'accounts:add_child_user' %}" class="w-full inline-block px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition duration-300">Add Child User</a>
+                    {% endif %}
+                </div>
+            </div>
+        </aside>
+
+        <main class="lg:w-2/3">
+            <section class="rounded-lg p-6 mb-6">
+                <h3 class="text-2xl font-semibold mb-4">Profile Information</h3>
+                <div class="space-y-4">
+                    <p><span class="font-semibold">User Type:</span> {{ user.profile.user_type|title }}</p>
+                    {% if user.profile.about %}
+                        <p><span class="font-semibold">About:</span> {{ user.profile.about }}</p>
+                    {% endif %}
+                    {% if user.profile.twitch_link %}
+                        <p><span class="font-semibold">Twitch Link:</span> 
+                            <a href="{{ user.profile.twitch_link }}" target="_blank" class="text-blue-500 hover:underline">
+                                {{ user.profile.twitch_link }}
+                            </a>
+                        </p>
+                    {% endif %}
+                </div>
+            </section>
+            {% if user.profile.user_type == 'parent' and children %}
+            <section class="rounded-lg p-6 mb-6">
+                <h3 class="text-2xl font-semibold mb-4">Your Children</h3>
+                
+                <div class="children-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for child in children %}
+                        <div class="child-card bg-base-100 shadow-md rounded-lg overflow-hidden">
+                            <div class="p-4 text-center">
+                                <div class="avatar mb-4">
+                                    <div class="w-24 h-24 rounded-full mx-auto ring ring-primary ring-offset-2 ring-offset-base-100 overflow-hidden">
+                                        {% if child.user.profile.avatar %}
+                                            <img src="{{ child.user.profile.avatar.url }}" alt="{{ child.user.username }}'s avatar" class="object-cover w-full h-full" />
+                                        {% else %}
+                                            <img src="{% static 'images/default_avatar.png' %}" alt="Default avatar" class="object-cover w-full h-full" />
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <h4 class="text-xl font-semibold">@{{ child.user.username }}</h4>
+                                <div class="mt-2 space-y-2">
+                                    <div class="flex items-center justify-center">
+                                        <span class="font-semibold">Completed Flashcards:</span>
+                                        <span class="ml-2">{{ child.flashcard_count }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-center">
+                                        <span class="font-semibold">Folders Created:</span>
+                                        <span class="ml-2">{{ child.folder_count }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+        
+             {% if user.profile.user_type == 'child' %}
+                <section class="rounded-lg p-6">
+                    <h3 class="text-2xl font-semibold mb-4">Your Progress</h3>
+                    <div class="space-y-4">
+<div>
+                            <span class="font-semibold">Completed Flashcards:</span> {{ flashcard_count }}                           <div class="w-full bg-gray-200 rounded-full h-4 mt-1">
+            
+                        </div>
+                        <div>
+                            <span class="font-semibold">Folders Created:</span> {{ folder_count }}
+                            <div class="w-full bg-gray-200 rounded-full h-4 mt-1">
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
+        </main>
+    </div>
+</div>
+{% endblock %}

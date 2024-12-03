@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+{% block content %}
+
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Add Flashcards to "{{ folder.name }}"</h1>
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+        {{ formset.management_form }}
+
+        {% for form in formset %}
+            <div class="border p-4 rounded-lg">
+                <h2 class="text-xl font-semibold mb-2">Flashcard {{ forloop.counter }}</h2>
+
+                <div class="form-control">
+                    <label class="label" for="{{ form.question.id_for_label }}">
+                        <span class="label-text">Question</span>
+                    </label>
+                    {{ form.question }}
+                </div>
+
+                <div class="form-control mt-2">
+                    <label class="label" for="{{ form.answer.id_for_label }}">
+                        <span class="label-text">Answer</span>
+                    </label>
+                    {{ form.answer }}
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="form-control mt-6">
+            <button type="submit" class="btn btn-primary">Save Flashcards</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

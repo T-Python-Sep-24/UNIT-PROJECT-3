@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+
+{% block title %}All Flashcards{% endblock %}
+
+{% block content %}
+<div class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">All Flashcards</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {% for flashcard in flashcards %}
+            <div class="card bg-base-100 shadow-md">
+                <div class="card-body">
+                    <h2 class="card-title">{{ flashcard.question|truncatewords:10 }}</h2>
+                    <p><strong>Folder:</strong> {{ flashcard.folder.name }}</p>
+                    <p><strong>Created by:</strong> @{{ flashcard.user.username }}</p>
+                    <div class="card-actions justify-end">
+                        <a href="{% url 'cards:flashcard_detail' flashcard.id %}" class="btn btn-primary btn-sm">View Flashcard</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No flashcards available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

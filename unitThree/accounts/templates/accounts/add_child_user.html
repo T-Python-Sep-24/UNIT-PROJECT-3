@@ -1,0 +1,40 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Add Child User{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Add Child User</h1>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+         <div class="form-control">
+            <label class="label" for="{{ user_form.username.id_for_label }}">
+                <span class="label-text">Username</span>
+            </label>
+            {{ user_form.username }}
+            {% if user_form.username.errors %}
+                <span class="text-red-500 text-sm">{{ user_form.username.errors }}</span>
+            {% endif %}
+        </div>
+         <div class="form-control">
+            <label class="label" for="{{ user_form.email.id_for_label }}">
+                <span class="label-text">Email</span>
+            </label>
+            {{ user_form.email }}
+            {% if user_form.email.errors %}
+                <span class="text-red-500 text-sm">{{ user_form.email.errors }}</span>
+            {% endif %}
+        </div>
+         <div class="form-control">
+            <label class="label" for="{{ user_form.password.id_for_label }}">
+                <span class="label-text">Password</span>
+            </label>
+            {{ user_form.password }}
+            {% if user_form.password.errors %}
+                <span class="text-red-500 text-sm">{{ user_form.password.errors }}</span>
+            {% endif %}
+        </div>
+         <button type="submit" class="btn btn-primary">Add Child</button>
+    </form>
+</div>
+{% endblock %}
