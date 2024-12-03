@@ -21,8 +21,8 @@
 
 {% block content %}
 <section class="container-md text-beige-100 text-center light-bg mb-5">
-    <h1 class="display-6 text-white-shadow mb-4">Pieces by Our Artists</h1>
-    <div class="pieces-grid">
+    <a href="{% url 'artPieces:displayArtPiecesView' %}" class="display-6 text-white-shadow hover-color">Pieces by Our Artists</a>
+    <div class="pieces-grid mt-4">
         {% for piece in pieces %}
         <div class="pieces">
             <div class="card text-light border-0">
@@ -39,9 +39,9 @@
 </section>
 
 <section class="container-md text-beige-100 text-center">
-    <h1 class="display-6 text-white-shadow my-3">Our Artists</h1>
+    <a href="{% url 'artists:displayArtistsView' %}" class="display-6 text-white-shadow hover-color">Our Artists</a>
     <!-- scroller -->
-    <div class="scroller mx-auto" data-direction="left" data-speed="slow">
+    <div class="scroller mx-auto mt-2" data-direction="left" data-speed="slow">
         <!-- scroller-inner -->
         <div class="scroller-inner">
             {% for artist in artists %}
