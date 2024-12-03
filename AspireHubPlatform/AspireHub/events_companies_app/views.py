@@ -43,7 +43,7 @@ def add_event_view(request:HttpRequest):
         date= request.POST["date"],   
       )
         new_event.save()
-        return redirect('events_companies_app:details_companies_view')
+        return redirect('events_companies_app:lists_companies_events_view')
     return render(request, "events_companies_app/add_event.html")
 
 

@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework import status
 import http.client
 # Create your views here.
-# def career_test_view(request:HttpRequest):
+def career_test_view(request:HttpRequest):
 
-#     return render(request, "career_path_app/career_test.html")
+    return render(request, "career_path_app/career_test.html")
 
 
 class PredictView(APIView):
