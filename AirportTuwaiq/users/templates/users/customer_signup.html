@@ -1,0 +1,51 @@
+{% extends "main/base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+
+<div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 90vh;">
+    <h1 class="text-center mb-4">Sign Up</h1>
+    <form method="post" action="{% url 'users:customer_sign_up_view' %}" class="w-50">
+        {% csrf_token %}
+    
+        <!-- Email -->
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+
+        <!-- Username -->
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+        
+        <!-- First Name -->
+        <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter your first name" required>
+        </div>
+
+        <!-- Last Name -->
+        <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter your last name" required>
+        </div>
+        <div class="mb-3">
+            <label for="phone_number" class="form-label">Phone Number (For Customers)</label>
+            <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter your phone number">
+        </div>
+        <!-- Password -->
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-flex justify-content-center mt-5">
+            <button type="submit" class="btn btn-primary w-50">Sign Up</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

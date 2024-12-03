@@ -1,0 +1,69 @@
+{% extends "main/base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container my-5" style="min-height: 80vh;">
+    <h1 class="text-center mb-4"><i class="fas fa-user-circle"></i> Profile</h1>
+    
+    <!-- User Details Section -->
+    <div class="text-center mb-4">
+        <h5 class="mb-3"><i class="fas fa-user"></i> User Details</h5>
+        <p>
+            <strong>First Name:</strong> {{ user.first_name }}<br>
+            <strong>Last Name:</strong> {{ user.last_name }}<br>
+            <strong>Email:</strong> {{ user.email }}<br>
+            {% if not user.is_staff %}
+            <strong>Phone Number:</strong> {{ customer.phone_number }}<br>
+            {% endif %}
+        </p>
+        {% if employee %}
+<div class="text-center mb-4">
+    <h5 class="mb-3"><i class="fas fa-briefcase"></i> Staff Details</h5>
+    <p>
+        <strong>Job Title:</strong> {{ employee.job_title }}<br>
+        <strong>ID Number:</strong> {{ employee.id_number }}
+    </p>
+</div>
+{% endif %}
+    
+    <!-- Booking History Section -->
+    <h2 class="text-center"><i class="fas fa-history"></i> Booking History</h2>
+    {% if bookings %}
+        <div class="row justify-content-center">
+            {% for booking in bookings %}
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-plane"></i> Flight {{ booking.flight.flight_number }}</h5>
+                            <p class="card-text">
+                                <strong>From:</strong> {{ booking.flight.from_city.name }}<br>
+                                <strong>To:</strong> {{ booking.flight.to_city.name }}<br>
+                                <strong>Date:</strong> {{ booking.flight.departure_time|date:"M d, Y H:i" }}<br>
+                                <strong>Status:</strong> {{ booking.status }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No booking history available.</p>
+    {% endif %}
+</div>
+<div class="text-center mb-4">
+   
+        {% if not user.is_staff %}
+        <a href="{% url 'users:update_profile_view' %}" class="btn btn-primary mx-2">
+            <i class="fas fa-user"></i> Customer
+        </a> 
+        {%endif%}
+            {% if user.is_staff %}
+        </a>
+        <a href="{% url 'users:update_emp_profile_view' %}" class="btn btn-success mx-2">
+            <i class="fas fa-briefcase"></i> Staff
+        </a>
+        {%endif%}
+    </div>
+</div>
+{% endblock %}

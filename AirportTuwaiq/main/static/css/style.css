@@ -1,0 +1,57 @@
+/* Navbar Styles */
+.navbar {
+    background-color: #580ab8; /* Custom color for the navbar */
+}
+.navbar .nav-link {
+    color: white !important; /* White text for navbar links */
+    font-weight: bold;
+}
+.navbar-brand img {
+    max-height: 50px; /* Adjust logo size */
+}
+
+/* Right Side Buttons */
+.navbar .btn-outline-light {
+    border-color: white;
+    color: white;
+}
+.navbar .btn-outline-light:hover {
+    background-color: white;
+    color: #580ab8;
+}
+.navbar .btn-light {
+    background-color: white;
+    color: #580ab8;
+}
+/*-------------------------------------*/
+/* Footer Styles */
+footer {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    font-size: 14px;
+    padding: 15px 0;
+}
+
+
+
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.chatbot-window {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.chatbot-body {
+    height: 300px;
+}

@@ -1,0 +1,39 @@
+{% extends "main/base.html" %}
+
+{% block title %}Riyadh - Explore the Capital{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="container my-5">
+    <h1 class="text-center mb-4">🌆 Welcome to Riyadh 🌍</h1>
+    <div class="row">
+        <!-- City Overview Section -->
+        <div class="col-md-8">
+            <img src="{% static 'image/riy2.jpg' %}" class="img-fluid rounded shadow" alt="Riyadh" style="height: 400px;width: 100%;">
+            <p class="mt-4">
+                Riyadh, the capital of Saudi Arabia, is known for its modern skyline, cultural landmarks, and thriving economy. Explore historical sites like Diriyah, or experience shopping in luxurious malls.
+            </p>
+        </div>
+
+        <!-- Highlights and Attractions Section -->
+        <div class="col-md-4">
+            <div class="highlight-section p-3 ">
+                <h5 class="mb-3">🌟 Highlights of Riyadh</h5>
+                <ul class="list-unstyled">
+                    <li>🏰 Diriyah - UNESCO World Heritage Site</li>
+                    <li>🛍️ Kingdom Centre - Shopping & Views</li>
+                    <li>🎨 National Museum of Saudi Arabia</li>
+                    <li>🌴 King Abdullah Park - Nature & Relaxation</li>
+                    <li>🏢 King Abdullah Financial District (KAFD) - A hub for business and modern architecture.</li>
+                    <li>🎭 Riyadh Season - Experience world-class events, festivals, and entertainment.</li>
+                    <li>🌆 Sky Bridge at Kingdom Centre - Panoramic views of the city skyline.</li>
+                    <li>🎢 Boulevard Riyadh City - A vibrant area filled with attractions, dining, and shopping.</li>
+                </ul>
+            </div>
+        </div>
+    <!-- Back to Home Button -->
+    <div class="text-center mt-5">
+        <a href="{% url 'main:home_view' %}" class="btn btn-primary btn-lg">🏠 Back to Home</a>
+    </div>
+</div>
+{% endblock %}

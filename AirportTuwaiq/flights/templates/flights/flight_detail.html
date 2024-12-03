@@ -1,0 +1,39 @@
+{% extends "main/base.html" %}
+
+{% block title %}Flight Details{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="container my-5 d-flex flex-column align-items-center">
+    <h1 class="text-center mb-4">
+        <i class="fas fa-plane"></i> Flight Details
+    </h1>
+
+    <div class="card" style="max-width: 600px; width: 100%;">
+        <div class="d-flex flex-column align-items-center">
+            <img src="{% static 'image/airline.jpg' %}" class="card-img-top" alt="Airline"
+                style="width: 70%; height: 250px; padding:10px; border-radius:15px;">
+        </div>
+        <div class="card-body d-flex flex-column align-items-start">
+            <h5 class="card-title">
+                <i class="fas fa-ticket-alt"></i> {{ flight.flight_number }}
+            </h5>
+            <p class="card-text">
+                <i class="fas fa-map-marker-alt"></i> From: {{ flight.from_city.name }} <br>
+                <i class="fas fa-map-marker-alt"></i> To: {{ flight.to_city.name }} <br>
+                <i class="fas fa-clock"></i> Departure: {{ flight.departure_time|date:"M d, Y H:i" }} <br>
+                <i class="fas fa-clock"></i> Arrival: {{ flight.arrival_time|date:"M d, Y H:i" }} <br>
+                <i class="fas fa-money-bill-wave"></i> Price: {{ flight.price }} SAR <br>
+                <i class="fas fa-chair"></i> Seats Available: {{ flight.available_seats }}
+            </p>
+            <div class="d-flex justify-content-between w-100 mt-4">
+                <a href="{% url 'flights:flight_list_view' %}" class="btn btn-secondary">Back to Flights</a>
+                
+                <a href="{% url 'flights:edit_flight_view' flight.id  %}" class="btn btn-success">Edit Flight</a>
+                <a href="{% url 'flights:delete_flight_view' flight.id %}" class="btn btn-danger">Delete</a>
+ 
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

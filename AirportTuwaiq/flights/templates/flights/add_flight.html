@@ -1,0 +1,89 @@
+{% extends "main/base.html" %}
+
+{% block title %}Add Flight{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center mb-4">
+        <i class="fas fa-plane-departure"></i> Add Flight
+    </h1>
+    {%if request.user.is_staff and perms.flights.add_flight%}
+    <form method="post" action="{% url 'flights:add_flight_view' %}" class="d-flex flex-column align-items-center">
+        {% csrf_token %}
+        
+        <!-- Flight Number -->
+        <div class="mb-3 w-75">
+            <label for="flight_number" class="form-label">
+                <i class="fas fa-ticket-alt"></i> Flight Number
+            </label>
+            <input type="text" class="form-control" id="flight_number" name="flight_number" placeholder="Enter flight number" required>
+        </div>
+
+        <!-- Origin City -->
+        <div class="mb-3 w-75">
+            <label for="from_city" class="form-label">
+                <i class="fas fa-map-marker-alt"></i> Origin City
+            </label>
+            <select class="form-select" id="from_city" name="from_city" required>
+                <option value="" disabled selected>Choose origin city</option>
+                <option value="Riyadh">Riyadh</option>
+                <option value="Abha">Abha</option>
+                <option value="Dammam">Dammam</option>
+                <option value="Jeddah">Jeddah</option>
+            </select>
+        </div>
+
+        <!-- Destination City -->
+        <div class="mb-3 w-75">
+            <label for="to_city" class="form-label">
+                <i class="fas fa-map-marker-alt"></i> Destination City
+            </label>
+            <select class="form-select" id="to_city" name="to_city" required>
+                <option value="" disabled selected>Choose destination city</option>
+                <option value="Riyadh">Riyadh</option>
+                <option value="Abha">Abha</option>
+                <option value="Dammam">Dammam</option>
+                <option value="Jeddah">Jeddah</option>
+            </select>
+        </div>
+
+        <!-- Departure Time -->
+        <div class="mb-3 w-75">
+            <label for="departure_time" class="form-label">
+                <i class="fas fa-clock"></i> Departure Time
+            </label>
+            <input type="datetime-local" class="form-control" id="departure_time" name="departure_time" required>
+        </div>
+
+        <!-- Arrival Time -->
+        <div class="mb-3 w-75">
+            <label for="arrival_time" class="form-label">
+                <i class="fas fa-clock"></i> Arrival Time
+            </label>
+            <input type="datetime-local" class="form-control" id="arrival_time" name="arrival_time" required>
+        </div>
+
+        <!-- Price -->
+        <div class="mb-3 w-75">
+            <label for="price" class="form-label">
+                <i class="fas fa-money-bill-wave"></i> Price (SAR)
+            </label>
+            <input type="number" class="form-control" id="price" name="price" placeholder="Enter price" required>
+        </div>
+
+        <!-- Available Seats -->
+        <div class="mb-3 w-75">
+            <label for="available_seats" class="form-label">
+                <i class="fas fa-chair"></i> Available Seats
+            </label>
+            <input type="number" class="form-control" id="available_seats" name="available_seats" placeholder="Enter available seats" required>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary w-50 mt-4">
+            <i class="fas fa-paper-plane"></i> Add Flight
+        </button>
+    </form>
+    {%endif%}
+</div>
+{% endblock %}

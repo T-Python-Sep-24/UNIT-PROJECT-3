@@ -1,0 +1,33 @@
+{% extends "main/base.html" %}
+
+{% block title %}Detail Flights{% endblock %}
+
+{% block content %}
+<div class="container my-5 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    {% if flight %}
+        <div class="text-center">
+            <h1 class="mb-4"><i class="fas fa-plane"></i> Detail Flights</h1>
+            <p>
+                <strong><i class="fas fa-ticket-alt"></i> Flight Number:</strong> {{ flight.flight_number }}
+            </p>
+            <p>
+                <strong><i class="fas fa-map-marker-alt"></i> From:</strong> {{ flight.from_city.name }}
+            </p>
+            <p>
+                <strong><i class="fas fa-map-marker-alt"></i> To:</strong> {{ flight.to_city.name }}
+            </p>
+            <p>
+                <strong><i class="fas fa-clock"></i> Departure:</strong> {{ flight.departure_time|date:"M d, Y H:i" }}
+            </p>
+            <p>
+                <strong><i class="fas fa-money-bill-wave"></i> Price:</strong> {{ flight.price }} SAR
+            </p>
+            <a href="{% url 'booking:confirm_booking' flight.id %}" class="btn btn-success mt-3">
+                <i class="fas fa-check-circle"></i> Confirm
+            </a>
+        </div>
+    {% else %}
+        <p class="text-center">No flights available for the given criteria.</p>
+    {% endif %}
+</div>
+{% endblock %}
