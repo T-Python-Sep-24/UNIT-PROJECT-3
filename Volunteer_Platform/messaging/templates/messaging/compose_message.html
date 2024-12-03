@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Compose Message{% endblock %}
+
+{% block content %}
+<h1>Compose New Message</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+</form>
+{% endblock %}

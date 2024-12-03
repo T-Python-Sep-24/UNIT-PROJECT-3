@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for {{ opportunity.title }}</title>
+    <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Apply for {{ opportunity.title }}</h1>
+        <form method="post" class="application-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn2"><span class="spn2">Submit Application</span></button>
+        </form>
+    </div>
+</body>
+</html>

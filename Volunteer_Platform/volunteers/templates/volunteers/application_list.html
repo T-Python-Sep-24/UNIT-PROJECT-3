@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Your Applications{% endblock %}
+
+{% block content %}
+<h1>Your Applications</h1>
+<ul>
+    {% for app in applications %}
+    <li>
+        {{ app.opportunity.title }} - {{ app.status }} ({{ app.date_applied }})
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

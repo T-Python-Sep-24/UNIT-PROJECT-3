@@ -1,0 +1,19 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Inbox{% endblock %}
+
+{% block content %}
+<h1>Inbox</h1>
+<ul>
+    {% for message in messages %}
+    <li>
+        <a href="{% url 'messaging:message_detail' message.id %}">
+            {{ message.subject }} - From: {{ message.sender.username }}
+        </a>
+        {% if not message.read %}
+            <strong>(Unread)</strong>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

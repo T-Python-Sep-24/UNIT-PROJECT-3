@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Volunteer Management Platform{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{% url 'main:homepage' %}">
+                    <img src="{% static 'main/images/logo.png' %}" alt="Platform Logo" class="logo-image">
+                </a>
+            </div>
+            <ul class="navbar">
+                <li><a href="{% url 'main:homepage' %}">Home</a></li>
+                <li><a href="{% url 'main:about' %}">About Us</a></li>
+                <li><a href="{% url 'main:contact' %}">Contact</a></li>
+                {% if user.is_authenticated %}
+                    <li>
+                        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn2"><span class="spn2">Logout</span></button>
+                        </form>
+                    </li>
+                    <li>Welcome, {{ user.username }} ({{ user.profile.role|default:"Role not assigned" }})</li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'volunteers:register_as_volunteer' %}">Register as Volunteer</a></li>
+                    <li><a href="{% url 'main:register_organization' %}">Register as Organization</a></li>
+                {% endif %}
+                {% if user.is_authenticated and user.profile.role == 'organization' %}
+                    <li><a href="{% url 'organization:add_opportunity' %}">Add Opportunity</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Volunteer Management Platform. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

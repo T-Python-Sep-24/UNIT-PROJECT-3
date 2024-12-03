@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Browse Opportunities{% endblock %}
+
+{% block content %}
+<h1>Available Opportunities</h1>
+
+{% if opportunities %}
+    <ul>
+        {% for opportunity in opportunities %}
+            <li>
+                <h2><a href="{% url 'organization:opportunity_detail' opportunity.pk %}">{{ opportunity.title }}</a></h2>
+                <p><strong>Description:</strong> {{ opportunity.description|truncatewords:20 }}</p>
+                <p><strong>Location:</strong> {{ opportunity.location|default:"Not specified" }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No opportunities available at the moment.</p>
+{% endif %}
+{% endblock %}
