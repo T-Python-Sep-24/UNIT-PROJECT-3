@@ -1,0 +1,70 @@
+{% extends 'main/base.html'%}
+{%load static%}
+
+   
+    {%block head%}
+    <link href="{% static 'css/blogs.css' %}" rel="stylesheet" />
+
+    {%endblock%}
+    {%block title%}<title>Update Challenge</title>{%endblock%}
+
+     {%block content%}
+
+     <h1 class="space-grotesk text-white mb-3">Update Challenge</h1>
+    {% if messages %}
+            <div class="messages">
+         {% for message in messages %}
+             <div class="alert {{ message.tags }}">
+                 {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    <div class="form-container py-4 rounded-4 d-flex flex-column justify-content-center mt-2">
+        
+            <div class="p-0 gap-4 d-flex justify-content-center align-items-center ">
+                <form action="{%url 'blogs:update_challenge_view'%}" class="container-fluid " method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                <div class="row">
+                    <div class="mb-3 col-md-12 col-sm-12">
+                        <label for="question" class="form-label">Challenge Question</label>
+                        <input type="text" value="{{challenge_question.question}}" class="form-control mb-2" id="question" name="question" required>
+                    </div> 
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-md-4 col-sm-12">
+                        <label for="option_1" class="form-label">Option 1</label>
+                        <input type="text" value="{{challenge_question.option_1}}" class="form-control mb-2" id="option_1" name="option_1" required>
+                    </div> 
+                    <div class="mb-3 col-md-4 col-sm-12">
+                        <label for="option_2" class="form-label">Option 2</label>
+                        <input type="text" value="{{challenge_question.option_2}}" class="form-control mb-2" id="option_2" name="option_2" required>
+                    </div> 
+                    <div class="mb-3 col-md-4 col-sm-12">
+                        <label for="option_3" class="form-label">Option 3</label>
+                        <input type="text" value="{{challenge_question.option_3}}" class="form-control mb-2" id="option_3" name="option_3" required>
+                    </div> 
+                    
+                </div>
+
+                 <div class="row">
+                    <div class="mb-3 col-md-4 col-sm-12">
+                        <label for="correct_answer" class="form-label">Correct Answer</label>
+                        <input type="text" value="{{challenge_question.correct_answer}}" class="form-control mb-2" id="correct_answer" name="correct_answer" required>
+                    </div> 
+                </div>
+            
+                <div class="row align-items-center">
+                    <div class="d-flex mt-2 justify-content-end gap-4">
+                        <input type="submit" value="Update Challenge" class="btn btn-success rounded-pill text-white"/>
+                        <a href="{%url 'blogs:blogs_all_view'%}" class="btn btn-danger rounded-pill text-white">Cancel</a>
+                    </div>
+                </div>    
+                </form>
+        
+        </div>
+    </div>
+
+    
+     
+     {%endblock%}

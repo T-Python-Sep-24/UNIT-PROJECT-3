@@ -29,3 +29,15 @@ class Comment(models.Model):
 
     def __str__(self) -> str:
         return f"{self.id} on {self.blog.title}"    
+    
+
+
+class ChallengeQuestion(models.Model):
+    question = models.CharField(max_length=500)  
+    option_1 = models.CharField(max_length=200)
+    option_2 = models.CharField(max_length=200)
+    option_3 = models.CharField(max_length=200)
+    correct_answer = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"Q: {self.question}"   

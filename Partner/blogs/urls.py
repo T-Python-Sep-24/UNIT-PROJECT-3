@@ -12,5 +12,5 @@ urlpatterns=[
     path('comment/delete/<comment_id>',views.delete_comment_view,name="delete_comment_view"),
     path('details/<blog_id>/',views.blog_details_view,name="blog_details_view"),
     path('bookmarks/add/<blog_id>/',views.add_bookmark_view,name="add_bookmark_view"),
-
+    path('challenge/update/',views.update_challenge_view,name="update_challenge_view"),
 ]

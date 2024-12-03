@@ -10,7 +10,7 @@
 
      {%block content%}
 <div class="row">
-    <div class="bolgs-area col-md-12 container-fluid ">
+    <div class="bolgs-area col-md-8 container-fluid ">
         
         <div class="border-bottom py-2">
             <h1 class="   text-center itim-regular  ">Blogs
@@ -94,56 +94,73 @@
               </ul>
           </navbar>
     </div>
-</div>
-<div class="challenge-area col-md-12 d-flex flex-column justify-content-center align-items-center ">
-       
-    <div>
-        <h4 class="my-2 head-challenge">
-            Language Challenge
-        </h4>
-        <form class="d-flex flex-column gap-3 justify-content-center ">
-            {% csrf_token %}
-            <div class="quiz-area py-5">
-                <p class="my-3 fs-4 text-center"> 
-                    Q: Some text here <span class="head-challenge">?</span>            
-                </p>
-            </div>
-           
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                <label class="form-check-label" for="flexRadioDefault1">
-                  <span class="radio-label">A</span>
-                  Default radio
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                <label class="form-check-label" for="flexRadioDefault2">
-                  <span class="radio-label">B</span>
-                  Default checked radio
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
-                <label class="form-check-label" for="flexRadioDefault3">
-                  <span class="radio-label">C</span>
-                  Default radio
-                </label>
-              </div>
-              <div class="d-flex justify-content-between my-3">
-                <button type="submit" class="btn btn-success rounded-pill mb-3">Edit</button>
 
-                <button type="submit" class="btn btn-orange rounded-pill mb-3">Verify</button>
-              </div>
-        </form>
-        <div class="correct-answer-block">
-            Congriglitions Your ansewr is correct 
-        </div>
-        <div class="wrong-answer-block">
-            Nice Try, but Your ansewr is wrong !
-            <p>the correct answer is " something"</p>
+    <div class="challenge-area col-md-4 d-flex flex-column justify-content-center align-items-center">
+        <div class="container py-2 px-2">
+            <h4 class="mt-4 text-center head-challenge itim-regular text-orange">
+                Language Challenge
+            </h4>
+            
+            <form class="d-flex flex-column justify-content-center align-items-center" method="POST" action="{% url 'blogs:blogs_all_view' %}">
+                {% csrf_token %}
+    
+                <div class="quiz-area px-2 text-center mb-2">
+                    <p class="fs-5">
+                        <span class="head-challenge itim-regular text-orange">Q: </span> {{ challenge_question.question }}<span class="head-challenge itim-regular text-orange"> ?</span>
+                    </p>
+                </div>
+    
+                <div class="d-flex flex-column w-100">
+                    <div class="col-md-12 mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer" value="{{ challenge_question.option_1 }}" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                <span class="radio-label itim-regular">A</span> {{ challenge_question.option_1 }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer" value="{{ challenge_question.option_2 }}" id="flexRadioDefault2">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                <span class="radio-label itim-regular">B</span> {{ challenge_question.option_2 }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer" value="{{ challenge_question.option_3 }}" id="flexRadioDefault3">
+                            <label class="form-check-label" for="flexRadioDefault3">
+                                <span class="radio-label itim-regular">C</span> {{ challenge_question.option_3 }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="d-flex justify-content-center gap-3 w-100 mt-4">
+                    {% if user.is_authenticated %}
+                        {% if request.user.is_superuser or perms.blogs.change_challengequestion %}
+                            <a href="{% url 'blogs:update_challenge_view' %}" class="btn btn-orange-white rounded-pill mb-3">Edit</a>
+                        {% endif %}
+                    {% endif %}
+                    <button type="submit" class="btn btn-orange rounded-pill px-4 mb-3"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </form>
+    
+            {% if request.POST.answer %}
+                {% if result %}
+                    <div class="alert alert-success text-center mt-4">
+                        🎉 Congratulations! Your answer is correct! 🎉
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger text-center mt-4">
+                        😞 Nice try, but your answer is wrong! 😞
+                        <p>The correct answer is: "{{challenge_question.correct_answer}}"</p>                    </div>
+                {% endif %}
+            {% endif %}
         </div>
     </div>
+    
 </div>
     
      

@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.contrib import messages
-from .models import Blog,Comment
+from .models import Blog,Comment,ChallengeQuestion
 from main.models import Language
 from accounts.models import Bookmark
-from .forms import BlogForm
+from .forms import BlogForm,ChallengeQuestionForm
 from django.core.paginator import Paginator
 # Create your views here.
 
@@ -12,6 +12,8 @@ from django.core.paginator import Paginator
 def blogs_all_view(request:HttpRequest):
     blogs=Blog.objects.all()
     languages=Language.objects.all()
+    challenge_question=ChallengeQuestion.objects.first()
+    result=False
     if "search" in request.GET and len(request.GET["search"]) >= 1:
         blogs = blogs.filter(title__icontains=request.GET["search"])
 
@@ -21,11 +23,19 @@ def blogs_all_view(request:HttpRequest):
     if "order_by" in request.GET and request.GET.get("date"):
         blogs = blogs.order_by("-created_at")
     
+    if "answer" in request.POST and request.POST["answer"]:
+        print("ansewr: ",request.POST["answer"])
+        if challenge_question.correct_answer == request.POST["answer"]:
+            result=True
+
+
     p=Paginator(blogs,6)
     page=request.GET.get('page',1)
     blogs_list=p.get_page(page)
 
-    return render(request,"blogs/blogs.html",{"blogs":blogs_list,"languages":languages})
+    return render(request,"blogs/blogs.html",{"blogs":blogs_list,"languages":languages,
+                                              "challenge_question":challenge_question,
+                                              "result":result})
 
 
 
@@ -168,3 +178,33 @@ def add_bookmark_view(request,blog_id):
 
 
     return redirect("blogs:blog_details_view",blog_id=blog_id) 
+
+
+
+def update_challenge_view(request:HttpRequest):
+    try:   
+        if not request.user.is_superuser and not request.user.has_perm("blogs.change_challengequestion"):
+            messages.warning(request,"You don't have permission to edit challenge","alert-warning")
+            return redirect("main:home_view")
+ 
+        challenge_question=ChallengeQuestion.objects.first()
+        if request.method=="POST":
+            challenge_question_form=ChallengeQuestionForm(request.POST,instance=challenge_question)
+            if challenge_question_form.is_valid():
+                challenge_question_form.save()
+               
+                messages.success(request, 'The challenge question has been updated successfully!','alert-success')
+                return redirect("blogs:update_challenge_view")
+            else:
+                print("form is not valid")
+                print(challenge_question_form.errors)
+        else:   
+            challenge_question_form = ChallengeQuestionForm(instance=challenge_question)        
+        return render(request,'blogs/update_challenge.html',{"challenge_question":challenge_question})
+    except ChallengeQuestion.DoesNotExist:
+        print("error massege")
+        messages.error(request, "An error occurred: The page not found",'alert-danger')
+        return redirect('main:home_view')
+    except Exception as e:
+        messages.error(request, f"An error occurred: {str(e)}")
+        return redirect('main:home_view')

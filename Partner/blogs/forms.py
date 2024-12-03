@@ -1,5 +1,5 @@
 from django import forms
-from .models import Blog,Comment
+from .models import Blog,Comment,ChallengeQuestion
 from django.contrib.auth.models import User
 class BlogForm(forms.ModelForm):
     class Meta:
@@ -12,4 +12,10 @@ class BlogForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
+        fields = "__all__"
+
+
+class ChallengeQuestionForm(forms.ModelForm):
+    class Meta:
+        model = ChallengeQuestion
         fields = "__all__"
