@@ -10,3 +10,4 @@ A platform that displays recent art pieces submitted by artists. And provides in
 - Viewing art pieces and all needed information about them.
 - Viewing artists, their informationand and what pieces they have.
 - Comments on art pieces.
+- Add art pieces to favorite for authenticated users
