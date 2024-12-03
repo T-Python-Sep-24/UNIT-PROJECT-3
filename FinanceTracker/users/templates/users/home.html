@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+
+{% block content %}
+<style>
+.goal-card-body {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+}
+
+.goal-card-body:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#expense-chart {
+    animation: fadeInChart 2s ease-in-out;
+}
+
+@keyframes fadeInChart {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.card {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.form-control {
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+}
+
+.form-control:focus {
+    background-color: #e2e6ea;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+</style>
+<div class="container">
+    <h2>Personal Finance Tracker</h2>
+<pre>{{ expense_summary|json_script:"expense-summary" }}</pre>
+
+<div class="container my-4 p-4 bg-dark text-white rounded shadow-lg">
+    <div class="row justify-content-between align-items-center">
+        <div class="col">
+            <h3>Total Salary: ${{ salary }}</h3>
+            <h3>Total Expenses: ${{ total_expenses }}</h3>
+            <h3>Remaining Savings: ${{ remaining_savings }}</h3>
+        </div>
+
+        <!-- Right Section: Pie Chart -->
+        <div class="col">
+            <canvas id="expense-chart" width="400" height="400"></canvas>
+        </div>
+    </div>
+</div>
+
+<br><br>
+
+<h3>Your Goals</h3>
+
+<div class="container my-4 p-4 bg-dark text-white rounded shadow-lg">
+    <ul class="list-unstyled">
+        {% for goal in goal_summary %}
+            <li class="mb-4 goal-card">
+                <div class=" p-3 goal-card-body">
+                    <h4 class="card-title">{{ goal.name }} - 
+                        {% if goal.progress >= 100 %}
+                            <span class="badge bg-success">Complete</span>
+                        {% else %}
+                            Progress: {{ goal.progress }}%
+                        {% endif %}
+                    </h4>
+                    <p class="card-text">Current Balance: ${{ goal.current_amount }} / Target: ${{ goal.target_amount }}</p>
+                    <p class="card-text">Deadline: {{ goal.deadline }}</p>
+                    
+                    {% if goal.progress < 100 %}
+                        <form method="POST" action="{% url 'home' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="goal_id" value="{{ goal.id }}">
+                            <div class="mb-3">
+                                <label for="amount_{{ goal.id }}" class="form-label">Add Money:</label>
+                                <input type="number" step="0.01" name="amount" id="amount_{{ goal.id }}" class="form-control" required>
+                            </div>
+                            <button type="submit" name="add_money_to_goal" class="btn btn-primary">Add Money</button>
+                        </form>
+                    {% else %}
+                        <p><strong>Goal Completed!</strong></p>
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if goal_summary|length < 3 %}
+        {% with goals_completed=0 %}
+            {% for goal in goal_summary %}
+                {% if goal.progress >= 100 %}
+                    {% with goals_completed=goals_completed|add:1 %}
+                    {% endwith %}
+                {% endif %}
+            {% endfor %}
+            {% if goals_completed == 0 %}
+                <a href="{% url 'goals:add_goal' %}">
+                    <button class="btn btn-success">Add New Goal</button>
+                </a>
+            {% endif %}
+        {% endwith %}
+    {% endif %}
+</div>
+
+
+    <br><br>
+</div>
+
+<script id="expense-data" type="application/json">
+    {{ expense_summary|json_script:"expense-summary" }}
+    {{ group_goal_summary|json_script:"group-goal-summary" }}
+</script>
+
+<script id="expense-data" type="application/json">
+    {{ expense_summary|json_script:"expense-summary" }}
+    {{ group_goal_summary|json_script:"group-goal-summary" }}
+</script>
+
+<script>
+    const expenseSummary = JSON.parse(document.getElementById('expense-summary').textContent);
+    const groupGoalSummary = JSON.parse(document.getElementById('group-goal-summary').textContent);
+
+    const expenseLabels = expenseSummary.map(item => item.category_name);
+    const expenseValues = expenseSummary.map(item => item.total_spent);
+
+    const groupGoalLabels = groupGoalSummary.map(item => item.goal_name);  
+    const groupGoalValues = groupGoalSummary.map(item => item.amount);  
+
+    const combinedLabels = [...expenseLabels, ...groupGoalLabels];
+    const combinedValues = [...expenseValues, ...groupGoalValues];
+
+    const combinedBackgroundColors = [
+        'rgba(255, 99, 132, 0.2)', 
+        'rgba(54, 162, 235, 0.2)', 
+        'rgba(255, 206, 86, 0.2)', 
+        'rgba(75, 192, 192, 0.2)', 
+        'rgba(153, 102, 255, 0.2)', 
+        'rgba(255, 159, 64, 0.2)', 
+        'rgba(255, 99, 132, 0.2)', 
+        'rgba(54, 162, 235, 0.2)', 
+        'rgba(255, 206, 86, 0.2)', 
+        'rgba(75, 192, 192, 0.2)',
+    ];
+
+    const combinedBorderColors = [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+    ];
+
+    const ctx = document.getElementById('expense-chart').getContext('2d');
+    const expenseChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: combinedLabels,
+            datasets: [{
+                data: combinedValues,
+                backgroundColor: combinedBackgroundColors,
+                borderColor: combinedBorderColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right'
+                }
+            }
+        }
+    });
+</script>
+
+
+{% endblock %}
+
