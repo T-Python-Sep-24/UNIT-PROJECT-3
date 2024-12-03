@@ -92,6 +92,6 @@ def confirm_booking_view(request: HttpRequest, flight_id):
         )
         booking.save()
         messages.success(request, f"Booking successfully confirmed for flight {flight.flight_number}. Welcome {request.user.first_name}!", "alert-success")
-        return redirect('booking:search_flights', flight_id=flight.id)
+        return redirect('booking:search_flights')
 
     return render(request, 'booking/confirm_booking.html', {'flight': flight ,'customer': request.user})
