@@ -1,0 +1,45 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}My Tests{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>My Test Results</h1>
+
+    {% if test_attempts %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Flashcard</th>
+                        <th>Score</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attempt in test_attempts %}
+                    <tr>
+                        <td>{{ attempt.flashcard.name }}</td>
+                        <td>{{ attempt.score }}/{{ attempt.max_score }}</td>
+                        <td>{{ attempt.created_at|date:"M d, Y H:i" }}</td>
+                        <td>
+                            <a href="{% url 'flashcards:test_flashcard_view' attempt.flashcard.id %}" 
+                               class="btn btn-sm btn-primary">
+                                Retake Test
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            You haven't taken any tests yet. 
+            <a href="{% url 'flashcards:all_flashcards_view' %}">Browse flashcards</a> to take a test.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

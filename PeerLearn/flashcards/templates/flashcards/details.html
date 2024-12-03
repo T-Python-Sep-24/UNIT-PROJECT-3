@@ -1,0 +1,159 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}Flashcard{% endblock %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'css/flashcards.css' %}">{% endblock %}
+
+{% block content %}
+<!-- Delete the flashcard -->
+<section class="container d-flex justify-content-between">
+    <h1>{{ flashcard.name }}</h1>
+    <div class="d-flex gap-2">
+        <div>
+            <a href="{% url 'flashcards:test_flashcard_view' flashcard.id %}" class="btn btn-dark">Test Yourself</a>
+        </div>
+        {% if request.user.is_superuser %}
+        <div class="d-flex gap-2">
+            <!-- Button trigger modal -->
+            <a href="#">
+                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Delete the Flashcard
+                </button>
+            </a>
+        </div>
+        {% endif %}    
+    </div>
+</section>
+<!-- Flashcard Section -->
+<section class="container">
+    <div id="flashcardCarousel" class="carousel slide" data-bs-interval="false">
+        <div class="carousel-inner">
+            {% for card in flashcard.flashcard_json.questions %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="flashcard">
+                    <div class="flashcard-inner">
+                        <!-- Front of Card -->
+                        <div class="flashcard-front">
+                            <div class="card-content">
+                                <h3>Question</h3>
+                                <p>{{ card.question }}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Back of Card -->
+                        <div class="flashcard-back">
+                            <div class="card-content">
+                                <div class="d-flex justify-content-between">
+                                    <h3>Answer</h3>
+                                    <!-- Back Card Controls -->
+                                    <div class="flashcard-controls my-auto pb-2 text-center">
+                                        <button class="btn btn-info hint-btn">Show Hint</button>
+                                        <button class="btn btn-info explain-btn">Show Explanation</button>
+                                    </div>                                    
+                                </div>
+                                <p class="answer-text">{{ card.answer }}</p>
+                                
+                                <div class="hint-content">
+                                    <strong>Hint:</strong> 
+                                    <p>{{ card.hint }}</p>
+                                </div>
+                                
+                                <div class="explain-content">
+                                    <strong>Explanation:</strong>
+                                    <p>{{ card.explain }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card Controls -->
+                <div class="flashcard-controls text-center">
+                    <button class="btn btn-primary flip-btn">Flip Card</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Navigation -->
+        <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-secondary" data-bs-target="#flashcardCarousel" data-bs-slide="prev">
+                Previous Card
+            </button>
+            <button class="btn btn-secondary" data-bs-target="#flashcardCarousel" data-bs-slide="next">
+                Next Card
+            </button>
+        </div>
+    </div>
+</section>
+<hr />
+<!-- Review section -->
+<section class="container">
+    <h2>Reviews</h2>
+
+    <div class="d-flex flex-column gap-3">
+        {% for review in flashcard.review_set.all %}
+            <div class="d-flex flex-column p-3 shadow">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4>{{review.user.first_name}} {{review.user.last_name}}</h4>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-star-fill"></i>
+                        <h5 class="m-0 p-0">{{review.rating}}</h5>
+                    </div>
+                </div>
+                
+                <p>{{review.comment}}</p>
+                <p class="text-muted">{{review.created_at}}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if request.user.is_authenticated %}
+    <h2 class="mt-5">Add Review</h2>
+    <form class="d-flex flex-column gap-2" action="{% url 'flashcards:add_review_view' flashcard.id %}" method="post">
+        {% csrf_token %}
+        <textarea class="form-control" name="comment" required minlength="3" placeholder="Comment..."></textarea>
+        <select class="form-select" name="rating" required>
+            <option value="">Rating</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <input type="submit" class="btn btn-dark" value="Add Review" />
+    </form>
+    {% else %}
+        <div class="p-3 rounded bg-warning mt-4 d-flex flex-column gap-2">
+            <p>Only registered users can add reviews</p>
+        </div>
+    {% endif %}
+</section>
+
+{% if request.user.is_superuser %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Deleting the flashcard</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete the flashcard?
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">No</button>
+        <a href="{% url 'flashcards:delete_flashcard_view' flashcard.id %}"><button type="button" class="btn btn-dark">Yes</button></a>
+    </div>
+    </div>
+</div>
+</div>
+{% endif %}
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'js/flashcards.js' %}"></script>
+{% endblock %}

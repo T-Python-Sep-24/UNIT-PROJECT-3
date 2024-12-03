@@ -1,0 +1,23 @@
+<div class="row row-cols-1 row-cols-md-2">
+    {% for flashcard in flashcards %}
+    <div class="col p-0">
+        <div class="flashcard-card d-flex flex-column shadow mx-2 my-2 p-2 gap-2">
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'flashcards:details_flashcard_view' flashcard.id %}" class="main-link"><h5>{{ flashcard.name }}</h5></a>
+                <div class="card-logo"><img src="{{ flashcard.subject.logo.url }}" alt="{{flashcard.subject.name}} logo"></div>
+            </div>
+            <div class="card-image">
+                <img src="{{ flashcard.photo.url }}" alt="{{ flashcard.name }}" />
+            </div>
+            <div class="d-flex gap-2">
+                <h5>Published:</h5>
+                <p>{{ flashcard.created_at }}</p>
+            </div>
+            <div class="d-flex gap-2">
+                <h5>Description:</h5>
+                <p>{{ flashcard.description }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

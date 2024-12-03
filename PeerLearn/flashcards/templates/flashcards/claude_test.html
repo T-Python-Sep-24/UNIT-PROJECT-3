@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}Add Flashcard{% endblock %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'css/flashcards.css' %}">{% endblock %}
+
+{% block content %}
+ <section class="container">
+    <h1>Test Claude</h1>
+    <div class="row">
+        <div class="col-8">
+            <form action="{% url 'flashcards:claude_test' %}" method="post" enctype="multipart/form-data" class="d-flex flex-column gap-2">
+                {% csrf_token %}
+                <h5>Extracted text:</h5>
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <textarea name="extracted_text" class="form-control" placeholder="Description" required></textarea>
+                </div>
+                <input type="submit" class="btn btn-dark">
+            </form>
+        </div>
+    </div>
+ </section>
+{% endblock %}

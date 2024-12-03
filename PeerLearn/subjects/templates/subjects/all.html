@@ -1,0 +1,42 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}Subjects{% endblock %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'css/subjects.css' %}">{% endblock %}
+
+{% block content %}
+<section class="container">
+   <div class="d-flex justify-content-between">
+      <h1>All Subjects</h1>
+      <div>
+         <form action="{% url 'subjects:all_subjects_view' %}" method="get">
+            <div class="d-flex gap-2">
+               <input type="search" name="search" class="form-control" placeholder="search" value="{{ request.GET.search }}" />
+               <input type="submit" value="search" class="btn btn-dark">
+            </div>
+         </form>
+      </div>
+   </div>
+    
+   <div class="row row-cols-1 row-cols-md-2">
+      {% for subject in subjects %}
+      <div class="col p-0">
+         <div class="car-card d-flex flex-column shadow mx-2 my-2 p-2 gap-2">
+            <div>
+                  <a href="{% url 'subjects:details_subject_view' subject.id %}" class="main-link"><h5>{{ subject.name }}</h5></a>
+            </div>
+            <div class="card-image">
+                  <img src="{{ subject.logo.url }}" alt="{{ subject.name }} logo" />
+            </div>
+            <h5>Published: {{ subject.created_at }}</h5>
+            <h5>Subject Flashcards: {{ subject.flashcard_set.count }}</h5>
+         </div>
+      </div>
+      {% endfor %}
+   </div>
+
+
+</section>
+{% endblock %}

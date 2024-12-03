@@ -1,0 +1,17 @@
+.hero .col {
+    height: 40vh;
+    margin-bottom: auto;
+    background-color: #000;
+}
+
+.hero img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.hero-text {
+    color: #fff;
+    height: 100%;
+    justify-content: center;
+}
