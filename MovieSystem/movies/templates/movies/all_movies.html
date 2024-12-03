@@ -1,0 +1,112 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    All Movies
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
+       
+        <form action="{% url 'movies:all_movies_view' %}" method="GET" class="w-100">
+            <div class="row g-2">
+                
+                <div class="col-12 col-md">
+                    <input 
+                        type="search" 
+                        class="form-control" 
+                        placeholder="Search for a specific movie" 
+                        value="{{ request.GET.search }}" 
+                        name="search"
+                    />
+                </div>
+
+                
+                <div class="col-12 col-md">
+                    <select name="director" class="form-select">
+                        <option value="">All Directors</option>
+                        {% for director in directors %}
+                            <option 
+                                value="{{ director.id }}" 
+                                {% if request.GET.director|stringformat:"s" == director.id|stringformat:"s" %}selected{% endif %}
+                            >
+                                {{ director.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                
+                <div class="col-12 col-md">
+                    <select name="genre" class="form-select">
+                        <option value="">All Genres</option>
+                        {% for genre in genres %}
+                            <option 
+                                value="{{ genre.id }}" 
+                                {% if request.GET.genre|stringformat:"s" == genre.id|stringformat:"s" %}selected{% endif %}
+                            >
+                                {{ genre.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+               
+                <div class="col-12 col-md-auto">
+                    <input type="submit" value="Apply" class="btn btn-primary w-100" />
+                </div>
+            </div>
+        </form>
+
+      
+        {% if request.user.is_staff and perms.movies.add_movie %}
+        <a 
+            href="{% url 'movies:add_movie_view' %}" 
+            class="btn btn-primary mt-2 mt-md-0 align-self-start align-self-md-center w-100 w-md-auto">
+            Add a New Movie +
+        </a>
+        {% endif %}
+    </div>
+
+    
+    {% include 'movies/movies_list.html' %}
+
+    
+    <div class="d-flex justify-content-center mt-4">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if movies.has_previous %}
+                <li class="page-item">
+                    <a class="page-link text-decoration-underline text-dark" href="?page=1">
+                        First
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-dark" href="?page={{ movies.previous_page_number }}">
+                        Previous
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ movies.number }} of {{ movies.paginator.num_pages }}</span>
+                </li>
+
+                {% if movies.has_next %}
+                <li class="page-item">
+                    <a class="page-link text-dark" href="?page={{ movies.next_page_number }}">
+                        Next
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-decoration-underline text-dark" href="?page={{ movies.paginator.num_pages }}">
+                        Last
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock content %}

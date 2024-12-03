@@ -1,0 +1,122 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    All Screenings
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>All Screenings</h1>
+            <div class="d-flex gap-3">
+                <form action="{% url 'screens:all_screens_view' %}" method="GET">
+                    <div class="d-flex gap-3">
+                        <select name="movie" class="form-select">
+                            <option value="" {% if not selected_movie %}selected{% endif %}>Select a movie</option>
+                            {% for movie in movies %}
+                                <option value="{{ movie.id }}" {% if selected_movie == movie.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ movie.title }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Filter" class="btn btn-primary" />
+                        
+                    </div>
+                    
+                </form>
+                <a href="{% url 'screens:add_screen_view' %}" class="btn btn-primary">Book a screen +</a>
+            </div>
+            
+            
+       
+        
+
+    </div>
+
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Movie</th>
+                <th>Theater</th>
+                <th>Showtime</th>
+                <th>Price (SAR)</th>
+                <th>Available</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for screening in screenings %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>
+                    <a href="{% url 'movies:movie_detail_view' screening.movie.id %}" class="text-decoration-underline">
+                        {{ screening.movie.title }}
+                    </a>
+                </td>
+                <td>{{ screening.theater }}</td>
+                <td>{{ screening.showtime|date:"d M Y, h:i A" }}</td>
+                <td>{{ screening.price }}</td>
+                <td>
+                    {% if screening.available %}
+                    <span class="text-success">Available</span>
+                    {% else %}
+                    <span class="text-danger">Full</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="d-flex gap-2">
+                        {% if request.user.is_staff and perms.screens.change_screening %}
+                        <a href="{% url 'screens:update_screen_view' screening.id %}" class="btn btn-warning btn-sm">Update</a>
+                        {% endif %}
+                        {% if request.user.is_staff and perms.screens.delete_screening %}
+                            <form action="{% url 'screens:delete_screen_view' screening.id  %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this Screen ?');">
+                                    Delete
+                                </button>
+                            </form>
+                        {% endif %}
+                        
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No screenings available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-center mt-4">
+        {% if screenings.has_other_pages %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if screenings.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ screenings.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ screenings.number }} of {{ screenings.paginator.num_pages }}</span>
+                </li>
+
+                {% if screenings.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ screenings.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ screenings.paginator.num_pages }}">Last</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

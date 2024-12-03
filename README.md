@@ -1,135 +1,43 @@
-# UNIT-PROJECT-3
-
-## Create a Project of your own choosing
-
-Base on what you’ve learned until now , create a project of your choosing. Impress us with your creativity and execution.
+# Movie Ticket Booking System
 
 
-## Minimum Requirements
-- Use Django.
-- Use Templates & Template Inheritance.
-- Use static, media & dynamic urls as needed.
-- Organize your project in apps as needed.
-- Use models to represent you data.
-- Use a CSS library to style your website.
-- User Authentication & Authorization (register, login, logout, Limit access to some pages using permissions , etc.)
-- Use naming conventions & best practices.
-- Strive to make the user journey intuitive and complete.
+# Project Description
+This is a Movie Ticket Booking System where users can browse available screenings of movies, select seats, and book tickets. The system features real-time seat availability and manages users' profiles, including wallet balances.
+
+# Features
+## User Features
+### User Authentication
+Users can sign up, log in, and manage their profiles, including updating their wallet balance and personal information.
+
+### Movie Screenings
+Users can view upcoming movie screenings and select available seats.
+
+### Seat Selection
+Users can select seats from a visual seating arrangement. The system updates seat availability in real-time.
+
+### Booking & Payment
+Users can book tickets and pay for them using their wallet balance. If the user has insufficient funds, they are notified.
 
 
+### Profile Management
+Users can view and update their profile, including their wallet balance and avatar.
 
-## Example Projects :
+### Tickets History
+Users can view a history of their past bookings, including movie details, showtime, seat numbers, and total price.
 
+# Staff Features
 
-1. **Task Management System:**
-- **Overview:** Create a platform for managing tasks and projects within a team or organization.
-- **Features:**
-- User authentication and role-based access control.
-- Task creation, assignment, and tracking.
-- Project management with milestones.
-- File uploads and comments on tasks.
-- Notification system for task updates.
+### Staff Authentication
+Staff members can log in to the system with special credentials to access admin functionalities.
 
-## Use python-dotenv to save your sensitive data.
-- https://pypi.org/project/python-dotenv/
+### Movie Management
+Staff can add, update, or remove movies from the system. They can upload posters, set movie details, and manage movie categories.
 
-
-## Use a CDN or cloud storage provider to sore your large static files (videos, images, etc.), such as:
-- https://firebase.google.com/docs/storage
-
-## Use Git & Github to manage and track changes in your project.
-- At lease commit and sync the changes once at the end of everyday.
-
-## Edit the README.md file to include (include the info at the top):
-- Project Name
-- Project Description
-- Features list.
-
-
-**Online Learning Platform:**
-
-- **Overview:** Develop a platform for online courses, quizzes, and educational resources.
-- **Features:**
-- User registration and profile management.
-- Course creation and enrollment.
-- Quiz and assessment functionalities.
-- Progress tracking and certificates.
+### Screening Management
+Staff can create, update, or remove movie screenings, including selecting showtimes, pricing, and seat configurations.
 
 
 
 
-**Crowdfunding Platform:**
-
-- **Overview:** Build a crowdfunding website where users can create campaigns and seek financial support for their projects.
-- **Features:**
-    - User profiles with project history.
-    - Campaign creation and customization.
-    - Payment integration for contributions.
-    - Progress tracking and updates.
-
-**Job Board and Recruitment System:**
-
-- **Overview:** Develop a platform for job seekers and employers to connect.
-- **Features:**
-    - User profiles with resumes.
-    - Job posting and application functionalities.
-    - Search and filter options for jobs.
-    - Employer dashboards for managing postings.
 
 
-**Inventory Management System:**
-
-- **Overview:** Build a system for tracking and managing inventory for businesses.
-- **Features:**
-    - User authentication with roles (e.g., admin, staff).
-    - Product catalog with stock levels.
-    - Order processing and tracking.
-    - Reporting and analytics.
-
-
-**Recipe Sharing Platform:**
-
-- **Overview:** Create a platform where users can share and discover recipes.
-- **Features:**
-    - User accounts with saved recipes.
-    - Recipe creation and editing.
-    - Search and categorization of recipes.
-    - User ratings and reviews.
-      
-## Resources:
-
-**Free high quality images :**
-
-- https://www.pexels.com/
-- https://unsplash.com
-
-**Free sounds website:**
-
-- https://mixkit.co/
-
-**Free stock videos:**
-
-- https://pixabay.com/videos/
-
-**Free Fonts:**
-
-- https://fonts.google.com
-
-**Free Icons**
-
-- https://fonts.google.com/icons
-- https://icons.getbootstrap.com/
-
-**CSS Library:**
-
-- https://getbootstrap.com/
-- https://get.foundation/index.html
-
-**CSS Animation libraries:**
-
-- https://animate.style
-- https://www.minimamente.com/project/magic/
-
-
-
- 

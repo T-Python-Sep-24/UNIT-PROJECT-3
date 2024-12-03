@@ -1,0 +1,27 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.avatar{
+    width: 25px;
+}
+.content-wrapper {
+    min-height: calc(100vh - 56px - 50px); 
+}
+
+
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.poster .poster-poster img{
+    width: 100%;
+    max-width: 610px;
+    height: 450px;
+}
+
+

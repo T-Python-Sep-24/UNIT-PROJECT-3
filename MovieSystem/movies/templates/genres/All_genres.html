@@ -1,0 +1,50 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    Genres
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+   
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Genres</h1>
+        {% if request.user.is_staff and perms.movies.add_genre %}
+        <a href="{% url 'movies:add_genre_view' %}" class="btn btn-primary">Add a new genre +</a>
+        {% endif %}
+    </div>
+
+   
+    <div class="row g-3">
+        {% for genre in genres %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card bg-body-secondary h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center text-black">
+                            <a href="{% url 'movies:all_movies_view' %}?genre={{ genre.id }}" class="text-decoration-none">
+                                <h5 class="card-title text-truncate">{{ genre.name }}</h5>
+                            </a>
+                        </div>
+                    </div>
+
+               
+                    <div class="card-footer">
+                        <div class="d-flex gap-2">
+                            {% if request.user.is_staff and perms.movies.change_genre %}
+                            <a href="{% url 'movies:update_genre_view' genre.id %}" class="btn btn-warning flex-fill">Update</a>
+                            {% endif %}
+                            {% if request.user.is_staff and perms.movies.delete_genre %}
+                            <form action="{% url 'movies:delete_genre_view' genre.id %}" method="post" class="flex-fill">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to delete this Genre?');">Delete</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
