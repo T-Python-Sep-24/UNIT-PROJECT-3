@@ -55,18 +55,17 @@ def user_profile_view(request, username):
         HttpResponse: Render 'users/profile.html' with user details and places.
     """
     try:
-        # Fetch the user by username
-        profile_user = User.objects.filter(username=username).first()  # Returns None if user doesn't exist
+        
+        profile_user = User.objects.filter(username=username).first()  
 
         if not profile_user:
-            # Handle case where the user doesn't exist
+            
             messages.error(request, f"User with username '{username}' not found.")
             profile_user, places, can_add_place = None, [], False
         else:
             places = Place.objects.filter(author=profile_user)
             can_add_place = request.user.is_authenticated and request.user == profile_user
     except Exception as e:
-        # Handle any other exceptions
         messages.error(request, f"An error occurred while fetching the profile: {e}")
         profile_user, places, can_add_place = None, [], False
 
