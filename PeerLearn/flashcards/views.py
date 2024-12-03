@@ -2,15 +2,16 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.conf import settings
 from django.contrib import messages
+from django.http import JsonResponse
 from subjects.models import Subject
 import os
+import requests
 from .models import Flashcard, Review
 from .forms import FlashcardForm
 from utils.pdf_utils import extract_text_with_pymupdf, extract_text_with_ocr, has_meaningful_text
 from utils.api_utils import generate_flashcards_and_test_from_text
+from anthropic import Anthropic
 
-import openai
-from django.http import JsonResponse
 
 
 # Create your views here.
@@ -163,20 +164,36 @@ list_display ﺑﺎﺳﺘﺨﺪام Admin واﺟﻬﺎت ﺗﺨﺼﻴﺺ
     return redirect('main:home_view')
 
 
-# Ensure the API key is set
-openai.api_key = settings.OPENAI_API_KEY  # or use your key directly here
 
-def chatgpt_test(request):
+def claude_test(request):
+    """
+    View to test Claude API using environment variable
+    """
     try:
-        # Request format for the latest API
-        response = openai.completions.create(
-            model="gpt-3.5-turbo",  # you can use "gpt-4" or another model if needed
-            prompt="Say hello, world!",
-            max_tokens=10
+        # Get API key from environment variable
+        api_key = os.getenv('CLAUDE_API_KEY')
+        
+        if not api_key:
+            return HttpResponse("Error: CLAUDE_API_KEY not set", status=500)
+        
+        # Initialize Anthropic client
+        client = Anthropic(api_key=api_key)
+        
+        # Make API call
+        response = client.messages.create(
+            model="claude-3-haiku-20240307",
+            max_tokens=300,
+            messages=[
+                {
+                    "role": "user", 
+                    "content": "Explain Python decorators in a simple, concise way"
+                }
+            ]
         )
-
-        # Return the response to the client
-        return JsonResponse({"message": response['choices'][0]['text'].strip()})
-
+        
+        # Return the response text
+        return HttpResponse(response.content[0].text)
+    
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        # Return any errors that occur
+        return HttpResponse(f"Error occurred: {str(e)}", status=500)

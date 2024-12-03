@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-from .views import chatgpt_test
+from .views import chatgpt_test, claude_test
 
 app_name = "flashcards"
 
@@ -11,7 +11,6 @@ urlpatterns = [
     path("details/<flashcard_id>/", views.details_flashcard_view, name="details_flashcard_view"),
     path("delete/<flashcard_id>/", views.delete_flashcard_view, name="delete_flashcard_view"),
     path("generate/", views.generate_view, name="generate_view"),
-    path('test-chatgpt/', chatgpt_test, name='test_chatgpt'),
-
+    path('test-claude/', claude_test, name='test_claude'),
     # path("upload/", views.upload_pdf_view, name="upload_pdf_view"),
 ]

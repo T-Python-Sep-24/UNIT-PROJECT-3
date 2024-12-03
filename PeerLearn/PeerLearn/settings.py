@@ -17,8 +17,10 @@ from dotenv import load_dotenv
 # Load environment variables from the .env file
 load_dotenv()
 
-# access API key through environment variable
+# access API key through environment variables
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+CLAUDE_API_KEY = os.getenv('CLAUDE_API_KEY')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
