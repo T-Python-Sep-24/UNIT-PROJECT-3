@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Fitness Tracker {% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+{% if request.user == user %}
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <div class="d-flex flex-column align-items-center">
+        <h1>
+             Explore Others Routines
+         </h1> 
+    </div>
+     
+    {% include 'routines/explore_routines.html' %}
+</div>
+
+<div class="line mt-5 mb-5"></div>
+
+{% endif %}
+
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <div class="d-flex flex-column align-items-center">
+        <h1>
+            Top Exercises
+         </h1> 
+    </div>
+    
+    {% include 'exercises/exercises_list.html' %}    
+
+</div>
+
+
+{% endblock %}

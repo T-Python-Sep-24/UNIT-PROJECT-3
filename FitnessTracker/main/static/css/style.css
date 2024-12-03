@@ -1,0 +1,131 @@
+body {
+
+    background-color: #ffce47cb;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 4.5rem;
+    color: #ffbb00;
+}
+
+h1, h2 {
+    word-spacing: 4px;
+}
+
+main {
+    min-height: 100vh;
+    background-image: url('/static/images/gym-equipment.jpg');
+    background-size: cover;
+    background-position:center;
+    background-repeat: no-repeat;
+    /* padding-top: 0.5rem; */
+}
+
+main {
+    color: #fcd15c;
+}
+
+main a{
+    color: #fcd15c;
+}
+
+footer a{
+    color: black;
+}
+
+/* .dropdown-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+} */
+
+.transparent-bg {
+    background-color: rgba(83, 83, 83, 0.3); 
+    border-radius: 8px;
+    padding: 20px; 
+    backdrop-filter: blur(2px); 
+}
+
+.table {
+    border-radius: 0.5rem; 
+    overflow: hidden;
+}
+
+.label-bg {
+    background-color: #ffce4790; 
+    border-radius: 8px;
+    padding: 10px; 
+    margin: 10px;
+    backdrop-filter: blur(2px); 
+}
+
+.routine_card {
+    background-color: rgba(102, 102, 102, 0.3); 
+    backdrop-filter: blur(6px); 
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease-in-out, border 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, background-color 0.3 ease-in-out;
+}
+
+.routine_card:hover {
+    transform: scale(1.03); 
+    box-shadow: 9px 9px #ffffffaf;
+    border: 6px solid #ffffff;
+    background-color: rgba(83, 83, 83, 0.143); 
+    backdrop-filter: blur(2px); 
+}
+
+.line {
+    width: 100%; 
+    height: 5px; 
+    background-color: #ffffff; 
+    margin: 20px 0;
+    margin-bottom: 10px;
+}
+
+.routine_card h2{
+    font-size: 2.5rem;
+    color: #ffbb00;
+    transition: transform 0.3s ease-in-out;
+}
+
+.routine_card h2:hover {
+    transform: scale(1.03);
+    color: #ffcf4c;
+}
+
+.routine_card p{
+    font-size: 1.2rem;
+    
+}
+
+.routine_card {
+    color: #ffde82;
+}
+
+.exercise_card {
+    background-color: rgba(83, 83, 83, 0.143); 
+    backdrop-filter: blur(4px); 
+    transition: border 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, background-color 0.3 ease-in-out;
+}
+
+.exercise_card:hover {
+    background-color: rgba(102, 102, 102, 0.3); 
+    backdrop-filter: blur(2px); 
+}
+
+@media (max-width: 992px) {
+
+    main {
+        background-size: contain;
+        background-repeat:repeat-y;
+    }
+
+
+}
+

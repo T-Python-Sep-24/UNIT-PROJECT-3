@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+
+{% block title %} New Routine {% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="d-flex flex-column justify-content-center align-items-center justify-content-lg-start align-items-lg-start">
+    <h1 class="align-self-center align-self-lg-start mb-5">
+        Create New Workouts Routine
+    </h1> 
+
+    <div class="row justify-content-center justify-content-lg-start w-100">
+        <div class="col-12 col-sm-10 col-lg-5">
+            <form class="d-flex flex-column gap-4" action="{% url 'routines:new_routine_view' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="d-flex flex-column gap-1" style="width: 100%;">
+                    <h2 class="">Routine Title</h2>
+                    <input type="text" name="name" placeholder="e.g., Chest Day" class="form-control" required/>
+                </div>
+                
+
+                <input type="submit" value="Add Workouts" class="btn form-control" style="background-color: #fcd15c; color: black"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

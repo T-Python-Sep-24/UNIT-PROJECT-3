@@ -1,0 +1,42 @@
+{% extends 'main/base.html' %}
+
+{% block title %} All Routines {% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <div class="d-flex flex-column align-items-center">
+        <h1>
+            All {{request.user.first_name}} Routines
+         </h1> 
+    </div>
+    
+    {% include 'routines/routines_list.html' %}
+</div>
+    
+
+<div class="line mt-5"></div>
+
+<div class="pagination d-flex justify-content-center align-items-center gap-4">
+    {% if routines.has_previous %}
+        <div class="d-flex gap-1">
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ routines.previous_page_number }}">&laquo; previous</a>
+        </div>
+    {% endif %}
+
+    <div class="">
+        Page {{ routines.number }} of {{ routines.paginator.num_pages }}
+    </div>
+
+    {% if routines.has_next %}
+        <div class="d-flex gap-4 ">
+            <a href="?page={{ routines.next_page_number }}">next &raquo;</a>
+            <a href="?page={{ routines.paginator.num_pages }}">last &raquo;</a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
