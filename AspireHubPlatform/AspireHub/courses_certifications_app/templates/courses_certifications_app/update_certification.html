@@ -1,0 +1,46 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block content %}
+<div class="m-auto w-10/12 rounded-2xl bg-white p-11 shadow-card md:w-8/12 mt-10 border-4">
+    <h2 class="text-2xl font-bold mb-4 text-white text-center">Update Certification</h2>
+    <form action="{% url 'courses_certifications_app:update_certification_view' certification.id %}" method="post" enctype="multipart/form-data" class="flex flex-col justify-center gap-5 md:grid md:grid-cols-2">
+        {% csrf_token %}
+        <div class="space-y-2">
+            <label for="name" class="text-md font-medium leading-none text-gray-900">Certification Name</label>
+            <input type="text" name="name" id="name" required value="{{ certification.name }}"
+                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
+        </div>
+        <div class="space-y-2">
+            <label for="description" class="text-md font-medium leading-none text-gray-900">Description</label>
+            <textarea name="description" id="description" required
+                      class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">{{ certification.description }}</textarea>
+        </div>
+        <div class="space-y-2">
+            <label for="classification" class="text-md font-medium leading-none text-gray-900">Classification</label>
+            <input type="text" name="classification" id="classification" required value="{{ certification.classification }}"
+                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
+        </div>
+        <div class="space-y-2">
+            <label for="cost" class="text-md font-medium leading-none text-gray-900">Cost of Testing</label>
+            <input type="number" name="cost" id="cost" step="0.01" required value="{{ certification.cost }}"
+                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
+        </div>
+        <div class="space-y-2">
+            <label for="estimated_study_time" class="text-md font-medium leading-none text-gray-900">Estimated Study Time</label>
+            <input type="text" name="estimated_study_time" id="estimated_study_time" required value="{{ certification.estimated_study_time }}"
+                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
+        </div>
+        <div class="space-y-2">
+            <label for="image" class="text-md font-medium leading-none text-gray-900">Certification Image</label>
+            <input type="file" name="image" id="image" accept="image/*"
+                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
+            <small class="text-gray-600">Current image: <img src="{{ certification.image.url }}" alt="{{ certification.name }}" class="h-20 object-cover"/></small>
+        </div>
+        <div class="col-span-2 w-full">
+            <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-orange-500 text-white hover:bg-orange-300 h-10 px-8 py-4 rounded-lg">
+                Update Certification
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

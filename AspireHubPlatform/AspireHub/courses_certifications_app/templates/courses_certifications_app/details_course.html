@@ -1,0 +1,23 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block content %}
+<main class="p-20">
+    <h3 class="text-xl font-semibold mb-2 text-center border-2 border-orange-500 mt-10 mb-10 w-full">{{ course.title }}</h3>
+    <div class="space-y-4">
+        <div class="flex flex-col gap-2">
+            <img src="{{ course.image.url }}" class="h-50 w-50 object-cover rounded-md" alt="{{ course.title }} image">
+            <div class="flex justify-between">
+                <p class="text-gray-500 text-sm">وقت إضافة الدورة: {{ course.created_at }}</p>
+            </div>
+            <p class="text-gray-600 text-center mt-8">{{ course.description }}</p>
+            <p class="text-gray-600">المدة: {{ course.duration }}</p>
+            <p class="text-gray-600">المتطلبات : {{ course.prerequisites|default:"None" }}</p>
+        </div>
+    </div>
+</main>
+
+<div class="flex justify-end gap-2">
+    <a href="{% url 'courses_certifications_app:update_course_view' course.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Update</a>
+    <a href="{% url 'courses_certifications_app:delete_course_view' course.id %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Delete</a>
+</div>
+{% endblock %}

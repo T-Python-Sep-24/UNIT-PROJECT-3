@@ -1,0 +1,24 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block content %}
+<main class="p-20">
+    <h3 class="text-xl font-semibold mb-2 text-center border-2 border-orange-500 mt-10 mb-10 w-full">{{ certification.name }}</h3>
+    <div class="space-y-4">
+        <div class="flex flex-col gap-2">
+            <img src="{{ certification.image.url }}" class="h-50 w-50 object-cover rounded-md" alt="{{ certification.name }} image">
+            <div class="flex justify-between">
+                <p class="text-gray-500 text-sm">وقت إضافة الشهادة: {{ certification.created_at }}</p>
+            </div>
+            <p class="text-gray-600 text-center mt-8">{{ certification.description }}</p>
+            <p class="text-gray-600">التصنيف: {{ certification.classification }}</p>
+            <p class="text-gray-600">تكلفة الاختبار: {{ certification.cost }} {{ certification.currency|default:"USD" }}</p>
+            <p class="text-gray-600">المدة الدراسية المقدرة: {{ certification.estimated_study_time }}</p>
+        </div>
+    </div>
+</main>
+
+<div class="flex justify-end gap-2">
+    <a href="{% url 'courses_certifications_app:update_certification_view' certification.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">تحديث</a>
+    <a href="{% url 'courses_certifications_app:delete_certification_view' certification.id %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">حذف</a>
+</div>
+{% endblock %}
