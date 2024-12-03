@@ -1,0 +1,48 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Update Profile {% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Update Profile</h1>
+    <form method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        
+        <div class="form-control">
+            <label class="label">First Name</label>
+            <input type="text" name="first_name" value="{{ request.user.first_name }}" class="input input-bordered" />
+        </div>
+        <div class="form-control">
+            <label class="label">Last Name</label>
+            <input type="text" name="last_name" value="{{ request.user.last_name }}" class="input input-bordered" />
+        </div>
+        <div class="form-control">
+            <label class="label">Email</label>
+            <input type="email" name="email" value="{{ request.user.email }}" class="input input-bordered" />
+        </div>
+        
+        <div class="form-control">
+            <label class="label">About</label>
+            <textarea name="about" class="textarea textarea-bordered">{{ request.user.profile.about }}</textarea>
+        </div>
+        
+        <div class="form-control">
+            <label class="label">Parent Username (optional)</label>
+            <input type="text" name="parent_username" class="input input-bordered"
+                {% if request.user.profile.parent %}
+                    value="{{ request.user.profile.parent.username }}"
+                {% else %}
+                    value=""
+                {% endif %}
+            />
+        </div>
+        
+        <div class="form-control">
+            <label class="label">Avatar</label>
+            <input type="file" name="avatar" class="input input-bordered" />
+        </div>
+        
+        <button type="submit" class="btn btn-primary mt-4">Update Profile</button>
+    </form>
+</div>
+{% endblock %}

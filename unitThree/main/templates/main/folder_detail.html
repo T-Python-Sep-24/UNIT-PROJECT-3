@@ -1,0 +1,45 @@
+{% extends 'main/base.html' %}
+{% block content %}
+
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">{{ folder.name }}</h1>
+    <a href="{% url 'cards:create_flashcard_view' folder.id %}" class="btn btn-primary">Add Flashcards</a>
+</div>
+
+{% if flashcards %}
+    <div class="  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for flashcard in flashcards %}
+        <div class="flip-card shadow-lg">
+            <div class="flip-card-inner">
+                <div class="flip-card-front bg-gray-800 text-white shadow-md">
+                    <h2 class="text-xl font-semibold">{{ flashcard.question }}</h2>
+                    <p>{{ flashcard.question_detail }}</p>
+                </div>
+                <div class="flip-card-back bg-gray-800 text-white shadow-md">
+                    <h2 class="text-xl font-semibold">Answer</h2>
+                    <p>{{ flashcard.answer }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class=" mt-6 flex justify-center join grid grid-cols-2">
+            <ul class="inline-flex items-center -space-x-px">
+                {% if flashcards.has_previous %}
+                    <li>
+                        <a href="?page={{ flashcards.previous_page_number }}" class="join-item btn btn-outline">Previous</a>
+                    </li>
+                {% endif %}
+                {% if flashcards.has_next %}
+                    <li>
+                        <a href="?page={{ flashcards.next_page_number }}" class="join-item btn btn-outline">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% else %}
+    <p>No flashcards in this folder yet.</p>
+{% endif %}
+
+{% endblock %}
