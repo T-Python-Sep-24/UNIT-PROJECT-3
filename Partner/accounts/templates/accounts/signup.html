@@ -1,0 +1,82 @@
+{% extends 'main/base.html'%}
+
+
+{% block title %}<title>Sign Up</title> {% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column justify-content-center align-items-center">
+
+    <h2 class="">Sign Up</h2>
+    <form class="d-flex flex-column gap-3 w-50" action="{% url 'accounts:sign_up' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+    
+          <div class="form-floating ">
+            <input type="text" class="form-control" id="floatingInput" placeholder="username" name="username" required>
+            <label for="floatingInput">Username</label>
+        </div>
+
+       
+      
+        <div class="form-floating">
+          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" required>
+          <label for="floatingInput">Email address</label>
+        </div>
+
+        <div class="form-floating">
+          <textarea type="" class="form-control" id="floatingAbout" placeholder="Talk about yourself, intrests, experiences, etc..." name="about"></textarea>
+          <label for="floatingAbout">Talk about yourself, intrests, experiences, etc...</label>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-6 col-sm-12">
+              <label for="native_language" class="form-label">Native language</label>
+              <select name="native_language" class="form-select" required>
+                <option>Choose Language</option>
+                {% for language in languages %}
+                    <option value="{{ language.id }}">{{ language.native_name }}</option>
+                {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3 col-md-6 col-sm-12">
+            <label for="target_language" class="form-label">Target language</label>
+            <select name="target_language" class="form-select" required>
+              <option>Choose Language</option>
+              {% for language in languages %}
+                  <option value="{{ language.id }}">{{ language.native_name }}</option>
+              {% endfor %}
+          </select>
+        </div>
+      </div>
+      
+
+      <div class="row">
+        <div class=" mb-3 col-md-6 col-sm-12">
+          <label class="mb-2">Choose Avatar:</label>
+        <input type="file" name="avatar" accept="image/*" class="form-control"/>
+      </div>
+      <div class="mb-3 col-md-6 col-sm-12">
+        <label for="gender" class="form-label">Gender</label>
+        <select name="gender" class="form-select" required>
+          <option>Select Gender</option>
+          {% for val, label in GenderChoices %}
+              <option value="{{ val }}">{{ label }}</option>
+          {% endfor %}
+      </select>
+    </div>
+      </div>
+        
+
+        <div class="form-floating">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" required>
+          <label for="floatingPassword">Password</label>
+        </div>
+
+        <button class="btn btn-orange rounded-pill w-100 py-2" type="submit">Sign up</button>
+      </form>
+</div>
+{%block script%}
+      
+{%endblock%}
+
+{% endblock %}

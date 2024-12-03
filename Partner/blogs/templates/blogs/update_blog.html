@@ -1,0 +1,74 @@
+{% extends 'main/base.html'%}
+{%load static%}
+
+   
+    {%block head%}
+    <link href="{% static 'css/blogs.css' %}" rel="stylesheet" />
+
+    {%endblock%}
+    {%block title%}<title>Update Blog</title>{%endblock%}
+
+     {%block content%}
+
+     <h1 class="space-grotesk text-white mb-3">Update Blog</h1>
+    {% if messages %}
+            <div class="messages">
+         {% for message in messages %}
+             <div class="alert {{ message.tags }}">
+                 {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    <div class="form-container py-4 rounded-4 d-flex flex-column justify-content-center mt-2">
+        
+            <div class="p-0 gap-4 d-flex justify-content-center align-items-center ">
+                <form action="{%url 'blogs:update_blog_view' blog.id%}" class="container-fluid " method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                <div class="row">
+                    <div class="mb-3 col-md-6 col-sm-12">
+                        <label for="title" class="form-label">Blog Title</label>
+                        <input type="text" value="{{blog.title}}" class="form-control mb-2" id="title" name="title" required>
+                        
+                        <label for="url_video" class="form-label">Blog Youtube-URL</label>
+                        <input type="url" value="{%if blog.url_video%}{{blog.url_video}}{%endif%}" class="form-control mb-4" placeholder=" (optional)" id="url_video" name="url_video">
+
+                            <select name="language" class="form-select" required>
+                                <option>Choose Language</option>
+                                {% for language in languages %}
+                                    <option value="{{ language.id }}" {% if language.id == blog.language.id%} selected{%endif%}>{{ language.name }}</option>
+                                {% endfor %}
+                            </select>
+                    </div> 
+                    <div class="mb-3 col-md-6 col-sm-12">
+                        <label for="content" class="form-label">Content</label>
+                        <textarea class="form-control" id="content" rows="7" name="content" required>{{blog.content}}</textarea>
+                    </div>
+                </div>
+
+                 <div class="row">
+                    <div class="mb-3 col-md-12 col-sm-12">
+                        <label for="image" class="form-label">Blog Image</label>
+                        <img src="{{blog.image.url}}" class="m-1" style="width: 40px;">
+
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*" />
+                </div>
+                </div>
+               
+                
+                <div class="row">
+                </div>
+                <div class="row align-items-center">
+                    <div class="d-flex mt-2 justify-content-end gap-4">
+                        <input type="submit" value="Update Blog" class="btn btn-success rounded-pill text-white"/>
+                        <a href="{%url 'blogs:blog_details_view' blog.id%}" class="btn btn-danger rounded-pill text-white">Cancel</a>
+                    </div>
+                </div>    
+                </form>
+        
+        </div>
+    </div>
+
+    
+     
+     {%endblock%}

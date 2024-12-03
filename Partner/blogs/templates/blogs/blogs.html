@@ -1,0 +1,167 @@
+{% extends 'main/base.html'%}
+{%load static%}
+
+   
+    {%block head%}
+    <link href="{% static 'css/blogs.css' %}" rel="stylesheet" />
+
+    {%endblock%}
+    {%block title%}<title>Blog</title>{%endblock%}
+
+     {%block content%}
+<div class="row">
+    <div class="bolgs-area col-md-8 container-fluid ">
+        
+        <div class="border-bottom py-2">
+            <h1 class="   text-center itim-regular  ">Blogs
+            </h1>
+            {% if request.user.is_superuser or perms.blogs.add_blog %}
+            <a href="{%url 'blogs:new_blog_view'%}" class="btn btn-orange-white rounded-pill ">Add</a>
+            {%endif%}
+        </div>
+        <div class="d-flex justify-content-end row"> 
+            <form class=" py-2" method="get" action="{%url 'blogs:blogs_all_view'%}">
+                {% csrf_token %}
+                <div class="filtring-and-search   gap-1 d-flex justify-content-center ">
+                    <input type="search" class="form-control " placeholder="Search" value="{{request.GET.search}}" name="search" minlength="1"/>
+                    <select name="filter_by_lang" class="form-select ">
+                        <option value="" selected disabled>Language</option> 
+                        {% for language in languages%}
+                        <option value="{{language.id}}" {%if request.GET.filter_by_lang == language.id %} selected {%endif%}>{{language.native_name}}</option>
+                        {%endfor%}
+                    </select>
+                    <select name="order_by" class="form-select">
+                        <option value="" disabled selected>Order by</option>
+                        <option value="date" {%if request.GET.order_by == date %} selected {%endif%}>Date</option>
+                    </select>
+                    <input type="submit" class="btn rounded-pill btn-orange text-white " value="Apply"/>
+                    <a href="{%url 'blogs:blogs_all_view'%}" class="btn btn-secondary rounded-pill text-white " value="clear">Clear </a>
+                </div>
+            </form>
+        </div>
+
+        <div class="row gap-2 justify-content-center mt-5 text-center">
+            {% for blog in blogs%}
+                <a href="{%url 'blogs:blog_details_view' blog.id%}" class="col-md-5 mb-5">
+                    <div class="dropdown">
+                        <p class="dropbtn btn-posts rounded-pill fs-6 py-2 px-5 fw-bold text-center">{{blog.title|truncatechars:25}}</p>
+                        <div class="dropdown-content rounded-4 ">
+                        
+                            <div class="d-flex bg-light  rounded-4">
+                                <img src="{{blog.image.url}}" alt="Blog Image" class="w-50 dropdown-img" style="object-fit: cover;">
+                                <div class="text p-3 w-100">
+                                    <h6 class="text-dark ">{{blog.title|truncatechars:45}}</h6>
+                                    <p class="text-dark ">{{blog.content|truncatechars:20}}</p>
+                                    <p class="text-dark fw-bold">{{blog.language.name|truncatechars:20}}</p>
+                                </div> 
+                            </div>
+                        </div>
+                      </div>
+                    </a>
+                {%endfor%}
+                 
+                            
+             
+          </div>
+          <br/>
+
+
+          <navbar aria-label="Page navigation example">
+              <ul class="pagination justify-content-center gap-4">
+                  {% if blogs.has_previous %}
+                      <li class="page-item">
+                          <a class="page-link rounded-circle px-3 py-2" href="?page={{ blogs.previous_page_number }}" aria-label="Previous">
+                              <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                          </a>
+                      </li>
+                  {% else %}
+                      <li class="page-item disabled ">
+                          <span class="page-link rounded-circle px-3 py-2" aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                      </li>
+                  {% endif %}
+          
+                  {% if blogs.has_next %}
+                      <li class="page-item">
+                          <a class="page-link rounded-circle px-3 py-2" href="?page={{ blogs.next_page_number }}" aria-label="Next">
+                              <span aria-hidden="true"><i class="fa-solid fa-chevron-right "></i></span>
+                          </a>
+                      </li>
+                  {% else %}
+                      <li class="page-item disabled">
+                          <span class="page-link rounded-circle px-3 py-2" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                      </li>
+                  {% endif %}
+              </ul>
+          </navbar>
+    </div>
+
+    <div class="challenge-area col-md-4 d-flex flex-column justify-content-center align-items-center">
+        <div class="container py-2 px-2">
+            <h4 class="mt-4 text-center head-challenge itim-regular text-orange">
+                Language Challenge
+            </h4>
+            
+            <form class="d-flex flex-column justify-content-center align-items-center" method="POST" action="{% url 'blogs:blogs_all_view' %}">
+                {% csrf_token %}
+    
+                <div class="quiz-area px-2 text-center mb-2">
+                    <p class="fs-5">
+                        <span class="head-challenge itim-regular text-orange">Q: </span> {{ challenge_question.question }}<span class="head-challenge itim-regular text-orange"> ?</span>
+                    </p>
+                </div>
+    
+                <div class="d-flex flex-column w-100">
+                    <div class="col-md-12 mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer" value="{{ challenge_question.option_1 }}" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                <span class="radio-label itim-regular">A</span> {{ challenge_question.option_1 }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer" value="{{ challenge_question.option_2 }}" id="flexRadioDefault2">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                <span class="radio-label itim-regular">B</span> {{ challenge_question.option_2 }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer" value="{{ challenge_question.option_3 }}" id="flexRadioDefault3">
+                            <label class="form-check-label" for="flexRadioDefault3">
+                                <span class="radio-label itim-regular">C</span> {{ challenge_question.option_3 }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="d-flex justify-content-center gap-3 w-100 mt-4">
+                    {% if user.is_authenticated %}
+                        {% if request.user.is_superuser or perms.blogs.change_challengequestion %}
+                            <a href="{% url 'blogs:update_challenge_view' %}" class="btn btn-orange-white rounded-pill mb-3">Edit</a>
+                        {% endif %}
+                    {% endif %}
+                    <button type="submit" class="btn btn-orange rounded-pill px-4 mb-3"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </form>
+    
+            {% if request.POST.answer %}
+                {% if result %}
+                    <div class="alert alert-success text-center mt-4">
+                        🎉 Congratulations! Your answer is correct! 🎉
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger text-center mt-4">
+                        😞 Nice try, but your answer is wrong! 😞
+                        <p>The correct answer is: "{{challenge_question.correct_answer}}"</p>                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    
+</div>
+    
+     
+     {%endblock%}

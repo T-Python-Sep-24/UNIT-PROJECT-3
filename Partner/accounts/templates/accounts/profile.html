@@ -1,0 +1,545 @@
+{% extends 'main/base.html'%}
+{%load static%}
+{% block title %} <title> Profile for {{user.username}}</title>  {% endblock %}
+{% block head%}
+<link href="{% static 'css/accounts.css' %}" rel="stylesheet" />
+
+{%endblock%}
+{% block content %}
+
+{% if messages %}
+  <div class="messages">
+{% for message in messages %}
+   <div class="alert {{ message.tags }}">
+    
+       {{ message }}
+       
+          </div>
+      {% endfor %}
+  </div>
+{% endif %}
+<div class="row">
+    <div class="col-md-4">
+
+        <img src="{{user.profile.avatar.url}}" class="w-100 rounded-3 avatar-img" />
+        <div class="d-flex justify-content-between mt-3">
+            <h5 class=""><i class="fa-solid fa-user text-orange"></i> Profile: {{user.username}} </h5>
+            {% if request.user == user %}
+            <a href="{%url 'accounts:update_profile_view'%}" class=""><i class="fa-solid fa-pen-to-square rounded-circle p-2 btn btn-success"></i></a>
+            {% endif %}
+        </div>
+        <hr/>
+        {% if user.profile.role != 'editor'%}
+
+        <div class="d-flex flex-column gap-2">
+            <p><i class="fa-solid fa-venus-mars text-orange"></i> <span class="fw-bold">Gender: </span>
+              {%if user.profile.gender == 'M'%} 
+                <span style="color: rgb(54, 85, 224);">Male</span>
+              {%else%}
+                 <span style="color: rgb(255, 120, 143);">Female</span>
+                {%endif%}
+
+            </p>
+            <p><i class="fa-brands fa-creative-commons-by text-orange"></i> <span class="fw-bold">Native Language: </span> {{user.profile.native_language.name}}</p>
+            <p><i class="fa-solid fa-bullseye text-orange"></i> <span class="fw-bold">Target Language: </span>{{user.profile.target_language.name}}</p>
+        </div>
+        {%endif%}
+       
+    </div>
+    <div class="col-md-8">
+
+        <div class="d-flex flex-column gap-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>{{user.username}}</h1>  
+                {%if request.user.is_authenticated and request.user != user and user.profile.role != 'editor'%}
+                {% if is_partnered%}  
+                <a href="" class="btn btn-success disabled rounded-pill">
+                    <i class="fa-solid fa-check"></i> Partner</a>  
+                {%elif is_requested or request.user.sent_requests.sender == request.user%}
+                    <a href="{%url 'partners:new_request_view' request.user.id user.id%}" class="btn btn-secondary rounded-pill">
+                        <i class="fa-solid fa-check"></i> Pending Request</a>  
+                        
+                        {%else%}
+                        <button type="button" class="btn btn-secondary rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-plus"></i> Partnership Request</button>
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">New Request</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'partners:new_request_view' request.user.id user.id %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="scheduled_at" class="col-form-label">Choose Session Schedule:</label>
+                                        <input type="datetime-local" class="form-control" id="scheduled_at" name="scheduled_at" required>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-orange rounded-pill">Send Request</button>
+                                    </div>
+                                </form>
+                            </div>
+                           
+                            </div>
+                        </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if request.user.is_authenticated and  user == request.user%}
+                 <!--see messages-->
+                 <div class="d-flex  align-items-end ">
+                    
+                    <button id="messagesButton" type="button" class="btn btn-secondary rounded-pill my-2" data-bs-toggle="modal" data-bs-target="#seeMassegesModal">
+                        <i class="fa-solid fa-envelope pr-1"></i>  Messages
+                        {% if unread_messages %}
+                            <span class="notification text-white bg-danger rounded-circle">{{ unread_messages|length }}</span>
+                       
+                        {% endif %}
+
+                    </button>
+               
+
+                </div>
+                 <!-- see masseges modal  -->
+
+                 <div class="modal fade" id="seeMassegesModal"  tabindex="-1" aria-labelledby="seeMassegesModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header d-flex justify-content-between">
+                                <h1  class="modal-title fs-5" id="seeMassegesModalLabel" >Messages</h1>
+                                <form action="{%url 'partners:mark_messages_as_read'%}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="unread_messages" value="{{ unread_messages }}" style="display: none;">
+                                    <input id="closeMessagesModalButton" type="submit" value="" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
+                                </form>
+                            </div>
+                            <div class="modal-body">
+                                {% for message in received_messages%}
+                                <div class="d-flex flex-column message" data-message-id="{{message.id}}" data-readstate="{{message.readstate}}">
+                                    <div class="border-bottom py-2">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <p class="text-orange p-0 m-0">{{message.sender.username}}: </p>
+                                                <div class="messageContent" >{{message.content}}</div>            
+                                            </div>
+                                            <a href="{%url 'partners:delete_message_view' message.id%}"><i class="fa-solid fa-xmark text-danger"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                    
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%endif%}
+            </div>
+
+
+            
+            <p class="">{{user.profile.about}}</p>
+            <hr class=""/>
+            <nav class="nav nav-pills nav-fill">
+                {% if user.profile.role != 'editor'%}
+                <a class="nav-link profile-nav-link active" aria-current="page" href="#" onclick="changeContent('Saved Blogs')">Saved Blogs</a>
+
+                    {%if request.user.is_authenticated and request.user == user %}
+                    <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Requests')">Requests</a>
+                    <a class="nav-link profile-nav-link" href="#" onclick="changeContent('Partners')">Partners</a>
+                    {%else%}
+                    <a class="nav-link profile-nav-link disabled" href="#">Requests</a>
+                    <a class="nav-link profile-nav-link disabled" href="#">Partners</a>
+
+                    {% endif %}
+
+                {%else%}
+                <a class="nav-link profile-nav-link active" aria-current="page" href="#" onclick="changeContent('Saved Blogs')">Published Blogs</a>
+
+                {%endif%}
+                
+            </nav>
+        
+                    <!-- Content -->
+            <div id="changableContent ">
+                <div class="px-2 py-4 row row-cols-3 gap-4 " id="savedBlogsContent">
+                    {% if user.profile.role != 'editor'%}
+                    <!--  Saved Blogs-->
+                    {% if user.bookmark_set.all%}
+                    {% for bookmark in user.bookmark_set.all %}
+                        
+                        <div class="col-md-3 d-flex rounded-3 gap-2 shadow align-items-center p-0 bookmark-container">
+                            <img src="{{ bookmark.blog.image.url }}" class="w-50 h-100" />
+                            <a href="{% url 'blogs:blog_details_view' bookmark.blog.id %}" class="text-decoration-none p-1">
+                                <h6 class="orange-link">{{ bookmark.blog.title }}</h6>
+                            </a>
+                        </div>
+                        
+                    {% endfor %}
+                    {%else%}
+                        <p>No saved blogs yet</p>
+                        {%endif%}
+
+                        {%else%}
+                        {% for blog in user.blog_set.all %}
+                        
+                        <div class="col-md-3 d-flex rounded-3 gap-2 shadow align-items-center p-0 bookmark-container">
+                            <img src="{{ blog.image.url }}" class="w-50 h-100" />
+                            <a href="{% url 'blogs:blog_details_view' blog.id %}" class="text-decoration-none p-1">
+                                <h6 class="orange-link">{{ blog.title }}</h6>
+                            </a>
+                        </div>
+                        
+                    {% endfor %}
+                        {%endif%}
+                </div>
+              
+                <!-- Requests -->
+                <div class="px-2 py-4 row row-cols-3 gap-4 align-items-center" id="requestsContent" style="display: none;">
+                    {%if request.user.is_authenticated and request.user == user %}
+                      {% if received_requests %}
+                    {% for re_request in received_requests %}
+                         {% if re_request.status != 'accepted' %}
+                        <div class="col-md-8 col-sm-12 d-flex rounded-3 gap-2 shadow align-items-center p-0 request-container">
+                            <img src="{{re_request.sender.profile.avatar.url }}" class=" h-100 " />
+                            <div class="d-flex flex-column justify-content-end align-items-end px-2 py-2 w-100">
+                                <div class="d-flex justify-content-between w-100">
+                                    <a href="{% url 'accounts:user_profile_view' re_request.sender.username %}" class="text-decoration-none p-1 d-flex gap-2 justify-content-center align-items-center">
+                                        <i class="fa-brands fa-ello text-orange pb-2"></i>
+                                        <h6 class="orange-link"> {{ re_request.sender.username }}</h6>
+                                    </a>
+                                    <a href="{%url 'partners:delete_request_view' re_request.sender.id request.user.id %}" class="text-secondary pt-1 px-2 "><i class="fa-solid fa-xmark"></i></a>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center gap-4 w-100">
+                                    
+                                    <p><i class="fa-brands fa-creative-commons-by text-orange"></i>  
+                                        {{re_request.sender.profile.native_language.name}}</p>
+                            
+                                    
+                                    <p><i class="fa-solid fa-bullseye text-orange"></i>
+                                         {{re_request.sender.profile.target_language.name}}</p>
+                                
+                                   
+                                    <p><i class="fa-solid fa-calendar-day text-orange"></i> 
+                                        {{re_request.scheduled_at}}</p>
+                                </div>
+
+                              
+                                <a class="btn-orange-white rounded-pill text-decoration-none px-3"  
+                                href="{% url 'partners:new_partner_view' request.user.id re_request.sender.id %}">Accept</a>   
+                                
+                            </div>
+                        </div>
+                        {%endif%}
+                    {% endfor %}
+                    {% else %}
+                    <p>No received requests yet</p>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                <!-- Partners -->
+                {%if request.user.is_authenticated and request.user == user%}
+                <div class="row row-cols-3 gap-4 px-4" id="partnersContent" style="display: none;">
+                   
+                    <table class="table align-items-center align-middle text-center">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Partner</th>
+                                <th>Scheduled At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {% for partner in partners %}
+                            <tr class="">
+                                <td>{{ partner.partner.username }}</td>
+                                <td>{{ partner.scheduled_at|date:"l, d F Y, h:i A" }}</td>
+                                <td class="d-flex justify-content-center gap-2">
+                                    <!--button to session -->
+                                    <form id="form">
+                                        <div class="field-wrapper">
+                            
+                                            <div class="form-field" style="display: none;">
+                                              
+                                                <input name="room" placeholder="Enter a room name..." value="{{partner.partner.username}}-{{request.user.username}}"  style="text-transform:uppercase"/>
+                                            </div>
+                            
+                                            <!--<div class="form-field" style="display: none;">      
+                                                <input name="username" placeholder="Enter your name..." value="{{request.user.username}}"  style="text-transform:uppercase"/>
+                                            </div> -->
+                            
+                                            <div class="form-field">
+                                                <input disabled class="btn btn-success btn-sm rounded-pill JoinStreamButton" data-scheduled-at="{{ partner.scheduled_at|date:'c' }}" type="submit" value="Join Stream" />
+                                            </div>
+                                        </div>
+                                    </form> 
+                                    <!--button to edit sceduel -->
+                                    <button type="button" class="btn btn-warning btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#editScheduleModal">
+                                        <i class="fa-solid fa-calendar-day text-white "></i>
+                                    </button>
+                                    <!--send messages-->
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#sendMassegesModal">
+                                        <i class="fa-solid fa-paper-plane text-white"></i>
+                                    </button>
+                                    <!--button to delete partner -->
+                                        <a href="{%url 'partners:delete_partner_view' request.user.id partner.partner.id%}" class="btn btn-danger btn-sm rounded-pill"><i class="fa-solid fa-user-xmark"></i></a>
+                                  
+                    
+                            
+                                </td>
+                            </tr>
+                                <!-- edit calender modal  -->
+                                    <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-labelledby="editScheduleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="editScheduleModalLabel">Edit Schedule</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{% url 'partners:edit_schedule_view' request.user.id partner.partner.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <div class="mb-3">
+                                                            <label for="scheduled_at" class="col-form-label">Choose New Session Schedule:</label>
+                                                            <input type="datetime-local" class="form-control" id="scheduled_at" name="scheduled_at" required>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-orange rounded-pill">Save Schedule</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                              
+
+                                <!-- send masseges modal  -->
+
+                                <div class="modal fade" id="sendMassegesModal" tabindex="-1" aria-labelledby="sendMassegesModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="sendMassegesModalLabel">Send Massege to {{partner.partner.username}}</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{% url 'partners:new_message_view' request.user.id partner.partner.id %}" method="post">
+                                                {% csrf_token %}
+                                                <div class="mb-3">
+                                                    <label for="message_content" class="col-form-label">Write Your Message:</label>
+                                                    <textarea type="text" class="form-control" id="message_content" name="message_content" required></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-orange rounded-pill">Send</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {% endfor %}
+                            {% for partner in partnered_users %}
+                            <tr class="">
+                                <td>{{ partner.user.username }}</td>
+                                <td>{{ partner.scheduled_at|date:"l, d F Y, h:i A" }}</td>
+                                <td class="d-flex justify-content-center gap-2">
+                                    <!--button to session -->
+                                    <form id="form">
+                                        <div class="field-wrapper">
+                            
+                                            <div class="form-field" style="display: none;">
+                                              
+                                                <input name="room" placeholder="Enter a room name..." value="{{request.user.username}}-{{partner.user.username}}"  style="text-transform:uppercase"/>
+                                            </div>
+                            
+                                            <!--<div class="form-field" style="display: none;">      
+                                                <input name="username" placeholder="Enter your name..." value="{{request.user.username}}"  style="text-transform:uppercase"/>
+                                            </div> -->
+                            
+                                            <div class="form-field">
+                                                <input disabled class="btn btn-success btn-sm rounded-pill JoinStreamButton" data-scheduled-at="{{ partner.scheduled_at|date:'c' }}" type="submit" value="Join Stream" />
+                                            </div>
+                                        </div>
+                                    </form> 
+                                    <!--button to edit sceduel -->
+                                    <button type="button" class="btn btn-warning btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#editScheduleModal">
+                                        <i class="fa-solid fa-calendar-day text-white "></i>
+                                    </button>
+                                    <!--send messages-->
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#sendMassegesModal">
+                                        <i class="fa-solid fa-paper-plane text-white"></i>
+                                    </button>
+                                    <!--button to delete partner -->
+                                        <a href="{%url 'partners:delete_partner_view' request.user.id partner.user.id%}" class="btn btn-danger btn-sm rounded-pill"><i class="fa-solid fa-user-xmark"></i></a>
+                                  
+                    
+                            
+                                </td>
+                            </tr>
+                                <!-- edit calender modal  -->
+                                    <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-labelledby="editScheduleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="editScheduleModalLabel">Edit Schedule</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{% url 'partners:edit_schedule_view' request.user.id partner.user.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <div class="mb-3">
+                                                            <label for="scheduled_at" class="col-form-label">Choose New Session Schedule:</label>
+                                                            <input type="datetime-local" class="form-control" id="scheduled_at" name="scheduled_at" required>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-orange rounded-pill">Save Schedule</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                              
+
+                                <!-- send masseges modal  -->
+
+                                <div class="modal fade" id="sendMassegesModal" tabindex="-1" aria-labelledby="sendMassegesModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="sendMassegesModalLabel">Send Massege to {{partner.user.username}}</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{% url 'partners:new_message_view' request.user.id partner.user.id %}" method="post">
+                                                {% csrf_token %}
+                                                <div class="mb-3">
+                                                    <label for="message_content" class="col-form-label">Write Your Message:</label>
+                                                    <textarea type="text" class="form-control" id="message_content" name="message_content" required></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-orange rounded-pill">Send</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    
+                </div>
+               
+
+                
+                {%endif%}
+            </div>
+        </div>
+        
+    </div>
+
+   
+
+</div>
+
+
+
+
+
+{% endblock %}
+{% block script%}
+<script type="text/javascript">
+    //session script
+    window.userName = "{{ request.user.username }}";
+    let form = document.getElementById('form')
+
+    let handleSubmit = async (e) => {
+        e.preventDefault()
+        let room = e.target.room.value.toUpperCase()
+
+        let response = await fetch(`/partners/get_token/?channel=${room}`)
+        let data = await response.json()
+
+        let UID = data.uid
+        let token = data.token
+
+        sessionStorage.setItem('UID', UID)
+        sessionStorage.setItem('token', token)
+        sessionStorage.setItem('room', room)
+
+        window.open('/partners/start/chat/room/', '_self')
+    }
+
+    form.addEventListener('submit', handleSubmit)
+</script>
+
+
+<script type="text/javascript">
+     //join button script
+    function convertToDate(dateStr) {
+        return new Date(dateStr);
+    }
+
+    function checkScheduledTime() {
+        let joinButtons = document.querySelectorAll('.JoinStreamButton');
+
+        joinButtons.forEach(button => {
+            let scheduledAt = button.getAttribute('data-scheduled-at');
+            
+            let scheduledDate = convertToDate(scheduledAt);
+            let currentDate = new Date();
+
+            if (currentDate >= scheduledDate) {
+                button.disabled = false;
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', checkScheduledTime);
+</script>
+
+
+
+<script type="text/javascript">
+    //nav script
+
+    function changeContent(content) {
+        document.getElementById('savedBlogsContent').style.display = 'none';
+        document.getElementById('requestsContent').style.display = 'none';
+        document.getElementById('partnersContent').style.display = 'none';
+
+        let links = document.querySelectorAll('.nav-link');
+        links.forEach(link => {
+            link.classList.remove('active');
+        });
+
+        if (content === 'Saved Blogs') {
+            document.getElementById('savedBlogsContent').style.display = 'flex';
+        } else if (content === 'Requests') {
+            document.getElementById('requestsContent').style.display = 'flex';
+        } else if (content === 'Partners') {
+            document.getElementById('partnersContent').style.display = 'block';
+        }
+
+        let activeLink = document.querySelector(`.nav-link[href='#'][onclick="changeContent('${content}')"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    }
+
+   
+</script>
+{%endblock%}
+
