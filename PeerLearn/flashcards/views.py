@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.conf import settings
 from django.contrib import messages
 from django.http import JsonResponse
@@ -223,53 +223,3 @@ def upload_pdf_view(request, start_page=0, end_page=10):
         print("[ERROR] No text could be extracted from the specified PDF pages.")
 
     return redirect("main:home_view")
-
-
-def claude_test(request):
-    """
-    Basic view to test Claude API functionality with extracted text.
-    Returns generated flashcards and test questions.
-    """
-    if request.method == 'POST':
-        try:
-            # Get extracted text from request
-            extracted_text = request.POST.get('extracted_text', '')
-            
-            if not extracted_text:
-                return JsonResponse({
-                    'status': 'error',
-                    'message': 'No text provided'
-                })
-            
-            # Generate materials using Claude API
-            flashcards_json, test_json = process_extracted_text(extracted_text)
-            
-            if flashcards_json and test_json:
-                # Both JSONs are valid, you can add your logic here:
-                # - Save to database
-                # - Process further
-                # - Add user attribution
-                # - Add metadata
-                # - etc.
-                
-                return JsonResponse({
-                    'status': 'success',
-                    'data': {
-                        'flashcards': flashcards_json,
-                        'test': test_json
-                    }
-                })
-            
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Failed to generate content'
-            })
-                
-        except Exception as e:
-            return JsonResponse({
-                'status': 'error',
-                'message': str(e)
-            })
-    
-    # For GET request, just render the template
-    return render(request, 'flashcards/claude_test.html')
