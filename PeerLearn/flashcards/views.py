@@ -3,6 +3,8 @@ from django.http import HttpRequest, HttpResponse
 from django.conf import settings
 from django.contrib import messages
 from django.http import JsonResponse
+from django.db import transaction
+from django.core.files.storage import default_storage
 from subjects.models import Subject
 import os
 import requests
@@ -38,9 +40,8 @@ def details_flashcard_view(request: HttpRequest, flashcard_id: int):
 
 
 def new_flashcard_view(request: HttpRequest):
-    # Limit acces to members
     if not request.user.is_authenticated:
-        messages.error(request, "This operation requires members account","alert-danger")
+        messages.error(request, "This operation requires members account", "alert-danger")
         return redirect("accounts:sign_in")
 
     subjects = Subject.objects.all()
@@ -49,12 +50,63 @@ def new_flashcard_view(request: HttpRequest):
     if request.method == "POST":
         flashcard_form = FlashcardForm(request.POST, request.FILES)
         if flashcard_form.is_valid():
-            flashcard_form.save()
-            messages.success(request, "Flashcard created successfully!", "alert-success")
-            return redirect("flashcards:all_flashcards_view")
+            try:
+                # Wrap all database operations in a transaction
+                with transaction.atomic():
+                    # Don't save the form immediately, get an unsaved instance
+                    flashcard = flashcard_form.save(commit=False)
+                    
+                    # Handle the PDF file
+                    pdf_file = request.FILES['pdf']
+                    # Save temporarily
+                    temp_path = default_storage.save(
+                        f'temp/{pdf_file.name}', 
+                        pdf_file
+                    )
+                    
+                    try:
+                        # Get the full path
+                        file_path = default_storage.path(temp_path)
+                        
+                        # Extract text from PDF
+                        extracted_text = extract_text_with_pymupdf(file_path)
+                        
+                        if not extracted_text:
+                            extracted_text = extract_text_with_ocr(file_path)
+                        
+                        if not extracted_text:
+                            raise ValueError("Could not extract text from PDF")
+                        
+                        # Generate flashcards and test using Claude API
+                        flashcards_json, test_json = process_extracted_text(extracted_text)
+                        
+                        if not flashcards_json or not test_json:
+                            raise ValueError("Could not generate learning materials")
+                        
+                        # Set all the fields
+                        flashcard.extracted_text = extracted_text
+                        flashcard.flashcard_json = flashcards_json
+                        flashcard.test_json = test_json
+                        
+                        # Save the flashcard only if everything succeeded
+                        flashcard.save()
+                        
+                    finally:
+                        # Clean up the temporary file
+                        if temp_path:
+                            default_storage.delete(temp_path)
+                    
+                messages.success(request, "Flashcard created successfully with learning materials!", "alert-success")
+                return redirect("flashcards:all_flashcards_view")
+                
+            except ValueError as e:
+                messages.error(request, str(e), "alert-danger")
+            except Exception as e:
+                print(f"Error processing flashcard: {str(e)}")
+                messages.error(request, "Error processing flashcard. Please try again.", "alert-danger")
         else:
-            print("form error: ", flashcard_form.errors)
-            messages.error(request, "Error creating flashcard. Please try again later", "alert-warning")
+            print("Form error: ", flashcard_form.errors)
+            messages.error(request, "Error creating flashcard. Please check your inputs.", "alert-warning")
 
     return render(request, "flashcards/new.html", context)
 
@@ -70,6 +122,21 @@ def delete_flashcard_view(request: HttpRequest, flashcard_id: int):
     messages.success(request, "Flashcard deleted successfully!", "alert-success")
     
     return redirect("flashcards:all_flashcards_view")
+
+
+def add_review_view(request:HttpRequest, flashcard_id):
+    if not request.user.is_authenticated:
+        messages.error(request, "Only registered user can add review","alert-danger")
+        return redirect("accounts:sign_in")
+
+    if request.method == "POST":
+        flashcard_object = Flashcard.objects.get(pk=flashcard_id)
+        new_review = Review(flashcard=flashcard_object,user=request.user,comment=request.POST["comment"],rating=request.POST["rating"])
+        new_review.save()
+
+        messages.success(request, "Added Review Successfully", "alert-success")
+
+    return redirect("flashcards:details_flashcard_view", flashcard_id=flashcard_id)
 
 
 

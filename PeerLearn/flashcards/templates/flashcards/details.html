@@ -7,37 +7,74 @@
 {% block style %}<link rel="stylesheet" href="{% static 'css/flashcards.css' %}">{% endblock %}
 
 {% block content %}
+<!-- Delete the flashcard -->
+<section class="container d-flex justify-content-between">
+    <h1>{{ flashcard.name }}</h1>
+    {% if request.user.is_superuser %}
+    <div class="d-flex gap-2">
+        <!-- Button trigger modal -->
+        <a href="#">
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Delete the Flashcard
+            </button>
+        </a>
+    </div>
+    {% endif %}    
+</section>
+<!-- Flashcard Section -->
 <section class="container">
-    <div class="row">
-        <div class="col">
-            <div class="d-flex flex-column gap-2 p-3 shadow">
-                <div class="d-flex justify-content-between">
-                    <h1>{{ flashcard.name }}</h1>
-                    {% if request.user.is_superuser %}
-                    <div class="d-flex gap-2">
-                        <!-- Button trigger modal -->
-                        <a href="#">
-                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                Delete
-                            </button>
-                        </a>
+    <div id="flashcardCarousel" class="carousel slide" data-bs-interval="false">
+        <div class="carousel-inner">
+            {% for card in flashcard.flashcard_json.questions %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="flashcard">
+                    <div class="flashcard-inner">
+                        <!-- Front of Card -->
+                        <div class="flashcard-front">
+                            <div class="card-content">
+                                <h3>Question</h3>
+                                <p>{{ card.question }}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Back of Card -->
+                        <div class="flashcard-back">
+                            <div class="card-content">
+                                <h3>Answer</h3>
+                                <p class="answer-text">{{ card.answer }}</p>
+                                
+                                <div class="hint-content">
+                                    <strong>Hint:</strong> 
+                                    <p>{{ card.hint }}</p>
+                                </div>
+                                
+                                <div class="explain-content">
+                                    <strong>Explanation:</strong>
+                                    <p>{{ card.explain }}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    {% endif %}
                 </div>
-                <div class="details-card-image">
-                    <img src="{{ flashcard.photo.url }}" alt="{{ flashcard.name }} logo">
-                </div>
-                <div class="d-flex justify-content-between">
-                    <h3>Published: {{ flashcard.created_at }}</h3>
-                    <div class="d-flex justify-content-between gap-3">
-                        <h3>description: </h3>
-                        <p>{{ flashcard.description }}</p>
-                    </div>
-                </div>         
-                <div>
-                    <p>test</p>
+                
+                <!-- Card Controls -->
+                <div class="flashcard-controls text-center">
+                    <button class="btn btn-primary flip-btn">Flip Card</button>
+                    <button class="btn btn-info hint-btn">Show Hint</button>
+                    <button class="btn btn-info explain-btn">Show Explanation</button>
                 </div>
             </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Navigation -->
+        <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-secondary" data-bs-target="#flashcardCarousel" data-bs-slide="prev">
+                Previous Card
+            </button>
+            <button class="btn btn-secondary" data-bs-target="#flashcardCarousel" data-bs-slide="next">
+                Next Card
+            </button>
         </div>
     </div>
 </section>
@@ -106,4 +143,7 @@
 </div>
 </div>
 {% endif %}
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'js/flashcards.js' %}"></script>
 {% endblock %}
