@@ -1,48 +1,134 @@
-import openai
-from django.conf import settings
+import json
+from anthropic import Anthropic
+import os
+# from django.conf import settings
 
-# Set OpenAI API key
-openai.api_key = settings.OPENAI_API_KEY
-
-def generate_flashcards_and_test_from_text(extracted_text):
+def generate_learning_materials(extracted_text):
     """
-    This function sends the extracted text (OCR data) to the OpenAI API and returns 
-    the structured JSON for flashcards and a test.
-
-    Parameters:
-    - extracted_text: The OCR-extracted text that may contain errors and needs enhancement and conversion into a flashcard/test format.
-
-    Returns:
-    - A dictionary containing the JSON-formatted flashcards and test data, or an error message if the call fails.
+    Generate flashcards and test questions from OCR extracted text using Claude API
     """
-    print(f"\n*********** Inside api utils ***********\n")
-    
-    system_message = """
-    You are a helpful assistant who converts extracted OCR text into flashcards and test questions. 
-    The following text may contain OCR errors such as misinterpreted characters or missing information. 
-    Please clean and enhance the text, correcting any obvious mistakes, and generate flashcards and a test based on the content. 
-    Ensure the flashcards and test questions make sense and cover the key points of the text.
-    """
-    
-    user_message = f"Extract the main ideas from the following text, which might contain OCR errors, and generate flashcards and a test: {extracted_text}"
-
     try:
-        # Using the updated method openai.completions.create() for text-based completions (including chat-based models)
-        response = openai.Completion.create(
-            model="gpt-4",  # Use "gpt-4" or "gpt-3.5-turbo"
-            prompt=f"{system_message}\n{user_message}",  # Combine system and user messages
-            temperature=0.7,  # Adjust temperature as needed
-            max_tokens=1500,  # Limit the output size
+        client = Anthropic(api_key=os.getenv('CLAUDE_API_KEY'))
+        
+        prompt = f"""
+        You are receiving text that was extracted through OCR (Optical Character Recognition). 
+        This means there might be:
+        - Misspellings or character recognition errors
+        - Incorrect word breaks
+        - Missing punctuation
+        - Mixed formatting
+        
+        First, try to understand and mentally correct any obvious OCR errors in the text.
+        Then, create two JSON objects based on the corrected understanding:
+        1. A flashcard set for learning the key concepts
+        2. A multiple choice test to assess understanding
+        
+        Follow these exact JSON structures:
+        
+        Flashcard JSON:
+        {{
+            "lang": "en",
+            "questions": [
+                {{
+                    "question": "Clear, focused question about a key concept",
+                    "answer": "Concise, accurate answer",
+                    "hint": "Helpful hint for remembering",
+                    "explain": "Detailed explanation with context"
+                }}
+            ]
+        }}
+        
+        Test JSON:
+        {{
+            "lang": "en",
+            "questions": [
+                {{
+                    "question": "Clear multiple choice question",
+                    "options": [
+                        {{"option": "Correct option", "is_correct": true}},
+                        {{"option": "Plausible wrong option", "is_correct": false}},
+                        {{"option": "Plausible wrong option", "is_correct": false}}
+                    ]
+                }}
+            ]
+        }}
+        
+        Create 3-5 high-quality questions for each format based on this OCR-extracted text:
+        {extracted_text}
+        
+        Return only the two JSON objects, with 'FLASHCARDS_JSON:' and 'TEST_JSON:' as separators.
+        """
+        
+        response = client.messages.create(
+            model="claude-3-haiku-20240307",
+            max_tokens=1500,
+            messages=[{"role": "user", "content": prompt}]
         )
-
-        print(f"********* response ***********\n")
-        print(f"original response: \n{response}")
-        print("\n************ end of response **********")
-
-        # Return the response text (you can use `json.loads()` to parse if needed)
-        return response['choices'][0]['text']
-
+        
+        response_text = response.content[0].text
+        
+        parts = response_text.split('FLASHCARDS_JSON:')
+        if len(parts) > 1:
+            flashcards_text = parts[1].split('TEST_JSON:')[0].strip()
+            test_text = parts[1].split('TEST_JSON:')[1].strip()
+            
+            return json.loads(flashcards_text), json.loads(test_text)
+            
+        return None, None
+        
     except Exception as e:
-        # Log the actual error message for better diagnostics
-        print(f"Error occurred: {str(e)}")  # This will be printed in the terminal
-        return {"error": str(e)}
+        print(f"Error: {str(e)}")
+        return None, None
+
+def validate_json_structure(json_obj, json_type):
+    """
+    Validate the structure of generated JSONs
+    """
+    try:
+        if not isinstance(json_obj, dict):
+            return False
+            
+        required_keys = {'lang', 'questions'}
+        if not all(key in json_obj for key in required_keys):
+            return False
+            
+        if not isinstance(json_obj['questions'], list):
+            return False
+            
+        for question in json_obj['questions']:
+            if json_type == 'flashcard':
+                required_question_keys = {'question', 'answer', 'hint', 'explain'}
+            else:  # test
+                required_question_keys = {'question', 'options'}
+                
+            if not all(key in question for key in required_question_keys):
+                return False
+                
+            if json_type == 'test':
+                for option in question['options']:
+                    if not {'option', 'is_correct'}.issubset(option.keys()):
+                        return False
+                        
+        return True
+        
+    except Exception:
+        return False
+
+def process_extracted_text(extracted_text):
+    """
+    Process OCR-extracted text and generate validated learning materials
+    """
+    # Basic text preprocessing
+    if extracted_text:
+        extracted_text = ' '.join(extracted_text.split())
+        extracted_text = extracted_text.replace('|', 'I')
+        extracted_text = extracted_text.replace('0', 'O')
+        
+    flashcards_json, test_json = generate_learning_materials(extracted_text)
+    
+    if flashcards_json and test_json:
+        if (validate_json_structure(flashcards_json, 'flashcard') and 
+            validate_json_structure(test_json, 'test')):
+            return flashcards_json, test_json
+            
+    return None, None

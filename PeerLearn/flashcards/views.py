@@ -9,7 +9,7 @@ import requests
 from .models import Flashcard, Review
 from .forms import FlashcardForm
 from utils.pdf_utils import extract_text_with_pymupdf, extract_text_with_ocr, has_meaningful_text
-from utils.api_utils import generate_flashcards_and_test_from_text
+from utils.api_utils import process_extracted_text
 from anthropic import Anthropic
 
 
@@ -167,33 +167,49 @@ list_display ﺑﺎﺳﺘﺨﺪام Admin واﺟﻬﺎت ﺗﺨﺼﻴﺺ
 
 def claude_test(request):
     """
-    View to test Claude API using environment variable
+    Basic view to test Claude API functionality with extracted text.
+    Returns generated flashcards and test questions.
     """
-    try:
-        # Get API key from environment variable
-        api_key = os.getenv('CLAUDE_API_KEY')
-        
-        if not api_key:
-            return HttpResponse("Error: CLAUDE_API_KEY not set", status=500)
-        
-        # Initialize Anthropic client
-        client = Anthropic(api_key=api_key)
-        
-        # Make API call
-        response = client.messages.create(
-            model="claude-3-haiku-20240307",
-            max_tokens=300,
-            messages=[
-                {
-                    "role": "user", 
-                    "content": "Explain Python decorators in a simple, concise way"
-                }
-            ]
-        )
-        
-        # Return the response text
-        return HttpResponse(response.content[0].text)
+    if request.method == 'POST':
+        try:
+            # Get extracted text from request
+            extracted_text = request.POST.get('extracted_text', '')
+            
+            if not extracted_text:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'No text provided'
+                })
+            
+            # Generate materials using Claude API
+            flashcards_json, test_json = process_extracted_text(extracted_text)
+            
+            if flashcards_json and test_json:
+                # Both JSONs are valid, you can add your logic here:
+                # - Save to database
+                # - Process further
+                # - Add user attribution
+                # - Add metadata
+                # - etc.
+                
+                return JsonResponse({
+                    'status': 'success',
+                    'data': {
+                        'flashcards': flashcards_json,
+                        'test': test_json
+                    }
+                })
+            
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Failed to generate content'
+            })
+                
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            })
     
-    except Exception as e:
-        # Return any errors that occur
-        return HttpResponse(f"Error occurred: {str(e)}", status=500)
+    # For GET request, just render the template
+    return render(request, 'flashcards/claude_test.html')
