@@ -1,0 +1,33 @@
+{% extends "main/base.html" %}
+
+{% block title %}Discover Abha{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="container my-5">
+    <h1 class="text-center mb-4">🌄 Welcome to Abha</h1>
+    <p class="text-center">Explore the mountain city known for its stunning landscapes and cool weather.</p>
+
+    <div class="row justify-content-center">
+        <!-- Image and Highlights Section -->
+        <div class="col-md-6 text-center">
+            <img src="{% static 'image/ab2.jpg' %}" class="img-fluid rounded mb-4" alt="Abha"style="height: 400px;width: 100%;">
+        </div>
+        <div class="col-md-6">
+            <div class="highlight-section p-3">
+                <h5 class="mb-3">🌟 Highlights of Abha</h5>
+                <ul class="list-unstyled">
+                    <li>🏞️ Al Soudah Park - Hike and enjoy breathtaking views</li>
+                    <li>🌲 Rijal Almaa - Discover the heritage village and traditional Asir culture</li>
+                    <li>🚠 Cable Car Rides - Experience stunning aerial views</li>
+                    <li>🍽️ Asiri Cuisine - Taste the flavors of authentic local food</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{% url 'main:home_view' %}" class="btn btn-primary">🏠 Back to Home</a>
+    </div>
+</div>
+{% endblock %}

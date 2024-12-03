@@ -7,6 +7,9 @@ from .models import City, Flight
 # Create your views here.
 def add_flight_view(request:HttpRequest): 
     try :
+        if (not request.user.is_staff and request.user.has_perm("flights.add_flight")):
+            messages.error(request, "You do not have permission to add flights.","alert-danger") 
+            return redirect("main:home_view")
         if request.method == "POST": 
             from_city=City.objects.get(name=request.POST["from_city"])
             to_city=City.objects.get(name=request.POST["to_city"])
@@ -61,6 +64,9 @@ def flight_detail_view(request: HttpRequest, flight_id):
 
 def edit_flight_view(request: HttpRequest, flight_id): 
     try:
+        if not request.user.is_staff:
+            messages.warning(request, "You do not have permission to update flights." , "alert-warning")
+            return redirect("main:home_view")
         flight = Flight.objects.get(pk=flight_id)  
         if request.method == "POST":
             from_city = City.objects.get(name=request.POST["from_city"])
@@ -89,3 +95,16 @@ def edit_flight_view(request: HttpRequest, flight_id):
     return render(request, 'flights/edit_flight.html', {'flight': flight})
 
 
+def delete_flight_view(request, flight_id):
+    # Ensure the user is a staff member
+    if not request.user.is_staff:
+        messages.error(request, "You do not have permission to delete flights.")
+        return redirect("flights:flight_list_view")  # Redirect to the flight listing page
+    try:
+        flight = Flight.objects.get(id=flight_id)
+        flight.delete()
+        messages.success(request, f"Flight {flight.flight_number} has been deleted successfully." , "alert-success")
+    except Flight.DoesNotExist:
+        messages.error(request, "The flight does not exist." , "alert-danger")
+    
+    return redirect("flights:flight_list_view") 

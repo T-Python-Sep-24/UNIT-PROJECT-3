@@ -1,0 +1,33 @@
+{% extends "main/base.html" %}
+
+{% block title %}Discover Jeddah{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="container my-5">
+    <h1 class="text-center mb-4">🌆 Welcome to Jeddah</h1>
+    <p class="text-center">The vibrant port city on the Red Sea, a gateway to Mecca and Medina, and a cultural hub.</p>
+
+    <div class="row justify-content-center">
+        <!-- Image and Highlights Section -->
+        <div class="col-md-6 text-center">
+            <img src="{% static 'image/jed2.jpg' %}" class="img-fluid rounded mb-4" alt="Jeddah" style="height: 400px;width: 100%;">
+        </div>
+        <div class="col-md-6">
+            <div class="highlight-section p-3">
+                <h5 class="mb-3">🌟 Highlights of Jeddah</h5>
+                <ul class="list-unstyled">
+                    <li>🏖️ Corniche - Scenic waterfront with beautiful views</li>
+                    <li>🕌 King Fahd's Fountain - Iconic Jeddah landmark</li>
+                    <li>🏛️ Al-Balad - Historic district with ancient architecture</li>
+                    <li>🎨 Jameel House of Traditional Arts</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{% url 'main:home_view' %}" class="btn btn-primary">🏠 Back to Home</a>
+    </div>
+</div>
+{% endblock %}

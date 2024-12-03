@@ -28,7 +28,10 @@
             </p>
             <div class="d-flex justify-content-between w-100 mt-4">
                 <a href="{% url 'flights:flight_list_view' %}" class="btn btn-secondary">Back to Flights</a>
-                <a href="{% url 'flights:edit_flight_view' flight.id  %}" class="btn btn-success">Edit Flight</a> <!-- Green edit button -->
+                
+                <a href="{% url 'flights:edit_flight_view' flight.id  %}" class="btn btn-success">Edit Flight</a>
+                <a href="{% url 'flights:delete_flight_view' flight.id %}" class="btn btn-danger">Delete</a>
+ 
             </div>
         </div>
     </div>

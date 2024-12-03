@@ -1,25 +1,118 @@
-{% extends "main/base.html" %}
+{% extends 'main/base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Airport Tuwaiq{% endblock %}
 
 {% block content %}
+{% load static %}
 <div class="container text-center my-5">
-    <h1>Welcome to Airport Tuwaiq</h1>
-    <p>Your gateway to seamless air travel.</p>
+    <h1>✈️ Welcome to Airport Tuwaiq 🛫</h1>
+    <p>🛬 Your gateway to seamless air travel! 🌍</p>
+    <h3 id="date" class="mt-4">📅 Date: </h3>
+    <h3 id="time">⏰ Time: </h3>
+    <div class="mt-4">
+        <p>📅 Plan your trip today! Whether you're traveling for business or leisure, Airport Tuwaiq has got you covered. ✈️</p>
+        <p>🛄 Manage your bookings, check your flight status, and explore the world with ease! 🌟</p>
 
-    <!-- Display date and time -->
-    <div id="date-time" class="my-4"></div>
+        <!-- New Content -->
+        <h3>🌟 Why Choose Airport Tuwaiq? 🌟</h3>
+        <ul class="list-unstyled mt-3">
+            <li>🛫 <strong>Convenient Flights:</strong> Access domestic and international destinations.</li>
+            <li>💺 <strong>Comfortable Seating:</strong> Enjoy world-class seating for a relaxing journey.</li>
+            <li>🤝 <strong>24/7 Support:</strong> Assistance for a smooth and worry-free experience.</li>
+        </ul>
+        
+        <h3>🚀 Popular Airlines</h3>
+        <ul class="list-unstyled">
+            <li>✈️ Saudi Airlines</li>
+            <li>✈️ Qatar Airways</li>
+        </ul>
+        
+        <h3>📍 Airport Services</h3>
+        <ul class="list-unstyled">
+            <li>🚖 Transfer Services</li>
+            <li>📶 Free Wi-Fi</li>
+            <li>🛋️ Luxurious Lounges</li>
+        </ul>
 
-    <script>
-        // Real-time date and time script
-        function updateDateTime() {
-            const now = new Date();
-            document.getElementById("date-time").innerHTML = `
-                <p>Date: ${now.toLocaleDateString()}</p>
-                <p>Time: ${now.toLocaleTimeString()}</p>
-            `;
-        }
-        setInterval(updateDateTime, 1000);
-    </script>
+        <!-- Explore Saudi Cities Section -->
+        <div class="container my-5">
+            <h3 class="text-center mb-4">🌆 Explore Saudi Cities</h3>
+            <div class="row justify-content-center">
+                <!-- Riyadh -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <img src="{% static 'image/riy.jpg' %}" class="card-img-top" alt="Riyadh" style="height: 200px; object-fit: cover;">
+                        <div class="card-body text-center d-flex flex-column">
+                            <h5 class="card-title">Riyadh</h5>
+                            <p class="card-text">The capital city of Saudi Arabia, known for its modern skyline, cultural landmarks, and rich heritage.</p>
+                            <div class="mt-auto">
+                                <a href="{% url 'main:riyadh' %}" class="btn btn-primary w-100">Discover Riyadh</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Jeddah -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <img src="{% static 'image/jed.jpg' %}" class="card-img-top" alt="Jeddah" style="height: 200px; object-fit: cover;">
+                        <div class="card-body text-center d-flex flex-column">
+                            <h5 class="card-title">Jeddah</h5>
+                            <p class="card-text">A bustling port city on the Red Sea, famous for its historic Al-Balad district and vibrant culture.</p>
+                            <div class="mt-auto">
+                                <a href="{% url 'main:jeddah' %}" class="btn btn-primary w-100">Discover Jeddah</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Dammam -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <img src="{% static 'image/dam.jpg' %}" class="card-img-top" alt="Dammam" style="height: 200px; object-fit: cover;">
+                        <div class="card-body text-center d-flex flex-column">
+                            <h5 class="card-title">Dammam</h5>
+                            <p class="card-text">Located on the Arabian Gulf, offering serene beaches, modern malls, and coastal attractions.</p>
+                            <div class="mt-auto">
+                                <a href="{% url 'main:dammam' %}" class="btn btn-primary w-100">Discover Dammam</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Abha -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <img src="{% static 'image/abha.jpg' %}" class="card-img-top" alt="Abha" style="height: 200px; object-fit: cover;">
+                        <div class="card-body text-center d-flex flex-column">
+                            <h5 class="card-title">Abha</h5>
+                            <p class="card-text">A mountain city with stunning views, cool weather, and rich Asir culture.</p>
+                            <div class="mt-auto">
+                                <a href="{% url 'main:abha' %}" class="btn btn-primary w-100">Discover Abha</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Booking Button -->
+        <a href="{% url 'booking:search_flights' %}?next={{ request.path }}" class="btn btn-primary btn-lg mt-4">
+            <i class="fas fa-ticket-alt"></i> ✈️ Book a Flight
+        </a>
+    </div>
 </div>
+    
+<script>
+    function updateDateTime() {
+        const now = new Date();
+        const date = now.toLocaleDateString(); // Format: MM/DD/YYYY
+        const time = now.toLocaleTimeString(); // Format: HH:MM:SS
+
+        document.getElementById("date").innerHTML = `📅 Date: ${date}`;
+        document.getElementById("time").innerHTML = `⏰ Time: ${time}`;
+    }
+
+    setInterval(updateDateTime, 1000); // Update every second
+    updateDateTime(); // Initial call to display immediately
+</script>
 {% endblock %}
