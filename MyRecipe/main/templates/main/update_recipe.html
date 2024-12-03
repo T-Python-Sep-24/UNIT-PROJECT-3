@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Recipe</title>
+</head>
+<body>
+{% if user == recipe.created_by %}
+    <h2>Edit Recipe</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update Recipe</button>
+    </form>
+{% else %}
+    <p>You do not have permission to edit this recipe.</p>
+{% endif %}
+</body>
+</html>

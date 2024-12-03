@@ -1,0 +1,142 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #6fbf8f;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.search-input {
+    padding: 12px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 350px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-right: 10px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+
+
+
+.search-button {
+    padding: 12px 18px;
+    background-color: #6fbf8f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+ul li {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+ul li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+ul li img {
+    max-width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+ul li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    display: block;
+    margin-top: 10px;
+}
+
+ul li a:hover {
+    color: #6fbf8f;
+}
+
+.add-recipe-btn {
+    display: inline-block;
+    background-color: #6fbf8f;
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-recipe-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+p {
+    font-size: 16px;
+    text-align: center;
+}
+
+p a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+p a:hover {
+    text-decoration: underline;
+    color: #45a049;
+}
