@@ -1,40 +1,52 @@
 {% extends 'main_app/base.html' %}
 {% load static %}
 {% block content %}
-<div class="m-auto w-10/12 rounded-2xl bg-white p-11 shadow-card md:w-8/12 mt-10 border-4">
+<div class="m-auto w-10/12 rounded-2xl bg-white  p-11 shadow-card md:w-8/12 mt-10 border-4">
     <h2 class="text-2xl font-bold mb-4 text-white text-center">Add Employee</h2>
-    <form action="{% url 'events_companies_app:add_employee_view' %}" method="post" enctype="multipart/form-data" class="flex flex-col justify-center gap-5 md:grid md:grid-cols-2">
-        {% csrf_token %}
-        <div class="space-y-2">
-            <label for="name" class="text-md font-medium leading-none text-gray-900">Employee Name</label>
-            <input type="text" name="name" id="name" required
-                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
-        </div>
-        <div class="space-y-2">
-            <label for="specialty" class="text-md font-medium leading-none text-gray-900">Specialty</label>
-            <input type="text" name="specialty" id="specialty" required
-                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
-        </div>
-        <div class="space-y-2">
-            <label for="description" class="text-md font-medium leading-none text-gray-900">Description</label>
-            <textarea name="description" id="description" 
-                      class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2"></textarea>
-        </div>
-        <div class="space-y-2">
-            <label for="image" class="text-md font-medium leading-none text-gray-900">Profile Image</label>
-            <input type="file" name="image" id="image" accept="image/*" required
-                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
-        </div>
-        <div class="space-y-2">
-            <label for="linkedin_link" class="text-md font-medium leading-none text-gray-900">LinkedIn Link</label>
-            <input type="url" name="linkedin_link" id="linkedin_link"
-                   class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
-        </div>
-        <div class="col-span-2 w-full">
-            <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-orange-500 text-white hover:bg-orange-300 h-10 px-8 py-4 rounded-lg">
-                Add Employee
-            </button>
-        </div>
-    </form>
+<form action="{% url 'events_companies_app:add_employee_view' %}" method="post" enctype="multipart/form-data" class="flex flex-col justify-center gap-5 md:grid md:grid-cols-2">
+    {% csrf_token %}
+    <div class="space-y-2">
+        <label for="company" class="text-md font-medium leading-none text-gray-900">Company</label>
+        <select name="company" id="company" required
+                class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
+            <option value="">Select a company</option>
+            {% for company in companies %}
+                <option value="{{ company.id }}">{{ company.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="space-y-2">
+        <label for="name" class="text-md font-medium leading-none text-gray-900">Employee Name</label>
+        <input type="text" name="name" id="name" required
+               class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
+    </div>
+    <div class="space-y-2">
+        <label for="specialty" class="text-md font-medium leading-none text-gray-900">Specialty</label>
+        <input type="text" name="specialty" id="specialty" required
+               class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
+    </div>
+    <div class="space-y-2">
+        <label for="description" class="text-md font-medium leading-none text-gray-900">Description</label>
+        <textarea name="description" id="description" 
+                  class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2"></textarea>
+    </div>
+    <div class="space-y-2">
+        <label for="image" class="text-md font-medium leading-none text-gray-900">Profile Image</label>
+        <input type="file" name="image" id="image" accept="image/*" required
+               class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
+    </div>
+    <div class="space-y-2">
+        <label for="linkedin_link" class="text-md font-medium leading-none text-gray-900">LinkedIn Link</label>
+        <input type="url" name="linkedin_link" id="linkedin_link"
+               class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full border px-3 text-sm rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-offset-2">
+    </div>
+    <div class="col-span-2 w-full">
+        <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-orange-500 text-white hover:bg-orange-300 h-10 px-8 py-4 rounded-lg">
+            Add Employee
+        </button>
+    </div>
+</form>
 </div>
+
+
 {% endblock %}

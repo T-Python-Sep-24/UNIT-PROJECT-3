@@ -2,23 +2,97 @@
 {% load static %}
 {% block content %}
 <main class="p-20">
-<h3 class="text-xl font-semibold mb-2  text-center border-2 border-orange-500 mt-10 mb-10 w-full">{{ company.name }}</h3>
-<div class="space-y-4">
-    <div class="flex flex-col gap-2">
-        <img src="{{ company.logo.url }}" class="h-50 w-50 object-cover rounded-md" alt="company logo">
-        <div class="flex justify-between">
-            <p class="text-gray-500 text-sm">Time of adding the company: {{ company.date_added }}</p>
+    <h3 class="text-xl font-semibold mb-2 text-center border-2 border-orange-500 mt-10 mb-10 w-full">{{ company.name }}</h3>
+    <div class="space-y-4">
+        <div class="flex flex-col gap-2">
+            <img src="{{ company.logo.url }}" class="h-50 w-50 object-cover rounded-md" alt="company logo">
+            <div class="flex justify-between">
+                <p class="text-gray-500 text-sm">Time of adding the company: {{ company.date_added }}</p>
+            </div>
+            <p class="text-gray-600 text-center mt-8">{{ company.description }}</p>
+            <p class="text-gray-600">Website: <a href="{{ company.website }}" class="text-blue-500" target="_blank">{{ company.website }}</a></p>
+            <p class="text-gray-600">Specialization: {{ company.specialization }}</p>
         </div>
-        <p class="text-gray-600 text-center mt-8">{{ company.description }}</p>
-        <p class="text-gray-600">Website: <a href="{{ company.website }}" class="text-blue-500" target="_blank">{{ company.website }}</a></p>
-        <p class="text-gray-600">Specialization: {{ company.specialization }}</p>
+
+        <section class="bg-black py-10">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-8">
+                    <h2 class="text-white text-2xl font-bold"><strong>Meet Our Employees</strong></h2>
+                </div>
+        
+                <div class="relative">
+                    <div class="overflow-hidden">
+                        <div class="flex transition-transform duration-500" id="sliderEmployees">
+                            {% for employee in employees %}
+                            <div class="flex-shrink-0 w-full">
+                                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                                    <div class="flex items-center mb-4">
+                                        <img loading="lazy" src="{{ employee.image.url }}" alt="{{ employee.name }}" class="h-12">
+                                    </div>
+                                    <p class="text-white mb-2">{{ employee.description }}</p>
+                                    <div class="text-gray-400">{{ employee.name }} - {{ employee.specialty }}</div>
+                                    {% if employee.linkedin_link %}
+                                    <div class="text-blue-400"><a href="{{ employee.linkedin_link }}" target="_blank">LinkedIn Profile</a></div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="flex-shrink-0 w-full">
+                                <p class="text-gray-500">No employees found for this company.</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="absolute left-0 top-1/2 transform -translate-y-1/2 cursor-pointer" id="prevSlide">
+                        <div class="text-white w-8 h-8">❮</div>
+                    </div>
+                    <div class="absolute right-0 top-1/2 transform -translate-y-1/2 cursor-pointer" id="nextSlide">
+                        <div class="text-white w-8 h-8">❯</div>
+                    </div>
+                    <div class="flex justify-center mt-4" id="slideNav">
+                        {% for employee in employees %}
+                        <button class="w-3 h-3 mx-1 bg-gray-400 rounded-full"></button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="flex justify-end gap-2">
+            <a href="{% url 'events_companies_app:update_company_view' company.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Update</a>
+            <a href="{% url 'events_companies_app:delete_company_view' company.id %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Delete</a>
+        </div>
     </div>
-    <div class="flex justify-end gap-2">
-        <a href="{% url 'events_companies_app:update_company_view' company.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Update</a>
-        <a href="{% url 'events_companies_app:delete_company_view' company.id %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Delete</a>
-    </div>
-</div>
 </main>
+
+<script>
+    const slides = document.querySelectorAll('#sliderEmployees > div');
+    const totalSlides = slides.length;
+    let currentIndex = 0;
+
+    function updateSlider() {
+        const offset = -currentIndex * 100; 
+        document.getElementById('sliderEmployees').style.transform = `translateX(${offset}%)`;
+
+        const navButtons = document.querySelectorAll('#slideNav button');
+        navButtons.forEach((button, index) => {
+            button.classList.toggle('bg-gray-400', index !== currentIndex);
+            button.classList.toggle('bg-white', index === currentIndex);
+        });
+    }
+
+    document.getElementById('prevSlide').onclick = function() {
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : totalSlides - 1;
+        updateSlider();
+    };
+
+    document.getElementById('nextSlide').onclick = function() {
+        currentIndex = (currentIndex < totalSlides - 1) ? currentIndex + 1 : 0;
+        updateSlider();
+    };
+
+    updateSlider();
+</script>
 {% endblock %}
 
 

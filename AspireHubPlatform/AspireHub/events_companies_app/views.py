@@ -19,17 +19,19 @@ def add_company_view(request:HttpRequest):
 
 def add_employee_view(request:HttpRequest):
     if request.method == "POST":
+        company_id = request.POST["company"]
         new_employee=Employee(
         name = request.POST["name"],
-        specialty = request.POST["specialty"],
+        specialty =request.POST["specialty"],
         image=request.FILES["image"],
-        description = request.POST["description "],
-        linkedin_link= request.POST["linkedin_link"],
-           
+        description =request.POST["description"],
+        linkedin_link=request.POST["linkedin_link"],
+        company_id=company_id   
        )
         new_employee.save()
+        companies = Company.objects.all()
         return redirect('events_companies_app:details_companies_view')
-    return render(request, "events_companies_app/add_company.html")
+    return render(request, "events_companies_app/add_employee.html",{'companies': companies})
  
 
 def add_event_view(request:HttpRequest):
@@ -41,7 +43,7 @@ def add_event_view(request:HttpRequest):
         date= request.POST["date"],   
       )
         new_event.save()
-        return redirect('events_companies_app:lists_companies_events_view')
+        return redirect('events_companies_app:details_companies_view')
     return render(request, "events_companies_app/add_event.html")
 
 
@@ -52,7 +54,8 @@ def lists_companies_events_view(request:HttpRequest):
 
 def details_companies_view(request:HttpRequest , company_id:int ):
     company= Company.objects.get(pk=company_id)
-    return render(request, "events_companies_app/details_compines.html", {'company':company})
+    employees= Employee.objects.all()
+    return render(request, "events_companies_app/details_compines.html", {'company':company , 'employees':employees})
 
 def details_events_view(request:HttpRequest , event_id:int):
     event= Event.objects.get(pk= event_id)
