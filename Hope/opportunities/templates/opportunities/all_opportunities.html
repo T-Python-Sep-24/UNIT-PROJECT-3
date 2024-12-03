@@ -1,0 +1,75 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}All Opportunities{% endblock %}
+
+{% block content %}
+<main class="all-opportunities-page">
+    <div class="container">
+        <div class="header">
+            <h1>Explore Opportunities</h1>
+            <p>Find the best volunteering opportunities that suit your skills and interests.</p>
+        </div>
+        
+        <section class="search-and-filters">
+            <form method="GET" class="search-form-opportunities">
+                <input type="text" name="search" placeholder="Search opportunities..." value="{{ request.GET.search }}">
+                <select name="city" class="filter-dropdown">
+                    <option value="">Filter by City</option>
+                    {% for city in cities %}
+                    <option value="{{ city }}" {% if request.GET.city == city %}selected{% endif %}>{{ city }}</option>
+                    {% endfor %}
+                </select>
+                
+                <select name="focus_industry" class="filter-dropdown">
+                    <option value="">Filter by Industry</option>
+                    {% for choice, display in focus_industries %}
+                    <option value="{{ choice }}" {% if request.GET.focus_industry == choice %}selected{% endif %}>
+                        {{ display }}
+                    </option>
+                    {% endfor %}
+                </select>
+                
+                <button type="submit" class="search-button">Search</button>
+            </form>
+        
+        </section>
+        
+        {% if opportunities %}
+        <div class="grid">
+            {% for opportunity in opportunities %}
+            <div class="card">
+                <img src="{{ opportunity.image.url }}" alt="{{ opportunity.name }}">
+                <div class="card-content">
+                    <a href="{% url 'opportunities:opportunity_detail_view' opportunity.id %}" class="card-title">{{ opportunity.name }}</a>
+                    <div class="card-subtitle">{{ opportunity.city }} • {{ opportunity.focus_industry }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if opportunities.has_previous %}
+                <a href="?search={{ request.GET.search }}&city={{ request.GET.city }}&focus_industry={{ request.GET.focus_industry }}&page=1">&laquo; First</a>
+                <a href="?search={{ request.GET.search }}&city={{ request.GET.city }}&focus_industry={{ request.GET.focus_industry }}&page={{ opportunities.previous_page_number }}">&lsaquo; Previous</a>
+                {% endif %}
+        
+                <span class="current">
+                    Page {{ opportunities.number }} of {{ opportunities.paginator.num_pages }}
+                </span>
+        
+                {% if opportunities.has_next %}
+                <a href="?search={{ request.GET.search }}&city={{ request.GET.city }}&focus_industry={{ request.GET.focus_industry }}&page={{ opportunities.next_page_number }}">Next &rsaquo;</a>
+                <a href="?search={{ request.GET.search }}&city={{ request.GET.city }}&focus_industry={{ request.GET.focus_industry }}&page={{ opportunities.paginator.num_pages }}">Last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+        {% else %}
+        <p class="no-results">No opportunities found. Try adjusting your filters or search query.</p>
+        {% endif %}
+
+    </div>
+</main>
+{% endblock %}

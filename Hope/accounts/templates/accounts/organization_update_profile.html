@@ -1,0 +1,74 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+
+{% block body_class %}{{profile.organization_user.username }} Update Profile{% endblock %} 
+
+{% block content %}
+
+<div class="update-profile-container">
+    <h1 class="update-profile-header">Edit Profile</h1>
+    <form action="{% url 'accounts:organization_update_profile' profile.organization_user.username %}" method="post" enctype="multipart/form-data" class="update-profile-form">
+      {% csrf_token %}
+  
+      <div class="form-group">
+        <label for="organization_name">Organization Name</label>
+        <input type="text" name="organization_name" id="organization_name" value="{{ profile.organization_name }}" placeholder="Enter Organization Name">
+      </div>
+  
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" id="description"  placeholder="Enter Description About the Organization " rows="5">{{ profile.description }}</textarea>
+      </div>
+  
+      <div class="form-group">
+        <label for="website_url">Website URL</label>
+        <input type="url" name="website_url"  placeholder="Enter Organization Website Link" id="website_url" value="{{ profile.website_url }}">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email"  placeholder="Enter Organization Contact Email" value="{{ profile.email }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="organization_type">Organization Type:</label>
+        <select name="organization_type" id="organization_type">
+          <option value="" {% if not profile.organization_type %}selected{% endif %}>Select Organization Type</option>
+          {% for choice, display in profile.ORGANIZATION_TYPE_CHOICES %}
+          <option value="{{ choice }}" {% if profile.organization_type == choice %}selected{% endif %}>{{ display }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+
+      <div class="form-group">
+        <label for="industry_focus_area">Industry Focus Area</label>
+        <select name="industry_focus_area" id="industry_focus_area">
+          <option value="" {% if not profile.industry_focus_area %}selected{% endif %}>Select Industry Focus Area</option>
+          {% for choice, display in profile.FOCUS_INDUSTRY_CHOICES %}
+          <option value="{{ choice }}" {% if profile.industry_focus_area == choice %}selected{% endif %}>{{ display }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="organization_logo">Organization Logo</label>
+        <input type="file" name="organization_logo" id="organization_logo" class="form-control">
+        {% if profile.organization_logo %}
+        <p class="update-image">Current Image<br><img src="{{ profile.organization_logo.url }}" alt="{{ profile.organization_name }}" style="max-height: 100px; padding-top: 20px;"></p>
+        {% endif %}
+      </div>
+      
+  
+      <button type="submit" class="submit-button">Update Profile</button>
+    </form>
+  </div>
+  
+
+
+
+
+
+{% endblock %}

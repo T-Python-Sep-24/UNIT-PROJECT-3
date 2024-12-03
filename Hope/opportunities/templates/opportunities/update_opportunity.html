@@ -1,0 +1,91 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}Update Opportunity{%endblock %}
+
+{% block content %}
+
+<main class="update-opportunity-page">
+    <div class="update-opportunity-container">
+        <h1 class="update-form-header">Update Opportunity</h1>
+        <form action="{% url 'opportunities:update_opportunity_view' opportunity.id %}" method="post" enctype="multipart/form-data" class="update-opportunity-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Opportunity Name</label>
+                <input type="text" name="name" id="name" class="form-control" value="{{ opportunity.name }}" placeholder="Enter Opportunity Name">
+            </div>
+            
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" name="city" id="city" class="form-control" value="{{ opportunity.city }}" placeholder="Enter City">
+            </div>
+            
+            <div class="form-group">
+                <label for="location">Location</label>
+                <textarea name="location" id="location" class="form-control" placeholder="Enter Location" rows="2">{{ opportunity.location }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="time">Time</label>
+                <input type="datetime-local" name="time" id="time" class="form-control" value="{{ opportunity.time|date:'Y-m-d\TH:i' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="event_type">Event Type</label>
+                <select name="event_type" id="event_type" class="form-control">
+                    <option value="">Select Event Type</option>
+                    <option value="Profit" {% if opportunity.event_type == "Profit" %}selected{% endif %}>Profit</option>
+                    <option value="Non-Profit" {% if opportunity.event_type == "Non-Profit" %}selected{% endif %}>Non-Profit</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="focus_industry">Focus Industry</label>
+                <select name="focus_industry" id="focus_industry" class="form-control">
+                    <option value="">Select Focus Industry</option>
+                    <option value="Medical" {% if opportunity.focus_industry == "Medical" %}selected{% endif %}>Medical</option>
+                    <option value="Entertainment" {% if opportunity.focus_industry == "Entertainment" %}selected{% endif %}>Entertainment</option>
+                    <option value="Education" {% if opportunity.focus_industry == "Education" %}selected{% endif %}>Education</option>
+                    <option value="Environment" {% if opportunity.focus_industry == "Environment" %}selected{% endif %}>Environment</option>
+                    <option value="Technology" {% if opportunity.focus_industry == "Technology" %}selected{% endif %}>Technology</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="education_level_required">Education Level Required</label>
+                <select name="education_level_required" id="education_level_required" class="form-control">
+                    <option value="">Select Education Level</option>
+                    <option value="None" {% if opportunity.education_level_required == "None" %}selected{% endif %}>No Education Required</option>
+                    <option value="High School" {% if opportunity.education_level_required == "High School" %}selected{% endif %}>High School Diploma</option>
+                    <option value="Bachelor" {% if opportunity.education_level_required == "Bachelor" %}selected{% endif %}>Bachelor’s Degree</option>
+                    <option value="Master" {% if opportunity.education_level_required == "Master" %}selected{% endif %}>Master’s Degree</option>
+                    <option value="PhD" {% if opportunity.education_level_required == "PhD" %}selected{% endif %}>PhD</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="number_of_volunteers_needed">Number of Volunteers Needed</label>
+                <input type="number" name="number_of_volunteers_needed" id="number_of_volunteers_needed" class="form-control" placeholder="Enter Number of Volunteers" min="1" value="{{ opportunity.number_of_volunteers_needed }}">
+            </div>
+
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" class="form-control" placeholder="Enter Opportunity Description" rows="4">{{ opportunity.description }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="image">Upload Image</label>
+                <input type="file" name="image" id="image" class="form-control">
+                {% if opportunity.image %}
+                    <p class="update-image">Current Image<br><img src="{{ opportunity.image.url }}" alt="{{ opportunity.name }}" style="max-height: 100px; padding-top: 20px;"></p>
+                {% endif %}
+            </div>
+            <button type="submit" class="update-submit-button">Update Opportunity</button>
+
+        </form>
+    </div>
+</main>
+
+{% endblock %}
