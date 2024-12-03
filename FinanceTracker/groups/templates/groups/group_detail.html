@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Group Detail{% endblock %}
+
+{% block content %}
+<style>
+.goal-card, .expense-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.goal-card:hover, .expense-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary, .btn-secondary, .btn-success {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover, .btn-secondary:hover, .btn-success:hover {
+    transform: scale(1.05);
+}
+
+.form-control {
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+}
+
+.form-control:focus {
+    background-color: #e2e6ea;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-primary, .btn-secondary {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.container {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+</style>
+<div class="container1 my-4 p-4 bg-dark text-white rounded shadow-lg">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>{{ group.name }}</h2>
+        {% if group.owner == request.user %}
+        <div class="owner-buttons align-items-center" style="text-align: right;">
+            <a href="{% url 'groups:add_goal' group_id=group.id %}" class="btn btn-primary">Add Goal</a>
+            <a href="{% url 'groups:add_expense' group_id=group.id %}" class="btn btn-secondary">Add Expense</a>
+            <a href="{% url 'groups:add_member' group_id=group.id %}" class="btn btn-success">Add Member</a>
+        </div>
+        {% endif %}
+    </div>
+    <p>{{ group.description }}</p>
+    <p>Invite others to join this group:</p>
+    {{ invite_link }}
+
+</div>
+
+<div class="container my-4 p-4 bg-dark text-white rounded shadow-lg">
+    <h4>Group Members</h4>
+    <ul class="list-unstyled">
+        {% for user in users %}
+            <li class="mb-3">
+                {{ user.username }}
+                {% if user.profile.total_contributions > shared_goal_per_user and request.user == group.owner %}
+                    <a href="{% url 'user_profile' user.id %}" class="text-light">View Profile</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="container my-4 p-4 bg-dark text-white rounded shadow-lg">
+    <h3>Group Goal</h3>
+    <div class="d-flex justify-content-between">
+        {% if group.goal %}
+        <div class="goal-card p-3 rounded">
+            <p><strong>Name:</strong> {{ group.goal.name }}</p>
+            <p><strong>Target:</strong> ${{ group.goal.target_amount }}</p>
+            <p><strong>Current:</strong> ${{ group.goal.current_amount }}</p>
+            <p><strong>Progress:</strong> {{ group.goal.progress|floatformat:2 }}%</p>
+            <p><strong>Deadline:</strong> {{ group.goal.deadline }}</p>
+            {% if group.goal.progress < 100 %}
+                <form method="POST" action="{% url 'groups:group_detail' group.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="is_for_goal" value="True">
+                    <input type="hidden" name="goal_id" value="{{ group.goal.id }}">
+                    <label for="amount_{{ group.goal.id }}" class="form-label">Add Money:</label>
+                    <input type="number" step="0.01" name="amount" id="amount_{{ group.goal.id }}" class="form-control" required>
+                    <button type="submit" name="add_money_to_goal" class="btn btn-primary mt-2">Add Money</button>
+                </form>
+            {% else %}
+                <p><strong>Goal Completed!</strong></p>
+            {% endif %}
+        </div>
+        {% else %}
+        <p>No goal set for this group yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Container for Group Expense -->
+<div class="container my-4 p-4 bg-dark text-white rounded shadow-lg">
+    <h3>Group Expense</h3>
+    <div class="d-flex justify-content-between">
+        {% if expense %}
+            <div class="expense-card p-3 rounded">
+                <p><strong>Category:</strong> {{ expense.category.name }}</p>
+                <p><strong>Total Amount:</strong> ${{ expense.amount }}</p>
+                <p><strong>Contributed:</strong> ${{ expense.contributed_amount }}</p>
+                <p><strong>Remaining:</strong> ${{ expense.remaining_amount }}</p>
+
+                {% if not expense.is_fully_funded %}
+                <form method="POST" action="{% url 'groups:group_detail' group.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="is_for_goal" value="False">
+                    <label for="expense_amount" class="form-label">Contribute:</label>
+                    <input type="number" step="0.01" name="amount" id="expense_amount" class="form-control" required>
+                    <button type="submit" name="add_money_to_expense" class="btn btn-secondary mt-2">Contribute</button>
+                </form>
+                {% else %}
+                <p><strong>Expense Fully Funded!</strong></p>
+                {% endif %}
+            </div>
+        {% else %}
+            <p>No expense added for this group yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

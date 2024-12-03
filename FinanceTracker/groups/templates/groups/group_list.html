@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Your Groups{% endblock %}
+
+{% block content %}
+<style>
+    .group-container {
+        background-color: #001d3d;
+        padding: 2rem;
+        border-radius: 1rem;
+        margin: 2rem auto;
+        max-width: 800px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .group-title {
+        font-size: 2rem;
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+    .create-group-btn {
+        display: block;
+        text-align: center;
+        margin: 1rem auto;
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #ffffff;
+        text-decoration: none;
+        background-color: #ffc300;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .create-group-btn:hover {
+        background-color: #ffd60a;
+        transform: scale(1.05);
+    }
+
+    .group-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .group-item {
+        background-color: #003566;
+        text-align: center;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+    .group-item:hover {
+        background-color: #001d3d;
+    }
+
+    .group-link {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .group-link:hover {
+        color: #ffd60a;
+        transform: scale(1.05);
+    }
+</style>
+
+<div class="group-container">
+    <h1 class="group-title">Your Groups</h1>
+    <a href="{% url 'groups:create_group' %}" class="create-group-btn">Create New Group</a>
+    <ul class="group-list">
+        {% for group in groups %}
+            <li class="group-item">
+                <a href="{% url 'groups:group_detail' group.id %}" class="group-link">{{ group.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

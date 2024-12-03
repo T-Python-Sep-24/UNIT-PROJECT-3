@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_bootstrap5',
     'django_celery_beat',
+    'groups',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,20 @@ AUTH_USER_MODEL = 'users.User'
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  
+EMAIL_PORT = 587  
+EMAIL_USE_TLS = True  
+EMAIL_HOST_USER = 'your-email@gmail.com'  
+EMAIL_HOST_PASSWORD = 'your-email-password'  

@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-{% block title %}Add Salary{% endblock %}
-
 {% block content %}
 <style>
     .form-container {
@@ -67,20 +65,16 @@
     }
 </style>
 
-<div class="form-container">
-    <h2>Add Your Salary</h2>
-    
-    {% if user.salary %}
-        <p>Your salary has already been added.</p>
-        <a href="{% url 'home' %}" class="btn btn-primary w-100">Back to Home</a>
-    {% else %}
-        <form method="POST">
+<div class="container mt-5">
+    <div class="form-container">
+        <h2>Invite Member to {{ group.name }}</h2>
+        <form method="post" action="{% url 'groups:add_member' group.id %}">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-primary w-100">Save Salary</button>
+            <button type="submit" class="btn btn-primary w-100">Send Invitation</button>
         </form>
-        <br>
-        <a href="{% url 'home' %}" class="btn btn-secondary w-100">Back to Home</a>
-    {% endif %}
+        <a href="{% url 'groups:group_detail' group.id %}" class="btn btn-secondary w-100 mt-3">Back to Group</a>
+
+    </div>
 </div>
 {% endblock %}
