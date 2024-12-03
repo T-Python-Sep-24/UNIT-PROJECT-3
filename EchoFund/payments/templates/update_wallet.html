@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %} Wallet Details {% endblock %}
+
+{% block main %}
+<main>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h4 class="mb-0">Wallet Details</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="{% url 'payments:update_wallet' wallet.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label">Wallet Number</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" value="{{wallet.id}}" readonly>
+                                    <span class="input-group-text"><i class="fas fa-wallet"></i></span>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="cvv" class="form-label">Pin Code</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" name="pin_number" value="{{wallet.pin_number}}" id="cvv">
+                                    <button class="btn btn-outline-secondary"  type="button" id="toggleCVV"><i class="far fa-eye" id="toggleIcon"></i></button>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label class="form-label">Card Holder Name</label>
+                                <input type="text" class="form-control" value="{{wallet.user.username}}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Balance</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" class="form-control" value="{{wallet.balance}}" name="balance" aria-label="Amount (to the nearest dollar)">
+                                    <span class="input-group-text">.00</span>
+                                </div>
+                            </div>
+
+                            <div class="d-grid d-flex justify-content-center gap-2">
+                                <button type="submit" class="btn btn-primary">Submit Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Update {{request.user.username}} Profile{% endblock %}
+
+{% block main  %}
+<main>
+    <div class="container">
+        <h2>Update Profile</h2>
+        <form action="{% url 'accounts:update_profile_view' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="first_name" class="form-label">First name</label>
+                <input type="text" class="form-control" value="{{request.user.first_name}}" name="first_name" id="first_name">
+                <label for="last_name" class="form-label">Last name</label>
+                <input type="text" class="form-control" value="{{request.user.last_name}}" name="last_name" id="last_name">
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" value="{{request.user.username}}" class="form-control" id="username">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" class="form-control" value="{{request.user.email}}" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="about" class="form-label">About</label>
+                <textarea name="about" class="form-control" id="about">{{request.user.profile.about}}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <img src="{{request.user.profile.avatar.url}}" class="w-25 rounded-circle">
+                <label for="avatar" class="form-label">Profile avatar</label>
+                <input id="avatar" type="file" class="form-image" name="avatar" accept="image/*" value="Avatar">
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-block">Update</button>
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}

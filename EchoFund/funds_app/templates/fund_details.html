@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}Fund Details{% endblock %}
+
+{% block main %}
+<main>
+    <div class="container mt-5">
+        <h1 class="display-4 text-center p-3">Fund Details</h1>
+        <div class="row  p-5 shadow rounded">
+
+            <div class="col p-3 g-2">
+                <div class="d-flex justify-content-between mb-4">
+                    <div class="">
+                        <h1 class="">{{fund.fund_name}}</h1>
+                        <h6><i class="bi bi-calendar-date"></i> Start Date: {{ fund.start_date }}</h6>
+                        <p class="card-text"><i class="fas fa-search pe-2"></i>{{ fund.about|truncatechars:30 }}</p>
+                        <p class="card-text"><i class="fas fa-book pe-2"></i>Policies: {{ fund.policies|truncatechars:30 }}</p>
+                        <p class="card-text">Created By: {{ fund.fund_owner }}</p>
+                    </div>
+                    <div>
+                        {% if is_bookmarked %}
+                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}?next={{request.path}}" class="text-end"> <i class="material-symbols-outlined">bookmark_check</i></a>
+                        {% else %}
+                            <a href="{% url 'funds_app:add_bookmark_view' fund.id %}?next={{request.path}}" class="text-end"> <i class="material-symbols-outlined">bookmark_add</i></a>
+                        {% endif %}
+
+                        {% if request.user.is_superuser or request.user == fund.fund_owner %}
+                            <a class="btn btn-primary" href="{% url 'funds_app:update_fund_view' fund.id %}"><i class="fas fa-edit"></i></a>
+                            <a class="btn btn-danger" href="{% url 'funds_app:delete_fund_view' fund.id %}"><i class="fas fa-trash"></i></a>
+                            {% if request.user == fund.fund_owner %}
+                                <a class="btn btn-warning" href="{% url 'funds_app:start_fund' fund.id %}">Start Fund</a>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if not request.user == fund.fund_owner and not request.user in fund.fund_members.all %}
+                        <a href="{% url 'funds_app:fund_participate_view' fund.id %}" class="btn btn-outline-primary">Participate</a>
+                        {% endif %}
+
+
+                    </div>
+
+                </div>
+
+                <h6>Description: </h6>
+                <p>{{fund.about}}</p>
+
+                <h6><i class="fa-solid fa-money-bill pe-2" ></i>Monthly Stock: {{fund.monthly_stock}}$</h6>
+                {% if request.user.is_superuser or request.user == fund.fund_owner %}
+                <div class="d-flex gap-2 align-items-center mt-3">
+                    <h4>Members:</h4>
+                    {% for member in fund.fund_members.all %}
+                        <a href="{% url 'accounts:profile_view' member.username %}"><h5>@{{member}}</h5></a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5 mb-5">
+        {% if reviews %}
+        <div class="container shadow p-5">
+            <h2>Reviews ({{reviews.count}})</h2>
+            {% for review in reviews %}
+            <div class="p-5 shadow rounded mt-2 mb-5">
+                <div class="d-flex gap-3 justify-content-center">
+                    <h3>{{review.user.first_name}} {{review.user.last_name}}</h3>
+                    <a href="{% url 'accounts:profile_view' review.user.username %}"><h5>@{{review.user.username}}</h5></a>
+                </div>
+                <p class="text-center">comment: {{review.comment}}</p>
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex gap-3 align-items-center">
+                        <p>Rating </p>
+                        {% for i in '12345'|make_list %}
+                            {% if forloop.counter <= review.rating %}
+                                <i class="fas fa-star text-warning"></i>
+                            {% else %}
+                                <i class="far fa-star text-warning"></i>
+                            {% endif %}
+                        {% endfor %}
+
+                    </div>
+
+                    <a href="{% url 'funds_app:delete_review_view' review.id %}"><span class="material-symbols-outlined text-danger">delete</span></a>
+                </div>
+                <p>{{review.reviewed_at}}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+        <form class="d-flex flex-column gap-4 shadow rounded p-5 mt-5" action="{% url 'funds_app:add_review_view' fund.id %}" method="post">
+            <h3 class="mt-4">Add new Review</h3>
+            {% csrf_token %}
+            <div>
+
+                <label for="review" class="form-label">review</label>
+                <textarea class="form-control" id="review" name="comment" required placeholder="review"></textarea>
+            </div>
+
+            <div class="">
+
+                <div class="form-outline">
+
+                    <p class="form-label">Rating: </p>
+                    <div class="star-rating">
+                        {% for rate, value in rates reversed %}
+                        <input type="radio" id="star{{ rate }}" name="rating" value="{{ rate }}" required/>
+                        <label for="star{{ rate }}" class="star">
+                            <i class="far fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <input type="submit" name="Add">
+        </form>
+        {% else %}
+        <div class="p-3 rounded bg-warning g-3 mt-3 d-flex flex-column gap-3">
+            <p>Only Users can add comments</p>
+            <a href="">Sign in to your account to add comments</a>
+            <a href="">Or Create a New account now!</a>
+        </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
