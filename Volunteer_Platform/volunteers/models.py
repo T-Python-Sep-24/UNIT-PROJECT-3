@@ -13,9 +13,11 @@ class Volunteer(models.Model):
         return self.user.username
 
 
+
+
 class VolunteerApplication(models.Model):
-    volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE, related_name='applications')
-    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE, related_name='applications')
+    volunteer = models.ForeignKey('volunteers.Volunteer', on_delete=models.CASCADE, related_name='applications')
+    opportunity = models.ForeignKey('organization.Opportunity', on_delete=models.CASCADE, related_name='applications')
     status = models.CharField(
         max_length=20,
         choices=[('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')],

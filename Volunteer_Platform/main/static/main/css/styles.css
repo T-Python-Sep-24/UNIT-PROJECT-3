@@ -564,3 +564,49 @@ footer {
     height: 50px; /* Set a specific height */
     width: auto; /* Maintain aspect ratio */
 }
+
+
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 900px; /* Match the card width */
+    margin: 0 auto;
+}
+
+.about-card {
+    background-color: #dddada97; /* Card background color */
+    border: 1px solid #ddd; /* Border for the card */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Inner padding */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    margin: 0 auto; /* Center the card */
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column; /* Stack the content vertically */
+}
+
+.profile-picture-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    margin: 0 auto;
+}
+
+.profile-details h2 {
+    margin: 10px 0;
+}
+
+.profile-details p {
+    font-size: 1em;
+    color: #333;
+}

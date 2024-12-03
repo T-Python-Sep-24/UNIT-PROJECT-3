@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from main.models import Location
 
+
 class Organization(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='organization')
     name = models.CharField(max_length=255)
@@ -13,17 +14,26 @@ class Organization(models.Model):
     def __str__(self):
         return self.name
 
+from django.db import models
 
 class Opportunity(models.Model):
-    title = models.CharField(max_length=200)
+    CATEGORY_CHOICES = [
+        ('technical', 'Technical'),
+        ('health', 'Health'),
+        ('education', 'Education'),
+    ]
+
+    title = models.CharField(max_length=255)
     description = models.TextField()
-    organization = models.ForeignKey(User, on_delete=models.CASCADE, related_name="opportunities")
-    location = models.CharField(max_length=100, blank=True, null=True)
-    skills_required = models.TextField(blank=True, null=True)
-    start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-    date_posted = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='opportunities/images/', blank=True, null=True)  # Ensure this is here
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
+    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
+    opportunity_type = models.CharField(
+        max_length=50,
+        choices=[('remote', 'Remote'), ('in_person', 'In Person')]
+    )
+    image = models.ImageField(upload_to='opportunities/images/', blank=True, null=True)
 
     def __str__(self):
         return self.title

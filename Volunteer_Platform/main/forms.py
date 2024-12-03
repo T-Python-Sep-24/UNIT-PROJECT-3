@@ -36,3 +36,31 @@ class UserRegistrationForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         return cleaned_data
+    
+
+
+    from django import forms
+from organization.models import Opportunity
+
+class OpportunityFilterForm(forms.Form):
+    CATEGORY_CHOICES = [
+        ('technical', 'Technical'),
+        ('health', 'Health'),
+        ('education', 'Education'),
+        ('environment', 'Environment'),
+    ]
+    OPPORTUNITY_TYPE_CHOICES = [
+        ('remote', 'Remote'),
+        ('onsite', 'Onsite'),
+    ]
+
+    category = forms.ChoiceField(
+        choices=[('', 'All Categories')] + CATEGORY_CHOICES,
+        required=False,
+        label='Category'
+    )
+    opportunity_type = forms.ChoiceField(
+        choices=[('', 'All Types')] + OPPORTUNITY_TYPE_CHOICES,
+        required=False,
+        label='Opportunity Type'
+    )

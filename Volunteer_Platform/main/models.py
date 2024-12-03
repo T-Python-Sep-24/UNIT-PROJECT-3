@@ -26,6 +26,7 @@ class Location(models.Model):
 class Testimonial(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='testimonials')
     content = models.TextField()
+    image = models.ImageField(upload_to='testimonials/images/', null=True, blank=True)  # Add image field
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -58,9 +59,6 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.username} ({self.role})"
 
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.contrib.auth.models import User
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):

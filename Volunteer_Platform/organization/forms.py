@@ -58,3 +58,16 @@ class OpportunityForm(forms.ModelForm):
     class Meta:
         model = Opportunity
         fields = ['title', 'description', 'location', 'start_date', 'end_date', 'soft_skills', 'hard_skills', 'other_skills', 'image']
+
+
+class OpportunityFilterForm(forms.Form):
+    category = forms.ChoiceField(
+        choices=[('', 'All Categories')] + Opportunity.CATEGORY_CHOICES,
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+    )
+    opportunity_type = forms.ChoiceField(
+        choices=[('', 'All Types'), ('remote', 'Remote'), ('in_person', 'In Person')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+    )
