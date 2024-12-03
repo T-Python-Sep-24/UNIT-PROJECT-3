@@ -1,0 +1,69 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}{{profile.user.username|capfirst}} Profile{% endblock %}
+
+{% block content %}
+<section class="container-lg my-5">
+    <div class="profile-grid">
+        <div class="profile text-beige-100">
+            <img src="{{profile.pfp.url}}" class="pfp rounded-1 shadow" alt="">
+            <h4 class="text-center my-2">@{{profile.user.username}}</h4>
+            {% if request.user == profile.user %}
+            <a href="{% url 'accounts:updateProfileView' %}" class="mx-auto btn-beige-300 px-2"><i class="bi bi-pencil-square pe-2"></i>Update</a>
+            {% endif %}
+        </div>
+        <div class="profile rounded-1 text-burgundy-darker">
+            <div class="d-flex flex-column">
+                <h2 class="mb-0 text-burgundy fw-bold">
+                    {{profile.user.first_name}} {{profile.user.last_name}}
+                </h2>
+                <img src="{% static 'images/underlineDark.png' %}" class="mb-3 mx-auto" width="220" alt="">
+            </div>
+            <div class="half-border mb-2"></div>
+            <p class="fs-5 my-1 text-burgundy"><span class="fw-bold text-burgundy-darker">About: </span>{{profile.about}}</p>
+            
+            <!-- User comments -->
+            <h5 class="mb-0 mt-3 fw-bold">
+                Comments:
+            </h5>
+            <div class="row px-2 gap-2">
+                {% for com in profile.user.comment_set.all %}
+                <div class="col card my-2 text-start shadow-sm rounded-2 bg-blur" style="max-width:20rem;">
+                    <div class="card-body py-1 d-flex flex-column gap-1">
+                        <p class="m-0 fs-5 fw-medium text-burgundy">On <a href="{% url 'artPieces:artPieceDetailsView' com.piece.id %}" class="text-offwhite fw-bold hover-color">{{com.piece.name}}</a></p>
+                        <p class="m-0 fw-medium">
+                            {{com.content}}
+                        </p>
+                        <p class="m-0 small fw-bold text-burgundy">
+                            {{com.createdAt}}
+                        </p>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="fw-medium ms-1 my-0 text-burgundy">No comments yet.</p>
+                {% endfor %}
+            </div>
+
+            <!-- User Favorites -->
+            {% if request.user == profile.user %}
+            <h5 class="mb-2 mt-3 fw-bold">Your favorites:</h5>
+            <div class="row px-2 gap-2">
+                {% for favorite in profile.user.favorite_set.all %}
+                <div class="col g-0 card text-light border-0 custom-crd" style="max-width:14rem;">
+                    <img src="{{favorite.piece.photo.url}}" class="card-img shadow custom-img" alt="Art Piece">
+                    <div class="card-img-overlay align-content-end text-start">
+                        <a href="{% url 'artPieces:artPieceDetailsView' favorite.piece.id %}" class="my-0 fs-5 hover-color">{{favorite.piece.name}}</a>
+                        <p class="m-0 small text-offwhite">Added: {{favorite.addedAt}}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="my-0 text-offwhite">No favorites yet.</p>
+                <a href="{% url 'artPieces:displayArtPiecesView' %}" class="btn-beige-400 py-0 ms-2 fs-6" style="width: fit-content;">Browse art pieces</a>
+                {% endfor %}
+            </div>
+            {% endif %} 
+        </div>
+    </div>
+</section>
+{% endblock %}

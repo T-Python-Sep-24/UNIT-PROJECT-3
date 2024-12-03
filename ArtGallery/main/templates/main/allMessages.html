@@ -1,0 +1,50 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}All Messages{% endblock %}
+
+{% block content %}
+<section class="container-md text-center">
+    <h1 class="mb-0 mt-3 text-beige-100">
+        All Messages
+    </h1>
+    <img src="{% static 'images/underline.png' %}" class="mb-3" width="200" alt="">
+    <div class="row row-cols-1 row-cols-md-2 justify-content-center gap-3">
+        {% for message in msgs %}
+        <div class="card p-1 my-2 text-start shadow rounded-2 bg-blur-lighter" style="max-width:30rem;">
+            <div class="card-body d-flex flex-column gap-1 position-relative text-burgundy">
+                <button type="button" class="btn-beige-400 border-2 shadow-sm m-2 px-1 py-0 position-absolute top-0 end-0" data-bs-toggle="modal"
+                    data-bs-target="#deleteMessageModal{{message.id}}">
+                    <i class="bi bi-trash3-fill small"></i>
+                </button>
+                <p class="m-0 fs-5"><span class="text-burgundy-darker fw-bold">From:</span> {{message.fname}} {{message.lname}}</p>
+                <p class="m-0 fs-5"><span class="text-burgundy-darker fw-bold">Email:</span> {{message.email}}</p>
+                <p class="m-0 fs-5"><span class="text-burgundy-darker fw-bold">Content:</span> {{message.content}}</p>
+                <p class="m-0 fs-6 fw-bold">{{message.createdAt}}</p>
+            </div>
+        </div>
+        <!-- Delete comment modal -->
+        <div class="modal fade" id="deleteMessageModal{{message.id}}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-blur-lighter">
+                    <div class="modal-header">
+                        <h1 class="modal-title text-burgundy-darker fs-5" id="deleteModalLabel">Delete Comment</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-burgundy fs-5">
+                        <p class="m-0">Are you sure you want to delete <span class="fw-medium text-burgundy-darker">{{message.fname}} {{message.lname}}'s</span> message?
+                        <p class="m-0 small"><strong class="text-burgundy-darker">Content: </strong>{{message.content}}</p>
+                    </div>
+                    <div class="modal-footer py-1">
+                        <button type="button" class="btn-beige-200 shadow-sm py-0" data-bs-dismiss="modal">Close</button>
+                        <a href="{% url 'main:deleteMessageView' message.id %}" class="btn-peach-dark shadow-sm py-0 text-white">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="col fs-4 text-beige-200 my-0">No messages yet..</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
