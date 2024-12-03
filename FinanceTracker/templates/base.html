@@ -96,8 +96,8 @@ footer {
 
             <div class="dropdown text-end">
                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ user.photo.url }}" alt="{{ user.username }}" width="32" height="32" class="rounded-circle">
-                </a>
+                  <img src="{% if user.photo %}{{ user.photo.url }}{% else %}/media/profile_photos/default.png{% endif %}" alt="{{ user.username }}" width="32" height="32" class="rounded-circle">
+                                  </a>
                 <ul class="dropdown-menu text-small">
                     <li>
                         {% if user.is_authenticated %}
