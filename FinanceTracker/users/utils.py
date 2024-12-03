@@ -19,10 +19,6 @@ def notify_users():
 
 
 def update_user_savings(user, amount):
-    """
-    Updates the savings of a user by deducting the given amount.
-    Returns the updated remaining savings.
-    """
     user.savings -= Decimal(amount)
     user.save()
     total_expenses = user.expenses.aggregate(total_spent=Sum('amount'))['total_spent'] or Decimal(0)
@@ -30,9 +26,3 @@ def update_user_savings(user, amount):
     return remaining_savings
 
 
-def update_user_savings(user, contribution_amount):
-    user.savings -= contribution_amount
-    user.save()
-
-    total_expenses = user.expenses.aggregate(total_spent=Sum('amount'))['total_spent'] or Decimal(0)
-    return user.savings - total_expenses

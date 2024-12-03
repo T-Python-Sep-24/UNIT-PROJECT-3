@@ -70,11 +70,26 @@
         color: #ffd60a;
         transform: scale(1.05);
     }
+    .join{
+        display: block;
+        text-align: center;
+        margin: 1rem auto;
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #ffffff;
+        text-decoration: none;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
 </style>
 
 <div class="group-container">
     <h1 class="group-title">Your Groups</h1>
     <a href="{% url 'groups:create_group' %}" class="create-group-btn">Create New Group</a>
+    <a href="{% url 'groups:join_group' %}" class="btn join btn-info">Join Group</a>
     <ul class="group-list">
         {% for group in groups %}
             <li class="group-item">

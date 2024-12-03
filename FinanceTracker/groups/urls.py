@@ -11,5 +11,7 @@ urlpatterns = [
     path('group/<int:group_id>/add_expense/', views.add_or_update_expense, name='add_expense'),
     path('group/<int:group_id>/add_member/', views.add_member, name='add_member'),
     path('<int:group_id>/accept_invitation/<uuid:token>/', views.accept_invitation, name='accept_invitation'),
+    path('join/', views.join_group, name='join_group'),
+
 
 ]

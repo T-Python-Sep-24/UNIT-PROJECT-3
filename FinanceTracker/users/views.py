@@ -15,7 +15,6 @@ from .forms import CustomUserCreationForm, CustomAuthenticationForm
 from .models import Profile
 from django.utils import timezone
 from .utils import update_user_savings  
-
 # Create your views here.
 
 
@@ -102,9 +101,7 @@ def home(request):
                     note=f"Contribution to goal: {goal.name}"
                 )
 
-                user.savings -= contributed_amount
-                user.save()
-                remaining_savings -= contributed_amount
+                remaining_savings = update_user_savings(user, contributed_amount)  
 
                 if goal.progress() >= 100:
                     messages.success(request, f"Goal {goal.name} is now complete!")
@@ -114,6 +111,7 @@ def home(request):
                 messages.error(request, "Insufficient savings to add money to goal.")
         except Goal.DoesNotExist:
             messages.error(request, "Goal not found.")
+
 
     if request.method == 'POST' and 'add_expense' in request.POST:
         category = request.POST.get('category')
@@ -140,6 +138,7 @@ def home(request):
                     date=date,
                     note=note
                 )
+                remaining_savings = update_user_savings(user, amount) 
                 messages.success(request, "Expense added successfully.")
         else:
             Expense.objects.create(
@@ -149,7 +148,9 @@ def home(request):
                 date=date,
                 note=note
             )
+            remaining_savings = update_user_savings(user, amount)  
             messages.success(request, "Expense added successfully.")
+
 
     return render(request, 'users/home.html', {
         'total_expenses': total_expenses,

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Group, GroupExpense, GroupGoal, GroupMembership, GroupInvitation, Contribution
 from finances.models import   Expense
-from .forms import GroupForm, GroupExpenseForm, GroupGoalForm, GroupContributionForm, GroupInvitationForm
+from .forms import GroupForm, GroupExpenseForm, GroupGoalForm, JoinGroupForm, GroupInvitationForm
 from django.core.mail import send_mail
 from decimal import Decimal
 from django.urls import reverse
@@ -12,6 +12,8 @@ from django.db.models import Sum
 from users.utils import update_user_savings, update_user_savings
 from django.utils.timezone import now
 import uuid
+import string
+import random
 # Create your views here.
 
 
@@ -25,6 +27,12 @@ def group_list(request):
     return render(request, 'groups/group_list.html', {'groups': groups})
 
 
+def generate_unique_code():
+    while True:
+        code = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        if not Group.objects.filter(unique_code=code).exists():
+            return code
+
 @login_required
 def create_group(request):
     if request.method == 'POST':
@@ -32,8 +40,9 @@ def create_group(request):
         if form.is_valid():
             group = form.save(commit=False)
             group.owner = request.user
+            group.unique_code = generate_unique_code()  
             group.save()
-            group.members.add(request.user)  
+            group.members.add(request.user)
             messages.success(request, 'Group created successfully!')
             return redirect('groups:group_list')
     else:
@@ -44,7 +53,25 @@ def create_group(request):
 
 
 
-
+@login_required
+def join_group(request):
+    if request.method == 'POST':
+        form = JoinGroupForm(request.POST)
+        if form.is_valid():
+            unique_code = form.cleaned_data['unique_code']
+            try:
+                group = Group.objects.get(unique_code=unique_code)
+                if request.user in group.members.all():
+                    messages.info(request, 'You are already a member of this group.')
+                else:
+                    group.members.add(request.user)
+                    messages.success(request, f'You have joined the group "{group.name}"!')
+                return redirect('groups:group_list')  
+            except Group.DoesNotExist:
+                messages.error(request, 'Invalid group code. Please try again.')
+    else:
+        form = JoinGroupForm()
+    return render(request, 'groups/join_group.html', {'form': form})
 
 
 @login_required

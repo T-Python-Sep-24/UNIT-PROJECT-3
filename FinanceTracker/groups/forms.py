@@ -27,7 +27,12 @@ class GroupGoalForm(forms.ModelForm):
 
 
 
-
+class JoinGroupForm(forms.Form):
+    unique_code = forms.CharField(
+        label="Group Code",
+        max_length=8,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Group Code'})
+    )
 
 class GroupContributionForm(forms.Form):
     contribution_type = forms.ChoiceField(choices=[('goal', 'Goal'), ('expense', 'Expense')])

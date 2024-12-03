@@ -3,6 +3,8 @@ from django.conf import settings
 from django.utils import timezone
 import uuid
 from decimal import Decimal
+import random
+import string
 # Create your models here.
 
 
@@ -27,6 +29,11 @@ class Group(models.Model):
     shared_goal_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     shared_goal_current = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     monthly_expense_limit = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    unique_code = models.CharField(max_length=8, unique=True, blank=True, null=True)
+
+
+   
+
 
     def __str__(self):
         return self.name
