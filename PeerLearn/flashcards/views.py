@@ -16,8 +16,8 @@ from anthropic import Anthropic
 
 # Create your views here.
 def all_flashcards_view(request: HttpRequest):
-    # subjects = Subject.objects.all()
-    # flashcards = Flashcard.objects.all()
+    subjects = Subject.objects.all()
+    flashcards = Flashcard.objects.all()
     if "search" in request.GET and len(request.GET["search"]) >= 1:
         flashcards = flashcards.filter(name__contains=request.GET["search"])
     if "subject" in request.GET and len(request.GET["subject"]) >= 1:

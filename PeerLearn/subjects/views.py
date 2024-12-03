@@ -25,6 +25,7 @@ def new_subject_view(request: HttpRequest):
     if request.method == "POST":
         subject_form = SubjectForm(request.POST, request.FILES)
         if subject_form.is_valid():
+            messages.success(request, "Subject created successfully!", "alert-success")
             subject_form.save()
             return redirect("subjects:all_subjects_view")
         else:
@@ -46,6 +47,7 @@ def update_subject_view(request: HttpRequest, subject_id: int):
         # updating an existing object (car) not creating new one
         subject_form = SubjectForm(instance=subject, data=request.POST, files=request.FILES)
         if subject_form.is_valid():
+            messages.success(request, "Subject updated successfully!", "alert-success")
             subject_form.save()
             return redirect("subjects:all_subjects_view")
         else:
@@ -69,6 +71,7 @@ def delete_subject_view(request: HttpRequest, subject_id: int):
         return redirect("accounts:sign_in")
 
     subject = Subject.objects.get(pk=subject_id)
+    messages.success(request, "Subject deleted successfully!", "alert-success")
     subject.delete()
 
     return redirect("subjects:all_subjects_view")

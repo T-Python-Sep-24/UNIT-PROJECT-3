@@ -10,8 +10,9 @@ class Flashcard(models.Model):
     pdf = models.FileField(upload_to="pdfs/", default="pdfs/default.pdf")
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    # extracted_text = 
-    # flashcard_cards =
+    extracted_text = models.TextField(blank=True, null=True)
+    flashcard_json = models.JSONField(null=True, blank=True)
+    test_json = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return self.name
