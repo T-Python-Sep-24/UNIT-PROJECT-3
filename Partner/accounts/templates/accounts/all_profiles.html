@@ -10,7 +10,8 @@
       
         <div class="container py-2">
             <div class="border-bottom py-2">
-                <h1 class="   text-center itim-regular  ">Partners ({{count_partners.count}})
+                <h1 class="   text-center itim-regular  ">Partners {% if request.GET.filter_by_target or request.GET.filter_by_native or request.GET.filter_by_gender or request.GET.search %}
+                     ({{all_partners.paginator.count}}){%endif%}
                 </h1>
             </div>
             <div class="d-flex justify-content-end row"> 
@@ -28,6 +29,12 @@
                             <option value="" selected disabled>Target Language</option> 
                             {% for language in languages%}
                             <option value="{{language.id}}" {%if request.GET.filter_by_lang == language.id %} selected {%endif%}>{{language.native_name}}</option>
+                            {%endfor%}
+                        </select>
+                        <select name="filter_by_gender" class="form-select ">
+                            <option value="" selected disabled>Gender</option> 
+                            {% for val, lable in gender%}
+                            <option value="{{val}}" {%if request.GET.filter_by_gender == val %} selected {%endif%}>{{lable}}</option>
                             {%endfor%}
                         </select>
                         <input type="submit" class="btn rounded-pill btn-orange text-white " value="Apply"/>
@@ -59,63 +66,35 @@
           </div>
 
     
-          <br/><br/>
-          <navbar aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-            
-                {% if all_partners.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page=1" aria-label="First">
-                            <span aria-hidden="true"> First</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ all_partners.previous_page_number }}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link" aria-hidden="true"> First</span>
-                    </li>
-                    <li class="page-item disabled">
-                        <span class="page-link" aria-hidden="true">&laquo;</span>
-                    </li>
-                {% endif %}
-    
-                {% for num in all_partners.paginator.page_range %}
-                    {% if num == all_partners.number %}
-                        <li class="page-item active " aria-current="page">
-                            <span class="page-link">{{ num }}</span>
-                        </li>
-                    {% else %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-        
-                {% if all_partners.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ all_partners.next_page_number }}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ all_partners.paginator.num_pages }}" aria-label="Last">
-                            <span aria-hidden="true">Last </span>
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link" aria-hidden="true">&raquo;</span>
-                    </li>
-                    <li class="page-item disabled">
-                        <span class="page-link" aria-hidden="true">Last</span>
-                    </li>
-                {% endif %}
-            </ul>
-        </navbar>
-    </div>
-</div>
+          <br/>
+
+
+<navbar aria-label="Page navigation example">
+    <ul class="pagination justify-content-center gap-4">
+        {% if all_partners.has_previous %}
+            <li class="page-item">
+                <a class="page-link rounded-circle px-3 py-2" href="?page={{ all_partners.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled ">
+                <span class="page-link rounded-circle px-3 py-2" aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+            </li>
+        {% endif %}
+
+        {% if all_partners.has_next %}
+            <li class="page-item">
+                <a class="page-link rounded-circle px-3 py-2" href="?page={{ all_partners.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true"><i class="fa-solid fa-chevron-right "></i></span>
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link rounded-circle px-3 py-2" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+            </li>
+        {% endif %}
+    </ul>
+</navbar>
+
      {%endblock%}

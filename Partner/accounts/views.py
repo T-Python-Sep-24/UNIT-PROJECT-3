@@ -5,10 +5,14 @@ from main.models import Language
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db import IntegrityError, transaction
-from partners.models import Request,Partner
+from partners.models import Partner
 from django.core.paginator import Paginator
 from .models import Profile
 from django.db.models import Q
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
+
 
 # Create your views here.
 
@@ -31,6 +35,15 @@ def sign_up(request: HttpRequest):
                                 target_language=target_language,
                                 gender=request.POST["gender"])
                 profile.save()
+
+                #send confirmation email
+                content_html = render_to_string("accounts/mail/confirmation.html",{"user":new_user})
+                send_to = new_user.email
+                email_message = EmailMessage("confiramation", content_html, settings.EMAIL_HOST_USER, [send_to])
+                email_message.content_subtype = "html"
+                #email_message.connection = email_message.get_connection(True)
+                email_message.send()
+
                
                 messages.success(request, "Registered User Successfuly", "alert-success")
                 return redirect("accounts:sign_in")
@@ -160,7 +173,6 @@ def update_profile_view(request):
 
 def all_partners_profiles_view(request):
     all_partners=Profile.objects.filter(role='partner')
-    count_partners=Profile.objects.filter(role='partner')
 
     languages=Language.objects.all()
     if "search" in request.GET and len(request.GET["search"]) >= 1:
@@ -172,7 +184,13 @@ def all_partners_profiles_view(request):
     if "filter_by_target" in request.GET and request.GET.get("filter_by_target"):
         all_partners = all_partners.filter(target_language__id=request.GET["filter_by_target"])
     
+    if "filter_by_gender" in request.GET and request.GET.get("filter_by_gender"):
+        all_partners = all_partners.filter(gender=request.GET["filter_by_gender"])
+
+
     p=Paginator(all_partners,6)
     page=request.GET.get('page',1)
     all_partners_list=p.get_page(page)
-    return render(request,'accounts/all_profiles.html',{"all_partners":all_partners_list,"languages":languages,"count_partners":count_partners})
+    return render(request,'accounts/all_profiles.html',{"all_partners":all_partners_list,
+                                                        "languages":languages,
+                                                        "gender":Profile.GenderChoices.choices})

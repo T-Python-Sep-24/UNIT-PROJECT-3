@@ -63,63 +63,36 @@
                             
              
           </div>
-          <br/><br/>
+          <br/>
+
+
           <navbar aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-            
-                {% if blogs.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page=1" aria-label="First">
-                            <span aria-hidden="true"> First</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ blogs.previous_page_number }}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link" aria-hidden="true"> First</span>
-                    </li>
-                    <li class="page-item disabled">
-                        <span class="page-link" aria-hidden="true">&laquo;</span>
-                    </li>
-                {% endif %}
-    
-                {% for num in blogs.paginator.page_range %}
-                    {% if num == blogs.number %}
-                        <li class="page-item active" aria-current="page">
-                            <span class="page-link">{{ num }}</span>
-                        </li>
-                    {% else %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-        
-                {% if blogs.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ blogs.next_page_number }}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ blogs.paginator.num_pages }}" aria-label="Last">
-                            <span aria-hidden="true">Last </span>
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link" aria-hidden="true">&raquo;</span>
-                    </li>
-                    <li class="page-item disabled">
-                        <span class="page-link" aria-hidden="true">Last</span>
-                    </li>
-                {% endif %}
-            </ul>
-        </navbar>
+              <ul class="pagination justify-content-center gap-4">
+                  {% if blogs.has_previous %}
+                      <li class="page-item">
+                          <a class="page-link rounded-circle px-3 py-2" href="?page={{ blogs.previous_page_number }}" aria-label="Previous">
+                              <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                          </a>
+                      </li>
+                  {% else %}
+                      <li class="page-item disabled ">
+                          <span class="page-link rounded-circle px-3 py-2" aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                      </li>
+                  {% endif %}
+          
+                  {% if blogs.has_next %}
+                      <li class="page-item">
+                          <a class="page-link rounded-circle px-3 py-2" href="?page={{ blogs.next_page_number }}" aria-label="Next">
+                              <span aria-hidden="true"><i class="fa-solid fa-chevron-right "></i></span>
+                          </a>
+                      </li>
+                  {% else %}
+                      <li class="page-item disabled">
+                          <span class="page-link rounded-circle px-3 py-2" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                      </li>
+                  {% endif %}
+              </ul>
+          </navbar>
     </div>
 </div>
 <div class="challenge-area col-md-12 d-flex flex-column justify-content-center align-items-center ">

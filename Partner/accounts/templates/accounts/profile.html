@@ -55,7 +55,7 @@
                 {% if is_partnered%}  
                 <a href="" class="btn btn-success disabled rounded-pill">
                     <i class="fa-solid fa-check"></i> Partner</a>  
-                {%elif is_requested and request.user.sent_requests.sender == request.user%}
+                {%elif is_requested or request.user.sent_requests.sender == request.user%}
                     <a href="{%url 'partners:new_request_view' request.user.id user.id%}" class="btn btn-secondary rounded-pill">
                         <i class="fa-solid fa-check"></i> Pending Request</a>  
                         
@@ -487,6 +487,7 @@
 
 
 <script type="text/javascript">
+     //join button script
     function convertToDate(dateStr) {
         return new Date(dateStr);
     }

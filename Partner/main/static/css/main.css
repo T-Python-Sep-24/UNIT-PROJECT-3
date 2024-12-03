@@ -340,15 +340,16 @@ footer a:hover{
 
 
 /* pageination */
-.page-item.active .page-link {
-    background-color: #fe5532;  
-    color: white; 
-    border-color: #fe5532; 
-    z-index: -100;
+
+
+.page-link {
+    color: #fe5532; 
+    border-color:#fe5532 ; 
+
 }
 
-.page-item.active .page-link:hover {
-    background-color: #d24428; 
+.page-link:hover {
+    background-color: #fe5532; 
     color: white;
-    z-index: -100;
+
 }
