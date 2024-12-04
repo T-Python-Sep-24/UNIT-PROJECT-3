@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<div class="container my-5">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <!-- Profile Header -->
+    <div class="text-center mb-4">
+        <h1 class="display-4">{{ profile_user.username }}'s Profile</h1>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-center gap-3 mb-5">
+        {% if can_add_place %}
+        <a href="{% url 'places:add_place_view' %}" class="btn btn-primary">Add a Place</a>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <a href="{% url 'users:user_bookmarks' %}" class="btn btn-secondary">View My Bookmarks</a>
+        {% endif %}
+    </div>
+
+    <!-- Places Published Section -->
+    <h2 class="mb-4">Places Published</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for place in places %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ place.photo.url }}" class="card-img-top" alt="{{ place.name }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ place.name }}</h5>
+                    <p class="card-text"><strong>City:</strong> {{ place.city }}</p>
+                    <a href="{% url 'places:place_detail_view' place.pk %}" class="btn btn-outline-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col">
+            <p class="text-center">No places published yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

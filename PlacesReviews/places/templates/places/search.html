@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Search Results</h1>
+
+    <!-- Search Form -->
+    <form method="get" action="{% url 'places:search_view' %}" class="input-group mb-4">
+        <!-- Search Query Input -->
+        <input type="text" name="q" placeholder="Search for places..." value="{{ query|default:'' }}" class="form-control">
+
+        <!-- Category Dropdown -->
+        <select name="category" class="form-select mx-2">
+            <option value="">All Categories</option>
+            {% for choice in category_choices %}
+                <option value="{{ choice.0 }}" {% if category == choice.0 %}selected{% endif %}>
+                    {{ choice.1 }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <!-- Display Search Results -->
+    <div class="row">
+        {% if results %}
+            {% for result in results %}
+                <div class="col-md-6">
+                    <div class="card mb-4 shadow-sm">
+                        <img src="{{ result.photo.url }}" class="card-img-top" alt="{{ result.name }}" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{% url 'places:place_detail_view' result.pk %}" class="text-decoration-none text-primary">
+                                    {{ result.name }}
+                                </a>
+                            </h5>
+                            <p class="card-text"><strong>City:</strong> {{ result.city }}</p>
+                            <p class="card-text"><strong>Category:</strong> {{ result.get_category_display }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <p class="alert alert-warning text-center">No results found for "{{ query }}".</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
