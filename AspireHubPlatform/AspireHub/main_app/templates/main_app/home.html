@@ -1,0 +1,97 @@
+{% extends "main_app/base.html" %}
+{% load static %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<div class="flex justify-center items-center flex-col gap-y-6 mt-32">
+    <h1 class="text-4xl font-bold">التحول الذكي لمسيرتك المهنية</h1>
+    <p class="text-gray-500 text-lg">اكتشف ميولك المهنية بسهولة وكفاءة مع منصة مسار، ابدأ رحلتك نحو تحقيق أهدافك التعليمية الآن</p>
+    <button class="bg-orange-500 text-white p-3 rounded-lg">  ابدأ الآن تحديد مسارك</button>
+  </div>
+  <div class="flex justify-center items-center">
+    <img src="https://www.maivin.in/images/career.gif" alt="">
+  </div>
+
+          <!-- Services Offered Section -->
+          <section class="mb-12 p-20">
+            <h2 class="text-2xl font-semibold mt-20 mb-12 flex justify-center items-center">ميزات مسار </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/carreer.png'%}" alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">اختبارات تحديد المسار </h3>
+                    <p class="text-gray-500" >اختبارات تفاعلية متعددة الخيارات لتحديد ميولك المهني بدقة</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/chatbot.png'%}" alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">تشات بوت ذكي </h3>
+                    <p class="text-gray-500">يوفر إجابات فورية على استفسارات المشتخدمين حول المنصة </p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/certificate.png'%}"  alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">شهادات احترافية</h3>
+                    <p class="text-gray-500" >قائمة بالشهادات المطلوبة في السوق مع تفاصيل الدورات التدريبية المرتبطة بها </p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/events.png'%}"  alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">معارض وفعاليات مهنية </h3>
+                    <p  class="text-gray-500">معلومات عن الفعاليات القدامة ، مع امكانية التسجيل في المشاركة</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/customer-support.png'%}"  alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">دعم فني واستفسارات </h3>
+                    <p class="text-gray-500">قسم للأسئلة الشائعة ونموذج للتواصل مع الدعم الفني</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-orange-500">
+                    <img src="{%static 'images/business-growth.png'%}"  alt="Tailwind CSS" class="w-16 h-16 mx-auto mb-2" />
+                    <h3 class="font-semibold text-lg flex justify-center items-center">قسم الشركات الناجحة </h3>
+                    <p class="text-gray-500 ">نبذة عن رواد الأعمال الناجحين ومعلومات للتواصل معهم وحجز جلسات استشارية</p>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="bg-orange-500 w-full flex justify-center items-center flex-col gap-y-6 mt-10">
+            <h1 class="text-4xl text-white font-bold mt-10">كيف يمكن لمسار أن تساعدك؟</h1>
+            <p class="text-white text-lg py-8 px-32 text-justify text-start mb-12 ">
+                مسار هي منصة مهنية مبتكرة تهدف إلى مساعدة الطلاب وحديثي التخرج في اختيار ميولهم ومساراتهم المهنية المناسبة. تقدم المنصة اختبارات متعددة الخيارات لتحديد التوجهات الشخصية، وتوفر معلومات شاملة حول الجامعات والدراسات العليا المتاحة بناءً على التخصصات المطلوبة.
+            </p>
+        
+            <div class="flex justify-center items-center mb-20 ml-8 mr-8 ">
+                <div class="grid grid-cols-4 gap-4 ">
+                    <div class="flex flex-col items-center ">
+                        <div class="flex justify-center items-center bg-white rounded-full w-20 h-20 mb-4">
+                            <img src="{%static 'images/resource.png'%}" alt="سهولة المصادر في مكان واحد" class="rounded-full w-16 h-16" />
+                        </div>
+                        <h3 class="font-bold text-lg mb-8 text-center text-white">تجميع المصادر في مكان واحد</h3>
+                        <p class="text-white text-sm text-center">تجمع منصة مسار جميع الموارد والأدوات اللازمة في مكان واحد، مما يسهل على المستخدمين الوصول إليها واستخدامها بكفاءة.</p>
+                    </div>
+        
+                    <div class="flex flex-col items-center">
+                        <div class="flex justify-center items-center bg-white rounded-full w-20 h-20 mb-4">
+                            <img src="{%static 'images/counseling.png'%}" alt="توفير أدوات التوجيه" class="rounded-full w-16 h-16" />
+                        </div>
+                        <h3 class="font-bold text-lg mb-8 text-center text-white">توفير أدوات التوجيه</h3>
+                        <p class="text-white text-sm  text-center">من خلال اختبارات التوجيه، تساعد المنصة المستخدمين في تحديد ميولهم المهنية وتوجيههم نحو الخيارات المناسبة.</p>
+                    </div>
+        
+                    <div class="flex flex-col items-center">
+                        <div class="flex justify-center items-center bg-white rounded-full w-20 h-20 mb-4">
+                            <img src="{%static 'images/apprenticeship.png'%}" alt="تعزيز فرص التعلم" class="rounded-full w-16 h-16" />
+                        </div>
+                        <h3 class="font-bold text-lg mb-8 text-center text-white">تعزيز فرص التعلم</h3>
+                        <p class="text-white text-sm  text-center">توفر المنصة موارد تعليمية متنوعة ودورات تدريبية تساعد المستخدمين في تطوير مهاراتهم ومعرفتهم.</p>
+                    </div>
+        
+                    <div class="flex flex-col items-center">
+                        <div class="flex justify-center items-center bg-white rounded-full w-20 h-20 mb-4">
+                            <img src="{%static 'images/communication.png'%}" alt="تسهيل التواصل" class="rounded-full w-16 h-16" />
+                        </div>
+                        <h3 class="font-bold text-lg mb-8 text-center text-white">تسهيل التواصل</h3>
+                        <p class="text-white text-sm  text-center">من خلال المنصة، يمكن للمستخدمين التواصل مع مستشارين محترفين ورواد أعمال للحصول على نصائح وإرشادات قيمة.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+   <!-- Default content can be added here  -->
+
+{% endblock %}
