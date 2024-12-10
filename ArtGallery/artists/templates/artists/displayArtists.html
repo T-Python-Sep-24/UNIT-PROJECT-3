@@ -1,0 +1,97 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Artists{% endblock %}
+
+{% block content %}
+    <section class="container-md text-center">
+        <div class="mt-3 d-flex flex-row gap-2 justify-content-center align-items-center">
+            <h1 class="text-beige-100 m-0">
+            Artists
+            </h1>
+            {% if user.is_staff and perms.artPieces.add_artpiece %}
+            <a href="{% url 'artists:addArtistView' %}" class="fs-4 px-2 hover-color"><i class="bi bi-plus-square"></i></a>
+            {% endif %}
+        </div>
+        <img src="{% static 'images/underline.png' %}" width="200">
+       <!-- Search bar -->
+        <form action="{% url 'artists:displayArtistsView' %}{% querystring %}" method="get" class="mt-3 mb-4 needs-validation"
+        novalidate>
+            <div class="input-group justify-content-center">
+                <input class="form-control text-offwhite bg-blur-lighter focus-ring focus-ring-dark rounded-start-2 border-0" placeholder="Search.." style="max-width: 300px;"
+                    type="search" aria-label="Search" name="search" value="{{request.GET.search}}" minlength="2">
+                <button class="btn-search rounded-end-2" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+                <div class="invalid-feedback">
+                    Please enter more than 2 letters.
+                </div>
+            </div>
+        </form>
+        <!-- Display artists -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-4">
+            {% for artist in artists %}
+            <div class="col">
+                <div class="card text-light border-0 custom-crd">
+                    <img src="{{artist.photo.url}}" class="card-img shadow custom-img" alt="Art Piece">
+                    <div class="card-img-overlay align-content-end text-start">
+                        <a href="{% url 'artists:artistDetailsView' artist.id %}" class="my-0 fs-4 text-white-shadow">{{artist.fullName}}</a>
+                        <p class="my-0 fs-5 text-offwhite"><span class="text-beige-200">Exhibit:</span> {{artist.exhibit}}</p>
+                        <div class="d-flex justify-content-end">
+                            <a href="{% url 'artists:artistDetailsView' artist.id %}" class="btn-beige-300 fw-bold"><small>More..</small></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            {% if request.GET.search %}
+            <p class="fs-5 fw-medium text-beige-300">No results for '{{request.GET.search}}' ..</p>
+            {% else %}
+            <p class="fs-5 fw-medium text-beige-300">No artists yet..</p>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center gap-2 mt-5">
+                {% if artists.number != 1 %}
+                <li class="page-item">
+                    <a href="{% url 'artists:displayArtistsView' %}{% querystring page=1 %}" 
+                    class="page-link bg-blur border-0 rounded-1 text-offwhite hover-color focus-ring focus-ring-dark backward">
+                    <img src="{% static 'images/first.svg' %}" alt="" width="18">
+                    </a>
+                </li>
+                {% endif %}
+                {% if artists.has_previous %}
+                <li class="page-item">
+                    <a href="{% url 'artists:displayArtistsView' %}{% querystring page=artists.previous_page_number %}" 
+                    class="page-link bg-blur border-0 rounded-1 text-offwhite hover-color focus-ring focus-ring-dark backward">
+                        <img src="{% static 'images/prev.svg' %}" alt="" width="18">
+                    </a>
+                </li>
+                {% endif %}
+                <li class="page-item">
+                    <p class="page-link bg-blur-lighter border-0 rounded-1 text-offwhite focus-ring focus-ring-dark">Page {{artists.number}}</p>
+                </li>
+                {% if artists.has_next %}
+                <li class="page-item">    
+                    <a href="{% url 'artists:displayArtistsView' %}{% querystring page=artists.next_page_number %}" 
+                    class="page-link bg-blur border-0 rounded-1 text-offwhite hover-color focus-ring focus-ring-dark forward">
+                        <img src="{% static 'images/next.svg' %}" alt="" width="18">
+                    </a>
+                </li>
+                {% endif %}
+                {% if artists.number != artists.paginator.num_pages %}
+                <li class="page-item">
+                    <a href="{% url 'artists:displayArtistsView' %}{% querystring page=artists.paginator.num_pages %}" 
+                    class="page-link bg-blur border-0 rounded-1 text-offwhite hover-color focus-ring focus-ring-dark forward">
+                        <img src="{% static 'images/last.svg' %}" alt="" width="18">
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <!-- Pagination end -->
+    </section>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Update Artist{% endblock %}
+
+{% block content %}
+    <section class="container-md text-center">
+        <h1 class="mb-0 mt-3 text-beige-100">
+        Update {{artist.fullName}}
+        </h1>
+        <img src="{% static 'images/underline.png' %}" class="mb-3" width="200">
+        <!-- Add artist -->
+        <div class="d-flex justify-content-center text-beige-100">
+            <form action="{% url 'artists:updateArtistView' artist.id %}" method="post" enctype="multipart/form-data" class="text-start p-4 rounded-1 shadow-sm bg-blur needs-validation text-light" novalidate>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="fullName" class="form-label fw-medium fs-5">Full Name</label>
+                    <input type="text" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="fullName" name="fullName" value="{{artist.fullName}}" required>
+                    <div class="invalid-feedback fs-5">
+                        Please enter a valid name.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="about" class="form-label fw-medium fs-5">About</label>
+                    <textarea class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="about" name="about" rows="2">{{artist.about}}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="instagram" class="form-label fw-medium fs-5">Instagram Account URL</label>
+                    <div class="input-group has-validation">
+                        <span class="input-group-text bg-blur text-offwhite border-0" id="inputGroupPrepend"><i class="bi bi-instagram"></i></span>
+                        <input type="url" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="instagram" name="instagram" value="{{artist.instagram}}" aria-describedby="inputGroupPrepend"required>
+                        <div class="invalid-feedback fs-5">
+                            Please enter a valid account url.
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="exhibit" class="form-label fw-medium fs-5">Exhibit</label>
+                    <div class="input-group has-validation">
+                        <span class="input-group-text bg-blur text-offwhite border-0" id="inputGroupPrepend"><i class="bi bi-geo-alt"></i></span>
+                        <input type="text" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="exhibit" name="exhibit" value="{{artist.exhibit}}" aria-describedby="inputGroupPrepend" required>
+                        <div class="invalid-feedback fs-5">
+                            Please enter a valid exhibit.
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 d-flex gap-3 align-items-end">
+                    <img src="{{artist.photo.url}}" id="preview" class="preview rounded-3 shadow-sm" alt="Preview">
+                    <div class="flex-fill">
+                        <label for="photo" class="form-label fw-medium fs-5">Photo</label>
+                        <input class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" type="file" id="photo" name="photo" onchange="previewImage(event)" accept="image/*">
+                    </div>
+                </div>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a href="{% url 'artists:artistDetailsView' artist.id %}" class="w-25 btn-beige-300 py-1 text-center">
+                        Cancel
+                    </a>
+                    <button class="w-25 btn-beige-200 py-1" type="submit">
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}

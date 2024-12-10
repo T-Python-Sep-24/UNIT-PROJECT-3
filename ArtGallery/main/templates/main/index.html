@@ -1,0 +1,62 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}The Gallery{% endblock %}
+
+{% block intro %}
+<section>
+    <div class="hero rounded-1 shadow justify-content-center">
+        <!-- Hero Title -->
+        <div class="d-flex flex-column text-start text-center">
+            <h1 class="text-beige-200 display-4 text-white-shadow">The Gallery</h1>
+            <h2 class="text-offwhite text-white-shadow">-Dive into creativity with our art collection-</h2>
+        </div>
+        <!-- Hero video -->
+        <video autoplay loop muted class="video-bg">
+            <source src="{% static  'videos/TheGalleryVid.mp4' %}" type="video/mp4" alt="Hero video">
+        </video>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="container-md text-beige-100 text-center light-bg mb-5">
+    <a href="{% url 'artPieces:displayArtPiecesView' %}" class="display-6 text-white-shadow hover-color">Pieces by Our Artists</a>
+    <div class="pieces-grid mt-4">
+        {% for piece in pieces %}
+        <div class="pieces">
+            <div class="card text-light border-0">
+                <img src="{{piece.photo.url}}" class="card-img shadow-lg" alt="Art Piece">
+                <div class="card-img-overlay align-content-end text-start">
+                    <a href="{% url 'artPieces:artPieceDetailsView' piece.id %}" class="my-0 fs-4 text-beige-300 text-white-shadow hover-color">{{piece.name}}</a>
+                    <a href="{% url 'artists:artistDetailsView' piece.artist.id %}" class="my-0 fs-5 d-block hover-color"><span class="text-beige-200">By:</span> {{piece.artist.fullName}}</a>
+                    <p class="my-0 text-offwhite"><span class="text-beige-200">Price:</span> {{piece.price}}.00 SAR</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="container-md text-beige-100 text-center">
+    <a href="{% url 'artists:displayArtistsView' %}" class="display-6 text-white-shadow hover-color">Our Artists</a>
+    <!-- scroller -->
+    <div class="scroller mx-auto mt-2" data-direction="left" data-speed="slow">
+        <!-- scroller-inner -->
+        <div class="scroller-inner">
+            {% for artist in artists %}
+            <div class="card text-light border-0">
+                <img src="{{artist.photo.url}}" class="card-img shadow" alt="Artist">
+                <div class="card-img-overlay align-content-end text-start">
+                    <a href="{% url 'artists:artistDetailsView' artist.id %}" class="my-0 fs-5 text-white-shadow">{{artist.fullName}}</a>
+                    <p class="mb-1 text-offwhite"><span class="text-beige-200">Exhibit:</span> {{artist.exhibit}}</p>
+                    <div class="d-flex">
+                        <a href="{% url 'artists:artistDetailsView' artist.id %}" class="btn-beige-200 fw-bold small"><small>More..</small></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

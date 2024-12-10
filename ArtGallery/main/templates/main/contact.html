@@ -1,0 +1,69 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+
+<section class="container text-center">
+    <h1 class="mb-0 mt-3 text-beige-100">
+        Contact Us
+    </h1>
+    <img src="{% static 'images/underline.png' %}" class="mb-3" width="200">
+
+    <div class="row row-cols-1 row-cols-md-2 justify-content-between text-offwhite">
+        <div class="col col-md-6 shadow rounded-3 py-4 px-4 bg-blur">
+            <i class="bi bi-chat-left-text h5 text-offwhite"></i>
+            {% if request.method == 'POST' %}
+            <div class="h-100 d-flex flex-column justify-content-center">
+                <h2 >We recieved your message successfully</h2>
+            </div>
+            {% else %}
+            <form action="{% url 'main:contactView' %}" method="post" class="text-start p-4 rounded-1 needs-validation text-light" novalidate>
+                {% csrf_token %}
+                <div class="mb-3 d-flex flex-row gap-2">
+                    <div class="flex-fill">
+                        <label for="fname" class="form-label fw-medium fs-5">Firs Name</label>
+                        <input type="text" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="fname" name="fname" required>
+                        <div class="invalid-feedback fs-5">
+                            Please enter a valid first name.
+                        </div>
+                    </div>
+                    <div class="flex-fill">
+                        <label for="lname" class="form-label fw-medium fs-5">Last Name</label>
+                        <input type="text" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="lname" name="lname" required>
+                        <div class="invalid-feedback fs-5">
+                            Please enter a valid last name.
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label fw-medium fs-5">Content</label>
+                    <textarea class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="content" name="content" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-medium fs-5">Email</label>
+                    <div class="input-group has-validation">
+                        <span class="input-group-text bg-blur text-offwhite border-0" id="inputGroupPrepend"><i class="bi bi-envelope"></i></span>
+                        <input type="email" class="form-control bg-blur text-offwhite border-0 focus-ring focus-ring-dark" id="email" name="email" aria-describedby="inputGroupPrepend" required>
+                        <div class="invalid-feedback fs-5">
+                            Please enter a valid email.
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button class="w-25 btn-beige-200 py-1" type="submit">
+                        Send
+                    </button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+        
+        <div class="col col-md-6">
+            <img src="{% static 'images/contact.webp' %}" class="w-100 h-100 object-fit-cover rounded-3 shadow opacity-75"/>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Using google fonts to import icons-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
+    <!-- Local stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    <header class="container-fluid fixed-top shadow-sm rounded-bottom-2 bg-blur">
+        <!-- This navbar expands at large screens, screens smaller than that toggle the collapse property -->
+        <nav class="navbar navbar-expand-md py-1 justify-content-center navbar-dark">
+            <!-- Brand name -->
+            <a class="px-4" href="/">
+                <img src="{% static 'images/Logo.png' %}" alt="Logo" width="120">
+            </a>
+
+            <!-- Toggle button to display navbar on small screens -->
+            <button class="navbar-toggler order-3" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapseItems" aria-controls="navbarCollapseItems" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+            {% url 'main:homeView' as homeUrl %}
+            {% url 'main:contactView' as contactUrl %}
+            {% url 'main:allMessagesView' as messagesUrl %}
+            {% url 'artists:displayArtistsView' as artistsUrl %}
+            {% url 'artPieces:displayArtPiecesView' as artPiecesUrl %}
+
+            {% url 'accounts:registerView' as registerUrl %}
+            {% url 'accounts:loginView' as loginUrl %}
+            {% url 'accounts:logoutView' as logoutUrl %}
+            {% url 'accounts:profileView' user.username as profileUrl %}
+
+            <!-- Nav bar components -->
+            <div class="collapse navbar-collapse my-3 justify-content-center" id="navbarCollapseItems">
+                <!-- Nav links -->
+                <ul class="navbar-nav align-items-center gap-3 px-4">
+                    <li class="nav-item p-1">
+                        <a class="hover-color {% if request.path == homeUrl %}active{% endif %}" href="{{homeUrl}}">Home</a>
+                    </li>
+                    <li class="nav-item p-1">
+                        <a class="hover-color {% if request.path == artPiecesUrl %}active{% endif %}" href="{{artPiecesUrl}}">Art Pieces</a>
+                    </li>
+                    <li class="nav-item p-1">
+                        <a class="hover-color {% if request.path == artistsUrl %}active{% endif %}" href="{{artistsUrl}}">Artists</a>
+                    </li>
+                    <li class="nav-item p-1">
+                        <a class="hover-color {% if request.path == contactUrl %}active{% endif %}" href="{{contactUrl}}">Contact</a>
+                    </li>
+                    {% if user.is_superuser %}
+                    <li class="nav-item p-1">
+                        <a class="hover-color {% if request.path == messagesUrl %}active{% endif %}" href="{{messagesUrl}}">Messages</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Account -->
+            <div class="d-flex flex-row mx-3 gap-2">
+                {% if user.is_authenticated %}
+                <div class="d-flex gap-3 align-items-end">
+                    <a href="{{profileUrl}}" class="d-flex flex-row gap-1 align-items-end">
+                        <img src="{{user.profile.pfp.url}}" class="rounded-circle pfp-sm">
+                        <p class="m-0 fw-medium hover-color {% if request.path == profileUrl %}active{% endif %}">{{user.first_name}}</p>
+                    </a>
+                    <a class="btn-peach-dark py-0" href="{{logoutUrl}}?next={{request.path}}">Logout</a>
+                </div>
+                {% else %}
+                <a class="py-0 my-auto {% if request.path == loginUrl %}btn btn-light rounded-1 fw-bold disabled{% else %}btn-peach-dark{% endif %}" href="{{loginUrl}}?next={{request.path}}">Login</a>
+                <a class="py-0 my-auto {% if request.path == registerUrl %}btn btn-light rounded-1 fw-bold disabled{% else %}btn-peach-dark{% endif %}" href="{{registerUrl}}">Register</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Alerts after any user action ex: add, delete -->
+    {% if messages %}
+    {% for msg in messages %}
+    <div class="container-fluid alerts-container">
+        <div class="alert {{msg.tags}} alert-dismissible fade show mx-auto" role="alert">
+            {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    
+    <!-- Hero will be inside this block -->
+    {% block intro %}
+    {% endblock %}
+
+    <main class="mt-5 pt-5" style="min-height: 75vh;">
+    <!-- Main contetn inside this block -->
+    {% block content %}
+    {% endblock %}
+    </main>
+
+    <footer class="container-fluid py-3 border-1 border-top border-dark text-center mt-4">
+        <div class="row gap-5">
+            <div class="col text-beige-200">
+                <a href="/" class=""><img src="{% static 'images/Logo.png' %}" alt="Logo" width="100"></a>
+                <p>© 2024</p>
+            </div>
+
+            <div class="col d-flex flex-row justify-content-evenly align-items-center">
+                <nav class="navbar navbar-expand-sm">
+                    <ul class="navbar-nav align-items-center gap-4 px-4">
+                        <li class="nav-item p-2">
+                            <a class="" href="{{homeUrl}}">Home</a>
+                        </li>
+                        <li class="nav-item p-2">
+                            <a class="" href="{{artPiecesUrl}}">Art Pieces</a>
+                        </li>
+                        <li class="nav-item p-2">
+                            <a class="" href="{{artistsUrl}}">Artists</a>
+                        </li>
+                        <li class="nav-item p-2">
+                            <a class="" href="{{contactUrl}}">Contact</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Js script src -->
+    <script src="{% static 'js/script.js' %}"></script>
+
+    <!-- Bootstrap script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+        </script>
+</body>
+
+</html>
