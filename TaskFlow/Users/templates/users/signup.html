@@ -1,0 +1,51 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="card shadow-lg p-4" style="width: 100%; max-width: 500px; border-radius: 10px;">
+        <h2 class="text-center text-primary mb-4">Sign Up</h2>
+        <form method="POST" enctype="multipart/form-data" id="signupForm">
+            {% csrf_token %}
+            <!-- Username Field -->
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required>
+            </div>
+            <!-- Email Field -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+            <!-- Password Field -->
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required>
+            </div>
+            <!-- About Field -->
+            <div class="mb-3">
+                <label for="about" class="form-label">About</label>
+                <textarea name="about" id="about" class="form-control" rows="4" placeholder="Tell us about yourself"></textarea>
+            </div>
+             <!-- Photo Upload -->
+             <div class="mb-3">
+                <label for="photo" class="form-label">Photo</label>
+                <input type="file" name="photo" id="photo" class="form-control" accept="image/*" onchange="profile_image(event)">
+                
+            </div>
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function profile_image(event) {
+        const preview = document.getElementById('photoPreview'); 
+        const file = event.target.files[0];
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+        }
+    }
+    </script>
+{% endblock %}
+

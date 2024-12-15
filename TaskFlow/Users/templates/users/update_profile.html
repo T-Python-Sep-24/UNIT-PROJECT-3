@@ -1,0 +1,55 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title text-primary">{{ profile.user.username }}</h4>
+                    {% if profile.photo %}
+                        <img src="{{ profile.photo.url }}" class="rounded-circle img-fluid mt-3" alt="Profile Preview" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; margin: 0 auto;">
+                            <span>No Photo</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5>Update Profile</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="about" class="form-label">About</label>
+                            <textarea name="about" id="about" class="form-control" rows="4" placeholder="Write something about yourself">{{ profile.about }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="photo" class="form-label">Profile Photo</label>
+                            <input type="file" name="photo" id="photo" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>Profile Details</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Username:</strong> {{ profile.user.username }}</p>
+                    <p><strong>Email:</strong> {{ profile.user.email }}</p>
+                    <p><strong>About:</strong> {{ profile.about }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
